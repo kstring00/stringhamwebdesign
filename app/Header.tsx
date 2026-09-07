@@ -9,7 +9,6 @@ const NAV = [
   { label: "Work", href: "/work" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/#quick-contact" },
-  { label: "Portal", href: "/portal" },
 ] as const;
 
 const DELTA = 6;
@@ -25,6 +24,7 @@ function Arrow() {
 export default function Header() {
   const pathname = usePathname();
   const [hidden, setHidden] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const lastY = useRef(0);
   const active = pathname.startsWith("/work")
     ? "/work"
@@ -37,6 +37,10 @@ export default function Header() {
           : "";
 
   useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     lastY.current = window.scrollY;
     let queued = false;
@@ -46,7 +50,7 @@ export default function Header() {
       const y = window.scrollY;
       const delta = y - lastY.current;
 
-      if (y < 96 || reduced.matches) setHidden(false);
+      if (menuOpen || y < 96 || reduced.matches) setHidden(false);
       else if (delta > DELTA) setHidden(true);
       else if (delta < -DELTA) setHidden(false);
 
@@ -62,7 +66,18 @@ export default function Header() {
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
 
   const onFocusCapture = () => setHidden(false);
 
@@ -89,26 +104,42 @@ export default function Header() {
           </span>
         </a>
 
-        <nav className={styles.nav} aria-label="Primary navigation">
-          {NAV.map((item) => {
-            const isActive = item.label !== "Contact" && active === item.href;
-            return (
-              <a
-                key={item.label}
-                href={item.href}
-                className={`${styles.navLink}${isActive ? ` ${styles.active}` : ""}`}
-                aria-current={isActive ? "page" : undefined}
-                onPointerMove={onNavPointerMove}
-              >
-                <span className={styles.navTextWrap}>
-                  <span className={styles.navText}>{item.label}</span>
-                  <span className={styles.navTextGhost} aria-hidden="true">
-                    {item.label}
+        <nav
+          className={`${styles.nav}${menuOpen ? ` ${styles.navOpen}` : ""}`}
+          id="site-primary-nav"
+          aria-label="Primary navigation"
+        >
+          <div className={styles.navLinks}>
+            {NAV.map((item) => {
+              const isActive = item.label !== "Contact" && active === item.href;
+              return (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className={`${styles.navLink}${isActive ? ` ${styles.active}` : ""}`}
+                  aria-current={isActive ? "page" : undefined}
+                  onPointerMove={onNavPointerMove}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <span className={styles.navTextWrap}>
+                    <span className={styles.navText}>{item.label}</span>
+                    <span className={styles.navTextGhost} aria-hidden="true">
+                      {item.label}
+                    </span>
                   </span>
-                </span>
-              </a>
-            );
-          })}
+                </a>
+              );
+            })}
+          </div>
+
+          <a
+            href="/portal"
+            className={`${styles.portalButton}${active === "/portal" ? ` ${styles.portalActive}` : ""}`}
+            aria-current={active === "/portal" ? "page" : undefined}
+            onClick={() => setMenuOpen(false)}
+          >
+            Portal
+          </a>
         </nav>
 
         <div className={styles.end}>
@@ -119,6 +150,20 @@ export default function Header() {
               <Arrow />
             </span>
           </a>
+          <button
+            className={styles.menuToggle}
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls="site-primary-nav"
+            aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+            onClick={() => {
+              setHidden(false);
+              setMenuOpen((current) => !current);
+            }}
+          >
+            <span aria-hidden="true" />
+            <span aria-hidden="true" />
+          </button>
         </div>
       </div>
     </header>
