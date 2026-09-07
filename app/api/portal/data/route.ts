@@ -51,6 +51,20 @@ type Invoice = {
   paid_at: string | null;
 };
 
+type OnboardingItem = {
+  id: string;
+  project_id: string;
+  name: string;
+  item_type: "file" | "text" | "link" | "confirm";
+  status: "pending" | "submitted" | "accepted" | "needs_changes" | "not_applicable";
+  note: string | null;
+  value: string | null;
+  position: number;
+  submitted_at: string | null;
+  accepted_at: string | null;
+  updated_at: string;
+};
+
 export async function GET() {
   const session = await getPortalSession();
 
@@ -59,7 +73,7 @@ export async function GET() {
   }
 
   try {
-    const [projects, clients, fileRows, timeEntries, invoices] = await Promise.all([
+    const [projects, clients, fileRows, timeEntries, invoices, onboardingItems] = await Promise.all([
       userRest<Project[]>(
         "projects?select=id,client_id,name,slug,status,tier,quoted_total,started_at,launched_at,created_at&order=created_at.desc",
         session.accessToken,
@@ -80,6 +94,10 @@ export async function GET() {
         "invoices?select=id,project_id,amount,status,due_at,paid_at&order=created_at.desc",
         session.accessToken,
       ),
+      userRest<OnboardingItem[]>(
+        "project_onboarding_items?select=id,project_id,name,item_type,status,note,value,position,submitted_at,accepted_at,updated_at&order=position.asc,created_at.asc",
+        session.accessToken,
+      ),
     ]);
 
     return NextResponse.json({
@@ -89,6 +107,7 @@ export async function GET() {
       files: fileRows,
       timeEntries,
       invoices,
+      onboardingItems,
     });
   } catch (error) {
     console.error("Portal dashboard load failed", error);

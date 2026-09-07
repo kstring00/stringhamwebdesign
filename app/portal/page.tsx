@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import PortalClient from "./PortalClient";
+import PortalRouter from "./PortalRouter";
 
 export const metadata: Metadata = {
   title: "Client Portal | Kyle Stringham",
@@ -13,5 +13,5 @@ export const metadata: Metadata = {
 };
 
 export default function PortalPage() {
-  return <PortalClient />;
+  return <PortalRouter />;
 }

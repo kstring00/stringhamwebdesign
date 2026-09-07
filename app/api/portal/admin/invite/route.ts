@@ -58,11 +58,12 @@ export async function POST(request: NextRequest) {
   try {
     const profile = await ensurePortalUser(email, name, "client");
 
-    const existingClients = await adminRest<{ id: string }[]>(
-      `clients?user_id=eq.${encodeURIComponent(profile.id)}&select=id&limit=1`,
+    const existingClients = await adminRest<{ id: string; invited_at: string | null }[]>(
+      `clients?user_id=eq.${encodeURIComponent(profile.id)}&select=id,invited_at&limit=1`,
     );
 
     let clientId = existingClients[0]?.id;
+    const originalInvitedAt = existingClients[0]?.invited_at ?? null;
 
     if (!clientId) {
       const insertedClients = await adminRest<{ id: string }[]>("clients", {
@@ -103,6 +104,14 @@ export async function POST(request: NextRequest) {
     });
 
     await sendPortalMagicLink(email, PORTAL_URL);
+    const sentAt = new Date().toISOString();
+    await adminRest(`clients?id=eq.${encodeURIComponent(clientId)}`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        invited_at: originalInvitedAt || sentAt,
+        invite_last_sent_at: sentAt,
+      }),
+    });
 
     return NextResponse.json({
       ok: true,

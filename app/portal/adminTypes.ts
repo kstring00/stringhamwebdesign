@@ -1,0 +1,13 @@
+export type AdminUser={id:string;email:string;name:string};
+export type Project={id:string;clientId:string;clientName:string;clientEmail:string;name:string;slug:string;phase:string;onboardingComplete:number;onboardingTotal:number;onboardingPercent:number;hoursLogged:number;amountDue:number;lastActivity:string|null};
+export type Item={id:string;projectId:string;name:string;itemType:"file"|"text"|"link"|"confirm";status:"pending"|"submitted"|"accepted"|"needs_changes"|"not_applicable";note:string|null;value:string|null;position:number;submittedAt:string|null;reviewedAt:string|null;acceptedAt:string|null;updatedAt:string};
+export type Checklist={projectId:string;projectName:string;clientName:string;complete:number;total:number;percent:number;items:Item[]};
+export type Need={id:string;kind:"stale_message"|"onboarding"|"invoice"|"time_checkin";projectId:string;title:string;evidence:string;actionLabel:string;itemId?:string;invoiceId?:string;nextMark?:number};
+export type Msg={id:string;projectId:string;clientName:string;senderName:string;body:string;createdAt:string;unread:boolean};
+export type FileRow={id:string;projectId:string;clientName:string;filename:string;kind:string;createdAt:string};
+export type TimeRow={id:string;projectId:string;clientName:string;projectName:string;date:string;phase:string;description:string;hours:number};
+export type Invite={id:string;businessName:string;contactName:string;email:string;invitedAt:string|null;inviteLastSentAt:string|null};
+export type Progress={projectId:string;clientName:string;totalHours:number;sinceLastCheckin:number;nextMark:number;percent:number;due:boolean}|null;
+export type ClientOption={id:string;businessName:string;email:string};
+export type Data={user:AdminUser;metrics:{activeProjects:number;hoursThisMonth:number;outstanding:number;awaitingClientItems:number};needs:Need[];projects:Project[];checklists:Checklist[];recentTimeEntries:TimeRow[];recentMessages:Msg[];recentFiles:FileRow[];invites:Invite[];clients:ClientOption[];unreadCount:number;checkinProgress:Progress};
+export type Modal="client"|"project"|"time"|"message"|"changes"|"addItem"|null;
