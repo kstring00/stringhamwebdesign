@@ -134,7 +134,7 @@ export default function Header() {
 
           <a
             href="/portal"
-            className={`${styles.portalButton}${active === "/portal" ? ` ${styles.portalActive}` : ""}`}
+            className={`${styles.portalButton} ${styles.portalMobile}${active === "/portal" ? ` ${styles.portalActive}` : ""}`}
             aria-current={active === "/portal" ? "page" : undefined}
             onClick={() => setMenuOpen(false)}
           >
@@ -144,6 +144,13 @@ export default function Header() {
 
         <div className={styles.end}>
           <span className={styles.endRule} aria-hidden="true" />
+          <a
+            href="/portal"
+            className={`${styles.portalButton} ${styles.portalDesktop}${active === "/portal" ? ` ${styles.portalActive}` : ""}`}
+            aria-current={active === "/portal" ? "page" : undefined}
+          >
+            Portal
+          </a>
           <a className={styles.getStarted} href="/#quick-contact">
             <span>Start a Project</span>
             <span className={styles.arrowShell} aria-hidden="true">

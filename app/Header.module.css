@@ -97,7 +97,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
 }
 
 .navLinks {
@@ -187,11 +186,19 @@
   transform: translateY(-1px);
 }
 
+.portalDesktop {
+  display: inline-flex;
+}
+
+.portalMobile {
+  display: none;
+}
+
 .end {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 0.6rem;
+  gap: 0.7rem;
 }
 
 .getStarted {
@@ -291,6 +298,14 @@
 
   .navLink::after {
     display: none;
+  }
+
+  .portalDesktop {
+    display: none;
+  }
+
+  .portalMobile {
+    display: inline-flex;
   }
 
   .portalButton {
