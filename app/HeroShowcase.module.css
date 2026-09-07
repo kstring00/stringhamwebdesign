@@ -142,6 +142,15 @@
   transform: translateY(1.15rem);
 }
 
+/* The tile grid is a plain rectangle, so it does not need the optical nudge the
+   CRT artwork was given. */
+.gridVisual {
+  width: min(100%, 46rem);
+  min-width: 0;
+  align-self: center;
+  justify-self: start;
+}
+
 .highlights {
   width: min(100%, 52rem);
   margin-top: clamp(1.75rem, 2.8vw, 2.5rem);
@@ -195,6 +204,10 @@
     width: min(100%, 44rem);
     margin-left: -1rem;
   }
+
+  .gridVisual {
+    width: min(100%, 41rem);
+  }
 }
 
 @media (max-width: 58rem) {
@@ -205,6 +218,10 @@
   .crtVisual {
     width: min(100%, 38rem);
     margin-left: -0.5rem;
+  }
+
+  .gridVisual {
+    width: min(100%, 35rem);
   }
 }
 
@@ -237,6 +254,11 @@
     justify-self: center;
     margin-left: 0;
     transform: none;
+  }
+
+  .gridVisual {
+    width: min(100%, 34rem);
+    justify-self: center;
   }
 
   .highlights {
