@@ -1,6 +1,6 @@
 import type { Item } from "./adminTypes";
 export type GlyphName="home"|"clients"|"projects"|"time"|"messages"|"files"|"settings"|"search"|"plus"|"bell"|"folder"|"money"|"people"|"upload"|"check"|"warn"|"pending"|"review"|"menu";
-const G:Record<GlyphName,string>={home:"⌂",clients:"◎",projects:"▱",time:"◷",messages:"□",files:"▤",settings:"⚙",search:"⌕",plus:"＋",bell:"♢",folder:"▱",money:"$",people:"◎",upload:"⇧",check:"✓",warn:"!",pending:"○",review:"◷",menu:"•••"};
+const G:Record<GlyphName,string>={home:"⌂",clients:"♙",projects:"▣",time:"◷",messages:"✉",files:"▤",settings:"⚙",search:"⌕",plus:"＋",bell:"♢",folder:"▣",money:"$",people:"♙",upload:"⇧",check:"✓",warn:"!",pending:"○",review:"◷",menu:"•••"};
 export function Glyph({name}:{name:GlyphName}){return <span data-glyph aria-hidden="true">{G[name]}</span>}
 export const NAV:[string,GlyphName,string][]=[["Dashboard","home","#dashboard"],["Clients","clients","#clients"],["Projects","projects","#projects"],["Time Logs","time","#time-log"],["Messages","messages","#messages"],["Files","files","#files"],["Settings","settings","#settings"]];
 export const money=(n:number)=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(n||0);
