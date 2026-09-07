@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import Header from "../Header";
+import SiteFooter from "../SiteFooter";
 import SiteMotion from "../SiteMotion";
 import { projects } from "../data/projects";
 import { PendingProjectCard, ProjectCard } from "./ProjectUI";
@@ -42,6 +43,7 @@ export default function WorkPage() {
           </div>
         </section>
       </main>
+      <SiteFooter />
       <SiteMotion />
     </>
   );

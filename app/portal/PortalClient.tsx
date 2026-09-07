@@ -143,32 +143,6 @@ export default function PortalClient() {
   }, []);
 
   const establishSession = useCallback(async () => {
-    const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
-    const accessToken = hash.get("access_token");
-    const refreshToken = hash.get("refresh_token");
-    const expiresIn = Number(hash.get("expires_in") || "3600");
-
-    if (accessToken && refreshToken) {
-      const response = await fetch("/api/portal/auth/session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          accessToken,
-          refreshToken,
-          expiresIn,
-        }),
-      });
-
-      history.replaceState(null, "", window.location.pathname);
-
-      if (!response.ok) {
-        const payload = (await response.json().catch(() => null)) as
-          | { error?: string }
-          | null;
-        throw new Error(payload?.error || "This sign-in link could not be used.");
-      }
-    }
-
     const sessionResponse = await fetch("/api/portal/auth/session", {
       cache: "no-store",
     });
@@ -190,6 +164,12 @@ export default function PortalClient() {
       setSessionState("signed-out");
     });
   }, [establishSession]);
+
+  useEffect(() => {
+    if (sessionState === "signed-out") {
+      window.location.replace("/portal");
+    }
+  }, [sessionState]);
 
   const loadMessages = useCallback(async (projectId: string) => {
     if (!projectId) {
@@ -272,10 +252,7 @@ export default function PortalClient() {
 
   async function logout() {
     await fetch("/api/portal/auth/session", { method: "DELETE" });
-    setUser(null);
-    setDashboard(null);
-    setMessages([]);
-    setSessionState("signed-out");
+    window.location.replace("/portal");
   }
 
   async function sendMessage(event: FormEvent<HTMLFormElement>) {
@@ -391,69 +368,13 @@ export default function PortalClient() {
     await loadDashboard();
   }
 
-  if (sessionState === "loading") {
+  if (sessionState !== "ready") {
     return (
       <main className={styles.portalShell}>
         <div className={styles.loadingMark} aria-label="Loading client portal">
           <span>KS</span>
           <i />
         </div>
-      </main>
-    );
-  }
-
-  if (sessionState === "signed-out") {
-    return (
-      <main className={styles.loginPage}>
-        <a className={styles.backHome} href="/">
-          ← Stringham Web Design
-        </a>
-        <section className={styles.loginPanel}>
-          <p className={styles.eyebrow}>Private client workspace</p>
-          <h1>Your project, without the email archaeology.</h1>
-          <p className={styles.loginCopy}>
-            Current status, files, messages, time logs, and what you owe — kept in
-            one place. Client accounts are invite-only.
-          </p>
-
-          {loginStatus === "sent" ? (
-            <div className={styles.sentState} role="status">
-              <span>Link sent.</span>
-              <p>
-                If that email belongs to an invited portal account, a secure sign-in
-                link is on its way.
-              </p>
-              <button type="button" onClick={() => setLoginStatus("idle")}>
-                Use another email
-              </button>
-            </div>
-          ) : (
-            <form className={styles.loginForm} onSubmit={requestMagicLink}>
-              <label htmlFor="portal-email">Email</label>
-              <div>
-                <input
-                  id="portal-email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  placeholder="you@business.com"
-                />
-                <button type="submit" disabled={loginStatus === "sending"}>
-                  {loginStatus === "sending" ? "Sending…" : "Email me a sign-in link"}
-                </button>
-              </div>
-            </form>
-          )}
-
-          {error ? <p className={styles.error} role="alert">{error}</p> : null}
-
-          <p className={styles.loginFoot}>
-            No password to remember. The link signs you in to your private project
-            workspace.
-          </p>
-        </section>
       </main>
     );
   }
@@ -468,7 +389,9 @@ export default function PortalClient() {
         <div className={styles.userBlock}>
           <span>
             {user?.name}
-            <small>{user?.role === "admin" ? "Admin" : "Client"}</small>
+            <small>
+              {user?.role === "admin" ? "Admin" : selectedClient?.business_name || "Client"}
+            </small>
           </span>
           <button type="button" onClick={logout}>Sign out</button>
         </div>
@@ -739,8 +662,8 @@ export default function PortalClient() {
               <p className={styles.eyebrow}>Client portal</p>
               <h1>One place for the project.</h1>
               <p>
-                Add a client and the workspace becomes the record for status,
-                files, messages, logged time, and billing.
+                Add a client and the workspace becomes the record for status, files,
+                messages, logged time, and billing.
               </p>
             </div>
           )}

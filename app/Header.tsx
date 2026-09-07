@@ -9,6 +9,7 @@ const NAV = [
   { label: "Work", href: "/work" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/#quick-contact" },
+  { label: "Portal", href: "/portal" },
 ] as const;
 
 const DELTA = 6;
@@ -27,11 +28,13 @@ export default function Header() {
   const lastY = useRef(0);
   const active = pathname.startsWith("/work")
     ? "/work"
-    : pathname === "/about"
-      ? "/about"
-      : pathname === "/"
-        ? "/"
-        : "";
+    : pathname.startsWith("/portal")
+      ? "/portal"
+      : pathname === "/about"
+        ? "/about"
+        : pathname === "/"
+          ? "/"
+          : "";
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");

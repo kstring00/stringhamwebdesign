@@ -43,7 +43,24 @@ export async function POST(request: NextRequest) {
     const email = users[0]?.email;
     if (!email) return NextResponse.json({ error: "Client email not found." }, { status: 404 });
 
-    await sendPortalMagicLink(email, PORTAL_URL);
+    const windows = await adminRest<{ id: string }[]>("portal_magic_link_windows", {
+      method: "POST",
+      returnRepresentation: true,
+      body: JSON.stringify({ email }),
+    });
+
+    try {
+      await sendPortalMagicLink(email, PORTAL_URL);
+    } catch (error) {
+      const windowId = windows[0]?.id;
+      if (windowId) {
+        await adminRest(`portal_magic_link_windows?id=eq.${encodeURIComponent(windowId)}`, {
+          method: "DELETE",
+        }).catch(() => undefined);
+      }
+      throw error;
+    }
+
     const now = new Date().toISOString();
     await adminRest(`clients?id=eq.${encodeURIComponent(client.id)}`, {
       method: "PATCH",

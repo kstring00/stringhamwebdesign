@@ -58,7 +58,6 @@ function MonitorFrame() {
       preserveAspectRatio="xMidYMid meet"
     >
       <g stroke="currentColor" strokeWidth="1.35" vectorEffect="non-scaling-stroke">
-        {/* Chassis depth sits on the right so the screen faces back toward the copy. */}
         <path d="M486 58 566 92v286l-80 42" />
         <path d="M510 74 590 106v244l-80 51" opacity=".68" />
         <path d="M486 58h-14M486 420h-14" opacity=".75" />
@@ -129,7 +128,7 @@ export default function RetroCRT() {
             aria-label={`${channel.label} website preview`}
           >
             <div className={styles.screenContent} key={channel.label}>
-              <div className={styles.scrollImage}>
+              <div className={styles.scrollImage} style={{ animationDuration: "22s" }}>
                 {channel.images.map((image, imageIndex) => (
                   <img
                     src={image.src}

@@ -103,7 +103,24 @@ export async function POST(request: NextRequest) {
       }),
     });
 
-    await sendPortalMagicLink(email, PORTAL_URL);
+    const windows = await adminRest<{ id: string }[]>("portal_magic_link_windows", {
+      method: "POST",
+      returnRepresentation: true,
+      body: JSON.stringify({ email }),
+    });
+
+    try {
+      await sendPortalMagicLink(email, PORTAL_URL);
+    } catch (error) {
+      const windowId = windows[0]?.id;
+      if (windowId) {
+        await adminRest(`portal_magic_link_windows?id=eq.${encodeURIComponent(windowId)}`, {
+          method: "DELETE",
+        }).catch(() => undefined);
+      }
+      throw error;
+    }
+
     const sentAt = new Date().toISOString();
     await adminRest(`clients?id=eq.${encodeURIComponent(clientId)}`, {
       method: "PATCH",

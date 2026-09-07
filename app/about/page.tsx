@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import Header from "../Header";
+import SiteFooter from "../SiteFooter";
 import styles from "./about.module.css";
 
 export const metadata: Metadata = {
@@ -104,6 +105,7 @@ export default function AboutPage() {
           </footer>
         </article>
       </main>
+      <SiteFooter />
     </>
   );
 }

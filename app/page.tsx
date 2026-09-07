@@ -3,6 +3,7 @@ import Header from "./Header";
 import HeroShowcase from "./HeroShowcase";
 import PricingConfigurator from "./PricingConfigurator";
 import SelectedWork from "./SelectedWork";
+import SiteFooter from "./SiteFooter";
 import SiteMotion from "./SiteMotion";
 import TimelineShowcase from "./TimelineShowcase";
 
@@ -19,6 +20,7 @@ export default function Home() {
         <BottomCapture />
       </main>
 
+      <SiteFooter />
       <SiteMotion />
     </>
   );

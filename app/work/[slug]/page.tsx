@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import Header from "../../Header";
+import SiteFooter from "../../SiteFooter";
 import SiteMotion from "../../SiteMotion";
 import { getProjectBySlug, projects } from "../../data/projects";
 import { StatusBadge } from "../ProjectUI";
@@ -160,6 +161,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </Link>
         </nav>
       </main>
+      <SiteFooter />
       <SiteMotion />
     </>
   );
