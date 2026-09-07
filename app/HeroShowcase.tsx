@@ -1,4 +1,4 @@
-import RetroCRT from "./RetroCRT";
+import HeroTileGrid from "./HeroTileGrid";
 import styles from "./HeroShowcase.module.css";
 
 function Arrow() {
@@ -50,8 +50,8 @@ export default function HeroShowcase() {
             </div>
           </div>
 
-          <div className={styles.crtVisual}>
-            <RetroCRT />
+          <div className={styles.gridVisual}>
+            <HeroTileGrid />
           </div>
         </div>
 

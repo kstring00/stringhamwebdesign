@@ -1,0 +1,201 @@
+/* Decorative hero grid. The whole stage is pointer-events: none so it can sit in
+   the hero without ever swallowing a click meant for something beneath it; the
+   cursor is tracked from a window listener instead. */
+.stage {
+  --cols: 7;
+  --rows: 5;
+  --gap: 12px;
+  --radius: 20px;
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  aspect-ratio: var(--cols) / var(--rows);
+  pointer-events: none;
+}
+
+/* One gradient for the whole grid, not one per tile: the tiles are translucent
+   and read whatever sits behind them, so a tile over the navy end goes cool and
+   a tile over the gold end goes warm. */
+.bloom {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(44% 50% at 71% 63%, rgba(201, 162, 39, 1) 6%, rgba(201, 162, 39, 0) 76%),
+    radial-gradient(42% 48% at 33% 31%, rgba(13, 27, 38, 1) 4%, rgba(13, 27, 38, 0) 78%),
+    linear-gradient(126deg, rgba(13, 27, 38, 0.34) 12%, rgba(201, 162, 39, 0) 52%, rgba(201, 162, 39, 0.36) 90%);
+  filter: blur(52px);
+  /* The tile-shaped mask is written from measured grid metrics on mount and on
+     resize; it is what leaves the gutters cream. */
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+}
+
+.grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--rows), minmax(0, 1fr));
+  gap: var(--gap);
+  width: 100%;
+  height: 100%;
+  perspective: 1000px;
+}
+
+.tile {
+  --s: 0;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* While the cursor is moving the transform is rewritten every frame, so the
+   ease-back transition has to be out of the way. It comes back on mouseleave,
+   which is what carries the tiles home over 600ms. */
+.live .tile,
+.live .glow,
+.live .sheen,
+.live .pane::after {
+  transition: none;
+}
+
+.live .tile {
+  will-change: transform;
+}
+
+.pane {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  overflow: hidden;
+}
+
+/* Rides on top of the 40% base border so the edge reaches ~70% at full strength. */
+.pane::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  opacity: var(--s);
+  transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* The brightness lift is a composited white wash rather than filter:
+   brightness(), which would force a repaint of the blurred backdrop on every
+   frame. Visually it reads the same on frosted glass. */
+.sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.32));
+  opacity: calc(var(--s) * 0.15);
+  transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fluted {
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.42) 0 1px,
+      rgba(255, 255, 255, 0) 1px 5px
+    );
+  background-color: rgba(255, 255, 255, 0.19);
+}
+
+.glow {
+  position: absolute;
+  inset: -18%;
+  z-index: -1;
+  border-radius: calc(var(--radius) * 1.6);
+  background: radial-gradient(50% 50% at 50% 50%, rgba(255, 252, 240, 0.95), rgba(255, 252, 240, 0) 72%);
+  opacity: calc(var(--s) * 0.5);
+  transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Ambient drift, so the grid is not completely dead with no cursor on it. Long
+   offset cycles on a handful of tiles only, and on .pane rather than .tile so it
+   never fights the transform the cursor writes.
+
+   Gated at the selector rather than overridden later: a plain `animation: none`
+   in the reduced-motion block loses to `.tile:nth-child(n) .pane` on specificity,
+   which left the drift running for anyone who had asked for less motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .stage:not(.stillStage) .tile:nth-child(3) .pane {
+    animation: drift 11s ease-in-out -2s infinite;
+  }
+
+  .stage:not(.stillStage) .tile:nth-child(8) .pane {
+    animation: drift 14s ease-in-out -7s infinite;
+  }
+
+  .stage:not(.stillStage) .tile:nth-child(15) .pane {
+    animation: drift 9s ease-in-out -4s infinite;
+  }
+
+  .stage:not(.stillStage) .tile:nth-child(23) .pane {
+    animation: drift 12.5s ease-in-out -9s infinite;
+  }
+
+  .stage:not(.stillStage) .tile:nth-child(30) .pane {
+    animation: drift 8s ease-in-out -1s infinite;
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateZ(-6px);
+  }
+  50% {
+    transform: translateZ(6px);
+  }
+}
+
+@media (max-width: 1023.98px) {
+  .stage {
+    --gap: 10px;
+    --radius: 16px;
+  }
+
+  .bloom {
+    filter: blur(52px);
+  }
+}
+
+@media (max-width: 767.98px) {
+  .stage {
+    --gap: 9px;
+    --radius: 14px;
+  }
+}
+
+/* Static grid — reduced motion, and touch widths where there is no hover to
+   track. The gradient and the glass still carry it, nothing moves. */
+.stillStage .tile,
+.stillStage .pane,
+.stillStage .glow,
+.stillStage .sheen {
+  transition: none;
+  transform: none;
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile,
+  .pane,
+  .glow,
+  .sheen,
+  .pane::after {
+    transition: none;
+    transform: none;
+    will-change: auto;
+  }
+}
