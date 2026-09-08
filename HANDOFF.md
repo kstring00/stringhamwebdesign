@@ -6,10 +6,16 @@ touching code.
 **Repo:** `kstring00/stringhamwebdesign` · **Stack:** Next.js 16 (App Router),
 React 19, TypeScript, CSS Modules, GSAP. No UI library, no CSS framework.
 
-**Branch state at handoff**
-- `main` — sections 1–5 merged (PR #5, commit `45a2fe4`).
-- `claude/binder-payments-scope-qzec6b` — current working branch, one commit
-  ahead: the binder capability panel. **Two tasks on it are unfinished.**
+**Branch state**
+- `main` — sections 1–5 merged, plus the binder capability panel (PR #6) and a
+  round of work by another assistant: the homepage scope and process sections
+  merged into one interactive "How this goes." section with a dove and a
+  navigator, the quick-contact block removed, the timesheet artefact removed
+  from step 5, and the About portrait replaced.
+- `claude/section6-payments-qzec6b` — section 6, payments. See 3c.
+
+Note: `origin/chatgpt/stripe-webhook` shares **no merge base** with `main`. It
+is an old unrelated lineage (it still carries pricing tiers). Ignore it.
 
 ---
 
@@ -118,47 +124,26 @@ For the second, `--gold-ink: #6f5620` and `--slate-ink: #425b6f` were added
 
 ## 3. What is IN PROGRESS on this branch
 
-### 3a. Binder capability panel — DONE, on the branch, verified
+### 3a. Binder capability panel — DONE, merged
 
-Commit `3395525`. The owner's complaint: the "under the hood" content sat on a
-loose sheet *below* the binder and he scrolled straight past it without
-knowing it was there.
+The "under the hood" content used to sit on a loose sheet below the binder and
+was easy to scroll straight past. Three tabs now sit on the top edge of the
+binder page; clicking one opens a partial overlay over the rendered site.
+Project tabs stay on the right. `Systems` reads the active project's own
+feature list; the other two are global, in `app/data/capabilities.ts`.
 
-Now: three tabs sit on the **top edge of the binder page** (above the browser
-chrome, so they read as binder chrome, not the client site's own nav). Clicking
-one opens a partial overlay over the rendered site. Project tabs **stay on the
-right** — the owner explicitly wanted that kept. The loose sheet is deleted.
+The panel starts **closed** so the work stays the largest element — that was
+the whole point of section 2, where the screenshot went from ~610px to ~1054px
+wide at a 1440px viewport. Don't regress it.
 
-- `Systems` reads the **active project's** own feature list.
-- `AI built in` and `Integrations` are global, in `app/data/capabilities.ts`.
-- Panel starts **closed** so the work stays the largest element (that was the
-  whole point of section 2 — the screenshot went from ~610px to ~1054px wide at
-  1440px viewport; don't regress it).
+**Still unverified:** contrast sweep and keyboard operation on the new tabs and
+panel.
 
-**Verified:** renders, 6 cards, panel opens/closes, no console errors, loose
-sheet gone. **Not yet verified:** contrast sweep and keyboard operation on the
-new tabs and panel. Do that before merging.
+### 3b. Scope section — DONE by another assistant, merged
 
-### 3b. Scope section — NOT STARTED
-
-`app/PricingConfigurator.tsx` (id `#scope`) still contains three numbered
-points using **package and add-on terminology that no longer exists**:
-"Start with the right package", "Add only what belongs" (add-ons), "Confirm the
-final scope together". The owner wants these gone.
-
-Replace with the layout from the reference image he supplied:
-- Eyebrow: `SCOPE BEFORE NUMBERS`
-- Heading: *"Tell me what you're building. I'll scope it from there."*
-- Lede: *"There is no public price menu to decode. You start with a quote
-  request, I review what you actually need, and the final scope is confirmed
-  with you before anything is priced or built."*
-- **Add a quote button** linking to `/quote` — he asked for this explicitly.
-- Right side: a line-art dove with an olive branch, gold + navy on cream.
-
-**Asset gap:** the dove in his reference is an image he generated; it is **not
-in the repo**. `public/ks-dove-mark.png` exists but is the header monogram, a
-different mark. Either ask him to drop the file into `/public`, or build a
-line-art SVG in the palette as a placeholder and tell him it's swappable.
+Folded into the unified homepage process section, with the dove and the quote
+CTA. `app/PricingConfigurator.tsx` still exists but is **no longer imported by
+`app/page.tsx`** — check whether it is dead before extending it.
 
 ### 3c. Section 6 — Payments — DONE
 
