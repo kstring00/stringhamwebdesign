@@ -14,16 +14,16 @@ const tierCatalog = {
 
 const addOnCatalog = {
   clarity: { name: "Microsoft Clarity setup", price: 150 },
-  "extra-page": { name: "Additional page", price: 175 },
+  "extra-page": { name: "Additional page", price: 250 },
   "copy-polish": { name: "Copy & content polish", price: 350 },
   "booking-flow": { name: "Booking flow integration", price: 250 },
-  "intake-flow": { name: "Advanced intake flow", price: 350 },
-  cms: { name: "Blog / CMS module", price: 450 },
-  crm: { name: "CRM / email integration", price: 350 },
-  automation: { name: "Workflow automation", price: 500 },
-  payments: { name: "Payments / checkout", price: 650 },
-  ai: { name: "AI-assisted feature", price: 950 },
-  portal: { name: "Client portal foundation", price: 1500 },
+  "intake-flow": { name: "Advanced intake flow", price: 550 },
+  cms: { name: "Blog / CMS module", price: 1200 },
+  crm: { name: "CRM / email integration", price: 450 },
+  automation: { name: "Workflow automation", price: null },
+  payments: { name: "Payments / checkout", price: 1200 },
+  ai: { name: "AI-assisted feature", price: null },
+  portal: { name: "Client portal foundation", price: 2500 },
   revision: { name: "Additional revision round", price: 250 },
 } as const;
 
@@ -108,7 +108,8 @@ export async function POST(request: NextRequest) {
   const tier = tierCatalog[tierId];
   const care = careCatalog[careId];
   const addOns = addOnIds.map((id) => addOnCatalog[id]);
-  const projectFloor = tier.price + addOns.reduce((sum, item) => sum + item.price, 0);
+  const hasConsultationPricedItems = addOns.some((item) => item.price === null);
+  const projectFloor = tier.price + addOns.reduce((sum, item) => sum + (item.price ?? 0), 0);
   const reference = `KS-${Date.now().toString(36).toUpperCase()}`;
 
   const apiKey = process.env.RESEND_API_KEY;
@@ -123,7 +124,13 @@ export async function POST(request: NextRequest) {
   const from = process.env.CAPTURE_FROM_EMAIL || "Website Inquiry <onboarding@resend.dev>";
 
   const addOnLines = addOns.length
-    ? addOns.map((item) => `- ${item.name}: from ${money(item.price)}`).join("\n")
+    ? addOns
+        .map((item) =>
+          item.price === null
+            ? `- ${item.name}: Quoted after consultation`
+            : `- ${item.name}: from ${money(item.price)}`,
+        )
+        .join("\n")
     : "- None selected";
 
   const message = [
@@ -138,6 +145,7 @@ export async function POST(request: NextRequest) {
     `Base package: ${tier.name} — from ${money(tier.price)}`,
     "Configured add-ons:",
     addOnLines,
+    ...(hasConsultationPricedItems ? ["Includes items scoped after consultation."] : []),
     `Care plan: ${care.name}${care.monthly ? ` — ${money(care.monthly)}/mo` : ""}`,
     "",
     `Configured project floor: ${money(projectFloor)}+`,

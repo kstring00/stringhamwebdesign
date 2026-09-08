@@ -19,8 +19,10 @@ export type Project = {
   liveUrl: string | null;
   problem: string[];
   features: string[];
+  approach: string;
   year: string;
   clientType: string;
+  note?: string;
 };
 
 export const projects: Project[] = [
@@ -40,16 +42,17 @@ export const projects: Project[] = [
         caption: "Common Ground homepage and primary support pathways.",
       },
     ],
-    liveUrl: null,
+    liveUrl: "https://texasabacenterscg.com/",
     problem: [
-      "Case-study copy is being finalized.",
-      "The project centers on making support resources and next steps easier for families to navigate.",
+      "Families looking for autism support can end up piecing together providers, parent resources, and next steps across too many places.",
+      "The site needed to reduce that search burden and make the next useful action obvious without making the experience feel clinical or overwhelming.",
     ],
     features: [
       "Clear support pathways",
       "Family-focused resource navigation",
       "Responsive, accessible interface",
     ],
+    approach: "I organized the experience around the decisions a family is actually trying to make, not around internal service categories. The interface keeps guidance direct, local, and easy to scan so visitors can move forward without decoding the site first.",
     year: "2026",
     clientType: "ABA / autism support",
   },
@@ -81,14 +84,15 @@ export const projects: Project[] = [
     ],
     liveUrl: null,
     problem: [
-      "Case-study copy is being finalized.",
-      "The build organizes a large study-product catalog into a coherent purchase and member-library experience.",
+      "A large exam-prep catalog can quickly feel like a folder of disconnected PDFs instead of one coherent product.",
+      "The build needed to make nine domains understandable before purchase and just as clear once a member signs in to study.",
     ],
     features: [
       "Domain-based study library",
       "Member dashboard",
       "Purchase and access pathways",
     ],
+    approach: "I treated the nine domains as one visual library system with a consistent hierarchy from storefront to member access. The goal was to make the volume of material feel organized and premium without adding friction to finding the next thing to study.",
     year: "2026",
     clientType: "Exam prep · licensing",
   },
@@ -99,44 +103,77 @@ export const projects: Project[] = [
     description: "A storage-facility web experience structured around clear unit discovery and customer decision-making.",
     status: "CASE STUDY",
     tech: ["Web design", "Responsive UI", "Conversion UX"],
-    heroImage: "",
-    heroImageAlt: "Lake City Self Storage website preview not available yet",
-    screenshots: [],
+    heroImage: "/work/lake-city-self-storage/home.webp",
+    heroImageAlt: "Lake City Self Storage homepage showing unit selection messaging and an aerial view of the storage facility",
+    screenshots: [
+      {
+        src: "/work/lake-city-self-storage/home.webp",
+        alt: "Lake City Self Storage homepage showing unit selection messaging and an aerial view of the storage facility",
+        caption: "Lake City Self Storage homepage and storage-type selection experience.",
+      },
+    ],
     liveUrl: null,
     problem: [
-      "Case-study copy is being finalized.",
-      "The experience is designed to make storage options easier to understand and compare.",
+      "Storage customers often arrive knowing what they need to store, but not which unit type or size matches it.",
+      "The site needed to turn that uncertainty into a simple decision path while keeping pricing, access, and facility information easy to reach.",
     ],
     features: [
       "Storage-focused information architecture",
       "Responsive customer journey",
       "Clear conversion pathways",
     ],
+    approach: "I led with the storage-type decision and paired straightforward guidance with strong facility imagery so the site answers the practical question first. From there, the experience narrows toward size, availability, and the action the customer is ready to take.",
     year: "2025",
     clientType: "Self storage",
   },
   {
-    slug: "project-04",
-    title: "[PLACEHOLDER] Project 04",
-    summary: "[PLACEHOLDER] Replace with a one-line summary of the project outcome.",
-    description: "[PLACEHOLDER] Replace with a concise two-line description of what was designed and built for this client.",
-    status: "CASE STUDY",
-    tech: ["[TECH]", "[TECH]", "[TECH]"],
-    heroImage: "",
-    heroImageAlt: "Project 04 website preview not available yet",
-    screenshots: [],
-    liveUrl: null,
+    slug: "with-little",
+    title: "With Little",
+    summary: "A local-first journaling and life-planning app with optional cloud sync, built around faithfulness in small things.",
+    description: "A local-first journaling and life-planning app with optional cloud sync, built around faithfulness in small things.",
+    status: "LIVE",
+    tech: ["Vanilla JS", "Supabase", "Local-first", "Auth"],
+    heroImage: "/work/with-little/dashboard.webp",
+    heroImageAlt: "With Little daily ledger dashboard showing planning, habits, must-dos, a thought journal, and scripture",
+    screenshots: [
+      {
+        src: "/work/with-little/dashboard.webp",
+        alt: "With Little daily ledger dashboard showing planning, habits, must-dos, a thought journal, and scripture",
+        caption: "Daily Ledger dashboard and morning planning view.",
+      },
+      {
+        src: "",
+        alt: "With Little journal entry view with prompts and gratitude",
+        caption: "Journal entry view with prompts and gratitude — screenshot coming soon.",
+      },
+      {
+        src: "",
+        alt: "With Little prayer log",
+        caption: "Prayer log — screenshot coming soon.",
+      },
+      {
+        src: "",
+        alt: "With Little privacy page explaining what lives on the device",
+        caption: "Privacy and local-data explanation — screenshot coming soon.",
+      },
+    ],
+    liveUrl: "https://withlittle.app",
     problem: [
-      "[PLACEHOLDER] Replace with a short paragraph describing the client or business problem.",
-      "[PLACEHOLDER] Replace with a short paragraph describing the constraint, friction, or opportunity the build needed to address.",
+      "Most journaling and habit apps assume you want your life on someone else's server, and most of them are built to keep you opening the app rather than to help you actually reflect.",
+      "I wanted something quiet — a place to write honestly, track rhythms, and keep a prayer log, where the default was that nothing left my device unless I chose otherwise.",
     ],
     features: [
-      "[PLACEHOLDER] Replace with feature or capability.",
-      "[PLACEHOLDER] Replace with feature or capability.",
-      "[PLACEHOLDER] Replace with feature or capability.",
+      "Passwordless authentication — sign-in by emailed magic link, no password ever stored",
+      "Row-level security in Supabase, so each user can only read or write their own rows even with the public connection key",
+      "Local-first storage — the app works fully offline, writing to localStorage as you type",
+      "Optional cloud sync that merges local data on sign-in and resolves conflicts by newer timestamp",
+      "Modular front end with no framework or build step — each module owns a slice of the UI over one shared storage layer",
+      "A written privacy page explaining exactly what syncs, what stays local, and how to delete either",
     ],
-    year: "[YEAR]",
-    clientType: "[PLACEHOLDER] Replace with client type",
+    approach: "Local-first was the architectural decision everything else followed from. If the data lives on the device by default, sync becomes an optional layer rather than a dependency, the app keeps working with no connection, and privacy is the default state rather than a policy promise. Cloud sync was built on top of that as something a user opts into, not something they have to accept to use the app.",
+    year: "2026",
+    clientType: "Personal project",
+    note: "A personal project, built and maintained on my own time.",
   },
 ];
 

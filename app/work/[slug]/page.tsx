@@ -3,14 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import Header from "../../Header";
+import SiteFooter from "../../SiteFooter";
 import SiteMotion from "../../SiteMotion";
-import {
-  canVisitProject,
-  getProjectBySlug,
-  projects,
-} from "../../data/projects";
-import { ProjectMedia, StatusBadge } from "../ProjectUI";
-import styles from "../work.module.css";
+import { getProjectBySlug, projects } from "../../data/projects";
+import { StatusBadge } from "../ProjectUI";
+import detailStyles from "../CaseStudyCompact.module.css";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -41,138 +38,130 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const projectIndex = projects.findIndex((item) => item.slug === project.slug);
   const previousProject = projects[(projectIndex - 1 + projects.length) % projects.length];
   const nextProject = projects[(projectIndex + 1) % projects.length];
-  const showVisitSite = canVisitProject(project) && project.liveUrl;
+
+  const heroScreenshot = project.screenshots[0] ?? {
+    src: project.heroImage,
+    alt: project.heroImageAlt,
+    caption: "",
+  };
+  const remainingScreenshots = project.screenshots.slice(1);
 
   return (
     <>
       <Header />
-      <main className={styles.page}>
-        <section className={styles.detailHero} id="top">
-          <div className={styles.detailInner}>
-            <div className={styles.detailHeroTop}>
-              <Link className={styles.backLink} href="/work">
-                ← All work
-              </Link>
+      <main className={detailStyles.caseStudy}>
+        <div className={detailStyles.shell}>
+          <aside className={detailStyles.projectRail}>
+            <Link className={detailStyles.backLink} href="/work">
+              ← All work
+            </Link>
+
+            <div className={detailStyles.railIdentity}>
+              <h1>{project.title}</h1>
               <StatusBadge status={project.status} />
             </div>
 
-            <div className={styles.detailTitleRow}>
-              <h1>{project.title}</h1>
-              <p className={styles.detailSummary}>{project.summary}</p>
+            <dl className={detailStyles.metaList}>
+              <div>
+                <dt>Year</dt>
+                <dd>{project.year}</dd>
+              </div>
+              <div>
+                <dt>Client type</dt>
+                <dd>{project.clientType}</dd>
+              </div>
+              <div>
+                <dt>Stack</dt>
+                <dd>{project.tech.join(" · ")}</dd>
+              </div>
+            </dl>
+
+            {project.note ? (
+              <p className={detailStyles.projectNote}>{project.note}</p>
+            ) : null}
+
+            {project.liveUrl ? (
+              <a
+                className={detailStyles.visitButton}
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Visit site <span aria-hidden="true">↗</span>
+              </a>
+            ) : null}
+          </aside>
+
+          <article className={detailStyles.projectContent}>
+            <figure className={detailStyles.heroFigure}>
+              <img
+                src={heroScreenshot.src || project.heroImage}
+                alt={heroScreenshot.alt}
+                loading="eager"
+                decoding="async"
+              />
+            </figure>
+
+            <div className={detailStyles.copyStack}>
+              <section className={detailStyles.copyBlock} aria-labelledby="problem-heading">
+                <p className={detailStyles.sectionLabel}>The problem</p>
+                <p id="problem-heading" className={detailStyles.bodyCopy}>
+                  {project.problem.join(" ")}
+                </p>
+              </section>
+
+              <section className={detailStyles.copyBlock} aria-labelledby="built-heading">
+                <p className={detailStyles.sectionLabel}>What I built</p>
+                <ul id="built-heading" className={detailStyles.featureList}>
+                  {project.features.map((feature) => (
+                    <li key={feature}>{feature}</li>
+                  ))}
+                </ul>
+              </section>
+
+              <section className={detailStyles.copyBlock} aria-labelledby="approach-heading">
+                <p className={detailStyles.sectionLabel}>The approach</p>
+                <p id="approach-heading" className={detailStyles.bodyCopy}>
+                  {project.approach}
+                </p>
+              </section>
             </div>
 
-            <div className={styles.detailMeta} aria-label="Project details">
-              <div>
-                <span className={styles.metaLabel}>Year</span>
-                <span>{project.year}</span>
+            {remainingScreenshots.length > 0 ? (
+              <div className={detailStyles.screenshotStack} aria-label={`${project.title} screenshots`}>
+                {remainingScreenshots.map((image, index) => (
+                  <figure className={detailStyles.screenshotFigure} key={`${image.caption}-${index}`}>
+                    {image.src ? (
+                      <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
+                    ) : (
+                      <div
+                        className={detailStyles.screenshotPlaceholder}
+                        role="img"
+                        aria-label={image.alt}
+                      >
+                        <span>Screenshot coming soon</span>
+                      </div>
+                    )}
+                    <figcaption>{image.caption}</figcaption>
+                  </figure>
+                ))}
               </div>
-              <div>
-                <span className={styles.metaLabel}>Client type</span>
-                <span>{project.clientType}</span>
-              </div>
-              <div>
-                <span className={styles.metaLabel}>Status</span>
-                <span>{project.status}</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <div className={styles.heroMediaWrap}>
-          <ProjectMedia
-            src={project.heroImage}
-            alt={project.heroImageAlt}
-            title={project.title}
-            className={styles.heroMedia}
-            loading="eager"
-          />
+            ) : null}
+          </article>
         </div>
 
-        <section className={styles.contentSection} aria-labelledby="problem-heading">
-          <div className={`${styles.detailInner} ${styles.twoCol}`}>
-            <p className={styles.sectionLabel}>01 / The problem</p>
-            <div className={styles.prose}>
-              <h2 id="problem-heading">The problem</h2>
-              {project.problem.map((paragraph, index) => (
-                <p key={index}>{paragraph}</p>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className={styles.contentSectionDark} aria-labelledby="built-heading">
-          <div className={`${styles.detailInner} ${styles.twoCol}`}>
-            <p className={styles.sectionLabel}>02 / What I built</p>
-            <div className={styles.featureColumn}>
-              <h2 id="built-heading">What I built</h2>
-              <ul className={styles.featureList}>
-                {project.features.map((feature, index) => (
-                  <li key={index}>{feature}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <section className={styles.screenshotSection} aria-labelledby="screenshots-heading">
-          <div className={styles.detailInner}>
-            <p className={styles.sectionLabel}>03 / Screenshots</p>
-            <div className={styles.prose}>
-              <h2 id="screenshots-heading">Screenshots</h2>
-            </div>
-            <div className={styles.screenshotGrid}>
-              {project.screenshots.map((image, index) => (
-                <ProjectMedia
-                  src={image.src}
-                  alt={image.alt}
-                  caption={image.caption}
-                  title={`${project.title} — ${index + 1}`}
-                  loading="lazy"
-                  key={`${image.src}-${index}`}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className={styles.contentSectionDark} aria-labelledby="stack-heading">
-          <div className={`${styles.detailInner} ${styles.twoCol}`}>
-            <p className={styles.sectionLabel}>04 / Tech stack</p>
-            <div className={styles.techColumn}>
-              <h2 id="stack-heading">Tech stack</h2>
-              <div className={styles.techWrap} aria-label="Project technology stack">
-                {project.tech.map((item, index) => (
-                  <span className={styles.techPill} key={`${item}-${index}`}>
-                    {item}
-                  </span>
-                ))}
-              </div>
-
-              {showVisitSite ? (
-                <a
-                  className={styles.visitButton}
-                  href={project.liveUrl as string}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Visit site <span aria-hidden="true">↗</span>
-                </a>
-              ) : null}
-            </div>
-          </div>
-        </section>
-
-        <nav className={styles.projectNav} aria-label="Project navigation">
+        <nav className={detailStyles.projectNav} aria-label="Project navigation">
           <Link href={`/work/${previousProject.slug}`}>
-            <small>← Previous project</small>
+            <small>← Previous</small>
             <strong>{previousProject.title}</strong>
           </Link>
           <Link href={`/work/${nextProject.slug}`}>
-            <small>Next project →</small>
+            <small>Next →</small>
             <strong>{nextProject.title}</strong>
           </Link>
         </nav>
       </main>
+      <SiteFooter />
       <SiteMotion />
     </>
   );

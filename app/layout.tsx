@@ -20,7 +20,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Kyle Stringham — websites",
   description:
-    "Custom websites for small businesses, from focused sites to advanced builds with integrations and AI. Projects start at $1,250.",
+    "Custom websites for small businesses, from focused sites to advanced builds with integrations, automation, and AI. Scope is confirmed after consultation.",
 };
 
 export default function RootLayout({

@@ -1,243 +1,499 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import {
-  MouseEvent as ReactMouseEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-
+import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./SelectedWork.module.css";
+import polish from "./SelectedWorkPolish.module.css";
 
-type LedgerRow = {
-  number: string;
-  name: string;
+type Feature = {
+  label: string;
+  detail: string;
+};
+
+type Project = {
+  id: string;
+  tab: string;
+  title: string;
   category: string;
   year: string;
   status: string;
-  href: string;
-  image: string | null;
-  pending?: boolean;
+  eyebrow: string;
+  headline: string;
+  body: string;
+  accent: "navy" | "gold" | "plum" | "forest";
+  siteUrl: string;
+  screenshots?: string[];
+  features: Feature[];
 };
 
-const rows: LedgerRow[] = [
+const projects: Project[] = [
   {
-    number: "01",
-    name: "Common Ground",
+    id: "with-little",
+    tab: "With Little",
+    title: "With Little",
+    category: "Personal project",
+    year: "2026",
+    status: "Live",
+    eyebrow: "SMALL STEPS. BIGGER POSSIBILITIES.",
+    headline: "A calmer digital home for families.",
+    body: "A gentle, useful experience built around clarity, trust, and the next right step.",
+    accent: "plum",
+    siteUrl: "withlittle.com",
+    screenshots: [
+      "/selected-work/with-little-01.png",
+      "/selected-work/with-little-02.png",
+    ],
+    features: [
+      { label: "Email / CRM", detail: "Follow-up and nurturing flows" },
+      { label: "Intake forms", detail: "Structured client information" },
+      { label: "Analytics", detail: "See what visitors actually use" },
+      { label: "CMS", detail: "Simple content updates" },
+      { label: "Payments", detail: "Ready for secure checkout" },
+      { label: "Client portal", detail: "Private resources and access" },
+    ],
+  },
+  {
+    id: "common-ground",
+    tab: "Common Ground",
+    title: "Common Ground",
     category: "ABA / autism support",
     year: "2026",
-    status: "IN PILOT",
-    href: "/work/common-ground",
-    image: "/hero-crt/common-ground.png",
+    status: "Piloted",
+    eyebrow: "PARENT NAVIGATION, WITHOUT THE OVERWHELM.",
+    headline: "One place to know what comes next.",
+    body: "A parent-navigation platform that turns scattered information into guided next steps.",
+    accent: "gold",
+    siteUrl: "texasabacenterscg.com",
+    screenshots: ["/hero-crt/common-ground.png"],
+    features: [
+      { label: "Guided intake", detail: "Personalized parent pathways" },
+      { label: "Resource system", detail: "Curated tools in one place" },
+      { label: "Analytics", detail: "Understand parent usage" },
+      { label: "Care-plan logic", detail: "Adaptive next-step planning" },
+      { label: "Provider tools", detail: "Interview and evaluation guides" },
+      { label: "Support routing", detail: "Clear paths to human help" },
+    ],
   },
   {
-    number: "02",
-    name: "BCBA Prep",
+    id: "bcba-prep",
+    tab: "BCBA Prep",
+    title: "BCBA Prep",
     category: "Exam prep · licensing",
     year: "2026",
-    status: "LAUNCHING SOON",
-    href: "/work/bcba-prep",
-    image: "/hero-crt/bcba-prep.png",
+    status: "Pre-launch",
+    eyebrow: "NINE DOMAINS. ONE STUDY EXPERIENCE.",
+    headline: "A study storefront that feels like a library.",
+    body: "Custom commerce and member architecture wrapped in an interactive book-based experience.",
+    accent: "plum",
+    siteUrl: "Bee the Behavior Bae",
+    screenshots: [
+      "/selected-work/bcba-prep-01.png",
+      "/selected-work/bcba-prep-02.png",
+    ],
+    features: [
+      { label: "Stripe", detail: "Server-side product pricing" },
+      { label: "Member access", detail: "Account-based study library" },
+      { label: "Bundles", detail: "Domain and full-library pricing" },
+      { label: "Testimonials", detail: "Social-proof collection" },
+      { label: "Analytics", detail: "Launch behavior insights" },
+      { label: "Licensing", detail: "Personal-use access structure" },
+    ],
   },
   {
-    number: "03",
-    name: "Lake City Self Storage",
+    id: "life-coaching",
+    tab: "Life Coaching",
+    title: "GrowthGains",
+    category: "Life coaching",
+    year: "2026",
+    status: "Pre-launch",
+    eyebrow: "IDENTITY. TRANSITION. NEXT CHAPTER.",
+    headline: "A coaching site built around the moment things change.",
+    body: "A guided marketing experience for people navigating marriage, divorce, empty nesting, and reinvention.",
+    accent: "forest",
+    siteUrl: "growthgains.co",
+    features: [
+      { label: "Intake funnel", detail: "Progressive discovery questions" },
+      { label: "Booking", detail: "Consultation-ready scheduling" },
+      { label: "Email", detail: "Lead follow-up structure" },
+      { label: "Analytics", detail: "Conversion-path visibility" },
+      { label: "Testimonials", detail: "Trust-building social proof" },
+      { label: "CMS", detail: "Expandable coaching content" },
+    ],
+  },
+  {
+    id: "storage",
+    tab: "Storage",
+    title: "Lake City Self Storage",
     category: "Self storage",
     year: "2025",
-    status: "CASE STUDY",
-    href: "/work/lake-city-self-storage",
-    image: null,
+    status: "Archived",
+    eyebrow: "LOCAL, CLEAR, CONVERSION-READY.",
+    headline: "A storage site that gets people to the unit faster.",
+    body: "A straightforward local-business experience built around trust, location clarity, and action.",
+    accent: "navy",
+    siteUrl: "lakecityselfstorage.com",
+    screenshots: [
+      "/selected-work/lake-city-01.png",
+      "/selected-work/lake-city-02.png",
+    ],
+    features: [
+      { label: "Unit discovery", detail: "Clear paths to availability" },
+      { label: "Contact flows", detail: "Fewer dead ends" },
+      { label: "Local SEO", detail: "Search-ready structure" },
+      { label: "Analytics", detail: "Track high-intent actions" },
+      { label: "Mobile", detail: "Fast, thumb-friendly browsing" },
+      { label: "Lead capture", detail: "Simple inquiry paths" },
+    ],
   },
   {
-    number: "04",
-    name: "Yours Here",
-    category: "—",
+    id: "yours-here",
+    tab: "Yours Here",
+    title: "Your business",
+    category: "Next project",
     year: "—",
-    status: "PENDING",
-    href: "#quick-contact",
-    image: null,
-    pending: true,
+    status: "Available",
+    eyebrow: "THIS TAB IS STILL EMPTY.",
+    headline: "Your business could be the next page.",
+    body: "A custom build shaped around the way your business actually works — not a template with the name swapped out.",
+    accent: "gold",
+    siteUrl: "yourbusiness.com",
+    features: [
+      { label: "Email / CRM", detail: "Nurture leads automatically" },
+      { label: "Intake forms", detail: "Collect exactly what you need" },
+      { label: "Analytics", detail: "Know what is working" },
+      { label: "CMS", detail: "Update content without friction" },
+      { label: "Payments", detail: "Take secure online payments" },
+      { label: "Client portal", detail: "Give clients a private home" },
+    ],
   },
 ];
 
-function Status({ text }: { text: string }) {
-  return (
-    <span className={styles.status}>
-      <i aria-hidden="true" />
-      {text}
-    </span>
-  );
-}
+const featureGlyphs = ["✉", "▤", "⌁", "▦", "▣", "◎"];
 
-function Metadata({ row, gold = false }: { row: LedgerRow; gold?: boolean }) {
+function GeneratedPreview({ active }: { active: Project }) {
   return (
-    <div
-      className={`${styles.metaTrack} ${gold ? styles.goldMetaTrack : ""}`}
-      aria-hidden={gold || undefined}
-    >
-      <span className={styles.category}>{row.category}</span>
-      <span className={styles.year}>{row.year}</span>
-      <Status text={row.status} />
+    <div className={styles.siteScroller} key={active.id}>
+      <div className={styles.siteHero}>
+        <div className={styles.fakeNav}>
+          <strong>{active.title}</strong>
+          <span>Home</span>
+          <span>Work</span>
+          <span>About</span>
+          <b>Let&apos;s talk</b>
+        </div>
+
+        <div className={styles.siteHeroGrid}>
+          <div>
+            <p className={styles.mockEyebrow}>{active.eyebrow}</p>
+            <h3>{active.headline}</h3>
+            <p>{active.body}</p>
+            <span className={styles.mockButton}>Explore the project →</span>
+          </div>
+          <div className={styles.heroArtwork} aria-hidden="true">
+            <span className={styles.artOrb} />
+            <span className={styles.artCard} />
+            <span className={styles.artLine} />
+          </div>
+        </div>
+      </div>
+
+      <div className={styles.mockStats}>
+        <div>
+          <strong>Custom</strong>
+          <span>Built around the workflow</span>
+        </div>
+        <div>
+          <strong>Responsive</strong>
+          <span>Designed across devices</span>
+        </div>
+        <div>
+          <strong>Maintainable</strong>
+          <span>Made to grow after launch</span>
+        </div>
+      </div>
+
+      <div className={styles.mockFeatureBlock}>
+        <div className={styles.mockPhoto} aria-hidden="true" />
+        <div>
+          <p>THE SYSTEM BEHIND THE SCREEN</p>
+          <h4>Design is only the front layer.</h4>
+          <span>
+            Forms, payments, analytics, content, automation and client access can all
+            live behind the same experience.
+          </span>
+        </div>
+      </div>
+
+      <div className={styles.mockFooter}>
+        <strong>{active.title}</strong>
+        <span>{active.category}</span>
+        <span>{active.year}</span>
+      </div>
     </div>
   );
 }
 
 export default function SelectedWork() {
-  const router = useRouter();
-  const [activeRow, setActiveRow] = useState<number | null>(null);
-  const [loadedRows, setLoadedRows] = useState<Set<number>>(() => new Set());
-  const [navigatingRow, setNavigatingRow] = useState<number | null>(null);
-  const navigationTimer = useRef<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [shotIndex, setShotIndex] = useState(0);
+  const [entered, setEntered] = useState(false);
+  const sectionRef = useRef<HTMLElement | null>(null);
 
-  const ensureImage = (index: number) => {
-    if (!rows[index]?.image) return;
-
-    setLoadedRows((current) => {
-      if (current.has(index)) return current;
-      const next = new Set(current);
-      next.add(index);
-      return next;
-    });
-  };
+  const active = projects[activeIndex];
+  const shotCount = active.screenshots?.length ?? 0;
 
   useEffect(() => {
-    return () => {
-      if (navigationTimer.current !== null) {
-        window.clearTimeout(navigationTimer.current);
-      }
-    };
+    const node = sectionRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setEntered(true);
+      },
+      { threshold: 0.18 },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
   }, []);
 
-  const handleNavigate = (
-    event: ReactMouseEvent<HTMLAnchorElement>,
-    row: LedgerRow,
-    index: number,
-  ) => {
-    if (
-      event.metaKey ||
-      event.ctrlKey ||
-      event.shiftKey ||
-      event.altKey ||
-      event.button !== 0
-    ) {
-      return;
-    }
+  useEffect(() => {
+    setShotIndex(0);
+    if (shotCount < 2) return;
 
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    const touchLike = window.matchMedia(
-      "(hover: none), (pointer: coarse)",
-    ).matches;
+    const timer = window.setInterval(() => {
+      setShotIndex((current) => (current + 1) % shotCount);
+    }, 6500);
 
-    if (reducedMotion || touchLike || row.pending || !row.image) return;
+    return () => window.clearInterval(timer);
+  }, [active.id, shotCount]);
 
-    event.preventDefault();
-    ensureImage(index);
-    setActiveRow(index);
-    setNavigatingRow(index);
+  const accentClass = useMemo(() => {
+    return styles[`accent_${active.accent}`] ?? "";
+  }, [active.accent]);
 
-    if (navigationTimer.current !== null) {
-      window.clearTimeout(navigationTimer.current);
-    }
+  const previousShot = () => {
+    if (shotCount < 2) return;
+    setShotIndex((current) => (current - 1 + shotCount) % shotCount);
+  };
 
-    navigationTimer.current = window.setTimeout(() => {
-      router.push(row.href);
-      navigationTimer.current = null;
-    }, 300);
+  const nextShot = () => {
+    if (shotCount < 2) return;
+    setShotIndex((current) => (current + 1) % shotCount);
+  };
+
+  const selectProject = (index: number) => {
+    setActiveIndex(index);
+    setShotIndex(0);
   };
 
   return (
     <section
-      className={styles.section}
-      id="featured-work"
+      ref={sectionRef}
+      className={`${styles.section} ${polish.sectionPolish} ${entered ? styles.entered : ""}`}
+      id="selected-work"
       aria-labelledby="selected-work-heading"
     >
-      <div className={styles.inner}>
+      <div className={styles.headingWrap}>
+        <p className={styles.eyebrow}>Selected work</p>
         <div className={styles.headingRow}>
-          <p className={styles.eyebrow}>Selected work</p>
           <h2 id="selected-work-heading">Proof before pricing.</h2>
+          <p className={styles.headingNote}>
+            Open the binder. Pick a tab. See the site, then see the system behind it.
+          </p>
         </div>
+      </div>
 
-        <div className={styles.ledger}>
-          {rows.map((row, index) => {
-            const active = activeRow === index;
-            const navigating = navigatingRow === index;
-            const imageLoaded = loadedRows.has(index);
+      <div className={`${styles.stage} ${polish.stagePolish} ${accentClass}`}>
+        <div className={styles.tableGlow} aria-hidden="true" />
 
-            return (
-              <Link
-                className={`${styles.ledgerRow} ${
-                  active ? styles.active : ""
-                } ${row.pending ? styles.pending : ""} ${
-                  navigating ? styles.navigating : ""
-                }`}
-                href={row.href}
-                key={row.number}
-                onClick={(event) => handleNavigate(event, row, index)}
-                onMouseEnter={() => {
-                  ensureImage(index);
-                  setActiveRow(index);
-                }}
-                onMouseLeave={() => {
-                  if (navigating) return;
-                  setActiveRow((current) =>
-                    current === index ? null : current,
-                  );
-                }}
-                onFocus={() => {
-                  ensureImage(index);
-                  setActiveRow(index);
-                }}
-                onBlur={() => {
-                  if (navigating) return;
-                  setActiveRow((current) =>
-                    current === index ? null : current,
-                  );
-                }}
-              >
-                {row.image ? (
-                  <span className={styles.previewSlot} aria-hidden="true">
-                    {imageLoaded ? (
+        <div
+          className={`${styles.binder} ${polish.binderPolish}`}
+          aria-label="Selected project binder"
+        >
+          <div className={styles.coverLeft}>
+            <div className={`${styles.coverPaper} ${polish.coverPolish}`}>
+              <p className={styles.coverKicker}>Selected work</p>
+              <p className={`${styles.coverLine} ${polish.coverLinePolish}`}>
+                Thoughtful websites,
+                <br />
+                built around
+                <br />
+                real businesses.
+              </p>
+              <span className={styles.coverRule} />
+              <p className={styles.coverSmall}>
+                Strategy
+                <br />
+                design
+                <br />
+                systems
+                <br />
+                launch
+              </p>
+              <blockquote>“Good design makes the next step obvious.”</blockquote>
+            </div>
+          </div>
+
+          <div className={styles.rings} aria-hidden="true">
+            {[0, 1, 2, 3, 4].map((ring) => (
+              <span key={ring} />
+            ))}
+          </div>
+
+          <div className={styles.pageStack}>
+            <div className={styles.backPage} aria-hidden="true" />
+            <div
+              className={`${styles.sitePage} ${polish.sitePagePolish} ${polish.projectPage}`}
+              key={active.id}
+            >
+              <div className={`${styles.browserBar} ${polish.browserBarPolish}`}>
+                <span className={styles.browserDots} aria-hidden="true">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+                <span className={styles.browserAddress}>{active.siteUrl}</span>
+                <span className={styles.browserAction}>↗</span>
+              </div>
+
+              <div className={`${styles.siteViewport} ${polish.viewportPolish}`}>
+                {shotCount > 0 ? (
+                  <div className={polish.screenshotStage}>
+                    {active.screenshots?.map((src, index) => (
                       <img
-                        className={styles.rowImage}
-                        src={row.image}
-                        alt=""
-                        loading="lazy"
+                        alt={`${active.title} website screen ${index + 1}`}
+                        className={`${polish.screenshotImage} ${index === shotIndex ? polish.screenshotActive : ""}`}
                         decoding="async"
+                        key={src}
+                        loading={index === 0 ? "eager" : "lazy"}
+                        src={src}
                       />
-                    ) : null}
-                    <span className={styles.previewCream} />
-                  </span>
-                ) : null}
+                    ))}
 
-                {row.pending ? (
-                  <span className={styles.pendingPreview} aria-hidden="true">
-                    <span>A place for what&apos;s next</span>
-                  </span>
-                ) : null}
+                    {shotCount > 1 ? (
+                      <div className={polish.shotNavigator} aria-label="Website screenshot navigation">
+                        <button
+                          aria-label={`Show previous ${active.title} screenshot`}
+                          onClick={previousShot}
+                          type="button"
+                        >
+                          ←
+                        </button>
+                        <div className={polish.shotReadout}>
+                          <span>Screen</span>
+                          <strong>
+                            {String(shotIndex + 1).padStart(2, "0")} / {String(shotCount).padStart(2, "0")}
+                          </strong>
+                          <i className={polish.shotProgress} key={`${active.id}-${shotIndex}`} />
+                        </div>
+                        <button
+                          aria-label={`Show next ${active.title} screenshot`}
+                          onClick={nextShot}
+                          type="button"
+                        >
+                          →
+                        </button>
+                      </div>
+                    ) : (
+                      <div className={polish.captureLabel} aria-hidden="true">
+                        <span>Live screen</span>
+                        <b>01 / 01</b>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <GeneratedPreview active={active} />
+                )}
+              </div>
 
-                <span className={styles.filament} aria-hidden="true" />
-
-                <div className={styles.rowText}>
-                  <span className={styles.number}>{row.number}</span>
-                  <span className={styles.projectName}>{row.name}</span>
-
-                  <span className={styles.metaViewport}>
-                    <Metadata row={row} />
-                    <Metadata row={row} gold />
-                  </span>
+              <div className={`${styles.pageMeta} ${polish.pageMetaPolish}`}>
+                <div>
+                  <span>{String(activeIndex + 1).padStart(2, "0")} / 06</span>
+                  <strong>{active.title}</strong>
                 </div>
-              </Link>
-            );
-          })}
+                <div>
+                  <span>{active.category}</span>
+                  <strong className={polish.statusBadge}>{active.status}</strong>
+                </div>
+              </div>
+            </div>
+
+            <div
+              className={`${styles.tabs} ${polish.tabsPolish}`}
+              role="tablist"
+              aria-label="Portfolio projects"
+            >
+              {projects.map((project, index) => (
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={index === activeIndex}
+                  className={`${index === activeIndex ? styles.activeTab : ""} ${polish.tabButton} ${index === activeIndex ? polish.tabButtonActive : ""}`}
+                  key={project.id}
+                  onClick={() => selectProject(index)}
+                >
+                  {project.tab}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <Link className={styles.viewAll} href="/work">
-          View all work <span aria-hidden="true">→</span>
-        </Link>
+        <div className={`${styles.sheetZone} ${polish.sheetZonePolish}`}>
+          <div className={styles.sheetShadow} aria-hidden="true" />
+          <article
+            className={`${styles.featureSheet} ${polish.featureSheetPolish}`}
+            key={active.id}
+          >
+            <div className={styles.sheetTop}>
+              <p>What&apos;s under the hood</p>
+              <div className={polish.sheetTopMeta}>
+                <span className={polish.sheetStatus}>{active.status}</span>
+                <span>{String(activeIndex + 1).padStart(2, "0")} / 06</span>
+              </div>
+            </div>
+
+            <h3>
+              Everything the site
+              <br />
+              can do behind the scenes.
+            </h3>
+
+            <p className={styles.sheetIntro}>
+              The visible website is only one layer. These are the systems that can
+              make it useful after someone lands on it.
+            </p>
+
+            <div className={styles.featureGrid}>
+              {active.features.map((feature, index) => (
+                <div
+                  className={`${styles.feature} ${polish.featurePolish}`}
+                  key={`${active.id}-${feature.label}`}
+                  style={{ "--i": index } as CSSProperties}
+                >
+                  <span className={styles.featureGlyph}>{featureGlyphs[index]}</span>
+                  <div>
+                    <strong>{feature.label}</strong>
+                    <p>{feature.detail}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className={styles.sheetFoot}>
+              <span>{active.title}</span>
+              <span>Built around the business.</span>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div className={styles.underStage}>
+        <p>
+          The binder is the work. The loose sheet is the infrastructure that makes
+          the work useful.
+        </p>
+        <a href="/work">View all work <span>→</span></a>
       </div>
     </section>
   );

@@ -4,22 +4,47 @@ import { useEffect, useRef, useState } from "react";
 
 import styles from "./RetroCRT.module.css";
 
+type ChannelImage = {
+  src: string;
+  alt: string;
+};
+
 type Channel = {
   label: string;
-  src: string | null;
-  alt: string;
+  images: ChannelImage[];
 };
 
 const channels: Channel[] = [
   {
     label: "Common Ground",
-    src: "/hero-crt/common-ground.png",
-    alt: "Common Ground homepage showing autism support resources for Texas families",
+    images: [
+      {
+        src: "/hero-crt/common-ground.png",
+        alt: "Common Ground homepage showing autism support resources for Texas families",
+      },
+    ],
   },
   {
     label: "BCBA Prep",
-    src: "/hero-crt/bcba-prep.png",
-    alt: "BCBA Prep study library homepage showing the nine BCBA exam domains",
+    images: [
+      {
+        src: "/hero-crt/bcba-prep.png",
+        alt: "BCBA Prep study library homepage showing the nine BCBA exam domains",
+      },
+    ],
+  },
+  {
+    label: "With Little",
+    images: [
+      {
+        src: "/hero-crt/with-little-daily.png",
+        alt: "With Little daily planning dashboard with habits, must-dos, journal, and scripture",
+      },
+      {
+        src: "/hero-crt/with-little-journal.png",
+        alt: "With Little journaling and reflection interface",
+      },
+    ],
   },
 ];
 
@@ -33,7 +58,6 @@ function MonitorFrame() {
       preserveAspectRatio="xMidYMid meet"
     >
       <g stroke="currentColor" strokeWidth="1.35" vectorEffect="non-scaling-stroke">
-        {/* Chassis depth sits on the right so the screen faces back toward the copy. */}
         <path d="M486 58 566 92v286l-80 42" />
         <path d="M510 74 590 106v244l-80 51" opacity=".68" />
         <path d="M486 58h-14M486 420h-14" opacity=".75" />
@@ -46,10 +70,6 @@ function MonitorFrame() {
 
         <path d="M56 374h414" opacity=".62" />
         <path d="M82 422v17h70l7-17M393 422l8 17h68v-17" opacity=".72" />
-
-        <circle cx="431" cy="391" r="12" />
-        <circle cx="467" cy="391" r="12" />
-        <path d="M431 374v8M467 374v8" opacity=".75" />
       </g>
     </svg>
   );
@@ -108,21 +128,18 @@ export default function RetroCRT() {
             aria-label={`${channel.label} website preview`}
           >
             <div className={styles.screenContent} key={channel.label}>
-              {channel.src ? (
-                <img
-                  className={styles.scrollImage}
-                  src={channel.src}
-                  alt={channel.alt}
-                  loading={activeChannel === 0 ? "eager" : "lazy"}
-                  decoding="async"
-                />
-              ) : (
-                <div className={styles.pendingScreen} role="img" aria-label={channel.alt}>
-                  <span>{String(activeChannel + 1).padStart(2, "0")}</span>
-                  <strong>{channel.label}</strong>
-                  <small>Screenshot ready to drop in</small>
-                </div>
-              )}
+              <div className={styles.scrollImage} style={{ animationDuration: "22s" }}>
+                {channel.images.map((image, imageIndex) => (
+                  <img
+                    src={image.src}
+                    alt={image.alt}
+                    loading={activeChannel === 0 && imageIndex === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                    key={image.src}
+                    style={{ display: "block", width: "100%", height: "auto" }}
+                  />
+                ))}
+              </div>
             </div>
 
             <span className={styles.bootLine} aria-hidden="true" />
@@ -131,58 +148,52 @@ export default function RetroCRT() {
           </div>
 
           <MonitorFrame />
-        </div>
 
-        <div className={styles.controlDeck} aria-label="Project preview controls">
-          <div
-            className={styles.switches}
-            style={{ gridTemplateColumns: `repeat(${channels.length}, minmax(0, 1fr))` }}
-          >
-            {channels.map((item, index) => {
-              const active = index === activeChannel;
+          <div className={styles.controlDeck} aria-label="Project preview controls">
+            <div className={styles.switches}>
+              {channels.map((item, index) => {
+                const active = index === activeChannel;
 
-              return (
-                <button
-                  className={`${styles.channelSwitch} ${active ? styles.switchActive : ""}`}
-                  type="button"
-                  aria-pressed={active}
-                  onClick={() => setActiveChannel(index)}
-                  key={item.label}
-                >
-                  <span className={styles.switchTravel} aria-hidden="true">
-                    <span />
-                  </span>
-                  <span className={styles.switchCopy}>
-                    <b>{String(index + 1).padStart(2, "0")}</b>
-                    <span>{item.label}</span>
-                  </span>
-                </button>
-              );
-            })}
+                return (
+                  <button
+                    className={`${styles.channelSwitch} ${active ? styles.switchActive : ""}`}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => setActiveChannel(index)}
+                    key={item.label}
+                  >
+                    <span className={styles.switchTravel} aria-hidden="true">
+                      <span />
+                    </span>
+                    <span className={styles.switchCopy}>
+                      <b>{String(index + 1).padStart(2, "0")}</b>
+                      <span>{item.label}</span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              className={styles.powerButton}
+              type="button"
+              onClick={runBoot}
+              aria-label="Restart CRT boot sequence"
+            >
+              <PowerGlyph />
+              <span>Power</span>
+            </button>
           </div>
-
-          <button
-            className={styles.powerButton}
-            type="button"
-            onClick={runBoot}
-            aria-label="Restart CRT boot sequence"
-          >
-            <PowerGlyph />
-            <span>Power</span>
-          </button>
         </div>
       </div>
 
       <div className={styles.mobileStatic} aria-label={`${channels[0].label} website preview`}>
-        {channels[0].src ? (
-          <img src={channels[0].src} alt={channels[0].alt} loading="eager" decoding="async" />
-        ) : (
-          <div className={styles.mobilePending} role="img" aria-label={channels[0].alt}>
-            <span>01</span>
-            <strong>{channels[0].label}</strong>
-            <small>Screenshot ready to drop in</small>
-          </div>
-        )}
+        <img
+          src={channels[0].images[0].src}
+          alt={channels[0].images[0].alt}
+          loading="eager"
+          decoding="async"
+        />
       </div>
     </div>
   );

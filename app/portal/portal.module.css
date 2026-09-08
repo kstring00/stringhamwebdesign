@@ -1,0 +1,856 @@
+.loginPage,
+.portalShell {
+  min-height: 100vh;
+  background: #0d1b26;
+  color: #f5f0e8;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.loginPage {
+  position: relative;
+  display: grid;
+  min-height: 100svh;
+  place-items: center;
+  padding: 7rem 1.25rem 3rem;
+}
+
+.backHome {
+  position: absolute;
+  top: 1.6rem;
+  left: clamp(1.25rem, 4vw, 4rem);
+  color: rgba(245, 240, 232, 0.58);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  transition: color 160ms ease;
+}
+
+.backHome:hover,
+.backHome:focus-visible {
+  color: #c9a227;
+}
+
+.loginPanel {
+  width: min(100%, 46rem);
+  border-top: 1px solid rgba(201, 162, 39, 0.48);
+  padding-top: clamp(2.4rem, 6vw, 4.5rem);
+}
+
+.eyebrow {
+  margin: 0;
+  color: #c9a227;
+  font-size: 0.61rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.loginPanel h1,
+.projectHero h1,
+.noProject h1 {
+  margin: 0.9rem 0 0;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(3.4rem, 8vw, 6.5rem);
+  font-weight: 300;
+  letter-spacing: -0.055em;
+  line-height: 0.88;
+}
+
+.loginCopy {
+  max-width: 39rem;
+  margin: 1.5rem 0 0;
+  color: rgba(245, 240, 232, 0.68);
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
+
+.loginForm {
+  margin-top: 2.4rem;
+}
+
+.loginForm label,
+.messageForm label {
+  display: block;
+  margin-bottom: 0.55rem;
+  color: rgba(245, 240, 232, 0.48);
+  font-size: 0.6rem;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.loginForm > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  border-bottom: 1px solid rgba(201, 162, 39, 0.52);
+}
+
+.loginForm input {
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  padding: 1rem 0;
+  background: transparent;
+  color: #f5f0e8;
+  font: inherit;
+  font-size: 1rem;
+}
+
+.loginForm input::placeholder {
+  color: rgba(245, 240, 232, 0.28);
+}
+
+.loginForm button,
+.sentState button {
+  border: 0;
+  background: transparent;
+  color: #c9a227;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 750;
+}
+
+.loginForm button:disabled {
+  cursor: wait;
+  opacity: 0.5;
+}
+
+.loginFoot {
+  margin: 1rem 0 0;
+  color: rgba(245, 240, 232, 0.36);
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+.sentState {
+  margin-top: 2.4rem;
+  border-left: 1px solid #c9a227;
+  padding: 0.2rem 0 0.2rem 1.2rem;
+}
+
+.sentState > span {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 2.2rem;
+  font-weight: 400;
+}
+
+.sentState p {
+  max-width: 35rem;
+  margin: 0.45rem 0 0.9rem;
+  color: rgba(245, 240, 232, 0.6);
+  line-height: 1.6;
+}
+
+.sentState button {
+  padding: 0;
+}
+
+.error {
+  margin: 1rem 0 0;
+  color: #e2b9aa;
+  font-size: 0.78rem;
+}
+
+.loadingMark {
+  min-height: 100svh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.75rem;
+  color: #c9a227;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 2rem;
+}
+
+.loadingMark i {
+  width: 4rem;
+  height: 1px;
+  background: rgba(201, 162, 39, 0.5);
+  transform-origin: left;
+  animation: portalPulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes portalPulse {
+  from { transform: scaleX(0.28); opacity: 0.35; }
+  to { transform: scaleX(1); opacity: 1; }
+}
+
+.portalHeader {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  height: 4.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(201, 162, 39, 0.28);
+  padding: 0 clamp(1rem, 3vw, 3rem);
+  background: rgba(13, 27, 38, 0.96);
+  backdrop-filter: blur(14px);
+}
+
+.portalBrand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  color: #f5f0e8;
+}
+
+.portalBrand > span {
+  color: #c9a227;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 1.55rem;
+}
+
+.portalBrand b {
+  font-size: 0.67rem;
+  font-weight: 750;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.userBlock {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.userBlock > span {
+  display: grid;
+  text-align: right;
+  color: rgba(245, 240, 232, 0.78);
+  font-size: 0.72rem;
+}
+
+.userBlock small {
+  color: rgba(245, 240, 232, 0.35);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.userBlock button,
+.inviteToggle {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #c9a227;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.65rem;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(15rem, 20rem) minmax(0, 1fr);
+  min-height: calc(100vh - 4.5rem);
+}
+
+.projectRail {
+  border-right: 1px solid rgba(201, 162, 39, 0.22);
+  padding: 2rem 1.2rem;
+}
+
+.railHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 0.4rem 1rem;
+}
+
+.projectList {
+  display: grid;
+  border-top: 1px solid rgba(245, 240, 232, 0.09);
+}
+
+.projectList button {
+  display: grid;
+  gap: 0.3rem;
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid rgba(245, 240, 232, 0.09);
+  padding: 1rem 0.4rem;
+  background: transparent;
+  color: rgba(245, 240, 232, 0.64);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+.projectList button:hover,
+.projectList button:focus-visible,
+.projectList .activeProject {
+  color: #f5f0e8;
+  transform: translateX(0.2rem);
+}
+
+.projectList .activeProject {
+  border-bottom-color: rgba(201, 162, 39, 0.55);
+}
+
+.projectList span {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.projectList small {
+  color: rgba(201, 162, 39, 0.68);
+  font-size: 0.54rem;
+  font-weight: 750;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.emptyRail {
+  margin: 1rem 0.4rem;
+  color: rgba(245, 240, 232, 0.35);
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.inviteForm {
+  display: grid;
+  gap: 0.55rem;
+  margin-bottom: 1.2rem;
+  border-top: 1px solid rgba(201, 162, 39, 0.4);
+  padding: 1rem 0.4rem 0;
+}
+
+.inviteForm input {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid rgba(245, 240, 232, 0.14);
+  outline: 0;
+  padding: 0.55rem 0;
+  background: transparent;
+  color: #f5f0e8;
+  font: inherit;
+  font-size: 0.72rem;
+}
+
+.inviteForm input::placeholder {
+  color: rgba(245, 240, 232, 0.3);
+}
+
+.inviteSplit {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.inviteForm > button {
+  border: 1px solid rgba(201, 162, 39, 0.55);
+  padding: 0.7rem 0.75rem;
+  background: transparent;
+  color: #c9a227;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.62rem;
+  font-weight: 750;
+}
+
+.projectView {
+  min-width: 0;
+  padding: clamp(2rem, 4vw, 4.5rem);
+}
+
+.notice,
+.errorBanner {
+  margin-bottom: 1rem;
+  border-left: 1px solid #c9a227;
+  padding: 0.7rem 1rem;
+  background: rgba(245, 240, 232, 0.04);
+  font-size: 0.72rem;
+}
+
+.errorBanner {
+  border-left-color: #d59c8a;
+  color: #e9c0b2;
+}
+
+.projectHero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  border-bottom: 1px solid rgba(201, 162, 39, 0.34);
+  padding-bottom: 2rem;
+}
+
+.projectHero h1 {
+  font-size: clamp(3rem, 6vw, 5.7rem);
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.48rem;
+  flex: none;
+  margin-top: 0.2rem;
+  color: rgba(245, 240, 232, 0.56);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.statusBadge i {
+  width: 0.38rem;
+  height: 0.38rem;
+  border: 1px solid #c9a227;
+  border-radius: 50%;
+  background: rgba(201, 162, 39, 0.22);
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 1px solid rgba(245, 240, 232, 0.1);
+}
+
+.summaryGrid article {
+  min-width: 0;
+  padding: 1.5rem clamp(0.7rem, 2vw, 1.4rem) 1.6rem 0;
+}
+
+.summaryGrid article + article {
+  border-left: 1px solid rgba(245, 240, 232, 0.1);
+  padding-left: clamp(0.7rem, 2vw, 1.4rem);
+}
+
+.summaryGrid span {
+  display: block;
+  color: rgba(245, 240, 232, 0.4);
+  font-size: 0.54rem;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.summaryGrid strong {
+  display: block;
+  margin-top: 0.45rem;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.summaryGrid small {
+  display: block;
+  max-width: 21rem;
+  margin-top: 0.55rem;
+  color: rgba(245, 240, 232, 0.36);
+  font-size: 0.66rem;
+  line-height: 1.45;
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(17rem, 0.65fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
+  padding-top: 2.5rem;
+}
+
+.messagesPanel,
+.filesPanel,
+.timesheetPanel,
+.invoicePanel {
+  border-top: 1px solid rgba(201, 162, 39, 0.38);
+  padding-top: 1rem;
+}
+
+.panelHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.1rem;
+}
+
+.panelHeading h2 {
+  margin: 0.2rem 0 0;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.panelHeading > span {
+  color: rgba(245, 240, 232, 0.35);
+  font-size: 0.64rem;
+}
+
+.messageThread {
+  display: grid;
+  gap: 1rem;
+  max-height: 28rem;
+  overflow: auto;
+  padding-right: 0.4rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 162, 39, 0.35) transparent;
+}
+
+.message {
+  max-width: 86%;
+  border-left: 1px solid rgba(245, 240, 232, 0.16);
+  padding-left: 0.9rem;
+}
+
+.messageMine {
+  margin-left: auto;
+  border-left-color: #c9a227;
+}
+
+.message header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.message header strong {
+  color: rgba(245, 240, 232, 0.75);
+  font-size: 0.66rem;
+}
+
+.message header time {
+  color: rgba(245, 240, 232, 0.28);
+  font-size: 0.55rem;
+}
+
+.message p {
+  margin: 0.45rem 0 0;
+  color: rgba(245, 240, 232, 0.62);
+  font-size: 0.84rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.emptyThread {
+  padding: 2rem 0;
+}
+
+.emptyThread span {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 1.55rem;
+}
+
+.emptyThread p,
+.emptySmall {
+  margin: 0.45rem 0 0;
+  color: rgba(245, 240, 232, 0.34);
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+.messageForm {
+  margin-top: 1.6rem;
+}
+
+.messageForm textarea {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid rgba(245, 240, 232, 0.13);
+  outline: 0;
+  padding: 0.85rem;
+  background: rgba(245, 240, 232, 0.025);
+  color: #f5f0e8;
+  font: inherit;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.messageForm textarea:focus {
+  border-color: rgba(201, 162, 39, 0.7);
+}
+
+.messageForm button {
+  margin-top: 0.7rem;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #c9a227;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 750;
+}
+
+.messageForm button:disabled {
+  cursor: default;
+  opacity: 0.38;
+}
+
+.sideStack {
+  display: grid;
+  align-content: start;
+  gap: 2.3rem;
+}
+
+.fileList {
+  display: grid;
+  border-top: 1px solid rgba(245, 240, 232, 0.09);
+}
+
+.fileList button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 0;
+  border-bottom: 1px solid rgba(245, 240, 232, 0.09);
+  padding: 0.8rem 0;
+  background: transparent;
+  color: #f5f0e8;
+  cursor: pointer;
+  text-align: left;
+}
+
+.fileList button > span {
+  display: grid;
+  min-width: 0;
+  gap: 0.2rem;
+}
+
+.fileList strong {
+  overflow: hidden;
+  font-size: 0.7rem;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fileList small {
+  color: rgba(245, 240, 232, 0.32);
+  font-size: 0.55rem;
+  text-transform: capitalize;
+}
+
+.fileList b {
+  color: #c9a227;
+  font-size: 0.8rem;
+}
+
+.uploadButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.8rem;
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  padding: 0.7rem 0.8rem;
+  color: #c9a227;
+  cursor: pointer;
+  font-size: 0.64rem;
+  font-weight: 700;
+}
+
+.uploadButton input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.uploadButton small {
+  color: rgba(245, 240, 232, 0.28);
+  font-size: 0.52rem;
+  font-weight: 500;
+}
+
+.timeList {
+  display: grid;
+  border-top: 1px solid rgba(245, 240, 232, 0.09);
+}
+
+.timeList > div {
+  display: grid;
+  grid-template-columns: 4.8rem minmax(0, 1fr) auto;
+  gap: 0.7rem;
+  align-items: start;
+  border-bottom: 1px solid rgba(245, 240, 232, 0.09);
+  padding: 0.7rem 0;
+}
+
+.timeList time {
+  color: rgba(245, 240, 232, 0.32);
+  font-size: 0.56rem;
+}
+
+.timeList span {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.timeList strong {
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+.timeList small {
+  color: rgba(245, 240, 232, 0.34);
+  font-size: 0.56rem;
+  line-height: 1.35;
+}
+
+.timeList b {
+  color: #c9a227;
+  font-size: 0.64rem;
+}
+
+.invoiceList {
+  display: grid;
+  border-top: 1px solid rgba(245, 240, 232, 0.09);
+}
+
+.invoiceList > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(245, 240, 232, 0.09);
+  padding: 0.75rem 0;
+}
+
+.invoiceList strong {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 400;
+}
+
+.invoiceList span {
+  color: #c9a227;
+  font-size: 0.54rem;
+  font-weight: 750;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.noProject {
+  max-width: 50rem;
+  margin-top: 10vh;
+}
+
+.noProject p:last-child {
+  max-width: 36rem;
+  color: rgba(245, 240, 232, 0.5);
+  line-height: 1.7;
+}
+
+@media (max-width: 70rem) {
+  .workspace {
+    grid-template-columns: 15rem minmax(0, 1fr);
+  }
+
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sideStack {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 54rem) {
+  .workspace {
+    display: block;
+  }
+
+  .projectRail {
+    border-right: 0;
+    border-bottom: 1px solid rgba(201, 162, 39, 0.24);
+    padding: 1rem;
+  }
+
+  .projectList {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    border-top: 0;
+    padding-bottom: 0.2rem;
+  }
+
+  .projectList button {
+    min-width: 11rem;
+    border: 1px solid rgba(245, 240, 232, 0.1);
+    padding: 0.8rem;
+  }
+
+  .projectList .activeProject {
+    border-color: rgba(201, 162, 39, 0.55);
+  }
+
+  .projectView {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .summaryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .summaryGrid article + article {
+    border-top: 1px solid rgba(245, 240, 232, 0.1);
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .sideStack {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 38rem) {
+  .portalHeader {
+    height: 4rem;
+    padding: 0 0.85rem;
+  }
+
+  .portalBrand b,
+  .userBlock > span {
+    display: none;
+  }
+
+  .workspace {
+    min-height: calc(100vh - 4rem);
+  }
+
+  .projectHero {
+    display: grid;
+  }
+
+  .projectHero h1 {
+    font-size: clamp(2.9rem, 15vw, 4.5rem);
+  }
+
+  .loginForm > div {
+    grid-template-columns: 1fr;
+  }
+
+  .loginForm button {
+    justify-self: start;
+    padding: 0.8rem 0 0;
+  }
+
+  .message {
+    max-width: 96%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loadingMark i {
+    animation: none;
+  }
+
+  .projectList button {
+    transition: none;
+  }
+}

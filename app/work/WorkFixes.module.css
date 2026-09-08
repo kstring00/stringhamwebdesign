@@ -1,0 +1,101 @@
+.mediaLink {
+  display: block;
+}
+
+.mediaLink:focus-visible,
+.titleLink:focus-visible,
+.visitSiteLink:focus-visible,
+.pendingCard:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.titleLink {
+  color: inherit;
+}
+
+.cardActions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.85rem 1.1rem;
+  margin-top: auto;
+  padding-top: 2rem;
+}
+
+.cardActionLink {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.visitSiteLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #8e7137;
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.visitSiteLink span {
+  font-size: 0.92em;
+  transition: transform 180ms ease;
+}
+
+.visitSiteLink:hover span {
+  transform: translate(2px, -2px);
+}
+
+.bcbaStatus {
+  top: auto !important;
+  bottom: 16px;
+}
+
+.bcbaImage {
+  object-position: center top;
+}
+
+.pendingCard {
+  color: inherit;
+}
+
+.pendingCard:hover {
+  color: inherit;
+}
+
+.pendingMedia {
+  display: grid;
+  place-items: center;
+  background: #f5f0e8;
+}
+
+.pendingFrame {
+  position: absolute;
+  inset: 18px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(201, 162, 39, 0.62);
+  color: rgba(128, 102, 53, 0.82);
+}
+
+.pendingFrame span {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.15rem, 2vw, 1.65rem);
+  font-style: italic;
+}
+
+.statusPending {
+  border-color: rgba(128, 102, 53, 0.72);
+  background: rgba(245, 240, 232, 0.88);
+  color: #806635;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visitSiteLink span {
+    transition: none;
+  }
+
+  .visitSiteLink:hover span {
+    transform: none;
+  }
+}

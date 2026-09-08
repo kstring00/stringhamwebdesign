@@ -10,7 +10,7 @@ type FieldErrors = {
   phone?: string;
 };
 
-const EMAIL = "stringham00@gmail.com";
+const EMAIL = "kyle@stringhamwebdesign.com";
 
 function validateName(value: string) {
   const trimmed = value.trim();
@@ -240,8 +240,6 @@ export default function BottomCapture() {
 
           <p className={styles.alternate}>
             Prefer email? <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
-            <span aria-hidden="true"> · </span>
-            <a href="#contact">Start the full AI intake</a>
           </p>
         </div>
       </div>

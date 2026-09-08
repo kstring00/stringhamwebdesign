@@ -1,0 +1,313 @@
+.caseStudy {
+  min-height: 100vh;
+  background: #f5f0e8;
+  color: #183147;
+}
+
+.shell {
+  width: min(calc(100% - 2rem), 82rem);
+  margin: 0 auto;
+  padding: clamp(7rem, 10vw, 8.5rem) 0 clamp(3.5rem, 6vw, 5rem);
+  display: grid;
+  grid-template-columns: minmax(17rem, 0.68fr) minmax(0, 1fr);
+  gap: clamp(3rem, 7vw, 7rem);
+  align-items: start;
+}
+
+.projectRail {
+  position: sticky;
+  top: 6.5rem;
+  align-self: start;
+}
+
+.backLink {
+  display: inline-flex;
+  margin-bottom: 2rem;
+  color: #607181;
+  font-size: 0.78rem;
+  font-weight: 700;
+  transition: color 160ms ease;
+}
+
+.backLink:hover,
+.backLink:focus-visible {
+  color: #a98220;
+}
+
+.railIdentity {
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+}
+
+.railIdentity h1 {
+  max-width: 9ch;
+  margin: 0;
+  color: #183147;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(3.2rem, 5.4vw, 5.7rem);
+  font-weight: 300;
+  letter-spacing: -0.045em;
+  line-height: 0.86;
+}
+
+.metaList {
+  margin: 2rem 0 0;
+  padding: 0;
+  border-top: 1px solid rgba(201, 162, 39, 0.46);
+}
+
+.metaList > div {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(24, 49, 71, 0.12);
+}
+
+.metaList dt,
+.metaList dd {
+  margin: 0;
+}
+
+.metaList dt,
+.sectionLabel {
+  color: #a98220;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.17em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.metaList dd {
+  color: #516675;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.projectNote {
+  max-width: 17rem;
+  margin: 1.1rem 0 0;
+  color: #7a817f;
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.visitButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 1.5rem;
+  padding: 0.78rem 1rem;
+  border: 1px solid #183147;
+  color: #183147;
+  font-size: 0.76rem;
+  font-weight: 750;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.visitButton:hover,
+.visitButton:focus-visible {
+  border-color: #a98220;
+  background: #183147;
+  color: #f5f0e8;
+}
+
+.projectContent {
+  min-width: 0;
+}
+
+.heroFigure,
+.screenshotFigure {
+  margin: 0;
+}
+
+.heroFigure {
+  overflow: hidden;
+  border: 1px solid rgba(24, 49, 71, 0.14);
+  background: #ebe4d8;
+}
+
+.heroFigure img,
+.screenshotFigure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.heroFigure img {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: top;
+}
+
+.copyStack {
+  display: grid;
+  gap: 3rem;
+  padding: 3rem 0;
+}
+
+.copyBlock {
+  max-width: 46rem;
+}
+
+.sectionLabel {
+  margin: 0 0 0.7rem;
+}
+
+.bodyCopy {
+  margin: 0;
+  color: #536674;
+  font-size: 0.98rem;
+  line-height: 1.72;
+}
+
+.featureList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgba(24, 49, 71, 0.12);
+}
+
+.featureList li {
+  position: relative;
+  padding: 0.72rem 0 0.72rem 1.35rem;
+  border-bottom: 1px solid rgba(24, 49, 71, 0.12);
+  color: #536674;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.featureList li::before {
+  content: "↳";
+  position: absolute;
+  left: 0;
+  color: #a98220;
+}
+
+.screenshotStack {
+  display: grid;
+  gap: 3rem;
+  padding-top: 0.2rem;
+}
+
+.screenshotFigure {
+  width: 100%;
+}
+
+.screenshotFigure img {
+  border: 1px solid rgba(24, 49, 71, 0.14);
+  object-fit: contain;
+  object-position: top;
+  background: #ebe4d8;
+}
+
+.screenshotPlaceholder {
+  aspect-ratio: 16 / 9;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(201, 162, 39, 0.42);
+  background: #eee7dc;
+  color: #8b8173;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.screenshotFigure figcaption {
+  margin-top: 0.55rem;
+  color: #7a817f;
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+.projectNav {
+  width: min(calc(100% - 2rem), 82rem);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid rgba(201, 162, 39, 0.62);
+}
+
+.projectNav a {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1.5rem 0 2.25rem;
+}
+
+.projectNav a:last-child {
+  text-align: right;
+}
+
+.projectNav small {
+  color: #a98220;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.projectNav strong {
+  color: #183147;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  font-weight: 300;
+  line-height: 1;
+}
+
+.projectNav a:hover strong,
+.projectNav a:focus-visible strong {
+  color: #a98220;
+}
+
+@media (max-width: 52rem) {
+  .shell {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    padding-top: 6.5rem;
+  }
+
+  .projectRail {
+    position: static;
+  }
+
+  .railIdentity h1 {
+    max-width: 12ch;
+    font-size: clamp(3rem, 14vw, 4.8rem);
+  }
+
+  .metaList {
+    margin-top: 1.5rem;
+  }
+
+  .copyStack,
+  .screenshotStack {
+    gap: 2.4rem;
+  }
+
+  .copyStack {
+    padding: 2.5rem 0;
+  }
+}
+
+@media (max-width: 34rem) {
+  .shell,
+  .projectNav {
+    width: min(calc(100% - 1.1rem), 82rem);
+  }
+
+  .metaList > div {
+    grid-template-columns: 5.4rem minmax(0, 1fr);
+  }
+
+  .projectNav {
+    grid-template-columns: 1fr;
+  }
+
+  .projectNav a:last-child {
+    border-top: 1px solid rgba(24, 49, 71, 0.1);
+    text-align: left;
+  }
+}
