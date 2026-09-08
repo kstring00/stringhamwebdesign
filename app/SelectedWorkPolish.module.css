@@ -4,9 +4,19 @@
 
 .stagePolish {
   margin-top: clamp(2.6rem, 4vw, 4.25rem);
+  min-height: 0 !important;
+  grid-template-columns: minmax(0, 1.88fr) minmax(20rem, 0.78fr) !important;
+  gap: clamp(1.4rem, 2.5vw, 2.8rem) !important;
+  align-items: stretch !important;
+  perspective: none !important;
 }
 
 .binderPolish {
+  min-height: clamp(35rem, 47vw, 44rem) !important;
+  height: 100%;
+  align-self: stretch;
+  transform: none !important;
+  animation: none !important;
   border: 1px solid rgba(255, 255, 255, 0.055);
   box-shadow:
     0 2.75rem 5.75rem rgba(13, 27, 38, 0.22),
@@ -37,9 +47,14 @@
     inset 0 0 0 1px rgba(255, 255, 255, 0.7);
 }
 
+.projectPage {
+  animation: projectPageIn 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 .browserBarPolish {
-  background: rgba(242, 238, 230, 0.96);
+  background: rgba(242, 238, 230, 0.97);
   backdrop-filter: blur(14px);
+  border-bottom-color: rgba(36, 47, 55, 0.08) !important;
 }
 
 .viewportPolish {
@@ -47,8 +62,8 @@
 }
 
 .viewportPolish::after {
-  height: 1.5rem;
-  opacity: 0.32;
+  height: 1.4rem;
+  opacity: 0.2;
 }
 
 .screenshotStage {
@@ -56,7 +71,7 @@
   inset: 0;
   overflow: hidden;
   background:
-    linear-gradient(135deg, rgba(13, 27, 38, 0.055), transparent 42%),
+    linear-gradient(135deg, rgba(13, 27, 38, 0.045), transparent 42%),
     #ebe6dd;
   isolation: isolate;
 }
@@ -66,7 +81,7 @@
   position: absolute;
   z-index: 4;
   inset: 0;
-  border: 1px solid rgba(21, 42, 57, 0.065);
+  border: 1px solid rgba(21, 42, 57, 0.055);
   pointer-events: none;
 }
 
@@ -76,112 +91,189 @@
   z-index: 3;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(10, 22, 31, 0.015), transparent 20% 78%, rgba(10, 22, 31, 0.12)),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04), transparent 18% 82%, rgba(13, 27, 38, 0.04));
+    linear-gradient(180deg, rgba(10, 22, 31, 0.012), transparent 18% 82%, rgba(10, 22, 31, 0.1)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03), transparent 20% 80%, rgba(13, 27, 38, 0.035));
   pointer-events: none;
 }
 
 .screenshotImage {
   position: absolute;
-  inset: -1px;
-  width: calc(100% + 2px);
-  height: calc(100% + 2px);
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: top center;
   opacity: 0;
-  transform: scale(1.018);
-  filter: saturate(0.97) contrast(1.015);
+  transform: translateX(-3%) scale(1.006);
+  transform-origin: center;
+  filter: saturate(0.96) contrast(1.01);
   transition:
-    opacity 720ms ease,
-    transform 1.1s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 720ms ease;
+    opacity 340ms ease,
+    transform 560ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 420ms ease;
+  will-change: opacity, transform;
 }
 
 .screenshotActive {
   z-index: 2;
   opacity: 1;
-  transform: scale(1);
+  transform: translateX(0) scale(1);
   filter: saturate(1) contrast(1.02);
+  animation: screenReveal 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .captureLabel {
   position: absolute;
-  z-index: 6;
-  left: 0.75rem;
-  bottom: 0.75rem;
+  z-index: 7;
+  left: 0.85rem;
+  bottom: 0.85rem;
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  min-height: 1.8rem;
-  padding: 0.35rem 0.58rem;
-  border: 1px solid rgba(255, 255, 255, 0.48);
+  min-height: 1.9rem;
+  padding: 0.38rem 0.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.46);
   border-radius: 999px;
-  background: rgba(11, 27, 39, 0.72);
-  box-shadow: 0 0.45rem 1.2rem rgba(13, 27, 38, 0.14);
-  color: rgba(255, 255, 255, 0.9);
+  background: rgba(11, 27, 39, 0.77);
+  box-shadow: 0 0.5rem 1.2rem rgba(13, 27, 38, 0.14);
+  color: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
-  font-size: 0.43rem;
-  font-weight: 750;
+  font-size: 0.45rem;
+  font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   pointer-events: none;
 }
 
 .captureLabel b {
-  color: #dbc174;
-  font-weight: 800;
+  color: #e1c978;
+  font-weight: 850;
   letter-spacing: 0.08em;
 }
 
-.shotControls {
+.shotNavigator {
   position: absolute;
-  z-index: 7;
-  right: 0.8rem;
-  bottom: 0.82rem;
-  display: flex;
-  align-items: center;
-  gap: 0.42rem;
-  padding: 0.36rem 0.46rem;
-  border: 1px solid rgba(255, 255, 255, 0.38);
-  border-radius: 999px;
-  background: rgba(11, 27, 39, 0.62);
-  box-shadow: 0 0.45rem 1.2rem rgba(13, 27, 38, 0.12);
-  backdrop-filter: blur(12px);
+  z-index: 8;
+  right: 0.9rem;
+  bottom: 0.9rem;
+  display: grid;
+  grid-template-columns: 2rem minmax(5.8rem, auto) 2rem;
+  align-items: stretch;
+  min-height: 2.55rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.46);
+  border-radius: 0.75rem;
+  background: rgba(10, 27, 39, 0.84);
+  box-shadow:
+    0 0.7rem 1.6rem rgba(13, 27, 38, 0.2),
+    inset 0 1px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
 }
 
-.shotButton {
-  width: 0.42rem;
-  height: 0.42rem;
-  padding: 0;
+.shotNavigator button {
   border: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.42);
+  border-radius: 0;
+  background: transparent;
+  color: #f3eee4;
+  font-size: 0.88rem;
   cursor: pointer;
-  transition:
-    transform 180ms ease,
-    background 180ms ease,
-    box-shadow 180ms ease;
+  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
 }
 
-.shotButton:hover {
-  transform: scale(1.18);
-  background: rgba(255, 255, 255, 0.72);
+.shotNavigator button:first-child {
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.shotButton:focus-visible {
+.shotNavigator button:last-child {
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.shotNavigator button:hover {
+  background: rgba(216, 188, 105, 0.16);
+  color: #e4ca77;
+}
+
+.shotNavigator button:active {
+  transform: scale(0.94);
+}
+
+.shotNavigator button:focus-visible {
   outline: 2px solid #d8bc69;
-  outline-offset: 2px;
+  outline-offset: -3px;
 }
 
-.shotActive {
+.shotReadout {
+  position: relative;
+  min-width: 6.25rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr auto;
+  align-items: center;
+  gap: 0 0.55rem;
+  padding: 0.42rem 0.62rem 0.34rem;
+  color: #f6f0e5;
+}
+
+.shotReadout span {
+  font-size: 0.4rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.68;
+}
+
+.shotReadout strong {
+  justify-self: end;
+  color: #e1c978;
+  font-size: 0.52rem;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+}
+
+.shotProgress {
+  grid-column: 1 / -1;
+  position: relative;
+  display: block;
+  height: 2px;
+  margin-top: 0.26rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.shotProgress::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
   background: #d8bc69;
-  box-shadow: 0 0 0 3px rgba(216, 188, 105, 0.2);
-  transform: scale(1.08);
+  animation: shotProgress 6.5s linear both;
 }
 
 .pageMetaPolish {
-  background: rgba(252, 249, 243, 0.965);
+  background: rgba(252, 249, 243, 0.975);
   backdrop-filter: blur(12px);
+}
+
+.statusBadge {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.55rem;
+  padding: 0.28rem 0.58rem;
+  border: 1px solid rgba(134, 99, 27, 0.3);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #e4ca77, #c7a75a);
+  box-shadow:
+    0 0.28rem 0.7rem rgba(132, 96, 27, 0.12),
+    inset 0 1px rgba(255, 255, 255, 0.55);
+  color: #102635 !important;
+  font-family: ui-sans-serif, system-ui, sans-serif !important;
+  font-size: 0.48rem !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.11em !important;
+  line-height: 1 !important;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .tabsPolish {
@@ -201,19 +293,51 @@
     0 0.45rem 0.9rem rgba(121, 88, 23, 0.16) !important;
 }
 
+.sheetZonePolish {
+  align-self: stretch;
+  display: flex;
+  transform: none !important;
+  animation: none !important;
+  padding-block: 0;
+}
+
 .featureSheetPolish {
-  border-radius: 0.22rem;
+  width: 100%;
+  min-height: 100% !important;
+  height: 100%;
+  border-radius: 0.2rem;
+  transform: none !important;
+  animation: sheetSwapIn 580ms 90ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
   box-shadow:
     0 2.3rem 5rem rgba(13, 27, 38, 0.18),
     0 0.5rem 1.5rem rgba(13, 27, 38, 0.08),
     inset 0 0 0 1px rgba(59, 47, 34, 0.05);
 }
 
+.sheetTopMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.sheetStatus {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.4rem;
+  padding: 0.24rem 0.52rem;
+  border: 1px solid rgba(153, 117, 45, 0.3);
+  border-radius: 999px;
+  background: rgba(214, 183, 101, 0.18);
+  color: #795b20;
+  font-size: 0.44rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+
 .featurePolish {
   background: rgba(255, 255, 255, 0.08);
-  transition:
-    background 180ms ease,
-    box-shadow 180ms ease;
+  transition: background 180ms ease, box-shadow 180ms ease;
 }
 
 .featurePolish:hover {
@@ -221,7 +345,58 @@
   box-shadow: inset 0 0 0 1px rgba(169, 131, 61, 0.08);
 }
 
+@keyframes projectPageIn {
+  from {
+    opacity: 0.5;
+    transform: translateX(1.15rem);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes screenReveal {
+  0% {
+    opacity: 0;
+    transform: translateX(7%) scale(0.992);
+    filter: saturate(0.92) contrast(1) blur(2px);
+    clip-path: inset(0 0 0 12%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: saturate(1) contrast(1.02) blur(0);
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes shotProgress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes sheetSwapIn {
+  from {
+    opacity: 0;
+    transform: translateX(1.1rem) !important;
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) !important;
+    filter: blur(0);
+  }
+}
+
 @media (max-width: 74rem) {
+  .stagePolish {
+    grid-template-columns: minmax(0, 1.5fr) minmax(17rem, 0.72fr) !important;
+    gap: 1rem !important;
+  }
+
   .coverLinePolish {
     font-size: clamp(1.72rem, 2.8vw, 2.55rem);
   }
@@ -230,6 +405,21 @@
 @media (max-width: 60rem) {
   .stagePolish {
     margin-top: 2.5rem;
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+
+  .binderPolish {
+    min-height: clamp(34rem, 72vw, 44rem) !important;
+  }
+
+  .sheetZonePolish {
+    display: block;
+  }
+
+  .featureSheetPolish {
+    min-height: 34rem !important;
+    height: auto;
   }
 
   .screenshotImage {
@@ -242,26 +432,50 @@
     padding-top: 4rem;
   }
 
+  .binderPolish {
+    min-height: 32rem !important;
+  }
+
   .captureLabel {
     left: 0.55rem;
     bottom: 0.55rem;
     padding: 0.3rem 0.5rem;
   }
 
-  .shotControls {
+  .shotNavigator {
     right: 0.55rem;
     bottom: 0.58rem;
+    grid-template-columns: 1.8rem minmax(5rem, auto) 1.8rem;
+    min-height: 2.3rem;
+  }
+
+  .shotReadout {
+    min-width: 5.2rem;
+    padding-inline: 0.48rem;
   }
 
   .screenshotImage {
     object-fit: cover;
   }
+
+  .sheetTopMeta {
+    gap: 0.4rem;
+  }
+
+  .sheetStatus {
+    padding-inline: 0.4rem;
+    font-size: 0.4rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .projectPage,
   .screenshotImage,
-  .shotButton,
+  .screenshotActive,
+  .shotProgress::after,
+  .featureSheetPolish,
   .featurePolish {
+    animation: none !important;
     transition: none !important;
   }
 }

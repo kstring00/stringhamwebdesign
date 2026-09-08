@@ -57,7 +57,7 @@ const projects: Project[] = [
     title: "Common Ground",
     category: "ABA / autism support",
     year: "2026",
-    status: "In pilot",
+    status: "Piloted",
     eyebrow: "PARENT NAVIGATION, WITHOUT THE OVERWHELM.",
     headline: "One place to know what comes next.",
     body: "A parent-navigation platform that turns scattered information into guided next steps.",
@@ -79,7 +79,7 @@ const projects: Project[] = [
     title: "BCBA Prep",
     category: "Exam prep · licensing",
     year: "2026",
-    status: "Launching soon",
+    status: "Pre-launch",
     eyebrow: "NINE DOMAINS. ONE STUDY EXPERIENCE.",
     headline: "A study storefront that feels like a library.",
     body: "Custom commerce and member architecture wrapped in an interactive book-based experience.",
@@ -104,7 +104,7 @@ const projects: Project[] = [
     title: "GrowthGains",
     category: "Life coaching",
     year: "2026",
-    status: "Concept build",
+    status: "Pre-launch",
     eyebrow: "IDENTITY. TRANSITION. NEXT CHAPTER.",
     headline: "A coaching site built around the moment things change.",
     body: "A guided marketing experience for people navigating marriage, divorce, empty nesting, and reinvention.",
@@ -125,7 +125,7 @@ const projects: Project[] = [
     title: "Lake City Self Storage",
     category: "Self storage",
     year: "2025",
-    status: "Case study",
+    status: "Archived",
     eyebrow: "LOCAL, CLEAR, CONVERSION-READY.",
     headline: "A storage site that gets people to the unit faster.",
     body: "A straightforward local-business experience built around trust, location clarity, and action.",
@@ -249,7 +249,7 @@ export default function SelectedWork() {
       ([entry]) => {
         if (entry.isIntersecting) setEntered(true);
       },
-      { threshold: 0.18 }
+      { threshold: 0.18 },
     );
 
     observer.observe(node);
@@ -262,7 +262,7 @@ export default function SelectedWork() {
 
     const timer = window.setInterval(() => {
       setShotIndex((current) => (current + 1) % shotCount);
-    }, 5200);
+    }, 6500);
 
     return () => window.clearInterval(timer);
   }, [active.id, shotCount]);
@@ -270,6 +270,21 @@ export default function SelectedWork() {
   const accentClass = useMemo(() => {
     return styles[`accent_${active.accent}`] ?? "";
   }, [active.accent]);
+
+  const previousShot = () => {
+    if (shotCount < 2) return;
+    setShotIndex((current) => (current - 1 + shotCount) % shotCount);
+  };
+
+  const nextShot = () => {
+    if (shotCount < 2) return;
+    setShotIndex((current) => (current + 1) % shotCount);
+  };
+
+  const selectProject = (index: number) => {
+    setActiveIndex(index);
+    setShotIndex(0);
+  };
 
   return (
     <section
@@ -291,7 +306,10 @@ export default function SelectedWork() {
       <div className={`${styles.stage} ${polish.stagePolish} ${accentClass}`}>
         <div className={styles.tableGlow} aria-hidden="true" />
 
-        <div className={`${styles.binder} ${polish.binderPolish}`} aria-label="Selected project binder">
+        <div
+          className={`${styles.binder} ${polish.binderPolish}`}
+          aria-label="Selected project binder"
+        >
           <div className={styles.coverLeft}>
             <div className={`${styles.coverPaper} ${polish.coverPolish}`}>
               <p className={styles.coverKicker}>Selected work</p>
@@ -324,7 +342,10 @@ export default function SelectedWork() {
 
           <div className={styles.pageStack}>
             <div className={styles.backPage} aria-hidden="true" />
-            <div className={`${styles.sitePage} ${polish.sitePagePolish}`}>
+            <div
+              className={`${styles.sitePage} ${polish.sitePagePolish} ${polish.projectPage}`}
+              key={active.id}
+            >
               <div className={`${styles.browserBar} ${polish.browserBarPolish}`}>
                 <span className={styles.browserDots} aria-hidden="true">
                   <i />
@@ -337,7 +358,7 @@ export default function SelectedWork() {
 
               <div className={`${styles.siteViewport} ${polish.viewportPolish}`}>
                 {shotCount > 0 ? (
-                  <div className={polish.screenshotStage} key={active.id}>
+                  <div className={polish.screenshotStage}>
                     {active.screenshots?.map((src, index) => (
                       <img
                         alt={`${active.title} website screen ${index + 1}`}
@@ -348,23 +369,37 @@ export default function SelectedWork() {
                         src={src}
                       />
                     ))}
-                    <div className={polish.captureLabel} aria-hidden="true">
-                      <span>Live screen</span>
-                      <b>{String(shotIndex + 1).padStart(2, "0")} / {String(shotCount).padStart(2, "0")}</b>
-                    </div>
+
                     {shotCount > 1 ? (
-                      <div className={polish.shotControls} aria-label="Website screenshot selector">
-                        {active.screenshots?.map((src, index) => (
-                          <button
-                            aria-label={`Show ${active.title} screenshot ${index + 1}`}
-                            className={`${polish.shotButton} ${index === shotIndex ? polish.shotActive : ""}`}
-                            key={src}
-                            onClick={() => setShotIndex(index)}
-                            type="button"
-                          />
-                        ))}
+                      <div className={polish.shotNavigator} aria-label="Website screenshot navigation">
+                        <button
+                          aria-label={`Show previous ${active.title} screenshot`}
+                          onClick={previousShot}
+                          type="button"
+                        >
+                          ←
+                        </button>
+                        <div className={polish.shotReadout}>
+                          <span>Screen</span>
+                          <strong>
+                            {String(shotIndex + 1).padStart(2, "0")} / {String(shotCount).padStart(2, "0")}
+                          </strong>
+                          <i className={polish.shotProgress} key={`${active.id}-${shotIndex}`} />
+                        </div>
+                        <button
+                          aria-label={`Show next ${active.title} screenshot`}
+                          onClick={nextShot}
+                          type="button"
+                        >
+                          →
+                        </button>
                       </div>
-                    ) : null}
+                    ) : (
+                      <div className={polish.captureLabel} aria-hidden="true">
+                        <span>Live screen</span>
+                        <b>01 / 01</b>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <GeneratedPreview active={active} />
@@ -378,12 +413,16 @@ export default function SelectedWork() {
                 </div>
                 <div>
                   <span>{active.category}</span>
-                  <strong>{active.status}</strong>
+                  <strong className={polish.statusBadge}>{active.status}</strong>
                 </div>
               </div>
             </div>
 
-            <div className={`${styles.tabs} ${polish.tabsPolish}`} role="tablist" aria-label="Portfolio projects">
+            <div
+              className={`${styles.tabs} ${polish.tabsPolish}`}
+              role="tablist"
+              aria-label="Portfolio projects"
+            >
               {projects.map((project, index) => (
                 <button
                   type="button"
@@ -391,7 +430,7 @@ export default function SelectedWork() {
                   aria-selected={index === activeIndex}
                   className={`${index === activeIndex ? styles.activeTab : ""} ${polish.tabButton} ${index === activeIndex ? polish.tabButtonActive : ""}`}
                   key={project.id}
-                  onClick={() => setActiveIndex(index)}
+                  onClick={() => selectProject(index)}
                 >
                   {project.tab}
                 </button>
@@ -400,12 +439,18 @@ export default function SelectedWork() {
           </div>
         </div>
 
-        <div className={styles.sheetZone}>
+        <div className={`${styles.sheetZone} ${polish.sheetZonePolish}`}>
           <div className={styles.sheetShadow} aria-hidden="true" />
-          <article className={`${styles.featureSheet} ${polish.featureSheetPolish}`} key={active.id}>
+          <article
+            className={`${styles.featureSheet} ${polish.featureSheetPolish}`}
+            key={active.id}
+          >
             <div className={styles.sheetTop}>
               <p>What&apos;s under the hood</p>
-              <span>{String(activeIndex + 1).padStart(2, "0")} / 06</span>
+              <div className={polish.sheetTopMeta}>
+                <span className={polish.sheetStatus}>{active.status}</span>
+                <span>{String(activeIndex + 1).padStart(2, "0")} / 06</span>
+              </div>
             </div>
 
             <h3>
