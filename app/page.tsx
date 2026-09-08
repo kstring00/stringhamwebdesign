@@ -1,7 +1,6 @@
 import BottomCapture from "./BottomCapture";
 import Header from "./Header";
 import HeroShowcase from "./HeroShowcase";
-import PricingConfigurator from "./PricingConfigurator";
 import SelectedWork from "./SelectedWork";
 import SiteFooter from "./SiteFooter";
 import SiteMotion from "./SiteMotion";
@@ -15,8 +14,7 @@ export default function Home() {
 
       <main>
         <SelectedWork />
-        <PricingConfigurator />
-        <ProcessSteps />
+        <ProcessSteps variant="home" />
         <BottomCapture />
       </main>
 
