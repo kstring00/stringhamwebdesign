@@ -106,7 +106,12 @@ export default function BottomCapture() {
           <p className={styles.eyebrow}>Not ready for the full intake?</p>
           <h2>Start with the basics</h2>
           <p className={styles.subcopy}>
-            Send your name and email. I’ll reply within one business day with the next step.
+            Send your name and email. I’ll reply within one business day with the
+            next step. If you have five minutes now,{" "}
+            <a className={styles.inlineLink} href="/quote">
+              send the full brief
+            </a>{" "}
+            instead and I can come back with something useful straight away.
           </p>
         </div>
 

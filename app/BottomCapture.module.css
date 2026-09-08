@@ -275,3 +275,22 @@
     width: 100%;
   }
 }
+
+/* Inline route to the full brief. Gold at 3:1 is the minimum for a non-text
+   affordance, so the underline carries --gold while the text stays readable. */
+.inlineLink {
+  color: inherit;
+  border-bottom: 1px solid var(--gold);
+  padding-bottom: 1px;
+  transition: border-color 200ms ease;
+}
+
+.inlineLink:hover {
+  border-bottom-color: currentColor;
+}
+
+.inlineLink:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 1px;
+}

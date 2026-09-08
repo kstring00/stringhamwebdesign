@@ -1,37 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 
-type RateEntry = { count: number; resetAt: number };
+import { replyWindowFor } from "@/app/lib/businessDays";
+import {
+  QUOTE_FIELD_LABELS,
+  QUOTE_FIELD_ORDER,
+  QuoteReceipt,
+  RECEIPT_COOKIE,
+  RECEIPT_MAX_AGE_SECONDS,
+  cleanAnswer,
+  cleanAnswers,
+  createReference,
+  encodeReceipt,
+  validateAnswers,
+} from "@/app/lib/quoteReceipt";
+import { processSteps } from "@/app/data/process";
+
+/** The brief is written to a cookie, so this must not be cached. */
+export const dynamic = "force-dynamic";
 
 const RATE_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT = 5;
-const rateStore = new Map<string, RateEntry>();
-
-const tierCatalog = {
-  focused: { name: "Focused Site", price: 1250 },
-  business: { name: "Custom Business Site", price: 2000 },
-  advanced: { name: "Advanced Build", price: 3500 },
-} as const;
-
-const addOnCatalog = {
-  clarity: { name: "Microsoft Clarity setup", price: 150 },
-  "extra-page": { name: "Additional page", price: 250 },
-  "copy-polish": { name: "Copy & content polish", price: 350 },
-  "booking-flow": { name: "Booking flow integration", price: 250 },
-  "intake-flow": { name: "Advanced intake flow", price: 550 },
-  cms: { name: "Blog / CMS module", price: 1200 },
-  crm: { name: "CRM / email integration", price: 450 },
-  automation: { name: "Workflow automation", price: null },
-  payments: { name: "Payments / checkout", price: 1200 },
-  ai: { name: "AI-assisted feature", price: null },
-  portal: { name: "Client portal foundation", price: 2500 },
-  revision: { name: "Additional revision round", price: 250 },
-} as const;
-
-const careCatalog = {
-  none: { name: "No care plan", monthly: 0 },
-  launch: { name: "Launch Care", monthly: 95 },
-  growth: { name: "Growth Care", monthly: 195 },
-} as const;
+const rateStore = new Map<string, { count: number; resetAt: number }>();
 
 function getClientIp(request: NextRequest) {
   const forwarded = request.headers.get("x-forwarded-for");
@@ -42,32 +31,108 @@ function getClientIp(request: NextRequest) {
 function isRateLimited(ip: string) {
   const now = Date.now();
   const current = rateStore.get(ip);
+
   if (!current || current.resetAt <= now) {
     rateStore.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
     return false;
   }
   if (current.count >= RATE_LIMIT) return true;
+
   current.count += 1;
-  rateStore.set(ip, current);
   return false;
 }
 
-function clean(value: unknown, maxLength: number) {
-  return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
+/**
+ * The email is the artefact that survives. The page gets read once; this gets
+ * forwarded to a business partner, so it carries the same reference, the same
+ * reply date and the same seven steps as the confirmation page.
+ */
+function buildClientEmail(receipt: QuoteReceipt) {
+  const answers = QUOTE_FIELD_ORDER.filter(
+    (field) => receipt.answers[field],
+  ).map((field) => `${QUOTE_FIELD_LABELS[field]}: ${receipt.answers[field]}`);
+
+  const steps = processSteps.map(
+    (step) => `${step.number}. ${step.name.toUpperCase()} — ${step.line}`,
+  );
+
+  return [
+    `Your brief is in. Reference ${receipt.reference}.`,
+    "",
+    `I'll reply by ${receipt.replyByLabel}, and my reply will have a link to book a call.`,
+    "",
+    "Here is what you sent me:",
+    "",
+    ...answers,
+    "",
+    "WHAT HAPPENS NEXT",
+    "",
+    ...steps,
+    "",
+    "If you forgot something, just reply to this email and it lands in the same thread.",
+    "",
+    "Kyle Stringham",
+    "stringhamwebdesign.com",
+  ].join("\n");
 }
 
-function money(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(value);
+function buildOwnerEmail(receipt: QuoteReceipt) {
+  const answers = QUOTE_FIELD_ORDER.map(
+    (field) =>
+      `${QUOTE_FIELD_LABELS[field]}: ${receipt.answers[field] || "Not provided"}`,
+  );
+
+  return [
+    `New quote brief — ${receipt.reference}`,
+    "",
+    ...answers,
+    "",
+    `Submitted: ${receipt.submittedAt}`,
+    `Reply promised by: ${receipt.replyByLabel} (${receipt.replyByIso})`,
+  ].join("\n");
+}
+
+async function sendEmail(payload: {
+  to: string;
+  subject: string;
+  text: string;
+  replyTo?: string;
+}) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) return { sent: false, reason: "no-api-key" as const };
+
+  const from =
+    process.env.CAPTURE_FROM_EMAIL || "Kyle Stringham <onboarding@resend.dev>";
+
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from,
+      to: [payload.to],
+      subject: payload.subject,
+      text: payload.text,
+      ...(payload.replyTo ? { reply_to: payload.replyTo } : {}),
+    }),
+  });
+
+  if (!response.ok) {
+    console.error("Quote email failed", response.status, payload.subject);
+    return { sent: false, reason: "send-failed" as const };
+  }
+
+  return { sent: true, reason: null };
 }
 
 export async function POST(request: NextRequest) {
-  const ip = getClientIp(request);
-  if (isRateLimited(ip)) {
-    return NextResponse.json({ error: "Too many attempts. Please wait a few minutes and try again." }, { status: 429 });
+  if (isRateLimited(getClientIp(request))) {
+    return NextResponse.json(
+      { error: "Too many attempts. Please wait a few minutes and try again." },
+      { status: 429 },
+    );
   }
 
   let body: Record<string, unknown>;
@@ -77,116 +142,73 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });
   }
 
-  if (clean(body.website, 200)) return NextResponse.json({ ok: true });
-
-  const name = clean(body.name, 100);
-  const email = clean(body.email, 180);
-  const phone = clean(body.phone, 60);
-  const business = clean(body.business, 120);
-  const notes = clean(body.notes, 1500);
-  const tierId = clean(body.tierId, 40) as keyof typeof tierCatalog;
-  const careId = clean(body.careId, 40) as keyof typeof careCatalog;
-  const rawAddOns = Array.isArray(body.addOnIds) ? body.addOnIds : [];
-  const addOnIds = rawAddOns
-    .map((value) => clean(value, 40))
-    .filter((value): value is keyof typeof addOnCatalog => value in addOnCatalog)
-    .slice(0, 20);
-
-  if (name.length < 2) {
-    return NextResponse.json({ error: "Please enter your name." }, { status: 400 });
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 });
-  }
-  if (phone && phone.replace(/\D/g, "").length < 7) {
-    return NextResponse.json({ error: "Please enter a valid phone number." }, { status: 400 });
-  }
-  if (!(tierId in tierCatalog) || !(careId in careCatalog)) {
-    return NextResponse.json({ error: "Please choose a valid build configuration." }, { status: 400 });
+  // Honeypot. Bots fill it; the form keeps it off-screen and unlabelled.
+  if (cleanAnswer(body.website, "name")) {
+    return NextResponse.json({ ok: true, reference: createReference() });
   }
 
-  const tier = tierCatalog[tierId];
-  const care = careCatalog[careId];
-  const addOns = addOnIds.map((id) => addOnCatalog[id]);
-  const hasConsultationPricedItems = addOns.some((item) => item.price === null);
-  const projectFloor = tier.price + addOns.reduce((sum, item) => sum + (item.price ?? 0), 0);
-  const reference = `KS-${Date.now().toString(36).toUpperCase()}`;
+  const answers = cleanAnswers(body);
+  const errors = validateAnswers(answers);
 
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
+  if (Object.keys(errors).length > 0) {
     return NextResponse.json(
-      { error: "The quote request is being connected. Please email stringham00@gmail.com for now." },
-      { status: 503 },
+      { error: "Some answers still need attention.", fieldErrors: errors },
+      { status: 400 },
     );
   }
 
-  const to = process.env.CAPTURE_TO_EMAIL || "stringham00@gmail.com";
-  const from = process.env.CAPTURE_FROM_EMAIL || "Website Inquiry <onboarding@resend.dev>";
+  const submittedAt = new Date();
+  const replyWindow = replyWindowFor(submittedAt);
 
-  const addOnLines = addOns.length
-    ? addOns
-        .map((item) =>
-          item.price === null
-            ? `- ${item.name}: Quoted after consultation`
-            : `- ${item.name}: from ${money(item.price)}`,
-        )
-        .join("\n")
-    : "- None selected";
+  const receipt: QuoteReceipt = {
+    reference: createReference(),
+    submittedAt: submittedAt.toISOString(),
+    replyByLabel: replyWindow.replyByLabel,
+    replyByIso: replyWindow.replyByIso,
+    answers,
+  };
 
-  const message = [
-    "New configured website quote request",
-    "",
-    `Reference: ${reference}`,
-    `Name: ${name}`,
-    `Email: ${email}`,
-    `Phone: ${phone || "Not provided"}`,
-    `Business: ${business || "Not provided"}`,
-    "",
-    `Base package: ${tier.name} — from ${money(tier.price)}`,
-    "Configured add-ons:",
-    addOnLines,
-    ...(hasConsultationPricedItems ? ["Includes items scoped after consultation."] : []),
-    `Care plan: ${care.name}${care.monthly ? ` — ${money(care.monthly)}/mo` : ""}`,
-    "",
-    `Configured project floor: ${money(projectFloor)}+`,
-    `Ongoing support: ${care.monthly ? `${money(care.monthly)}/mo` : "Not selected"}`,
-    "",
-    "Client notes:",
-    notes || "None provided",
-    "",
-    "Important: This configuration is a starting estimate only. Review scope before sending a formal quote.",
-    `Submitted: ${new Date().toISOString()}`,
-  ].join("\n");
+  const owner = process.env.CAPTURE_TO_EMAIL || "stringham00@gmail.com";
 
-  try {
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from,
-        to: [to],
-        reply_to: email,
-        subject: `${reference} — ${tier.name} quote request from ${name}`,
-        text: message,
-      }),
-    });
+  // The owner copy is the one that must not be lost, so it is sent first and
+  // its failure fails the request. The client confirmation is best effort:
+  // the confirmation page already tells them everything the email does.
+  const ownerResult = await sendEmail({
+    to: owner,
+    subject: `${receipt.reference} — quote brief from ${answers.name}`,
+    text: buildOwnerEmail(receipt),
+    replyTo: answers.email,
+  });
 
-    if (!response.ok) {
-      console.error("Quote request email failed", response.status);
-      return NextResponse.json(
-        { error: "I couldn’t send that configuration just now. Please try again." },
-        { status: 502 },
-      );
-    }
-
-    return NextResponse.json({ ok: true, reference });
-  } catch {
+  if (!ownerResult.sent && ownerResult.reason === "send-failed") {
     return NextResponse.json(
-      { error: "I couldn’t send that configuration just now. Please try again." },
+      { error: "I couldn't send that just now. Please try again." },
       { status: 502 },
     );
   }
+
+  const clientResult = await sendEmail({
+    to: answers.email,
+    subject: `${receipt.reference} — your brief is in`,
+    text: buildClientEmail(receipt),
+    replyTo: owner,
+  });
+
+  const response = NextResponse.json({
+    ok: true,
+    reference: receipt.reference,
+    replyByLabel: receipt.replyByLabel,
+    replyByIso: receipt.replyByIso,
+    emailSent: clientResult.sent,
+  });
+
+  response.cookies.set(RECEIPT_COOKIE, encodeReceipt(receipt), {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: RECEIPT_MAX_AGE_SECONDS,
+  });
+
+  return response;
 }

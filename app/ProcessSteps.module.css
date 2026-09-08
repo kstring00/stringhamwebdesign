@@ -1,0 +1,258 @@
+/* The seven-step process.
+
+   Cream ground, so this reads as the calm answer to the dark work section
+   above it. Every step is a disclosure: the headline and one line are always
+   visible, the detail expands. */
+
+.section {
+  --gold-ink: #6f5620;
+  --slate-ink: #425b6f;
+  --step-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --step-duration: 320ms;
+
+  position: relative;
+  isolation: isolate;
+  background: var(--cream);
+  padding: clamp(4.5rem, 8vw, 7.5rem) var(--gutter);
+}
+
+/* A hairline that draws itself in as the section arrives. */
+.section::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: var(--gutter);
+  right: var(--gutter);
+  height: 1px;
+  background: var(--line-strong);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 900ms var(--step-ease);
+}
+
+.entered.section::before {
+  transform: scaleX(1);
+}
+
+.inner {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 62rem);
+  margin-inline: auto;
+}
+
+.bare {
+  width: 100%;
+}
+
+.header {
+  margin-bottom: clamp(2.5rem, 4vw, 3.75rem);
+}
+
+.eyebrow {
+  margin: 0 0 1rem;
+  color: var(--gold-ink);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.header h2 {
+  margin: 0;
+  max-width: 12ch;
+  font-size: clamp(2.6rem, 6vw, 4.5rem);
+  letter-spacing: -0.04em;
+}
+
+.intro {
+  margin: 1.25rem 0 0;
+  max-width: 38rem;
+  color: var(--slate-ink);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* ---------- the steps ---------- */
+
+.steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.step {
+  border-bottom: 1px solid var(--line);
+}
+
+.stepHeading {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+.trigger {
+  position: relative;
+  width: 100%;
+  /* 44px minimum touch target, with room to spare. */
+  min-height: 4.5rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(0.9rem, 2vw, 1.75rem);
+  padding: 1.15rem 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--gold-ink);
+  outline-offset: -2px;
+  border-radius: 2px;
+}
+
+.number {
+  align-self: start;
+  padding-top: 0.15rem;
+  color: var(--gold-ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+}
+
+.triggerText {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.name {
+  color: var(--navy);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.line {
+  color: var(--slate-ink);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+/* A plus that becomes a minus. Two rules, no icon font. */
+.marker {
+  position: relative;
+  align-self: start;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.3rem;
+  flex: none;
+}
+
+.marker i {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--gold-ink);
+  transition: transform var(--step-duration) var(--step-ease);
+}
+
+.marker i:last-child {
+  transform: rotate(90deg);
+}
+
+.stepOpen .marker i:last-child {
+  transform: rotate(0deg);
+}
+
+.trigger:hover .name {
+  color: var(--gold-ink);
+}
+
+/* ---------- the detail panel ----------
+
+   0fr -> 1fr animates the row height with no measured pixel value. The inner
+   carries visibility so collapsed copy is out of the a11y tree and the tab
+   order, not merely clipped. */
+
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--step-duration) var(--step-ease);
+}
+
+.stepOpen .panel {
+  grid-template-rows: 1fr;
+}
+
+.panelInner {
+  overflow: hidden;
+  visibility: hidden;
+  transition: visibility 0s linear var(--step-duration);
+}
+
+.stepOpen .panelInner {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.panelInner > p {
+  margin: 0 0 1em;
+  max-width: 44rem;
+  padding-left: calc(2.4rem + clamp(0.9rem, 2vw, 1.75rem));
+  color: var(--slate-ink);
+  font-size: 0.9375rem;
+  line-height: 1.75;
+}
+
+.panelInner > p:last-of-type {
+  margin-bottom: 1.5rem;
+}
+
+.artifact {
+  margin: 0 0 1.75rem;
+  padding-left: calc(2.4rem + clamp(0.9rem, 2vw, 1.75rem));
+}
+
+@media (max-width: 40rem) {
+  .trigger {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0.85rem;
+  }
+
+  .panelInner > p,
+  .artifact {
+    padding-left: 0;
+  }
+
+  .line {
+    font-size: 0.9375rem;
+  }
+}
+
+/* Everything still opens and closes; only the easing goes. */
+@media (prefers-reduced-motion: reduce) {
+  .section::before {
+    transition: none;
+    transform: scaleX(1);
+  }
+
+  .panel,
+  .panelInner,
+  .marker i {
+    transition: none !important;
+  }
+}

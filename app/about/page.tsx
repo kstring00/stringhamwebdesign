@@ -101,7 +101,7 @@ export default function AboutPage() {
               God&apos;s the reason I do this. The care I try to put into the work comes from
               there.
             </p>
-            <a href="/#quick-contact">Start a project <span aria-hidden="true">→</span></a>
+            <a href="/quote">Start a project <span aria-hidden="true">→</span></a>
           </footer>
         </article>
       </main>

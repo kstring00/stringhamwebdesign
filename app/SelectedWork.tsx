@@ -1,6 +1,13 @@
 "use client";
 
-import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+import {
+  CSSProperties,
+  KeyboardEvent as ReactKeyboardEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import styles from "./SelectedWork.module.css";
 import polish from "./SelectedWorkPolish.module.css";
 
@@ -236,10 +243,16 @@ export default function SelectedWork() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [shotIndex, setShotIndex] = useState(0);
   const [entered, setEntered] = useState(false);
+  // Which way the page flips. Set from the tab you came from, so moving down
+  // the tabs turns the page forward and moving up turns it back.
+  const [turnDirection, setTurnDirection] = useState<"forward" | "back">("forward");
   const sectionRef = useRef<HTMLElement | null>(null);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const active = projects[activeIndex];
   const shotCount = active.screenshots?.length ?? 0;
+  const total = projects.length;
+  const totalLabel = String(total).padStart(2, "0");
 
   useEffect(() => {
     const node = sectionRef.current;
@@ -282,8 +295,32 @@ export default function SelectedWork() {
   };
 
   const selectProject = (index: number) => {
+    if (index === activeIndex) return;
+    setTurnDirection(index > activeIndex ? "forward" : "back");
     setActiveIndex(index);
     setShotIndex(0);
+  };
+
+  // Roving tabindex: only the selected tab is in the tab order, and the arrow
+  // keys move between tabs the way the tablist pattern expects.
+  const onTabKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+    const keys = ["ArrowDown", "ArrowRight", "ArrowUp", "ArrowLeft", "Home", "End"];
+    if (!keys.includes(event.key)) return;
+    event.preventDefault();
+
+    let next = activeIndex;
+    if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+      next = (activeIndex + 1) % total;
+    } else if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+      next = (activeIndex - 1 + total) % total;
+    } else if (event.key === "Home") {
+      next = 0;
+    } else if (event.key === "End") {
+      next = total - 1;
+    }
+
+    selectProject(next);
+    tabRefs.current[next]?.focus();
   };
 
   return (
@@ -296,9 +333,10 @@ export default function SelectedWork() {
       <div className={styles.headingWrap}>
         <p className={styles.eyebrow}>Selected work</p>
         <div className={styles.headingRow}>
-          <h2 id="selected-work-heading">Proof before pricing.</h2>
+          <h2 id="selected-work-heading">The work, up close.</h2>
           <p className={styles.headingNote}>
-            Open the binder. Pick a tab. See the site, then see the system behind it.
+            Open the binder. Pick a tab. See the site at full size, then see the
+            system behind it.
           </p>
         </div>
       </div>
@@ -340,12 +378,17 @@ export default function SelectedWork() {
             ))}
           </div>
 
-          <div className={styles.pageStack}>
+          <div className={styles.pageStack} data-turn={turnDirection}>
             <div className={styles.backPage} aria-hidden="true" />
             <div
-              className={`${styles.sitePage} ${polish.sitePagePolish} ${polish.projectPage}`}
+              className={`${styles.sitePage} ${polish.sitePagePolish}`}
               key={active.id}
+              id={`binder-panel-${active.id}`}
+              role="tabpanel"
+              aria-labelledby={`binder-tab-${active.id}`}
+              tabIndex={0}
             >
+              <span className={styles.turnShade} aria-hidden="true" />
               <div className={`${styles.browserBar} ${polish.browserBarPolish}`}>
                 <span className={styles.browserDots} aria-hidden="true">
                   <i />
@@ -408,7 +451,7 @@ export default function SelectedWork() {
 
               <div className={`${styles.pageMeta} ${polish.pageMetaPolish}`}>
                 <div>
-                  <span>{String(activeIndex + 1).padStart(2, "0")} / 06</span>
+                  <span>{String(activeIndex + 1).padStart(2, "0")} / {totalLabel}</span>
                   <strong>{active.title}</strong>
                 </div>
                 <div>
@@ -427,10 +470,17 @@ export default function SelectedWork() {
                 <button
                   type="button"
                   role="tab"
+                  id={`binder-tab-${project.id}`}
                   aria-selected={index === activeIndex}
+                  aria-controls={`binder-panel-${project.id}`}
+                  tabIndex={index === activeIndex ? 0 : -1}
+                  ref={(node) => {
+                    tabRefs.current[index] = node;
+                  }}
                   className={`${index === activeIndex ? styles.activeTab : ""} ${polish.tabButton} ${index === activeIndex ? polish.tabButtonActive : ""}`}
                   key={project.id}
                   onClick={() => selectProject(index)}
+                  onKeyDown={onTabKeyDown}
                 >
                   {project.tab}
                 </button>
@@ -449,7 +499,7 @@ export default function SelectedWork() {
               <p>What&apos;s under the hood</p>
               <div className={polish.sheetTopMeta}>
                 <span className={polish.sheetStatus}>{active.status}</span>
-                <span>{String(activeIndex + 1).padStart(2, "0")} / 06</span>
+                <span>{String(activeIndex + 1).padStart(2, "0")} / {totalLabel}</span>
               </div>
             </div>
 
@@ -471,7 +521,9 @@ export default function SelectedWork() {
                   key={`${active.id}-${feature.label}`}
                   style={{ "--i": index } as CSSProperties}
                 >
-                  <span className={styles.featureGlyph}>{featureGlyphs[index]}</span>
+                  <span className={styles.featureGlyph} aria-hidden="true">
+                      {featureGlyphs[index]}
+                    </span>
                   <div>
                     <strong>{feature.label}</strong>
                     <p>{feature.detail}</p>

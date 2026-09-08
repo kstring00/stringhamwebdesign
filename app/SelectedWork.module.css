@@ -7,6 +7,10 @@
   --gold: #c9a227;
   --gold-soft: #d8bc69;
   --ink-muted: #72808a;
+  /* gold for small labels on cream; --gold is 3.2:1 there and fails AA */
+  --gold-ink: #6f5620;
+  /* slate ink for small copy on cream: 6.3:1 */
+  --slate-ink: #425b6f;
   background: var(--cream);
   color: var(--navy);
   padding: clamp(5.5rem, 8vw, 8rem) var(--gutter) clamp(5.5rem, 8vw, 8rem);
@@ -22,7 +26,7 @@
 
 .eyebrow {
   margin: 0 0 1.1rem;
-  color: #a9833d;
+  color: var(--gold-ink);
   font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.18em;
@@ -48,7 +52,7 @@
 
 .headingNote {
   margin: 0 0 0.5rem;
-  color: #667785;
+  color: var(--slate-ink);
   font-size: 0.9rem;
   line-height: 1.6;
   max-width: 24rem;
@@ -141,7 +145,7 @@
   letter-spacing: 0.19em;
   font-weight: 800;
   text-transform: uppercase;
-  color: #a9833d;
+  color: var(--gold-ink);
 }
 
 .coverLine {
@@ -244,7 +248,7 @@
   align-items: center;
   background: #f2eee6;
   border-bottom: 1px solid rgba(38, 49, 56, 0.1);
-  color: #78838b;
+  color: var(--slate-ink);
   font-size: 0.58rem;
 }
 
@@ -468,7 +472,7 @@
 
 .mockFeatureBlock p {
   margin: 0 0 0.55rem;
-  color: #a9833d;
+  color: var(--gold-ink);
   font-size: 0.43rem;
   letter-spacing: 0.14em;
   font-weight: 800;
@@ -534,7 +538,7 @@
 }
 
 .pageMeta span {
-  color: #9a8a6a;
+  color: var(--slate-ink);
   font-size: 0.46rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -633,7 +637,7 @@
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  color: #8d7442;
+  color: var(--gold-ink);
   font-size: 0.53rem;
   font-weight: 800;
   letter-spacing: 0.16em;
@@ -697,7 +701,7 @@
   place-items: center;
   border: 1px solid rgba(169,131,61,0.38);
   border-radius: 50%;
-  color: #9b7934;
+  color: var(--gold-ink);
   font-size: 0.62rem;
 }
 
@@ -710,7 +714,7 @@
 
 .feature p {
   margin: 0.15rem 0 0;
-  color: #7b8589;
+  color: var(--slate-ink);
   font-size: 0.53rem;
   line-height: 1.4;
 }
@@ -726,7 +730,7 @@
   gap: 1rem;
   padding-top: 0.8rem;
   border-top: 1px solid rgba(48,54,56,0.13);
-  color: #8e7b59;
+  color: var(--gold-ink);
   font-size: 0.48rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -744,7 +748,7 @@
 .underStage p {
   margin: 0;
   max-width: 38rem;
-  color: #72808a;
+  color: var(--slate-ink);
   font-size: 0.78rem;
   line-height: 1.55;
 }
@@ -1096,7 +1100,6 @@
 
 .headingWrap,
 .stage,
-.largePreview,
 .underStage {
   position: relative;
   z-index: 2;
@@ -1135,251 +1138,125 @@
   color: var(--cream);
 }
 
-.largePreview {
-  margin-top: clamp(2.5rem, 4.5vw, 4.5rem);
-  overflow: hidden;
-  border: 1px solid rgba(201, 162, 39, 0.38);
-  background: #0a1721;
-  box-shadow: 0 2.2rem 5rem rgba(0, 0, 0, 0.24);
+/* ---------- page turn ----------
+
+   Tab switches turn the page rather than fading it. The sheet pivots on the
+   spine (the gold rings sit over that edge and never move), and a shadow
+   crosses the spread as the page comes down. Timings are custom properties so
+   they can be tuned in one place.
+*/
+
+.pageStack {
+  --turn-duration: 350ms;
+  --turn-ease: cubic-bezier(0.34, 0.72, 0.28, 1);
+  perspective: 2400px;
+  perspective-origin: left center;
 }
 
-.largePreviewHeader {
-  min-height: 5.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  padding: 1rem clamp(1rem, 2vw, 1.5rem);
-  border-bottom: 1px solid rgba(245, 240, 232, 0.12);
-  color: var(--cream);
+.sitePage {
+  transform-origin: left center;
+  backface-visibility: hidden;
+  animation: pageTurnForward var(--turn-duration) var(--turn-ease) both;
 }
 
-.largePreviewHeader > div:first-child,
-.largePreviewMeta {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
+.pageStack[data-turn="back"] .sitePage {
+  animation-name: pageTurnBack;
 }
 
-.largePreviewHeader span {
-  color: rgba(245, 240, 232, 0.52);
-  font-size: 0.56rem;
-  font-weight: 750;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
+/* The shadow that sweeps the spread while the page is coming down. */
+.turnShade {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(13, 27, 38, 0.34) 0%,
+    rgba(13, 27, 38, 0.16) 26%,
+    transparent 58%
+  );
+  animation: turnShadePass var(--turn-duration) var(--turn-ease) both;
 }
 
-.largePreviewHeader strong {
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: clamp(1.45rem, 2.4vw, 2.1rem);
-  font-weight: 500;
+.pageStack[data-turn="back"] .turnShade {
+  animation-name: turnShadePassBack;
 }
 
-.largePreviewMeta b {
-  padding: 0.34rem 0.62rem;
-  border: 1px solid rgba(201, 162, 39, 0.42);
-  border-radius: 999px;
-  color: var(--gold-soft);
-  font-size: 0.52rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+@keyframes pageTurnForward {
+  from {
+    transform: rotateY(-62deg);
+  }
+  to {
+    transform: rotateY(0deg);
+  }
 }
 
-.largePreviewViewport {
-  position: relative;
-  overflow: hidden;
-  background: #f5f0e8;
+@keyframes pageTurnBack {
+  from {
+    transform: rotateY(46deg);
+  }
+  to {
+    transform: rotateY(0deg);
+  }
 }
 
-.largePreviewImage {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-height: none;
+@keyframes turnShadePass {
+  0% {
+    opacity: 0.85;
+    transform: translateX(-14%);
+  }
+  70% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(6%);
+  }
 }
 
-.largeGeneratedPreview {
-  min-height: clamp(38rem, 58vw, 58rem);
-  overflow: hidden;
-  background: #faf6ef;
+@keyframes turnShadePassBack {
+  0% {
+    opacity: 0.7;
+    transform: translateX(10%);
+  }
+  70% {
+    opacity: 0.34;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-6%);
+  }
 }
 
-.largeGeneratedPreview .siteScroller {
-  min-height: 100%;
-  animation: none;
+/* Reduced motion: the page swaps instantly and stays flat and fully legible.
+   No turn, no shadow pass, no perspective. */
+@media (prefers-reduced-motion: reduce) {
+  .pageStack {
+    perspective: none;
+  }
+
+  .sitePage,
+  .turnShade {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .turnShade {
+    display: none;
+  }
 }
 
-.largeGeneratedPreview .fakeNav {
-  font-size: 0.7rem;
-}
+/* ---------- ink on the paper surfaces ----------
 
-.largeGeneratedPreview .fakeNav strong {
-  font-size: 1.4rem;
-}
+   The section sets `color: var(--cream)` so copy reads on the navy ground.
+   That inherits straight into the paper surfaces inside the binder, where
+   cream on cream measures about 1:1 and the text disappears. Re-assert navy
+   ink on every paper surface so inherited colour can never leak in again.
+*/
 
-.largeGeneratedPreview .siteHero {
-  padding: clamp(1.5rem, 3vw, 3rem);
-}
-
-.largeGeneratedPreview .siteHeroGrid {
-  min-height: 28rem;
-}
-
-.largeGeneratedPreview .siteHeroGrid h3 {
-  font-size: clamp(3.5rem, 6vw, 6.8rem);
-}
-
-.largeGeneratedPreview .siteHeroGrid > div > p:not(.mockEyebrow) {
-  font-size: 0.95rem;
-}
-
-.largeGeneratedPreview .mockEyebrow,
-.largeGeneratedPreview .mockButton,
-.largeGeneratedPreview .mockStats span,
-.largeGeneratedPreview .mockFeatureBlock p,
-.largeGeneratedPreview .mockFeatureBlock span,
-.largeGeneratedPreview .mockFooter {
-  font-size: 0.72rem;
-}
-
-.largeGeneratedPreview .heroArtwork {
-  height: 24rem;
-}
-
-.largePlaceholder {
-  min-height: clamp(34rem, 52vw, 50rem);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding: clamp(2rem, 7vw, 7rem);
-  background: var(--paper);
+.coverPaper,
+.sitePage,
+.featureSheet {
   color: var(--navy);
-}
-
-.largePlaceholder p {
-  margin: 0 0 1.2rem;
-  color: #a9833d;
-  font-size: 0.64rem;
-  font-weight: 800;
-  letter-spacing: 0.18em;
-}
-
-.largePlaceholder h3 {
-  max-width: 9ch;
-  margin: 0;
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: clamp(3.4rem, 7vw, 7rem);
-  font-weight: 300;
-  line-height: 0.9;
-  letter-spacing: -0.05em;
-}
-
-.largePlaceholder > span {
-  max-width: 38rem;
-  margin-top: 1.4rem;
-  color: #667783;
-  font-size: 1rem;
-  line-height: 1.7;
-}
-
-.largePlaceholder a {
-  margin-top: 2rem;
-  color: var(--navy-soft);
-  font-size: 0.82rem;
-  font-weight: 800;
-  border-bottom: 1px solid rgba(201, 162, 39, 0.5);
-  padding-bottom: 0.25rem;
-}
-
-.largePreviewControls {
-  min-height: 4rem;
-  display: grid;
-  grid-template-columns: 3.4rem 1fr 3.4rem;
-  align-items: center;
-  border-top: 1px solid rgba(245, 240, 232, 0.12);
-  color: var(--cream);
-}
-
-.largePreviewControls span {
-  justify-self: center;
-  color: var(--gold-soft);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-}
-
-.largePreviewControls button {
-  height: 100%;
-  border: 0;
-  background: transparent;
-  color: var(--cream);
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.largePreviewControls button:first-child {
-  border-right: 1px solid rgba(245, 240, 232, 0.1);
-}
-
-.largePreviewControls button:last-child {
-  border-left: 1px solid rgba(245, 240, 232, 0.1);
-}
-
-.largePreviewControls button:hover {
-  color: var(--gold-soft);
-}
-
-.largePreviewControls button:focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: -3px;
-}
-
-@media (max-width: 60rem) {
-  .largePreviewHeader {
-    align-items: flex-start;
-  }
-
-  .largePreviewHeader,
-  .largePreviewHeader > div:first-child,
-  .largePreviewMeta {
-    flex-wrap: wrap;
-  }
-
-  .largeGeneratedPreview .siteHeroGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 44rem) {
-  .largePreview {
-    margin-top: 2rem;
-  }
-
-  .largePreviewHeader {
-    display: grid;
-    gap: 0.75rem;
-  }
-
-  .largePreviewMeta {
-    justify-content: space-between;
-  }
-
-  .largeGeneratedPreview {
-    min-height: 34rem;
-  }
-
-  .largeGeneratedPreview .siteHeroGrid h3 {
-    font-size: clamp(2.8rem, 13vw, 4.5rem);
-  }
-
-  .largeGeneratedPreview .heroArtwork {
-    height: 14rem;
-  }
-
-  .largePlaceholder {
-    min-height: 30rem;
-    padding: 2rem 1.35rem;
-  }
 }

@@ -1,0 +1,405 @@
+/* The intake.
+
+   Dark navy ground: this is an instrument panel, not a marketing page. One
+   question group per screen, progress as a segmented meter. */
+
+.page {
+  --gold-on-dark: #e2c58a;
+  --cream-ink: #f5f0e8;
+  --muted-ink: rgba(245, 240, 232, 0.68);
+  --panel: #12242f;
+  --hairline: rgba(245, 240, 232, 0.16);
+
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  background: var(--navy-deep);
+  color: var(--cream-ink);
+  padding: clamp(6.5rem, 12vw, 9rem) var(--gutter) clamp(4rem, 8vw, 7rem);
+}
+
+/* Faint technical grid, the same language as the work section. */
+.page::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.32;
+  background-image:
+    linear-gradient(rgba(245, 240, 232, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245, 240, 232, 0.05) 1px, transparent 1px);
+  background-size: 3.5rem 3.5rem;
+}
+
+.grid {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 72rem);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(2.5rem, 6vw, 5.5rem);
+  align-items: start;
+}
+
+/* ---------- left rail ---------- */
+
+.eyebrow {
+  margin: 0 0 1.1rem;
+  color: var(--gold-on-dark);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.intro h1 {
+  margin: 0;
+  max-width: 11ch;
+  color: var(--cream-ink);
+  font-size: clamp(2.6rem, 5.5vw, 4.25rem);
+  letter-spacing: -0.04em;
+}
+
+.lede {
+  margin: 1.5rem 0 0;
+  max-width: 32rem;
+  color: var(--muted-ink);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.facts {
+  margin: clamp(2rem, 4vw, 3rem) 0 0;
+  display: grid;
+  gap: 1.1rem;
+  border-top: 1px solid var(--hairline);
+  padding-top: 1.5rem;
+}
+
+.facts > div {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.facts dt {
+  color: var(--gold-on-dark);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.facts dd {
+  margin: 0;
+  color: var(--muted-ink);
+  font-size: 0.875rem;
+  line-height: 1.65;
+}
+
+/* ---------- form panel ---------- */
+
+.formShell {
+  position: relative;
+  border: 1px solid var(--hairline);
+  border-radius: 0.5rem;
+  background: var(--panel);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  box-shadow: 0 2rem 4.5rem rgba(0, 0, 0, 0.28);
+}
+
+.meterRow {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+.meterLabel {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  color: var(--gold-on-dark);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.meterLabel b {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.12em;
+}
+
+/* Discrete bars, like the energy meter elsewhere. */
+.meter {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0.3rem;
+}
+
+.segment {
+  height: 0.3rem;
+  border-radius: 1px;
+  background: rgba(245, 240, 232, 0.14);
+  transition: background 260ms ease, box-shadow 260ms ease;
+}
+
+.segmentDone {
+  background: var(--gold-on-dark);
+}
+
+.segmentLive {
+  background: var(--gold-on-dark);
+  box-shadow: 0 0 0 1px rgba(226, 197, 138, 0.4);
+}
+
+/* ---------- fields ---------- */
+
+.form {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2rem);
+}
+
+.fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.stepLabel {
+  margin: 0 0 0.9rem;
+  color: var(--gold-on-dark);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.question {
+  margin: 0;
+  max-width: 20ch;
+  color: var(--cream-ink);
+  font-size: clamp(1.6rem, 3.2vw, 2.35rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.question:focus,
+.question:focus-visible {
+  outline: none;
+}
+
+.help {
+  margin: 1rem 0 0;
+  max-width: 34rem;
+  color: var(--muted-ink);
+  font-size: 0.875rem;
+  line-height: 1.65;
+}
+
+.fields {
+  margin-top: clamp(1.5rem, 3vw, 2rem);
+  display: grid;
+  gap: 1.25rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.fieldLabel {
+  color: var(--cream-ink);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.optional {
+  color: var(--muted-ink);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.input {
+  width: 100%;
+  /* Comfortably past the 44px touch minimum. */
+  min-height: 3.25rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--hairline);
+  border-radius: 0.3rem;
+  background: rgba(5, 23, 47, 0.55);
+  color: var(--cream-ink);
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: border-color 200ms ease, background 200ms ease;
+}
+
+.textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+/* --smoke fails AA on this ground, so placeholders use the same muted ink as
+   the help copy: 7.4:1 on the panel. */
+.input::placeholder {
+  color: rgba(245, 240, 232, 0.52);
+}
+
+.input:hover {
+  border-color: rgba(245, 240, 232, 0.3);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--gold-on-dark);
+  outline-offset: 2px;
+  border-color: var(--gold-on-dark);
+}
+
+.inputError {
+  border-color: #e9a978;
+}
+
+.fieldFoot {
+  margin: 0;
+  min-height: 1.15rem;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.hint {
+  color: var(--muted-ink);
+}
+
+/* Warm amber rather than a red: it stays inside the palette's temperature and
+   clears 7:1 on this ground. Never the only signal — the message says what is
+   wrong in words. */
+.error {
+  color: #f0b98c;
+}
+
+/* ---------- controls ---------- */
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--hairline);
+}
+
+.back,
+.next {
+  min-height: 2.75rem;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--hairline);
+  border-radius: 0.3rem;
+  background: transparent;
+  color: var(--cream-ink);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 200ms ease, color 200ms ease;
+}
+
+.next {
+  margin-left: auto;
+  border-color: rgba(226, 197, 138, 0.55);
+  color: var(--gold-on-dark);
+}
+
+.back:hover:not(:disabled),
+.next:hover {
+  border-color: var(--gold-on-dark);
+  color: var(--gold-on-dark);
+}
+
+.back:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.back:focus-visible,
+.next:focus-visible {
+  outline: 2px solid var(--gold-on-dark);
+  outline-offset: 2px;
+}
+
+.controls > :global(.tx-wrap) {
+  margin-left: auto;
+}
+
+.formError {
+  margin: 0;
+  color: #f0b98c;
+  font-size: 0.85rem;
+}
+
+.resumeNote {
+  margin: 1.25rem 0 0;
+  color: var(--muted-ink);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 62rem) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .intro h1 {
+    max-width: 16ch;
+  }
+}
+
+@media (max-width: 34rem) {
+  .facts > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.25rem;
+  }
+
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .next,
+  .controls > :global(.tx-wrap) {
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .segment,
+  .input,
+  .back,
+  .next {
+    transition: none;
+  }
+}
