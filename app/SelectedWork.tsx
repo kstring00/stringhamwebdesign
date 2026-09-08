@@ -90,9 +90,9 @@ const projects: Project[] = [
       "/selected-work/bcba-prep-02.png",
     ],
     features: [
-      { label: "Stripe", detail: "Server-side product setup" },
+      { label: "Stripe", detail: "Server-side product pricing" },
       { label: "Member access", detail: "Account-based study library" },
-      { label: "Bundles", detail: "Domain and full-library access" },
+      { label: "Bundles", detail: "Domain and full-library pricing" },
       { label: "Testimonials", detail: "Social-proof collection" },
       { label: "Analytics", detail: "Launch behavior insights" },
       { label: "Licensing", detail: "Personal-use access structure" },
@@ -240,7 +240,6 @@ export default function SelectedWork() {
 
   const active = projects[activeIndex];
   const shotCount = active.screenshots?.length ?? 0;
-  const countLabel = String(projects.length).padStart(2, "0");
 
   useEffect(() => {
     const node = sectionRef.current;
@@ -297,7 +296,7 @@ export default function SelectedWork() {
       <div className={styles.headingWrap}>
         <p className={styles.eyebrow}>Selected work</p>
         <div className={styles.headingRow}>
-          <h2 id="selected-work-heading">Proof before the quote.</h2>
+          <h2 id="selected-work-heading">Proof before pricing.</h2>
           <p className={styles.headingNote}>
             Open the binder. Pick a tab. See the site, then see the system behind it.
           </p>
@@ -409,7 +408,7 @@ export default function SelectedWork() {
 
               <div className={`${styles.pageMeta} ${polish.pageMetaPolish}`}>
                 <div>
-                  <span>{String(activeIndex + 1).padStart(2, "0")} / {countLabel}</span>
+                  <span>{String(activeIndex + 1).padStart(2, "0")} / 06</span>
                   <strong>{active.title}</strong>
                 </div>
                 <div>
@@ -450,7 +449,7 @@ export default function SelectedWork() {
               <p>What&apos;s under the hood</p>
               <div className={polish.sheetTopMeta}>
                 <span className={polish.sheetStatus}>{active.status}</span>
-                <span>{String(activeIndex + 1).padStart(2, "0")} / {countLabel}</span>
+                <span>{String(activeIndex + 1).padStart(2, "0")} / 06</span>
               </div>
             </div>
 
@@ -489,54 +488,10 @@ export default function SelectedWork() {
         </div>
       </div>
 
-      <div className={`${styles.largePreview} ${accentClass}`} aria-live="polite">
-        <div className={styles.largePreviewHeader}>
-          <div>
-            <span>Selected project</span>
-            <strong>{active.title}</strong>
-          </div>
-          <div className={styles.largePreviewMeta}>
-            <span>{active.category}</span>
-            <b>{active.status}</b>
-          </div>
-        </div>
-
-        <div className={styles.largePreviewViewport}>
-          {shotCount > 0 && active.screenshots ? (
-            <img
-              className={styles.largePreviewImage}
-              src={active.screenshots[shotIndex]}
-              alt={`${active.title} full website screen ${shotIndex + 1}`}
-              decoding="async"
-            />
-          ) : active.id === "yours-here" ? (
-            <div className={styles.largePlaceholder}>
-              <p>{active.eyebrow}</p>
-              <h3>{active.headline}</h3>
-              <span>{active.body}</span>
-              <a href="#ai-intake-chat">Start the intake →</a>
-            </div>
-          ) : (
-            <div className={styles.largeGeneratedPreview}>
-              <GeneratedPreview active={active} />
-            </div>
-          )}
-        </div>
-
-        {shotCount > 1 ? (
-          <div className={styles.largePreviewControls}>
-            <button type="button" onClick={previousShot} aria-label="Previous screenshot">←</button>
-            <span>
-              SCREEN {String(shotIndex + 1).padStart(2, "0")} / {String(shotCount).padStart(2, "0")}
-            </span>
-            <button type="button" onClick={nextShot} aria-label="Next screenshot">→</button>
-          </div>
-        ) : null}
-      </div>
-
       <div className={styles.underStage}>
         <p>
-          The binder is the navigator. The full-size project view below is the work.
+          The binder is the work. The loose sheet is the infrastructure that makes
+          the work useful.
         </p>
         <a href="/work">View all work <span>→</span></a>
       </div>
