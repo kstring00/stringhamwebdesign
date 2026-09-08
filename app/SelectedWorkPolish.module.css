@@ -1,50 +1,149 @@
 .sectionPolish {
+  position: relative;
+  isolation: isolate;
   padding-top: clamp(4.75rem, 6vw, 6rem);
+  background:
+    linear-gradient(rgba(245, 240, 232, 0.965), rgba(245, 240, 232, 0.965)),
+    #f5f0e8;
+}
+
+.sectionPolish::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(58% 32% at -8% 18%, rgba(13, 27, 38, 0.13), transparent 72%),
+    radial-gradient(44% 27% at 102% 66%, rgba(13, 27, 38, 0.11), transparent 72%),
+    radial-gradient(28% 18% at 70% 6%, rgba(201, 162, 39, 0.07), transparent 78%),
+    radial-gradient(32% 22% at 38% 96%, rgba(13, 27, 38, 0.07), transparent 75%);
+}
+
+.sectionPolish::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.48;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='760' viewBox='0 0 1200 760'%3E%3Cg fill='none' stroke='%230d1b26' stroke-opacity='.16'%3E%3Cpath d='M-110 560C130 360 276 338 468 420c178 76 286 62 432-18 125-69 214-88 396-34' stroke-width='2'/%3E%3Cpath d='M-80 610c238-201 390-217 565-124 164 87 294 73 450-9 110-58 204-70 355-24' stroke-width='1'/%3E%3Cpath d='M760-40c-96 106-122 208-71 305 58 111 197 146 298 218 98 70 141 156 130 286' stroke-width='2'/%3E%3Cpath d='M812-55c-91 119-91 215-25 305 65 89 190 122 281 191 101 77 155 169 151 295' stroke-width='1'/%3E%3C/g%3E%3Cg fill='none' stroke='%23c9a227' stroke-opacity='.13'%3E%3Ccircle cx='1088' cy='110' r='86'/%3E%3Ccircle cx='1088' cy='110' r='118'/%3E%3C/g%3E%3C/svg%3E");
+  background-position: center top;
+  background-size: min(1200px, 100vw) auto;
+  background-repeat: no-repeat;
+}
+
+.sectionPolish :global([class*="headingWrap"]),
+.sectionPolish :global([class*="stage"]),
+.sectionPolish :global([class*="underStage"]) {
+  position: relative;
+  z-index: 2;
 }
 
 .stagePolish {
   margin-top: clamp(2.6rem, 4vw, 4.25rem);
   min-height: 0 !important;
-  grid-template-columns: minmax(0, 1.88fr) minmax(20rem, 0.78fr) !important;
-  gap: clamp(1.4rem, 2.5vw, 2.8rem) !important;
+  grid-template-columns: minmax(0, 1.95fr) minmax(20rem, 0.78fr) !important;
+  gap: clamp(1.25rem, 2.1vw, 2.4rem) !important;
   align-items: stretch !important;
   perspective: none !important;
+}
+
+.stagePolish::before {
+  inset: -3% -4% -8% !important;
+  background:
+    radial-gradient(50% 38% at 35% 48%, rgba(13, 27, 38, 0.16), transparent 72%),
+    radial-gradient(34% 30% at 86% 52%, rgba(13, 27, 38, 0.09), transparent 74%),
+    radial-gradient(24% 20% at 68% 80%, rgba(201, 162, 39, 0.12), transparent 74%) !important;
+  filter: blur(34px) !important;
+  opacity: 0.9;
 }
 
 .binderPolish {
   min-height: clamp(35rem, 47vw, 44rem) !important;
   height: 100%;
   align-self: stretch;
+  grid-template-columns: minmax(11.5rem, 0.54fr) minmax(0, 1.46fr) !important;
   transform: none !important;
   animation: none !important;
-  border: 1px solid rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.45rem !important;
+  background:
+    radial-gradient(120% 90% at 18% -10%, rgba(255, 255, 255, 0.075), transparent 43%),
+    linear-gradient(145deg, #162a3a 0%, #0d1b26 52%, #122737 100%) !important;
   box-shadow:
-    0 2.75rem 5.75rem rgba(13, 27, 38, 0.22),
-    0 0.65rem 1.5rem rgba(13, 27, 38, 0.12),
-    inset 0 1px rgba(255, 255, 255, 0.045);
+    0 3.1rem 6.5rem rgba(13, 27, 38, 0.24),
+    0 0.85rem 1.9rem rgba(13, 27, 38, 0.14),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.035),
+    inset 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.binderPolish :global([class*="coverLeft"]) {
+  padding: 1.05rem 0.74rem 1.05rem 1.05rem !important;
 }
 
 .coverPolish {
+  border-radius: 0.84rem 0 0 0.84rem !important;
   background:
-    radial-gradient(circle at 16% 8%, rgba(255, 255, 255, 0.72), transparent 26%),
-    linear-gradient(90deg, rgba(113, 89, 53, 0.08), transparent 16%),
-    #f7f2e9;
+    radial-gradient(circle at 14% 7%, rgba(255, 255, 255, 0.82), transparent 27%),
+    linear-gradient(90deg, rgba(113, 89, 53, 0.085), transparent 17%),
+    repeating-linear-gradient(0deg, transparent 0 5px, rgba(42, 35, 27, 0.017) 5px 6px),
+    #f7f2e9 !important;
+  box-shadow:
+    inset -1px 0 rgba(42, 39, 33, 0.1),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.65);
 }
 
 .coverLinePolish {
-  max-width: 8.3ch;
-  font-size: clamp(1.9rem, 2.85vw, 3rem);
-  line-height: 0.99;
+  max-width: 8.6ch;
+  font-size: clamp(1.95rem, 2.75vw, 3.05rem);
+  line-height: 0.97;
+  letter-spacing: -0.035em;
   text-wrap: balance;
 }
 
-.sitePagePolish {
-  border: 1px solid rgba(42, 48, 50, 0.08);
-  background: #f9f5ee;
+.binderPolish :global([class*="rings"]) {
+  left: calc(27% - 1.16rem) !important;
+  top: 7.5% !important;
+  bottom: 7.5% !important;
+}
+
+.binderPolish :global([class*="rings"]) span {
+  width: 2.55rem !important;
+  height: 0.72rem !important;
+  border-color: #bd9330 !important;
+  background: linear-gradient(180deg, #f6da83 0%, #c79c36 48%, #8f6817 100%) !important;
   box-shadow:
-    0 1.6rem 3.5rem rgba(13, 27, 38, 0.18),
-    0 0.2rem 0.75rem rgba(13, 27, 38, 0.08),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+    0 3px 7px rgba(30, 25, 17, 0.27),
+    inset 0 1px rgba(255, 255, 255, 0.86),
+    0 0 0 1px rgba(92, 62, 11, 0.13) !important;
+}
+
+.binderPolish :global([class*="pageStack"]) {
+  height: 100%;
+  min-height: 0;
+  padding: 0.86rem 3rem 0.86rem 0.38rem !important;
+}
+
+.binderPolish :global([class*="backPage"]) {
+  inset: 1.16rem 2.26rem 1.16rem 0.86rem !important;
+  border-radius: 0.8rem !important;
+  background: linear-gradient(145deg, #e8dfd2, #d9cbb7) !important;
+  transform: translate(0.72rem, 0.2rem) !important;
+  box-shadow: 0 0.75rem 1.75rem rgba(13, 27, 38, 0.1) !important;
+}
+
+.sitePagePolish {
+  height: 100%;
+  min-height: 0 !important;
+  border: 1px solid rgba(42, 48, 50, 0.08);
+  border-radius: 0.86rem !important;
+  background: #faf7f1;
+  box-shadow:
+    0 1.8rem 3.8rem rgba(13, 27, 38, 0.19),
+    0 0.22rem 0.8rem rgba(13, 27, 38, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.76);
 }
 
 .projectPage {
@@ -52,28 +151,38 @@
 }
 
 .browserBarPolish {
-  background: rgba(242, 238, 230, 0.97);
+  height: 2.45rem !important;
+  background: rgba(244, 240, 232, 0.98);
   backdrop-filter: blur(14px);
   border-bottom-color: rgba(36, 47, 55, 0.08) !important;
+  box-shadow: inset 0 -1px rgba(13, 27, 38, 0.035);
+}
+
+.browserBarPolish :global([class*="browserAddress"]) {
+  min-width: 8.2rem !important;
+  padding: 0.29rem 0.86rem !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(64, 69, 68, 0.07) !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.82);
 }
 
 .viewportPolish {
-  background: #ece8df;
+  background: #ebe6dd;
 }
 
 .viewportPolish::after {
-  height: 1.4rem;
-  opacity: 0.2;
+  height: 1.5rem;
+  opacity: 0.16;
 }
 
 .screenshotStage {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background:
-    linear-gradient(135deg, rgba(13, 27, 38, 0.045), transparent 42%),
-    #ebe6dd;
   isolation: isolate;
+  background:
+    linear-gradient(135deg, rgba(13, 27, 38, 0.035), transparent 42%),
+    #ebe6dd;
 }
 
 .screenshotStage::before {
@@ -81,7 +190,7 @@
   position: absolute;
   z-index: 4;
   inset: 0;
-  border: 1px solid rgba(21, 42, 57, 0.055);
+  border: 1px solid rgba(21, 42, 57, 0.05);
   pointer-events: none;
 }
 
@@ -91,8 +200,8 @@
   z-index: 3;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(10, 22, 31, 0.012), transparent 18% 82%, rgba(10, 22, 31, 0.1)),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03), transparent 20% 80%, rgba(13, 27, 38, 0.035));
+    linear-gradient(180deg, rgba(10, 22, 31, 0.008), transparent 18% 84%, rgba(10, 22, 31, 0.085)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025), transparent 20% 80%, rgba(13, 27, 38, 0.025));
   pointer-events: none;
 }
 
@@ -106,7 +215,7 @@
   opacity: 0;
   transform: translateX(-3%) scale(1.006);
   transform-origin: center;
-  filter: saturate(0.96) contrast(1.01);
+  filter: saturate(0.97) contrast(1.01);
   transition:
     opacity 340ms ease,
     transform 560ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -118,26 +227,26 @@
   z-index: 2;
   opacity: 1;
   transform: translateX(0) scale(1);
-  filter: saturate(1) contrast(1.02);
+  filter: saturate(1) contrast(1.015);
   animation: screenReveal 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .captureLabel {
   position: absolute;
   z-index: 7;
-  left: 0.85rem;
-  bottom: 0.85rem;
+  left: 0.9rem;
+  bottom: 0.9rem;
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
   min-height: 1.9rem;
   padding: 0.38rem 0.65rem;
-  border: 1px solid rgba(255, 255, 255, 0.46);
+  border: 1px solid rgba(255, 255, 255, 0.42);
   border-radius: 999px;
-  background: rgba(11, 27, 39, 0.77);
-  box-shadow: 0 0.5rem 1.2rem rgba(13, 27, 38, 0.14);
-  color: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(12px);
+  background: rgba(9, 25, 37, 0.82);
+  box-shadow: 0 0.55rem 1.3rem rgba(13, 27, 38, 0.16);
+  color: rgba(255, 255, 255, 0.93);
+  backdrop-filter: blur(14px);
   font-size: 0.45rem;
   font-weight: 800;
   letter-spacing: 0.12em;
@@ -146,7 +255,7 @@
 }
 
 .captureLabel b {
-  color: #e1c978;
+  color: #e2c66d;
   font-weight: 850;
   letter-spacing: 0.08em;
 }
@@ -154,28 +263,31 @@
 .shotNavigator {
   position: absolute;
   z-index: 8;
-  right: 0.9rem;
-  bottom: 0.9rem;
+  left: 50%;
+  right: auto;
+  bottom: 0.95rem;
+  transform: translateX(-50%);
   display: grid;
-  grid-template-columns: 2rem minmax(5.8rem, auto) 2rem;
+  grid-template-columns: 2.35rem minmax(6.3rem, auto) 2.35rem;
   align-items: stretch;
-  min-height: 2.55rem;
+  min-height: 2.75rem;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.46);
-  border-radius: 0.75rem;
-  background: rgba(10, 27, 39, 0.84);
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 0.9rem;
+  background: linear-gradient(180deg, rgba(18, 42, 58, 0.95), rgba(9, 26, 38, 0.94));
   box-shadow:
-    0 0.7rem 1.6rem rgba(13, 27, 38, 0.2),
-    inset 0 1px rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(14px);
+    0 0.85rem 1.8rem rgba(13, 27, 38, 0.24),
+    inset 0 1px rgba(255, 255, 255, 0.065),
+    inset 0 -1px rgba(0,0,0,.18);
+  backdrop-filter: blur(15px);
 }
 
 .shotNavigator button {
   border: 0;
   border-radius: 0;
   background: transparent;
-  color: #f3eee4;
-  font-size: 0.88rem;
+  color: #f5efe3;
+  font-size: 0.95rem;
   cursor: pointer;
   transition: background 160ms ease, color 160ms ease, transform 160ms ease;
 }
@@ -190,11 +302,11 @@
 
 .shotNavigator button:hover {
   background: rgba(216, 188, 105, 0.16);
-  color: #e4ca77;
+  color: #e6c96f;
 }
 
 .shotNavigator button:active {
-  transform: scale(0.94);
+  transform: scale(0.93);
 }
 
 .shotNavigator button:focus-visible {
@@ -204,28 +316,28 @@
 
 .shotReadout {
   position: relative;
-  min-width: 6.25rem;
+  min-width: 6.5rem;
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: 1fr auto;
   align-items: center;
-  gap: 0 0.55rem;
-  padding: 0.42rem 0.62rem 0.34rem;
+  gap: 0 0.58rem;
+  padding: 0.45rem 0.68rem 0.36rem;
   color: #f6f0e5;
 }
 
 .shotReadout span {
   font-size: 0.4rem;
   font-weight: 800;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.17em;
   text-transform: uppercase;
-  opacity: 0.68;
+  opacity: 0.64;
 }
 
 .shotReadout strong {
   justify-self: end;
-  color: #e1c978;
-  font-size: 0.52rem;
+  color: #e4c96e;
+  font-size: 0.53rem;
   font-weight: 850;
   letter-spacing: 0.1em;
 }
@@ -235,9 +347,9 @@
   position: relative;
   display: block;
   height: 2px;
-  margin-top: 0.26rem;
+  margin-top: 0.28rem;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .shotProgress::after {
@@ -245,52 +357,70 @@
   position: absolute;
   inset: 0;
   transform-origin: left center;
-  background: #d8bc69;
+  background: linear-gradient(90deg, #c9a227, #edcf72);
   animation: shotProgress 6.5s linear both;
 }
 
 .pageMetaPolish {
-  background: rgba(252, 249, 243, 0.975);
-  backdrop-filter: blur(12px);
+  min-height: 4.7rem !important;
+  background: rgba(252, 249, 243, 0.982);
+  backdrop-filter: blur(13px);
+  border-top-color: rgba(38, 49, 56, 0.085) !important;
 }
 
 .statusBadge {
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  min-height: 1.55rem;
-  padding: 0.28rem 0.58rem;
-  border: 1px solid rgba(134, 99, 27, 0.3);
+  min-height: 1.6rem;
+  padding: 0.29rem 0.65rem;
+  border: 1px solid rgba(134, 99, 27, 0.29);
   border-radius: 999px;
-  background: linear-gradient(180deg, #e4ca77, #c7a75a);
+  background: linear-gradient(180deg, #e5cc7a, #c8a857);
   box-shadow:
-    0 0.28rem 0.7rem rgba(132, 96, 27, 0.12),
-    inset 0 1px rgba(255, 255, 255, 0.55);
+    0 0.3rem 0.75rem rgba(132, 96, 27, 0.12),
+    inset 0 1px rgba(255, 255, 255, 0.58);
   color: #102635 !important;
   font-family: ui-sans-serif, system-ui, sans-serif !important;
-  font-size: 0.48rem !important;
+  font-size: 0.47rem !important;
   font-weight: 850 !important;
-  letter-spacing: 0.11em !important;
+  letter-spacing: 0.12em !important;
   line-height: 1 !important;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
 .tabsPolish {
-  filter: drop-shadow(0 0.55rem 0.75rem rgba(13, 27, 38, 0.08));
+  top: 7% !important;
+  bottom: 7% !important;
+  right: -0.14rem !important;
+  width: 3.15rem !important;
+  gap: 0.38rem !important;
+  filter: drop-shadow(0 0.65rem 0.85rem rgba(13, 27, 38, 0.09));
 }
 
 .tabButton {
-  border-top: 1px solid rgba(255, 255, 255, 0.32) !important;
+  position: relative;
+  border-top: 1px solid rgba(255, 255, 255, 0.38) !important;
+  border-radius: 0 0.58rem 0.58rem 0 !important;
+  background: linear-gradient(90deg, #e4d8c6, #ddd0bb) !important;
   box-shadow:
-    inset 1px 0 rgba(255, 255, 255, 0.42),
-    0 3px 8px rgba(13, 27, 38, 0.075) !important;
+    inset 1px 0 rgba(255, 255, 255, 0.48),
+    0 4px 10px rgba(13, 27, 38, 0.09) !important;
+  transition: transform 190ms ease, background 190ms ease, box-shadow 190ms ease !important;
+}
+
+.tabButton:hover {
+  transform: translateX(0.16rem) !important;
+  background: linear-gradient(90deg, #eadfcd, #dfd2bd) !important;
 }
 
 .tabButtonActive {
+  transform: translateX(0.34rem) !important;
+  background: linear-gradient(180deg, #dcc16d 0%, #c6a24f 100%) !important;
   box-shadow:
-    inset 1px 0 rgba(255, 255, 255, 0.5),
-    0 0.45rem 0.9rem rgba(121, 88, 23, 0.16) !important;
+    inset 1px 0 rgba(255, 255, 255, 0.55),
+    0 0.55rem 1rem rgba(121, 88, 23, 0.2) !important;
 }
 
 .sheetZonePolish {
@@ -302,61 +432,133 @@
 }
 
 .featureSheetPolish {
+  position: relative;
   width: 100%;
   min-height: 100% !important;
   height: 100%;
-  border-radius: 0.2rem;
+  overflow: hidden;
+  border-radius: 0.42rem;
   transform: none !important;
   animation: none !important;
+  background:
+    repeating-linear-gradient(90deg, rgba(160, 125, 65, 0.028) 0 1px, transparent 1px 1.4rem),
+    linear-gradient(180deg, #faf6ee 0%, #f6f0e7 100%) !important;
   box-shadow:
-    0 2.3rem 5rem rgba(13, 27, 38, 0.18),
-    0 0.5rem 1.5rem rgba(13, 27, 38, 0.08),
-    inset 0 0 0 1px rgba(59, 47, 34, 0.05);
+    0 2.5rem 5.5rem rgba(13, 27, 38, 0.18),
+    0 0.55rem 1.55rem rgba(13, 27, 38, 0.09),
+    inset 0 0 0 1px rgba(59, 47, 34, 0.055);
+}
+
+.featureSheetPolish::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  width: 11rem;
+  height: 14rem;
+  right: -1.2rem;
+  top: -0.8rem;
+  opacity: 0.14;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 250'%3E%3Cg fill='none' stroke='%23a9833d' stroke-width='1.2'%3E%3Cpath d='M166 238C146 174 135 123 137 67 138 39 150 20 176 8'/%3E%3Cpath d='M139 82c-37-18-59-37-70-60 32 2 55 20 70 60Z'/%3E%3Cpath d='M141 123c-32-4-57-16-76-37 34-8 60 5 76 37Z'/%3E%3Cpath d='M148 163c-28 4-50 0-69-13 25-14 49-9 69 13Z'/%3E%3Cpath d='M142 60c11-28 27-45 48-52 0 28-16 46-48 52Z'/%3E%3Cpath d='M142 105c17-26 36-40 58-43-4 30-23 44-58 43Z'/%3E%3Cpath d='M148 150c18-21 36-31 54-31-3 25-21 35-54 31Z'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.featureSheetPolish > * {
+  position: relative;
+  z-index: 1;
+}
+
+.featureSheetPolish :global([class*="sheetTop"]) {
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid rgba(169, 131, 61, 0.18);
+}
+
+.featureSheetPolish h3 {
+  max-width: 9.8ch;
+  font-size: clamp(2.15rem, 3vw, 3.6rem) !important;
+  line-height: 0.94 !important;
+  letter-spacing: -0.045em !important;
+}
+
+.featureSheetPolish :global([class*="sheetIntro"]) {
+  max-width: 28rem;
+  font-size: 0.72rem !important;
+  line-height: 1.62 !important;
 }
 
 .sheetTopMeta {
   display: inline-flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: 0.72rem;
 }
 
 .sheetStatus {
   display: inline-flex;
   align-items: center;
-  min-height: 1.4rem;
-  padding: 0.24rem 0.52rem;
-  border: 1px solid rgba(153, 117, 45, 0.3);
+  min-height: 1.45rem;
+  padding: 0.25rem 0.56rem;
+  border: 1px solid rgba(153, 117, 45, 0.31);
   border-radius: 999px;
-  background: rgba(214, 183, 101, 0.18);
+  background: rgba(214, 183, 101, 0.16);
   color: #795b20;
-  font-size: 0.44rem;
+  font-size: 0.43rem;
   font-weight: 850;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.13em;
   white-space: nowrap;
 }
 
+.featureSheetPolish :global([class*="featureGrid"]) {
+  margin-top: clamp(1.45rem, 2.5vw, 2.2rem) !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 0.7rem !important;
+  border: 0 !important;
+}
+
 .featurePolish {
-  background: rgba(255, 255, 255, 0.08);
-  transition: background 180ms ease, box-shadow 180ms ease;
+  min-height: 6.8rem;
+  padding: clamp(0.85rem, 1.25vw, 1.15rem) !important;
+  border: 1px solid rgba(69, 65, 57, 0.1) !important;
+  border-radius: 0.72rem;
+  background: rgba(255, 255, 255, 0.48) !important;
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.64),
+    0 0.35rem 0.8rem rgba(13, 27, 38, 0.025);
+  transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
 }
 
 .featurePolish:hover {
-  background: rgba(255, 255, 255, 0.34);
-  box-shadow: inset 0 0 0 1px rgba(169, 131, 61, 0.08);
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.68) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(169, 131, 61, 0.09),
+    0 0.55rem 1rem rgba(13, 27, 38, 0.05);
 }
 
-/* Keep the physical binder and page geometry fixed while tabs swap content. */
-.binderPolish :global([class*="pageStack"]) {
-  height: 100%;
-  min-height: 0;
+.featurePolish :global([class*="featureGlyph"]) {
+  width: 1.7rem !important;
+  height: 1.7rem !important;
+  background: rgba(201, 162, 39, 0.08);
+  border-color: rgba(169, 131, 61, 0.32) !important;
 }
 
-.binderPolish :global([class*="sitePage"]) {
-  height: 100%;
-  min-height: 0;
+.featurePolish strong {
+  font-size: 1.02rem !important;
 }
 
-/* GrowthGains uses Michael's real portrait instead of the generic abstract art. */
+.featurePolish p {
+  margin-top: 0.22rem !important;
+  font-size: 0.54rem !important;
+  line-height: 1.44 !important;
+}
+
+.featureSheetPolish :global([class*="sheetFoot"]) {
+  padding-top: 0.9rem !important;
+  border-top-color: rgba(169, 131, 61, 0.2) !important;
+}
+
+/* GrowthGains uses Michael's real portrait inside the generated preview. */
 :global([class*="accent_forest"]) :global([class*="heroArtwork"]) {
   background:
     linear-gradient(180deg, rgba(9, 31, 30, 0.04), rgba(9, 31, 30, 0.2)),
@@ -369,19 +571,6 @@
   display: none !important;
 }
 
-@keyframes projectPageIn {
-  from {
-    opacity: 0.5;
-    transform: translateX(1.15rem);
-    filter: blur(2px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-    filter: blur(0);
-  }
-}
-
 @keyframes screenReveal {
   0% {
     opacity: 0;
@@ -392,7 +581,7 @@
   100% {
     opacity: 1;
     transform: translateX(0) scale(1);
-    filter: saturate(1) contrast(1.02) blur(0);
+    filter: saturate(1) contrast(1.015) blur(0);
     clip-path: inset(0 0 0 0);
   }
 }
@@ -402,23 +591,18 @@
   to { transform: scaleX(1); }
 }
 
-@keyframes sheetSwapIn {
-  from {
-    opacity: 0;
-    transform: translateX(1.1rem) !important;
-    filter: blur(2px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0) !important;
-    filter: blur(0);
-  }
-}
-
 @media (max-width: 74rem) {
   .stagePolish {
     grid-template-columns: minmax(0, 1.5fr) minmax(17rem, 0.72fr) !important;
     gap: 1rem !important;
+  }
+
+  .binderPolish {
+    grid-template-columns: minmax(10rem, 0.49fr) minmax(0, 1.51fr) !important;
+  }
+
+  .binderPolish :global([class*="rings"]) {
+    left: calc(24.5% - 1.14rem) !important;
   }
 
   .coverLinePolish {
@@ -456,6 +640,10 @@
     padding-top: 4rem;
   }
 
+  .sectionPolish::after {
+    opacity: 0.25;
+  }
+
   .binderPolish {
     min-height: 32rem !important;
   }
@@ -467,7 +655,6 @@
   }
 
   .shotNavigator {
-    right: 0.55rem;
     bottom: 0.58rem;
     grid-template-columns: 1.8rem minmax(5rem, auto) 1.8rem;
     min-height: 2.3rem;
@@ -490,14 +677,20 @@
     padding-inline: 0.4rem;
     font-size: 0.4rem;
   }
+
+  .featureSheetPolish :global([class*="featureGrid"]) {
+    grid-template-columns: 1fr !important;
+  }
+
+  .featurePolish {
+    min-height: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .projectPage,
   .screenshotImage,
   .screenshotActive,
   .shotProgress::after,
-  .featureSheetPolish,
   .featurePolish {
     animation: none !important;
     transition: none !important;
