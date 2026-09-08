@@ -26,10 +26,11 @@ export default function AboutPage() {
 
           <figure className={styles.portrait}>
             <img
-              src="/about/portrait-placeholder.svg"
-              alt="Portrait of Kyle Stringham — placeholder image until the final portrait is supplied"
+              src="https://raw.githubusercontent.com/kstring00/stringhamwebdesign/62150537aa73260bb47bb7799f12d3ea3485f811/IMG_0157.jpg"
+              alt="Portrait of Kyle Stringham"
               width="640"
               height="800"
+              fetchPriority="high"
             />
           </figure>
         </section>
