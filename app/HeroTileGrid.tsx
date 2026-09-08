@@ -3,24 +3,18 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./HeroTileGrid.module.css";
 
-const FALLOFF = 280; // px from the cursor at which a tile stops responding
-const LIFT = 40; // px of translateZ at full strength
-const GROW = 0.06; // added scale at full strength
-const TILT = 6; // deg of rotateX/rotateY at full strength
-const SETTLE = 600; // ms — matches the ease-back transition in the stylesheet
+const FALLOFF = 250; // px from the cursor at which a tile stops responding
+const LIFT = 84; // px of translateZ at full strength
+const GROW = 0.028; // added scale at full strength
+const TILT = 8; // deg of rotateX/rotateY at full strength
+const SETTLE = 520; // ms — matches the ease-back transition in the stylesheet
+const FALLOFF_CURVE = 1.35; // concentrates the lift under the cursor
 
 type Layout = { cols: number; rows: number; track: boolean };
 
 const WIDE: Layout = { cols: 7, rows: 5, track: true };
 const COMPACT: Layout = { cols: 5, rows: 4, track: true };
 const STILL: Layout = { cols: 5, rows: 4, track: false };
-
-// Fluted tiles are listed rather than picked at random so the texture stays in
-// the same places between renders and never lands in a neat row.
-const FLUTED: Record<number, number[]> = {
-  35: [4, 9, 16, 22, 27, 31],
-  20: [3, 7, 12, 16],
-};
 
 export default function HeroTileGrid() {
   const [layout, setLayout] = useState<Layout>(WIDE);
@@ -40,7 +34,6 @@ export default function HeroTileGrid() {
   layoutRef.current = layout;
 
   const count = layout.cols * layout.rows;
-  const fluted = FLUTED[count] ?? [];
 
   // Layout and motion preference both come from media queries so the grid keeps
   // matching the page after a resize or a change to the OS motion setting.
@@ -84,8 +77,8 @@ export default function HeroTileGrid() {
     };
 
     const read = getComputedStyle(stage);
-    const gap = parseFloat(read.getPropertyValue("--gap")) || 12;
-    const radius = parseFloat(read.getPropertyValue("--radius")) || 20;
+    const gap = parseFloat(read.getPropertyValue("--gap")) || 7;
+    const radius = parseFloat(read.getPropertyValue("--radius")) || 18;
     const { cols, rows } = layoutRef.current;
 
     const cellW = (box.width - (cols - 1) * gap) / cols;
@@ -166,7 +159,8 @@ export default function HeroTileGrid() {
           const dy = point.y - c.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < FALLOFF) {
-            s = 1 - dist / FALLOFF;
+            const raw = 1 - dist / FALLOFF;
+            s = Math.pow(raw, FALLOFF_CURVE);
             // Tilt away from the cursor: the edge nearest it leans back.
             ry = (dx / FALLOFF) * TILT * s;
             rx = -(dy / FALLOFF) * TILT * s;
@@ -276,7 +270,7 @@ export default function HeroTileGrid() {
             }}
           >
             <span className={styles.glow} />
-            <span className={`${styles.pane} ${fluted.includes(i) ? styles.fluted : ""}`}>
+            <span className={styles.pane}>
               <span className={styles.sheen} />
             </span>
           </div>
