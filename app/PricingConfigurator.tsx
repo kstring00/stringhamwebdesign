@@ -48,11 +48,11 @@ export default function PricingConfigurator() {
 
         <div className={styles.actionRow}>
           <p>
-            After you submit your quote request, the section directly below shows
-            exactly what to expect: consultation, plan &amp; quote, build, then launch.
+            The fastest way to a real number is to tell me what you need. Send the
+            brief and I&apos;ll come back with scope first, then price.
           </p>
-          <a href="#timeline">
-            See what happens next <span aria-hidden="true">→</span>
+          <a href="#quick-contact">
+            Start your quote request <span aria-hidden="true">→</span>
           </a>
         </div>
       </div>
