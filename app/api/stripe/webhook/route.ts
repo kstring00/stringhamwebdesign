@@ -1,7 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 
-import { adminRest } from "@/app/lib/portalSupabase";
+import { adminRest, PortalRestError } from "@/app/lib/portalSupabase";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -59,27 +59,36 @@ function readMetadata(object: StripeObject) {
     : {}) as Record<string, string>;
 }
 
+type ClaimResult = "claimed" | "duplicate" | "unavailable";
+
 /**
  * Claims an event id before any state change.
  *
  * Stripe retries on every non-2xx and can deliver the same event twice even
  * after a success. The primary key on stripe_events is what makes a duplicate
- * a no-op: the insert fails, we return 200, and no invoice is marked paid a
- * second time.
+ * a no-op: the insert is rejected, we return 200, and no invoice is marked paid
+ * a second time.
  *
- * Returns false when this event has already been claimed.
+ * A duplicate and an unreachable datastore are NOT the same outcome, and
+ * collapsing them loses events. A duplicate is settled — 200 tells Stripe to
+ * stop. An unreachable datastore means nothing was recorded and the delivery
+ * must be retried, so it has to surface as a non-2xx.
+ *
+ * PostgREST answers a primary-key violation with 409 (SQLSTATE 23505); every
+ * other failure, including a thrown config error carrying no status, is treated
+ * as unavailable.
  */
-async function claimEvent(eventId: string, type: string) {
+async function claimEvent(eventId: string, type: string): Promise<ClaimResult> {
   try {
     await adminRest("stripe_events", {
       method: "POST",
       body: JSON.stringify({ event_id: eventId, type }),
     });
-    return true;
-  } catch {
-    // Either a duplicate (the expected case) or the datastore is unreachable.
-    // Both mean: do not apply a state change on this delivery.
-    return false;
+    return "claimed";
+  } catch (error) {
+    if (error instanceof PortalRestError && error.status === 409) return "duplicate";
+    console.error("Could not claim Stripe event", eventId, type, error);
+    return "unavailable";
   }
 }
 
@@ -244,14 +253,24 @@ export async function POST(request: NextRequest) {
 
   if (!handled.has(type)) {
     // Still claimed, so the ignore is recorded rather than invisible.
-    if (await claimEvent(eventId, type)) {
+    const claim = await claimEvent(eventId, type);
+    if (claim === "unavailable") {
+      // Nothing was recorded. 500 so Stripe redelivers and the ignore lands.
+      return NextResponse.json({ error: "Event store unavailable." }, { status: 500 });
+    }
+    if (claim === "claimed") {
       await closeEvent(eventId, "ignored", `Unhandled event type ${type}.`);
     }
     return NextResponse.json({ received: true, handled: false });
   }
 
-  // Claim before acting. A duplicate delivery stops here.
-  if (!(await claimEvent(eventId, type))) {
+  // Claim before acting. A duplicate delivery stops here; an unreachable
+  // datastore must not be reported as one, or the event is lost for good.
+  const claim = await claimEvent(eventId, type);
+  if (claim === "unavailable") {
+    return NextResponse.json({ error: "Event store unavailable." }, { status: 500 });
+  }
+  if (claim === "duplicate") {
     return NextResponse.json({ received: true, duplicate: true });
   }
 

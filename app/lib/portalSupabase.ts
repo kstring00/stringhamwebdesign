@@ -1,5 +1,7 @@
 import { cookies } from "next/headers";
 
+import { normalizeSupabaseUrl } from "./supabaseUrl";
+
 const ACCESS_COOKIE = "swd_portal_access";
 const REFRESH_COOKIE = "swd_portal_refresh";
 const DEFAULT_ADMIN_EMAIL = "stringham00@gmail.com";
@@ -29,14 +31,14 @@ export type PortalSession = {
 };
 
 function config() {
-  const url = process.env.SUPABASE_URL?.replace(/\/$/, "");
+  const supabaseUrl = normalizeSupabaseUrl(process.env.SUPABASE_URL);
   const secretKey = process.env.SUPABASE_SECRET_KEY;
 
-  if (!url || !secretKey) {
+  if (!supabaseUrl || !secretKey) {
     throw new Error("Supabase server environment variables are not configured.");
   }
 
-  return { url, secretKey };
+  return { url: supabaseUrl.url, secretKey };
 }
 
 function cookieOptions(maxAge: number) {
@@ -47,6 +49,22 @@ function cookieOptions(maxAge: number) {
     path: "/",
     maxAge,
   };
+}
+
+/**
+ * A PostgREST response that was not ok, carrying the status so callers can tell
+ * a rejected write (409 on a unique violation) from an unreachable datastore.
+ */
+export class PortalRestError extends Error {
+  readonly status: number;
+  readonly detail: string;
+
+  constructor(status: number, detail: string) {
+    super(`Portal data request failed with status ${status}.`);
+    this.name = "PortalRestError";
+    this.status = status;
+    this.detail = detail;
+  }
 }
 
 export async function adminRest<T>(
@@ -69,7 +87,7 @@ export async function adminRest<T>(
   if (!response.ok) {
     const detail = await response.text().catch(() => "");
     console.error("Portal admin REST failed", response.status, detail.slice(0, 500));
-    throw new Error(`Portal data request failed with status ${response.status}.`);
+    throw new PortalRestError(response.status, detail);
   }
 
   if (response.status === 204) return undefined as T;

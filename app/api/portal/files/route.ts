@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { normalizeSupabaseUrl } from "@/app/lib/supabaseUrl";
 
 import {
   getPortalSession,
@@ -153,7 +154,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Could not prepare the download." }, { status: 500 });
   }
 
-  const base = process.env.SUPABASE_URL?.replace(/\/$/, "") ?? "";
+  // Same normalization as PostgREST: /storage/v1 is appended below, so the
+  // configured value must be the bare project URL.
+  const base = normalizeSupabaseUrl(process.env.SUPABASE_URL)?.url ?? "";
   const url = signedPath.startsWith("http")
     ? signedPath
     : `${base}/storage/v1${signedPath.startsWith("/") ? "" : "/"}${signedPath}`;
