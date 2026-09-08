@@ -2,6 +2,7 @@
 
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./SelectedWork.module.css";
+import polish from "./SelectedWorkPolish.module.css";
 
 type Feature = {
   label: string;
@@ -19,6 +20,8 @@ type Project = {
   headline: string;
   body: string;
   accent: "navy" | "gold" | "plum" | "forest";
+  siteUrl: string;
+  screenshots?: string[];
   features: Feature[];
 };
 
@@ -34,6 +37,11 @@ const projects: Project[] = [
     headline: "A calmer digital home for families.",
     body: "A gentle, useful experience built around clarity, trust, and the next right step.",
     accent: "plum",
+    siteUrl: "withlittle.com",
+    screenshots: [
+      "/selected-work/with-little-01.png",
+      "/selected-work/with-little-02.png",
+    ],
     features: [
       { label: "Email / CRM", detail: "Follow-up and nurturing flows" },
       { label: "Intake forms", detail: "Structured client information" },
@@ -54,6 +62,8 @@ const projects: Project[] = [
     headline: "One place to know what comes next.",
     body: "A parent-navigation platform that turns scattered information into guided next steps.",
     accent: "gold",
+    siteUrl: "texasabacenterscg.com",
+    screenshots: ["/hero-crt/common-ground.png"],
     features: [
       { label: "Guided intake", detail: "Personalized parent pathways" },
       { label: "Resource system", detail: "Curated tools in one place" },
@@ -74,6 +84,11 @@ const projects: Project[] = [
     headline: "A study storefront that feels like a library.",
     body: "Custom commerce and member architecture wrapped in an interactive book-based experience.",
     accent: "plum",
+    siteUrl: "Bee the Behavior Bae",
+    screenshots: [
+      "/selected-work/bcba-prep-01.png",
+      "/selected-work/bcba-prep-02.png",
+    ],
     features: [
       { label: "Stripe", detail: "Server-side product pricing" },
       { label: "Member access", detail: "Account-based study library" },
@@ -94,6 +109,7 @@ const projects: Project[] = [
     headline: "A coaching site built around the moment things change.",
     body: "A guided marketing experience for people navigating marriage, divorce, empty nesting, and reinvention.",
     accent: "forest",
+    siteUrl: "growthgains.co",
     features: [
       { label: "Intake funnel", detail: "Progressive discovery questions" },
       { label: "Booking", detail: "Consultation-ready scheduling" },
@@ -114,6 +130,11 @@ const projects: Project[] = [
     headline: "A storage site that gets people to the unit faster.",
     body: "A straightforward local-business experience built around trust, location clarity, and action.",
     accent: "navy",
+    siteUrl: "lakecityselfstorage.com",
+    screenshots: [
+      "/selected-work/lake-city-01.png",
+      "/selected-work/lake-city-02.png",
+    ],
     features: [
       { label: "Unit discovery", detail: "Clear paths to availability" },
       { label: "Contact flows", detail: "Fewer dead ends" },
@@ -134,6 +155,7 @@ const projects: Project[] = [
     headline: "Your business could be the next page.",
     body: "A custom build shaped around the way your business actually works — not a template with the name swapped out.",
     accent: "gold",
+    siteUrl: "yourbusiness.com",
     features: [
       { label: "Email / CRM", detail: "Nurture leads automatically" },
       { label: "Intake forms", detail: "Collect exactly what you need" },
@@ -147,12 +169,77 @@ const projects: Project[] = [
 
 const featureGlyphs = ["✉", "▤", "⌁", "▦", "▣", "◎"];
 
+function GeneratedPreview({ active }: { active: Project }) {
+  return (
+    <div className={styles.siteScroller} key={active.id}>
+      <div className={styles.siteHero}>
+        <div className={styles.fakeNav}>
+          <strong>{active.title}</strong>
+          <span>Home</span>
+          <span>Work</span>
+          <span>About</span>
+          <b>Let&apos;s talk</b>
+        </div>
+
+        <div className={styles.siteHeroGrid}>
+          <div>
+            <p className={styles.mockEyebrow}>{active.eyebrow}</p>
+            <h3>{active.headline}</h3>
+            <p>{active.body}</p>
+            <span className={styles.mockButton}>Explore the project →</span>
+          </div>
+          <div className={styles.heroArtwork} aria-hidden="true">
+            <span className={styles.artOrb} />
+            <span className={styles.artCard} />
+            <span className={styles.artLine} />
+          </div>
+        </div>
+      </div>
+
+      <div className={styles.mockStats}>
+        <div>
+          <strong>Custom</strong>
+          <span>Built around the workflow</span>
+        </div>
+        <div>
+          <strong>Responsive</strong>
+          <span>Designed across devices</span>
+        </div>
+        <div>
+          <strong>Maintainable</strong>
+          <span>Made to grow after launch</span>
+        </div>
+      </div>
+
+      <div className={styles.mockFeatureBlock}>
+        <div className={styles.mockPhoto} aria-hidden="true" />
+        <div>
+          <p>THE SYSTEM BEHIND THE SCREEN</p>
+          <h4>Design is only the front layer.</h4>
+          <span>
+            Forms, payments, analytics, content, automation and client access can all
+            live behind the same experience.
+          </span>
+        </div>
+      </div>
+
+      <div className={styles.mockFooter}>
+        <strong>{active.title}</strong>
+        <span>{active.category}</span>
+        <span>{active.year}</span>
+      </div>
+    </div>
+  );
+}
+
 export default function SelectedWork() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [shotIndex, setShotIndex] = useState(0);
   const [entered, setEntered] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
 
   const active = projects[activeIndex];
+  const shotCount = active.screenshots?.length ?? 0;
 
   useEffect(() => {
     const node = sectionRef.current;
@@ -169,6 +256,17 @@ export default function SelectedWork() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    setShotIndex(0);
+    if (shotCount < 2) return;
+
+    const timer = window.setInterval(() => {
+      setShotIndex((current) => (current + 1) % shotCount);
+    }, 5200);
+
+    return () => window.clearInterval(timer);
+  }, [active.id, shotCount]);
+
   const accentClass = useMemo(() => {
     return styles[`accent_${active.accent}`] ?? "";
   }, [active.accent]);
@@ -176,7 +274,7 @@ export default function SelectedWork() {
   return (
     <section
       ref={sectionRef}
-      className={`${styles.section} ${entered ? styles.entered : ""}`}
+      className={`${styles.section} ${polish.sectionPolish} ${entered ? styles.entered : ""}`}
       id="selected-work"
       aria-labelledby="selected-work-heading"
     >
@@ -190,14 +288,14 @@ export default function SelectedWork() {
         </div>
       </div>
 
-      <div className={`${styles.stage} ${accentClass}`}>
+      <div className={`${styles.stage} ${polish.stagePolish} ${accentClass}`}>
         <div className={styles.tableGlow} aria-hidden="true" />
 
-        <div className={styles.binder} aria-label="Selected project binder">
+        <div className={`${styles.binder} ${polish.binderPolish}`} aria-label="Selected project binder">
           <div className={styles.coverLeft}>
-            <div className={styles.coverPaper}>
+            <div className={`${styles.coverPaper} ${polish.coverPolish}`}>
               <p className={styles.coverKicker}>Selected work</p>
-              <p className={styles.coverLine}>
+              <p className={`${styles.coverLine} ${polish.coverLinePolish}`}>
                 Thoughtful websites,
                 <br />
                 built around
@@ -226,83 +324,54 @@ export default function SelectedWork() {
 
           <div className={styles.pageStack}>
             <div className={styles.backPage} aria-hidden="true" />
-            <div className={styles.sitePage}>
-              <div className={styles.browserBar}>
+            <div className={`${styles.sitePage} ${polish.sitePagePolish}`}>
+              <div className={`${styles.browserBar} ${polish.browserBarPolish}`}>
                 <span className={styles.browserDots} aria-hidden="true">
                   <i />
                   <i />
                   <i />
                 </span>
-                <span className={styles.browserAddress}>
-                  {active.id === "yours-here"
-                    ? "yourbusiness.com"
-                    : `${active.id.replaceAll("-", "")}.com`}
-                </span>
+                <span className={styles.browserAddress}>{active.siteUrl}</span>
                 <span className={styles.browserAction}>↗</span>
               </div>
 
-              <div className={styles.siteViewport}>
-                <div className={styles.siteScroller} key={active.id}>
-                  <div className={styles.siteHero}>
-                    <div className={styles.fakeNav}>
-                      <strong>{active.title}</strong>
-                      <span>Home</span>
-                      <span>Work</span>
-                      <span>About</span>
-                      <b>Let&apos;s talk</b>
+              <div className={`${styles.siteViewport} ${polish.viewportPolish}`}>
+                {shotCount > 0 ? (
+                  <div className={polish.screenshotStage} key={active.id}>
+                    {active.screenshots?.map((src, index) => (
+                      <img
+                        alt={`${active.title} website screen ${index + 1}`}
+                        className={`${polish.screenshotImage} ${index === shotIndex ? polish.screenshotActive : ""}`}
+                        decoding="async"
+                        key={src}
+                        loading={index === 0 ? "eager" : "lazy"}
+                        src={src}
+                      />
+                    ))}
+                    <div className={polish.captureLabel} aria-hidden="true">
+                      <span>Live screen</span>
+                      <b>{String(shotIndex + 1).padStart(2, "0")} / {String(shotCount).padStart(2, "0")}</b>
                     </div>
-
-                    <div className={styles.siteHeroGrid}>
-                      <div>
-                        <p className={styles.mockEyebrow}>{active.eyebrow}</p>
-                        <h3>{active.headline}</h3>
-                        <p>{active.body}</p>
-                        <span className={styles.mockButton}>Explore the project →</span>
+                    {shotCount > 1 ? (
+                      <div className={polish.shotControls} aria-label="Website screenshot selector">
+                        {active.screenshots?.map((src, index) => (
+                          <button
+                            aria-label={`Show ${active.title} screenshot ${index + 1}`}
+                            className={`${polish.shotButton} ${index === shotIndex ? polish.shotActive : ""}`}
+                            key={src}
+                            onClick={() => setShotIndex(index)}
+                            type="button"
+                          />
+                        ))}
                       </div>
-                      <div className={styles.heroArtwork} aria-hidden="true">
-                        <span className={styles.artOrb} />
-                        <span className={styles.artCard} />
-                        <span className={styles.artLine} />
-                      </div>
-                    </div>
+                    ) : null}
                   </div>
-
-                  <div className={styles.mockStats}>
-                    <div>
-                      <strong>Custom</strong>
-                      <span>Built around the workflow</span>
-                    </div>
-                    <div>
-                      <strong>Responsive</strong>
-                      <span>Designed across devices</span>
-                    </div>
-                    <div>
-                      <strong>Maintainable</strong>
-                      <span>Made to grow after launch</span>
-                    </div>
-                  </div>
-
-                  <div className={styles.mockFeatureBlock}>
-                    <div className={styles.mockPhoto} aria-hidden="true" />
-                    <div>
-                      <p>THE SYSTEM BEHIND THE SCREEN</p>
-                      <h4>Design is only the front layer.</h4>
-                      <span>
-                        Forms, payments, analytics, content, automation and client
-                        access can all live behind the same experience.
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className={styles.mockFooter}>
-                    <strong>{active.title}</strong>
-                    <span>{active.category}</span>
-                    <span>{active.year}</span>
-                  </div>
-                </div>
+                ) : (
+                  <GeneratedPreview active={active} />
+                )}
               </div>
 
-              <div className={styles.pageMeta}>
+              <div className={`${styles.pageMeta} ${polish.pageMetaPolish}`}>
                 <div>
                   <span>{String(activeIndex + 1).padStart(2, "0")} / 06</span>
                   <strong>{active.title}</strong>
@@ -314,13 +383,13 @@ export default function SelectedWork() {
               </div>
             </div>
 
-            <div className={styles.tabs} role="tablist" aria-label="Portfolio projects">
+            <div className={`${styles.tabs} ${polish.tabsPolish}`} role="tablist" aria-label="Portfolio projects">
               {projects.map((project, index) => (
                 <button
                   type="button"
                   role="tab"
                   aria-selected={index === activeIndex}
-                  className={index === activeIndex ? styles.activeTab : ""}
+                  className={`${index === activeIndex ? styles.activeTab : ""} ${polish.tabButton} ${index === activeIndex ? polish.tabButtonActive : ""}`}
                   key={project.id}
                   onClick={() => setActiveIndex(index)}
                 >
@@ -333,7 +402,7 @@ export default function SelectedWork() {
 
         <div className={styles.sheetZone}>
           <div className={styles.sheetShadow} aria-hidden="true" />
-          <article className={styles.featureSheet} key={active.id}>
+          <article className={`${styles.featureSheet} ${polish.featureSheetPolish}`} key={active.id}>
             <div className={styles.sheetTop}>
               <p>What&apos;s under the hood</p>
               <span>{String(activeIndex + 1).padStart(2, "0")} / 06</span>
@@ -353,7 +422,7 @@ export default function SelectedWork() {
             <div className={styles.featureGrid}>
               {active.features.map((feature, index) => (
                 <div
-                  className={styles.feature}
+                  className={`${styles.feature} ${polish.featurePolish}`}
                   key={`${active.id}-${feature.label}`}
                   style={{ "--i": index } as CSSProperties}
                 >
