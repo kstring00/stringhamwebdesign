@@ -15,8 +15,8 @@ export default function Home() {
 
       <main>
         <SelectedWork />
-        <TimelineShowcase />
         <PricingConfigurator />
+        <TimelineShowcase />
         <BottomCapture />
       </main>
 
