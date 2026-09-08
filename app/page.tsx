@@ -1,4 +1,3 @@
-import BottomCapture from "./BottomCapture";
 import Header from "./Header";
 import HeroShowcase from "./HeroShowcase";
 import SelectedWork from "./SelectedWork";
@@ -15,7 +14,6 @@ export default function Home() {
       <main>
         <SelectedWork />
         <ProcessSteps variant="home" />
-        <BottomCapture />
       </main>
 
       <SiteFooter />
