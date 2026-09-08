@@ -74,6 +74,7 @@ For the second, `--gold-ink: #6f5620` and `--slate-ink: #425b6f` were added
 | 3 — `/quote` intake | Done. |
 | 4 — `/quote/received` | Done. |
 | 5 — Seven-step process | Done, copy approved by owner. |
+| 6 — Payments | Done. Stripe Invoicing, DB-enforced handoff gate. |
 | 7 — Transmission button | Built (pre-existing). **Never audited against spec.** |
 
 ### Key files
@@ -159,67 +160,43 @@ in the repo**. `public/ks-dove-mark.png` exists but is the header monogram, a
 different mark. Either ask him to drop the file into `/public`, or build a
 line-art SVG in the palette as a placeholder and tell him it's swappable.
 
-### 3c. Section 6 — Payments — NOT STARTED
+### 3c. Section 6 — Payments — DONE
 
-Full spec from the owner:
+Built on `claude/section6-payments-qzec6b`. Stripe **Invoicing**, not Checkout.
 
-- **Stripe Invoicing, NOT Checkout.** Services with agreed scope get invoices,
-  not fixed-price products.
-- 50% deposit to start, 50% on approval before handoff.
-- Invoices generated from agreed scope, sent by email, tracked in the portal
-  when it exists.
-- Care plans as Stripe **subscriptions**, monthly, separate from project
-  invoices, cancellable.
-- Webhook: signature verification, **idempotency on duplicate events**, and a
-  **recorded state change on payment — not a `console.log`**.
-- **Test mode only. Do not touch live keys. No secret values in any file.**
-- **Hard rule to encode in the flow: final payment clears BEFORE account
-  transfer. Ownership passes on payment.**
+- `supabase/migrations/20260908120000_stripe_invoicing.sql` — `invoices.kind`
+  (deposit / final / care / other) with a unique index so a project can only
+  ever have one of each; `stripe_events` for idempotency;
+  `projects.final_payment_cleared_at` and `.ownership_transferred_at`; and the
+  **`projects_payment_before_transfer` trigger**, which refuses any write that
+  sets `ownership_transferred_at` without a cleared final payment. That rule is
+  in the database on purpose — a route bug or a hand-written PostgREST call
+  must not be able to bypass it.
+- `app/lib/stripe.ts` — dependency-free REST client. **`requireTestKey()`
+  throws on anything that is not `sk_test_`**, so a live key in the environment
+  fails loudly instead of quietly charging someone.
+- `app/lib/stripeInvoicing.ts` — 50/50 split (odd cents land on the deposit so
+  the halves always sum to the agreed total), draft → finalise → send, and care
+  plans as separate monthly subscriptions cancelled at period end.
+- `app/api/stripe/webhook/route.ts` — rewritten. Claims the event id **before**
+  any state change, so a duplicate delivery is a no-op. Real state changes, not
+  `console.log`. Handles `invoice.*` and `customer.subscription.*`.
+- Admin routes: `POST /api/portal/admin/invoices` (raise deposit or final from
+  the project's agreed total), `POST /api/portal/admin/handoff`,
+  `POST|DELETE /api/portal/admin/care-plan`.
 
-**Groundwork already surveyed:**
+**Verified** — `node scripts/stripe-webhook-check.js` (22 assertions:
+signature, replay rejection, idempotency, final-vs-deposit gating) and
+`npx tsx app/lib/stripe.check.ts` (26 assertions: key guard, money split, form
+encoding). See `scripts/README.md`.
 
-`app/api/stripe/webhook/route.ts` exists and already has *good* HMAC signature
-verification with a timestamp tolerance and `timingSafeEqual`. Keep that. It
-has exactly the three gaps the spec names:
-1. `console.log` instead of a recorded state change.
-2. No idempotency.
-3. Listens for `checkout.session.*` — wrong model; should be `invoice.*` and
-   `customer.subscription.*`.
-
-The Supabase schema **already has the tables** (`supabase/migrations/`):
-```sql
-invoices(id, project_id, amount, status, stripe_invoice_id UNIQUE,
-         due_at, paid_at, created_at)
-  status IN ('draft','open','paid','void','past_due')
-
-care_plans(id, project_id UNIQUE, status, stripe_subscription_id UNIQUE,
-           started_at, cancelled_at, created_at)
-  status IN ('inactive','active','past_due','cancelled')
-
-projects(id, client_id, name, slug, status, tier, quoted_total, ...)
-```
-
-**Suggested plan (not yet built):**
-1. New migration adding: `invoices.kind` (`deposit` | `final` | `care`), a
-   `stripe_events(event_id primary key, type, received_at)` table for
-   idempotency, and `projects.final_payment_cleared_at` +
-   `projects.ownership_transferred_at`.
-2. **Encode the hard rule as a database trigger** that refuses to set
-   `ownership_transferred_at` unless `final_payment_cleared_at` is set. A DB
-   constraint is the strongest place for it — application code can be bypassed.
-3. `app/lib/stripeInvoicing.ts` — build the 50/50 invoices from an agreed
-   scope. **Add a guard that throws if the key doesn't start with `sk_test_`**,
-   so live keys cannot be used by accident.
-4. Rewrite the webhook: insert the event id first and bail on conflict
-   (idempotency), then update `invoices` / `care_plans` rows.
-
-Use `app/lib/supabaseAdmin.ts` (`supabaseAdminRequest`) for DB writes — it's
-the existing server-only PostgREST helper. Env vars: `SUPABASE_URL`,
-`SUPABASE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `RESEND_API_KEY`,
-`CAPTURE_TO_EMAIL`, `CAPTURE_FROM_EMAIL`. **Never write values for these into
-a file.**
-
----
+**NOT YET DONE for section 6:**
+- **The migration has not been applied to Supabase.** Run it before using any
+  of this.
+- No portal UI for these routes — they are API-only until the portal exists.
+- `STRIPE_SECRET_KEY` (test), `STRIPE_WEBHOOK_SECRET` and
+  `STRIPE_CARE_PRICE_ID` need setting in the environment. Never in a file.
+- Never exercised against real Stripe. The harness stubs it.
 
 ## 4. Still outstanding after the above
 
