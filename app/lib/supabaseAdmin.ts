@@ -1,16 +1,18 @@
+import { normalizeSupabaseUrl } from "./supabaseUrl";
+
 type SupabaseRequestOptions = RequestInit & {
   returnRepresentation?: boolean;
 };
 
 function getConfig() {
-  const url = process.env.SUPABASE_URL?.replace(/\/$/, "");
+  const supabaseUrl = normalizeSupabaseUrl(process.env.SUPABASE_URL);
   const secretKey = process.env.SUPABASE_SECRET_KEY;
 
-  if (!url || !secretKey) {
+  if (!supabaseUrl || !secretKey) {
     throw new Error("Supabase server environment variables are not configured.");
   }
 
-  return { url, secretKey };
+  return { url: supabaseUrl.url, secretKey };
 }
 
 /**

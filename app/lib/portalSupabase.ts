@@ -1,5 +1,7 @@
 import { cookies } from "next/headers";
 
+import { normalizeSupabaseUrl } from "./supabaseUrl";
+
 const ACCESS_COOKIE = "swd_portal_access";
 const REFRESH_COOKIE = "swd_portal_refresh";
 const DEFAULT_ADMIN_EMAIL = "stringham00@gmail.com";
@@ -29,14 +31,14 @@ export type PortalSession = {
 };
 
 function config() {
-  const url = process.env.SUPABASE_URL?.replace(/\/$/, "");
+  const supabaseUrl = normalizeSupabaseUrl(process.env.SUPABASE_URL);
   const secretKey = process.env.SUPABASE_SECRET_KEY;
 
-  if (!url || !secretKey) {
+  if (!supabaseUrl || !secretKey) {
     throw new Error("Supabase server environment variables are not configured.");
   }
 
-  return { url, secretKey };
+  return { url: supabaseUrl.url, secretKey };
 }
 
 function cookieOptions(maxAge: number) {

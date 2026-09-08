@@ -119,6 +119,18 @@ For the second, `--gold-ink: #6f5620` and `--slate-ink: #425b6f` were added
   recreates them if deleted. They're committed for that reason.
 - Don't put `pkill` in a compound bash command; it kills the shell before the
   rest runs.
+- **`SUPABASE_URL` must be the bare project URL, never the REST endpoint.**
+  Every caller appends its own prefix (`/rest/v1/...`, `/storage/v1/...`), so a
+  value ending in `/rest/v1` builds `/rest/v1/rest/v1/...` and PostgREST
+  rejects **every** request with `PGRST125 Invalid path specified in request
+  URL`. This cost most of a session on 2026-09-08. `app/lib/supabaseUrl.ts` now
+  strips the suffix and `instrumentation.ts` prints a loud banner at server
+  start, but fix the env value — the correction is a safety net.
+- **A stale `next start` survives killing the npm wrapper.** `next start`
+  forks `next-server`, which keeps port 3000 and will happily answer requests
+  you believe are hitting a freshly booted server with different env. If a test
+  gives an impossible result, check for `EADDRINUSE` in the boot log before
+  believing it.
 
 ---
 
@@ -176,12 +188,59 @@ signature, replay rejection, idempotency, final-vs-deposit gating) and
 encoding). See `scripts/README.md`.
 
 **NOT YET DONE for section 6:**
-- **The migration has not been applied to Supabase.** Run it before using any
-  of this.
+- ~~The migration has not been applied to Supabase.~~ **Applied 2026-09-08**,
+  along with `20260908180000_grant_stripe_events_to_service_role.sql`.
 - No portal UI for these routes — they are API-only until the portal exists.
 - `STRIPE_SECRET_KEY` (test), `STRIPE_WEBHOOK_SECRET` and
   `STRIPE_CARE_PRICE_ID` need setting in the environment. Never in a file.
-- Never exercised against real Stripe. The harness stubs it.
+- ~~Never exercised against real Stripe.~~ **Plumbing confirmed 2026-09-08** —
+  see 3d. Still not exercised with an invoice id that matches a real row; that
+  run is written up in `docs/stripe-invoice-test-run.md` and not yet done.
+
+### 3d. Payments — first real webhook run, 2026-09-08
+
+`stripe listen` + `stripe trigger invoice.paid` against `npm run dev`. The
+cascade produced **14 rows** in `stripe_events`: one `handled` row for
+`invoice.paid` with detail `No invoice row for in_1UDSmAE39qJFLJXwnU7rC5Ui.`,
+and `ignored` rows carrying a reason for each unhandled type. Signature
+verification, the claim, dispatch and the recorded outcome are all confirmed
+against real Stripe. Those 14 rows also prove `service_role` can write to
+`stripe_events`.
+
+The `No invoice row` detail is the **expected** result for `stripe trigger`: it
+fabricates an invoice no row references. Use `docs/stripe-invoice-test-run.md`
+for a run where the ids match and the handoff gate actually opens.
+
+**Two bugs found and fixed on the way (`claude/stripe-webhook-local-setup-ks9g3g`):**
+
+1. **Doubled REST path.** `SUPABASE_URL` carried a `/rest/v1` suffix, so every
+   database call 404'd with `PGRST125`. See the landmine above. Fixed centrally
+   in `app/lib/supabaseUrl.ts`, used by `portalSupabase.ts`, `supabaseAdmin.ts`
+   and the Storage URL in `app/api/portal/files/route.ts`.
+
+2. **`claimEvent` swallowed an outage into a 200.** Its `catch` treated *every*
+   failure as "already claimed", and the caller answered `200 {duplicate:true}`.
+   A 200 tells Stripe the event is settled and stops redelivery — so while
+   Supabase was unreachable, payments were being **dropped, not deferred**.
+   `adminRest` now throws `PortalRestError` carrying the HTTP status;
+   `claimEvent` returns `claimed | duplicate | unavailable`; only a PostgREST
+   `409` (SQLSTATE 23505) is a duplicate, and anything else returns **500** so
+   Stripe retries.
+
+**The lesson worth keeping: the harness passed 22/22 while every database write
+was failing.**
+
+`scripts/stripe-webhook-stub.js` answers `201` to the claim insert
+unconditionally. It cannot fail the way a real datastore fails, so it proved the
+*handler logic* and said nothing about whether the handler could reach a
+database — and its green result actively delayed finding the real fault. It also
+could not have caught bug 2, because the stub never returned a non-409 error.
+
+So: a green harness means the branching is right, not that the integration
+works. When a stub is the only evidence, the untested surface is the boundary
+between the code and the thing it stubs. The harness now has an outage mode
+(`__down`) and 27 checks, five of them covering exactly that boundary — added
+only because a real run exposed what the stub could not.
 
 ## 4. Still outstanding after the above
 
