@@ -22,6 +22,7 @@ export default function HeroTileGrid() {
 
   const stageRef = useRef<HTMLDivElement | null>(null);
   const bloomRef = useRef<HTMLSpanElement | null>(null);
+  const monogramRef = useRef<HTMLSpanElement | null>(null);
   const layoutRef = useRef<Layout>(WIDE);
   const tilesRef = useRef<Array<HTMLDivElement | null>>([]);
   const centersRef = useRef<Array<{ x: number; y: number }>>([]);
@@ -64,6 +65,7 @@ export default function HeroTileGrid() {
   const measure = useCallback(() => {
     const stage = stageRef.current;
     const bloom = bloomRef.current;
+    const monogram = monogramRef.current;
     if (!stage) return;
 
     const box = stage.getBoundingClientRect();
@@ -102,16 +104,18 @@ export default function HeroTileGrid() {
     }
     centersRef.current = centers;
 
-    // Clipping the bloom to the tile shapes is what keeps the gutters cream: the
-    // colour reads as something the glass is sampling rather than a wash sitting
-    // behind the whole grid.
-    if (bloom) {
+    // Clip both the colour field and monogram to the tile shapes. The KS therefore
+    // feels embedded beneath the glass instead of printing across the cream gutters.
+    if (bloom || monogram) {
       const svg =
         `<svg xmlns="http://www.w3.org/2000/svg" width="${box.width.toFixed(2)}" ` +
         `height="${box.height.toFixed(2)}">${shapes}</svg>`;
       const url = `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
-      bloom.style.maskImage = url;
-      bloom.style.webkitMaskImage = url;
+      for (const layer of [bloom, monogram]) {
+        if (!layer) continue;
+        layer.style.maskImage = url;
+        layer.style.webkitMaskImage = url;
+      }
     }
   }, []);
 
@@ -260,6 +264,10 @@ export default function HeroTileGrid() {
       aria-hidden="true"
     >
       <span ref={bloomRef} className={styles.bloom} />
+      <span ref={monogramRef} className={styles.monogram}>
+        <span className={styles.monogramK}>K</span>
+        <span className={styles.monogramS}>S</span>
+      </span>
       <div className={styles.grid}>
         {Array.from({ length: count }, (_, i) => (
           <div
