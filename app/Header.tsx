@@ -95,6 +95,7 @@ export default function Header() {
       <div className={styles.bar}>
         <a className={styles.brand} href="/" aria-label="Kyle Stringham, home">
           <span className={styles.monogramShell} aria-hidden="true">
+            <span className={styles.doveMark} />
             <span className={styles.monogram}>KS</span>
           </span>
           <span className={styles.brandRule} aria-hidden="true" />
