@@ -48,7 +48,7 @@
 }
 
 .projectPage {
-  animation: projectPageIn 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: none !important;
 }
 
 .browserBarPolish {
@@ -307,7 +307,7 @@
   height: 100%;
   border-radius: 0.2rem;
   transform: none !important;
-  animation: sheetSwapIn 580ms 90ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
+  animation: none !important;
   box-shadow:
     0 2.3rem 5rem rgba(13, 27, 38, 0.18),
     0 0.5rem 1.5rem rgba(13, 27, 38, 0.08),
@@ -343,6 +343,30 @@
 .featurePolish:hover {
   background: rgba(255, 255, 255, 0.34);
   box-shadow: inset 0 0 0 1px rgba(169, 131, 61, 0.08);
+}
+
+/* Keep the physical binder and page geometry fixed while tabs swap content. */
+.binderPolish :global([class*="pageStack"]) {
+  height: 100%;
+  min-height: 0;
+}
+
+.binderPolish :global([class*="sitePage"]) {
+  height: 100%;
+  min-height: 0;
+}
+
+/* GrowthGains uses Michael's real portrait instead of the generic abstract art. */
+:global([class*="accent_forest"]) :global([class*="heroArtwork"]) {
+  background:
+    linear-gradient(180deg, rgba(9, 31, 30, 0.04), rgba(9, 31, 30, 0.2)),
+    url("https://raw.githubusercontent.com/kstring00/Michaels-life-coach-site/main/public/michael.jpg") center 24% / cover no-repeat !important;
+}
+
+:global([class*="accent_forest"]) :global([class*="artOrb"]),
+:global([class*="accent_forest"]) :global([class*="artCard"]),
+:global([class*="accent_forest"]) :global([class*="artLine"]) {
+  display: none !important;
 }
 
 @keyframes projectPageIn {
