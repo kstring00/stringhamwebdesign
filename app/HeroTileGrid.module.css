@@ -4,8 +4,8 @@
 .stage {
   --cols: 7;
   --rows: 5;
-  --gap: 12px;
-  --radius: 20px;
+  --gap: 7px;
+  --radius: 18px;
   position: relative;
   isolation: isolate;
   width: 100%;
@@ -24,7 +24,7 @@
     radial-gradient(44% 50% at 71% 63%, rgba(201, 162, 39, 1) 6%, rgba(201, 162, 39, 0) 76%),
     radial-gradient(42% 48% at 33% 31%, rgba(13, 27, 38, 1) 4%, rgba(13, 27, 38, 0) 78%),
     linear-gradient(126deg, rgba(13, 27, 38, 0.34) 12%, rgba(201, 162, 39, 0) 52%, rgba(201, 162, 39, 0.36) 90%);
-  filter: blur(52px);
+  filter: blur(48px);
   /* The tile-shaped mask is written from measured grid metrics on mount and on
      resize; it is what leaves the gutters cream. */
   mask-size: 100% 100%;
@@ -42,22 +42,41 @@
   gap: var(--gap);
   width: 100%;
   height: 100%;
-  perspective: 1000px;
+  perspective: 760px;
+  perspective-origin: 50% 48%;
 }
 
 .tile {
   --s: 0;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* A restrained plate behind the glass gives the moving tile physical depth.
+   It is nearly absent at rest and becomes visible only as the tile rises. */
+.tile::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: calc(var(--radius) - 2px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(145deg, rgba(15, 47, 75, 0.34), rgba(181, 140, 70, 0.2));
+  box-shadow: 0 16px 28px rgba(13, 27, 38, 0.16);
+  opacity: calc(var(--s) * 0.72);
+  transform: translateZ(-18px);
+  transition: opacity 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
 }
 
 /* While the cursor is moving the transform is rewritten every frame, so the
    ease-back transition has to be out of the way. It comes back on mouseleave,
-   which is what carries the tiles home over 600ms. */
+   which is what carries the tiles home over 520ms. */
 .live .tile,
+.live .tile::before,
 .live .glow,
 .live .sheen,
+.live .pane,
 .live .pane::after {
   transition: none;
 }
@@ -69,23 +88,27 @@
 .pane {
   position: absolute;
   inset: 0;
+  z-index: 2;
   border-radius: var(--radius);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.42);
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 14px 30px rgb(13 27 38 / calc(var(--s) * 0.13));
   overflow: hidden;
+  transform: translateZ(0.5px);
+  transition: box-shadow 520ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Rides on top of the 40% base border so the edge reaches ~70% at full strength. */
+/* Rides on top of the base border and becomes more legible as the tile rises. */
 .pane::after {
   content: "";
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  opacity: var(--s);
-  transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  border: 1px solid rgba(255, 255, 255, 0.58);
+  opacity: calc(var(--s) * 0.92);
+  transition: opacity 520ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* The brightness lift is a composited white wash rather than filter:
@@ -95,85 +118,36 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(150deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.32));
-  opacity: calc(var(--s) * 0.15);
-  transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.fluted {
-  background-image:
-    repeating-linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.42) 0 1px,
-      rgba(255, 255, 255, 0) 1px 5px
-    );
-  background-color: rgba(255, 255, 255, 0.19);
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.28));
+  opacity: calc(var(--s) * 0.2);
+  transition: opacity 520ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .glow {
   position: absolute;
-  inset: -18%;
+  inset: -16%;
   z-index: -1;
   border-radius: calc(var(--radius) * 1.6);
-  background: radial-gradient(50% 50% at 50% 50%, rgba(255, 252, 240, 0.95), rgba(255, 252, 240, 0) 72%);
-  opacity: calc(var(--s) * 0.5);
-  transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Ambient drift, so the grid is not completely dead with no cursor on it. Long
-   offset cycles on a handful of tiles only, and on .pane rather than .tile so it
-   never fights the transform the cursor writes.
-
-   Gated at the selector rather than overridden later: a plain `animation: none`
-   in the reduced-motion block loses to `.tile:nth-child(n) .pane` on specificity,
-   which left the drift running for anyone who had asked for less motion. */
-@media (prefers-reduced-motion: no-preference) {
-  .stage:not(.stillStage) .tile:nth-child(3) .pane {
-    animation: drift 11s ease-in-out -2s infinite;
-  }
-
-  .stage:not(.stillStage) .tile:nth-child(8) .pane {
-    animation: drift 14s ease-in-out -7s infinite;
-  }
-
-  .stage:not(.stillStage) .tile:nth-child(15) .pane {
-    animation: drift 9s ease-in-out -4s infinite;
-  }
-
-  .stage:not(.stillStage) .tile:nth-child(23) .pane {
-    animation: drift 12.5s ease-in-out -9s infinite;
-  }
-
-  .stage:not(.stillStage) .tile:nth-child(30) .pane {
-    animation: drift 8s ease-in-out -1s infinite;
-  }
-}
-
-@keyframes drift {
-  0%,
-  100% {
-    transform: translateZ(-6px);
-  }
-  50% {
-    transform: translateZ(6px);
-  }
+  background: radial-gradient(50% 50% at 50% 50%, rgba(255, 252, 240, 0.94), rgba(255, 252, 240, 0) 72%);
+  opacity: calc(var(--s) * 0.42);
+  transition: opacity 520ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @media (max-width: 1023.98px) {
   .stage {
-    --gap: 10px;
-    --radius: 16px;
+    --gap: 6px;
+    --radius: 15px;
   }
 
   .bloom {
-    filter: blur(52px);
+    filter: blur(48px);
   }
 }
 
 @media (max-width: 767.98px) {
   .stage {
-    --gap: 9px;
-    --radius: 14px;
+    --gap: 5px;
+    --radius: 13px;
   }
 }
 
@@ -182,10 +156,15 @@
 .stillStage .tile,
 .stillStage .pane,
 .stillStage .glow,
-.stillStage .sheen {
+.stillStage .sheen,
+.stillStage .tile::before {
   transition: none;
   transform: none;
   will-change: auto;
+}
+
+.stillStage .tile::before {
+  opacity: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -193,9 +172,14 @@
   .pane,
   .glow,
   .sheen,
-  .pane::after {
+  .pane::after,
+  .tile::before {
     transition: none;
     transform: none;
     will-change: auto;
+  }
+
+  .tile::before {
+    opacity: 0;
   }
 }
