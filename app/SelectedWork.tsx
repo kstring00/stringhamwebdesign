@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { capabilityPanels } from "./data/capabilities";
 import styles from "./SelectedWork.module.css";
 import polish from "./SelectedWorkPolish.module.css";
 
@@ -246,6 +247,10 @@ export default function SelectedWork() {
   // Which way the page flips. Set from the tab you came from, so moving down
   // the tabs turns the page forward and moving up turns it back.
   const [turnDirection, setTurnDirection] = useState<"forward" | "back">("forward");
+  // Which "under the hood" panel is open over the rendered site. Null keeps
+  // the work itself the largest thing on screen, which is the point of the
+  // section; the tabs stay visible either way so the panels are discoverable.
+  const [openPanel, setOpenPanel] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -279,6 +284,20 @@ export default function SelectedWork() {
 
     return () => window.clearInterval(timer);
   }, [active.id, shotCount]);
+
+  const activePanel = openPanel
+    ? capabilityPanels.find((panel) => panel.id === openPanel) ?? null
+    : null;
+
+  const capabilityCards = activePanel
+    ? activePanel.fromProject
+      ? active.features.map((feature, index) => ({
+          label: feature.label,
+          detail: feature.detail,
+          glyph: featureGlyphs[index % featureGlyphs.length],
+        }))
+      : activePanel.cards ?? []
+    : [];
 
   const accentClass = useMemo(() => {
     return styles[`accent_${active.accent}`] ?? "";
@@ -380,6 +399,32 @@ export default function SelectedWork() {
 
           <div className={styles.pageStack} data-turn={turnDirection}>
             <div className={styles.backPage} aria-hidden="true" />
+
+            {/* Capability tabs sit on the top edge of the page, above the
+                browser chrome, so they read as part of the binder rather than
+                as navigation belonging to the client's site. */}
+            <div className={styles.topTabs}>
+              <span className={styles.topTabsLabel} aria-hidden="true">
+                Under the hood
+              </span>
+
+              {capabilityPanels.map((panel) => {
+                const open = openPanel === panel.id;
+                return (
+                  <button
+                    aria-controls="binder-capability-panel"
+                    aria-expanded={open}
+                    className={`${styles.topTab} ${open ? styles.topTabActive : ""}`}
+                    key={panel.id}
+                    onClick={() => setOpenPanel(open ? null : panel.id)}
+                    type="button"
+                  >
+                    {panel.tab}
+                  </button>
+                );
+              })}
+            </div>
+
             <div
               className={`${styles.sitePage} ${polish.sitePagePolish}`}
               key={active.id}
@@ -400,6 +445,58 @@ export default function SelectedWork() {
               </div>
 
               <div className={`${styles.siteViewport} ${polish.viewportPolish}`}>
+                {activePanel ? (
+                  <div
+                    className={styles.capabilityPanel}
+                    id="binder-capability-panel"
+                    key={`${activePanel.id}-${active.id}`}
+                    role="region"
+                    aria-label={`${activePanel.tab} — ${active.title}`}
+                  >
+                    <div className={styles.capabilityHead}>
+                      <div>
+                        <p className={styles.capabilityEyebrow}>
+                          {activePanel.tab}
+                          <span aria-hidden="true"> / </span>
+                          {active.title}
+                        </p>
+                        <h3 className={styles.capabilityTitle}>
+                          {activePanel.title}
+                        </h3>
+                      </div>
+
+                      <button
+                        aria-label="Close this panel and show the site"
+                        className={styles.capabilityClose}
+                        onClick={() => setOpenPanel(null)}
+                        type="button"
+                      >
+                        <span aria-hidden="true">×</span>
+                      </button>
+                    </div>
+
+                    <p className={styles.capabilityIntro}>{activePanel.intro}</p>
+
+                    <div className={styles.capabilityGrid}>
+                      {capabilityCards.map((card, index) => (
+                        <div
+                          className={styles.capabilityCard}
+                          key={`${activePanel.id}-${card.label}`}
+                          style={{ ["--i" as string]: index }}
+                        >
+                          <span className={styles.capabilityGlyph} aria-hidden="true">
+                            {card.glyph}
+                          </span>
+                          <div>
+                            <strong>{card.label}</strong>
+                            <p>{card.detail}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+
                 {shotCount > 0 ? (
                   <div className={polish.screenshotStage}>
                     {active.screenshots?.map((src, index) => (
@@ -489,61 +586,12 @@ export default function SelectedWork() {
           </div>
         </div>
 
-        <div className={`${styles.sheetZone} ${polish.sheetZonePolish}`}>
-          <div className={styles.sheetShadow} aria-hidden="true" />
-          <article
-            className={`${styles.featureSheet} ${polish.featureSheetPolish}`}
-            key={active.id}
-          >
-            <div className={styles.sheetTop}>
-              <p>What&apos;s under the hood</p>
-              <div className={polish.sheetTopMeta}>
-                <span className={polish.sheetStatus}>{active.status}</span>
-                <span>{String(activeIndex + 1).padStart(2, "0")} / {totalLabel}</span>
-              </div>
-            </div>
-
-            <h3>
-              Everything the site
-              <br />
-              can do behind the scenes.
-            </h3>
-
-            <p className={styles.sheetIntro}>
-              The visible website is only one layer. These are the systems that can
-              make it useful after someone lands on it.
-            </p>
-
-            <div className={styles.featureGrid}>
-              {active.features.map((feature, index) => (
-                <div
-                  className={`${styles.feature} ${polish.featurePolish}`}
-                  key={`${active.id}-${feature.label}`}
-                  style={{ "--i": index } as CSSProperties}
-                >
-                  <span className={styles.featureGlyph} aria-hidden="true">
-                      {featureGlyphs[index]}
-                    </span>
-                  <div>
-                    <strong>{feature.label}</strong>
-                    <p>{feature.detail}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className={styles.sheetFoot}>
-              <span>{active.title}</span>
-              <span>Built around the business.</span>
-            </div>
-          </article>
-        </div>
       </div>
 
       <div className={styles.underStage}>
         <p>
-          The binder is the work. The loose sheet is the infrastructure that makes
-          the work useful.
+          The binder is the work. The tabs along the top open the systems that
+          make each build useful once someone lands on it.
         </p>
         <a href="/work">View all work <span>→</span></a>
       </div>
