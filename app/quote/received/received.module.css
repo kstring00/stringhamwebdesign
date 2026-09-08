@@ -1,0 +1,260 @@
+/* The confirmation.
+
+   Anxiety comes off in order: it arrived, here is what you said, here is the
+   date, here is the process, here is the one thing left to do. */
+
+.page {
+  --gold-on-dark: #e2c58a;
+  --gold-ink: #6f5620;
+  --slate-ink: #425b6f;
+  --cream-ink: #f5f0e8;
+  --muted-ink: rgba(245, 240, 232, 0.7);
+  --hairline: rgba(245, 240, 232, 0.16);
+
+  background: var(--cream);
+}
+
+.shell {
+  width: min(100%, 62rem);
+  margin-inline: auto;
+}
+
+/* ---------- 1. it went through ---------- */
+
+.confirmation {
+  position: relative;
+  isolation: isolate;
+  background: var(--navy-deep);
+  color: var(--cream-ink);
+  padding: clamp(6.5rem, 12vw, 9rem) var(--gutter) clamp(3.5rem, 7vw, 5.5rem);
+}
+
+.confirmation::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.3;
+  background-image:
+    linear-gradient(rgba(245, 240, 232, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245, 240, 232, 0.05) 1px, transparent 1px);
+  background-size: 3.5rem 3.5rem;
+}
+
+.confirmation > .shell {
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  margin: 0 0 1.1rem;
+  color: var(--gold-on-dark);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.confirmation h1 {
+  margin: 0;
+  max-width: 12ch;
+  color: var(--cream-ink);
+  font-size: clamp(2.8rem, 6.5vw, 5rem);
+  letter-spacing: -0.04em;
+}
+
+.referenceRow {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1.5rem, 6vw, 5rem);
+}
+
+.metaLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--gold-on-dark);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.reference {
+  display: block;
+  color: var(--cream-ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: clamp(1.35rem, 3vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.replyDate {
+  display: block;
+  color: var(--cream-ink);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.35rem, 3vw, 1.85rem);
+  font-weight: 400;
+}
+
+.promise {
+  margin: clamp(1.75rem, 3vw, 2.5rem) 0 0;
+  max-width: 46rem;
+  color: var(--muted-ink);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.promise strong {
+  color: var(--cream-ink);
+  font-weight: 600;
+}
+
+/* ---------- echo ---------- */
+
+.echo {
+  margin-top: clamp(2.5rem, 5vw, 3.75rem);
+}
+
+.echoHeading {
+  margin: 0 0 1.25rem;
+  color: var(--gold-on-dark);
+  font-family: inherit;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.echoList {
+  margin: 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.echoRow {
+  display: grid;
+  grid-template-columns: minmax(9rem, 14rem) minmax(0, 1fr);
+  gap: 1rem clamp(1rem, 3vw, 2.5rem);
+  padding: 0.95rem 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.echoRow dt {
+  color: var(--gold-on-dark);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding-top: 0.25rem;
+}
+
+.echoRow dd {
+  margin: 0;
+  color: var(--cream-ink);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  /* Long unbroken URLs must not push the page sideways. */
+  overflow-wrap: anywhere;
+}
+
+/* ---------- 4. the one next action ---------- */
+
+.nextAction {
+  background: var(--cream-light);
+  padding: clamp(4rem, 8vw, 6.5rem) var(--gutter);
+  border-top: 1px solid var(--line);
+}
+
+.nextAction .eyebrow {
+  color: var(--gold-ink);
+}
+
+.nextAction h2 {
+  margin: 0;
+  max-width: 14ch;
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  letter-spacing: -0.035em;
+}
+
+.lede {
+  margin: 1.35rem 0 0;
+  max-width: 40rem;
+  color: var(--slate-ink);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.footnote {
+  margin: 1rem 0 0;
+  max-width: 40rem;
+  color: var(--slate-ink);
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.primaryAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 3rem;
+  margin-top: clamp(1.75rem, 3vw, 2.25rem);
+  padding: 0.85rem 1.5rem;
+  border: 1px solid var(--gold-ink);
+  border-radius: 0.3rem;
+  color: var(--navy);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: background 200ms ease, color 200ms ease;
+}
+
+.primaryAction:hover {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--cream-light);
+}
+
+.primaryAction:focus-visible {
+  outline: 2px solid var(--gold-ink);
+  outline-offset: 3px;
+}
+
+/* ---------- empty state ---------- */
+
+.emptyHeading {
+  margin: 0;
+  max-width: 16ch;
+  font-size: clamp(2.4rem, 5.5vw, 4rem);
+  letter-spacing: -0.035em;
+}
+
+.page > .shell {
+  padding: clamp(7rem, 14vw, 10rem) var(--gutter) clamp(5rem, 10vw, 8rem);
+}
+
+.page > .shell .eyebrow {
+  color: var(--gold-ink);
+}
+
+@media (max-width: 40rem) {
+  .echoRow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.3rem;
+  }
+
+  .referenceRow {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primaryAction {
+    transition: none;
+  }
+}

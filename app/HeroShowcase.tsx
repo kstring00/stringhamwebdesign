@@ -45,7 +45,7 @@ export default function HeroShowcase() {
               <a className={styles.primary} href="/work">
                 See the work <Arrow />
               </a>
-              <a className={styles.secondary} href="#quick-contact">
+              <a className={styles.secondary} href="/quote">
                 Start a project
               </a>
             </div>

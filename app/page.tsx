@@ -5,7 +5,7 @@ import PricingConfigurator from "./PricingConfigurator";
 import SelectedWork from "./SelectedWork";
 import SiteFooter from "./SiteFooter";
 import SiteMotion from "./SiteMotion";
-import TimelineShowcase from "./TimelineShowcase";
+import ProcessSteps from "./ProcessSteps";
 
 export default function Home() {
   return (
@@ -16,7 +16,7 @@ export default function Home() {
       <main>
         <SelectedWork />
         <PricingConfigurator />
-        <TimelineShowcase />
+        <ProcessSteps />
         <BottomCapture />
       </main>
 

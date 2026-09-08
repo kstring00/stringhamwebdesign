@@ -161,7 +161,7 @@ export function PendingProjectCard({ index }: { index: number }) {
   return (
     <Link
       className={`${styles.projectCard} ${fixStyles.pendingCard}`}
-      href="/#quick-contact"
+      href="/quote"
       aria-label="Start a project with Kyle Stringham"
     >
       <div className={`${styles.cardMedia} ${fixStyles.pendingMedia}`}>

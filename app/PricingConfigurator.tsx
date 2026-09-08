@@ -51,7 +51,7 @@ export default function PricingConfigurator() {
             The fastest way to a real number is to tell me what you need. Send the
             brief and I&apos;ll come back with scope first, then price.
           </p>
-          <a href="#quick-contact">
+          <a href="/quote">
             Start your quote request <span aria-hidden="true">→</span>
           </a>
         </div>

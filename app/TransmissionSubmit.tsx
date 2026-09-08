@@ -19,6 +19,12 @@ type TransmissionSubmitProps = Omit<
   controlledState?: TransmissionState;
   errorMessage?: string;
   idleLabel?: string;
+  /**
+   * What the label resolves to once the meter completes. The intake passes
+   * the server-computed reply date here; the default covers callers that do
+   * not have one.
+   */
+  sentLabel?: string;
 };
 
 const SEGMENTS = 18;
@@ -28,6 +34,7 @@ export default function TransmissionSubmit({
   controlledState,
   errorMessage = "Transmission interrupted.",
   idleLabel = "SEND YOUR BUILD",
+  sentLabel = "I’ll reply within one business day.",
   disabled,
   type = "button",
   ...buttonProps
@@ -169,7 +176,7 @@ export default function TransmissionSubmit({
     state === "sending"
       ? "Sending your build."
       : state === "sent"
-        ? "Transmission complete. I will reply within one business day."
+        ? `Transmission complete. ${sentLabel}`
         : state === "error"
           ? `${errorMessage} Retry available.`
           : "Ready to send your build.";
@@ -592,7 +599,7 @@ export default function TransmissionSubmit({
           data-settled={confirmationSettled ? "true" : "false"}
           aria-hidden={state !== "sent"}
         >
-          {confirmationSettled ? "I’ll reply within one business day." : "TRANSMITTED"}
+          {confirmationSettled ? sentLabel : "TRANSMITTED"}
         </span>
 
         <span className="tx-error-copy" aria-hidden={state !== "error"}>

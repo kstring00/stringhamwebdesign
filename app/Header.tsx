@@ -150,7 +150,7 @@ export default function Header() {
           >
             Portal
           </a>
-          <a className={styles.getStarted} href="/#quick-contact">
+          <a className={styles.getStarted} href="/quote">
             <span>Start a Project</span>
             <span className={styles.arrowShell} aria-hidden="true">
               <Arrow />
