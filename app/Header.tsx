@@ -6,9 +6,7 @@ import styles from "./Header.module.css";
 
 const NAV = [
   { label: "Home", href: "/" },
-  { label: "Work", href: "/work" },
   { label: "About", href: "/about" },
-  { label: "Contact", href: "/#quick-contact" },
 ] as const;
 
 const DELTA = 6;
@@ -112,7 +110,7 @@ export default function Header() {
         >
           <div className={styles.navLinks}>
             {NAV.map((item) => {
-              const isActive = item.label !== "Contact" && active === item.href;
+              const isActive = active === item.href;
               return (
                 <a
                   key={item.label}
