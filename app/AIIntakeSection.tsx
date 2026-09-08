@@ -337,7 +337,7 @@ export default function AIIntakeSection() {
           </a>
           <p className={styles.ctaNote}>Plan on about 10 minutes</p>
           <p className={styles.emailFallback}>
-            Prefer email? <a href="mailto:stringham00@gmail.com">stringham00@gmail.com</a>
+            Prefer email? <a href="mailto:kyle@stringhamwebdesign.com">kyle@stringhamwebdesign.com</a>
           </p>
         </div>
 

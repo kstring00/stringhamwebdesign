@@ -486,10 +486,12 @@
 }
 
 .proposalFooter strong {
+  max-width: 13rem;
   color: #0d1b26;
   font-family: var(--font-cormorant), Georgia, serif;
   font-size: 1.1rem;
   font-weight: 500;
+  text-align: right;
 }
 
 .handoff {
@@ -560,25 +562,11 @@
     transform: translateY(0);
   }
 
-  .settleHeading {
-    transition-delay: 0ms;
-  }
-
-  .settleClose {
-    transition-delay: 60ms;
-  }
-
-  .settleBody {
-    transition-delay: 120ms;
-  }
-
-  .settleArtifact {
-    transition-delay: 180ms;
-  }
-
-  .settleAdvance {
-    transition-delay: 240ms;
-  }
+  .settleHeading { transition-delay: 0ms; }
+  .settleClose { transition-delay: 60ms; }
+  .settleBody { transition-delay: 120ms; }
+  .settleArtifact { transition-delay: 180ms; }
+  .settleAdvance { transition-delay: 240ms; }
 
   .numberIncoming .tabNumber,
   .numberIncoming .panelStepNumber {
@@ -616,49 +604,16 @@
   .panelActive .handoffCheck path {
     stroke-dashoffset: 0;
   }
-
-  .proposalLine:nth-child(1) .proposalCheck path,
-  .handoffRow:nth-child(1) .handoffCheck path {
-    transition-delay: 0ms;
-  }
-
-  .proposalLine:nth-child(2) .proposalCheck path,
-  .handoffRow:nth-child(2) .handoffCheck path {
-    transition-delay: 80ms;
-  }
-
-  .proposalLine:nth-child(3) .proposalCheck path,
-  .handoffRow:nth-child(3) .handoffCheck path {
-    transition-delay: 160ms;
-  }
-
-  .handoffRow:nth-child(4) .handoffCheck path {
-    transition-delay: 240ms;
-  }
-
-  .handoffRow:nth-child(5) .handoffCheck path {
-    transition-delay: 320ms;
-  }
 }
 
 @keyframes odometerIn {
-  from {
-    transform: translateY(110%);
-  }
-
-  to {
-    transform: translateY(0);
-  }
+  from { transform: translateY(110%); }
+  to { transform: translateY(0); }
 }
 
 @keyframes odometerOut {
-  from {
-    transform: translateY(0);
-  }
-
-  to {
-    transform: translateY(-110%);
-  }
+  from { transform: translateY(0); }
+  to { transform: translateY(-110%); }
 }
 
 @media (max-width: 72rem) {
@@ -809,5 +764,37 @@
   .handoffCheck path {
     stroke-dasharray: none;
     stroke-dashoffset: 0;
+  }
+}
+
+/* Give the four-step process more room now that it carries the scope/quote logic. */
+.tab {
+  min-height: 6.2rem;
+  padding-block: 1.35rem;
+}
+
+.panelViewport,
+.panel {
+  min-height: 42.5rem;
+}
+
+.panelCopyInner {
+  padding-top: clamp(3.6rem, 6vw, 6rem);
+  padding-bottom: clamp(5.5rem, 7.5vw, 7rem);
+}
+
+.artifactPanel {
+  padding-top: clamp(2.6rem, 4.5vw, 4.6rem);
+  padding-bottom: clamp(6rem, 7.5vw, 7rem);
+}
+
+@media (max-width: 48rem) {
+  .tab {
+    min-height: 4.8rem;
+  }
+
+  .panelViewport,
+  .panel {
+    min-height: 0;
   }
 }

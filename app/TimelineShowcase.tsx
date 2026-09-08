@@ -25,14 +25,14 @@ const steps = [
     name: "Plan & quote",
     closesOn: "Approved direction",
     copy:
-      "You get a written plan before any work starts — what I'm building, what I'm not, what it costs, and how many revision rounds are included.",
+      "You get a written plan before any work starts — what I'm building, what I'm not, the agreed project scope, and how many revision rounds are included.",
   },
   {
     nav: "Build",
     name: "Build",
     closesOn: "Revisions used",
     copy:
-      "Every ten hours of work, you get my actual timesheet — date, task, plain-language description of what I did, hours logged. Your price is fixed at the quote. The log is there so you can see exactly where the time went.",
+      "Every ten hours of work, you get my actual timesheet — date, task, plain-language description of what I did, hours logged. Your project stays fixed to the approved quote. The log is there so you can see exactly where the time went.",
   },
   {
     nav: "Launch",
@@ -62,7 +62,7 @@ const consultationSteps = [
     number: "01c",
     title: "Consultation call",
     body:
-      "30 to 60 minutes, with me. We go through your brief together, I ask what a form can't, and we look at your current site and materials. You leave knowing what I'd build and roughly what it costs. No obligation on either side.",
+      "30 to 60 minutes, with me. We go through your brief together, I ask what a form can't, and we look at your current site and materials. We confirm the right package, add-ons, and final scope before I send the written quote. No obligation on either side.",
     emphasized: true,
   },
 ] as const;
@@ -150,8 +150,8 @@ function ProposalArtifact() {
 
       <footer className={styles.proposalFooter}>
         <div className={styles.proposalLine} style={{ transitionDelay: "400ms" }}>
-          <span>Fixed project price</span>
-          <strong>$X,XXX</strong>
+          <span>Project scope</span>
+          <strong>Confirmed after consultation</strong>
         </div>
         <div className={styles.proposalLine} style={{ transitionDelay: "480ms" }}>
           <span>Revision rounds included</span>

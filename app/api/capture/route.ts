@@ -84,12 +84,12 @@ export async function POST(request: NextRequest) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
-      { error: "The contact form is being connected. Please email stringham00@gmail.com for now." },
+      { error: "The contact form is being connected. Please email kyle@stringhamwebdesign.com for now." },
       { status: 503 },
     );
   }
 
-  const to = process.env.CAPTURE_TO_EMAIL || "stringham00@gmail.com";
+  const to = process.env.CAPTURE_TO_EMAIL || "kyle@stringhamwebdesign.com";
   const from = process.env.CAPTURE_FROM_EMAIL || "Website Inquiry <onboarding@resend.dev>";
 
   const message = [

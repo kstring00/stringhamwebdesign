@@ -10,7 +10,7 @@ type FieldErrors = {
   phone?: string;
 };
 
-const EMAIL = "stringham00@gmail.com";
+const EMAIL = "kyle@stringhamwebdesign.com";
 
 function validateName(value: string) {
   const trimmed = value.trim();
