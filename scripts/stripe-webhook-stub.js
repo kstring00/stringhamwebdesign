@@ -2,7 +2,7 @@
 // changes can be exercised for real, with no network and no live keys.
 const http = require('http');
 
-const state = { events: new Map(), patches: [], invoices: new Map() };
+const state = { events: new Map(), patches: [], invoices: new Map(), down: false };
 // One known invoice row: a FINAL invoice, so the handoff gate should open.
 state.invoices.set('in_final_1', { id: 'row-final', project_id: 'proj-1', kind: 'final' });
 state.invoices.set('in_dep_1',   { id: 'row-dep',   project_id: 'proj-1', kind: 'deposit' });
@@ -18,6 +18,8 @@ const server = http.createServer((req, res) => {
     };
 
     if (path === 'stripe_events') {
+      // Simulated outage: PostgREST unreachable/erroring, NOT a duplicate.
+      if (state.down) return send(503, { code: 'STUB_OUTAGE' });
       if (req.method === 'POST') {
         const { event_id, type } = JSON.parse(body);
         if (state.events.has(event_id)) return send(409, { code: '23505' }); // duplicate PK
@@ -60,7 +62,8 @@ const server = http.createServer((req, res) => {
       events: [...state.events.entries()].map(([k, v]) => ({ id: k, ...v })),
       patches: state.patches,
     });
-    if (path === '__reset') { state.patches = []; state.events.clear(); return send(200, { ok: true }); }
+    if (path === '__down') { state.down = !query.includes('off'); return send(200, { down: state.down }); }
+    if (path === '__reset') { state.patches = []; state.events.clear(); state.down = false; return send(200, { ok: true }); }
 
     send(404, { error: 'stub: no route ' + req.method + ' ' + req.url });
   });

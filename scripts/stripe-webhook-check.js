@@ -101,6 +101,32 @@ const evt = (id, type, object) => JSON.stringify({ id, type, data: { object } })
   ok('unhandled type still recorded as ignored', s.events[0]?.status === 'ignored');
   ok('unhandled type applies no state change', s.patches.length === 0);
 
+  // --- datastore outage must NOT be reported as a settled duplicate ---
+  // A 200 here would tell Stripe the event is handled and stop redelivery,
+  // losing the payment permanently. It has to be a non-2xx so Stripe retries.
+  await stub('__reset');
+  await stub('__down');
+  p = evt('evt_6','invoice.paid',{id:'in_final_1'});
+  r = await post(p, sign(p));
+  ok('datastore outage returns 500, not 200', r.status === 500, JSON.stringify(r.body));
+  ok('datastore outage is not labelled a duplicate', r.body.duplicate === undefined,
+     JSON.stringify(r.body));
+
+  // Same for a type we ignore: nothing was recorded, so it must be retried.
+  p = evt('evt_7','payment_intent.created',{id:'pi_2'});
+  r = await post(p, sign(p));
+  ok('outage on unhandled type also returns 500', r.status === 500, JSON.stringify(r.body));
+
+  // Recovery: once the datastore is back, the retry lands and applies state.
+  await stub('__down?off');
+  p = evt('evt_6','invoice.paid',{id:'in_final_1'});
+  r = await post(p, sign(p));
+  s = await stub('__state');
+  ok('retry after recovery is applied', r.status === 200 && r.body.handled === true,
+     JSON.stringify(r.body));
+  ok('retry after recovery opens handoff gate',
+     !!s.patches.find(x => x.table === 'projects')?.patch.final_payment_cleared_at);
+
   console.log(fails ? `\n${fails} FAILURE(S)` : '\nall webhook checks passed');
   process.exit(fails ? 1 : 0);
 })();

@@ -49,6 +49,22 @@ function cookieOptions(maxAge: number) {
   };
 }
 
+/**
+ * A PostgREST response that was not ok, carrying the status so callers can tell
+ * a rejected write (409 on a unique violation) from an unreachable datastore.
+ */
+export class PortalRestError extends Error {
+  readonly status: number;
+  readonly detail: string;
+
+  constructor(status: number, detail: string) {
+    super(`Portal data request failed with status ${status}.`);
+    this.name = "PortalRestError";
+    this.status = status;
+    this.detail = detail;
+  }
+}
+
 export async function adminRest<T>(
   resource: string,
   options: RequestOptions = {},
@@ -69,7 +85,7 @@ export async function adminRest<T>(
   if (!response.ok) {
     const detail = await response.text().catch(() => "");
     console.error("Portal admin REST failed", response.status, detail.slice(0, 500));
-    throw new Error(`Portal data request failed with status ${response.status}.`);
+    throw new PortalRestError(response.status, detail);
   }
 
   if (response.status === 204) return undefined as T;
