@@ -33,9 +33,8 @@
   -webkit-mask-repeat: no-repeat;
 }
 
-/* Quiet brand layer under the glass. The same measured tile mask used by the
-   bloom clips the letters, so the monogram never paints into the cream gutters.
-   It should register after a second look, not compete with the headline. */
+/* Brand layer under the glass. The same measured tile mask used by the bloom
+   clips the letters, so the monogram never paints into the cream gutters. */
 .monogram {
   position: absolute;
   inset: 0;
@@ -47,10 +46,11 @@
   overflow: hidden;
   font-family: var(--font-cormorant), Georgia, serif;
   font-size: clamp(12rem, 28vw, 25rem);
-  font-weight: 300;
+  font-weight: 400;
   line-height: 0.72;
   letter-spacing: -0.12em;
-  transform: translate(-1.5%, 1%);
+  transform: translate(-1.5%, 1%) scale(1.075);
+  transform-origin: center;
   mask-size: 100% 100%;
   mask-repeat: no-repeat;
   -webkit-mask-size: 100% 100%;
@@ -64,11 +64,11 @@
 }
 
 .monogramK {
-  color: rgba(13, 27, 38, 0.105);
+  color: rgba(13, 27, 38, 0.21);
 }
 
 .monogramS {
-  color: rgba(160, 131, 72, 0.18);
+  color: rgba(160, 131, 72, 0.36);
 }
 
 .grid {
@@ -194,7 +194,7 @@
 
   .monogram {
     font-size: clamp(8rem, 38vw, 13rem);
-    transform: translate(-1%, 2%);
+    transform: translate(-1%, 2%) scale(1.075);
   }
 }
 
