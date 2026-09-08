@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./Header.module.css";
 
 const NAV = [
-  { label: "[ HOME ]", href: "/" },
+  { label: "[ Home ]", href: "/" },
   { label: "About", href: "/about" },
 ] as const;
 
