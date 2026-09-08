@@ -6,10 +6,16 @@ touching code.
 **Repo:** `kstring00/stringhamwebdesign` · **Stack:** Next.js 16 (App Router),
 React 19, TypeScript, CSS Modules, GSAP. No UI library, no CSS framework.
 
-**Branch state at handoff**
-- `main` — sections 1–5 merged (PR #5, commit `45a2fe4`).
-- `claude/binder-payments-scope-qzec6b` — current working branch, one commit
-  ahead: the binder capability panel. **Two tasks on it are unfinished.**
+**Branch state**
+- `main` — sections 1–5 merged, plus the binder capability panel (PR #6) and a
+  round of work by another assistant: the homepage scope and process sections
+  merged into one interactive "How this goes." section with a dove and a
+  navigator, the quick-contact block removed, the timesheet artefact removed
+  from step 5, and the About portrait replaced.
+- `claude/section6-payments-qzec6b` — section 6, payments. See 3c.
+
+Note: `origin/chatgpt/stripe-webhook` shares **no merge base** with `main`. It
+is an old unrelated lineage (it still carries pricing tiers). Ignore it.
 
 ---
 
@@ -74,6 +80,7 @@ For the second, `--gold-ink: #6f5620` and `--slate-ink: #425b6f` were added
 | 3 — `/quote` intake | Done. |
 | 4 — `/quote/received` | Done. |
 | 5 — Seven-step process | Done, copy approved by owner. |
+| 6 — Payments | Done. Stripe Invoicing, DB-enforced handoff gate. |
 | 7 — Transmission button | Built (pre-existing). **Never audited against spec.** |
 
 ### Key files
@@ -117,109 +124,64 @@ For the second, `--gold-ink: #6f5620` and `--slate-ink: #425b6f` were added
 
 ## 3. What is IN PROGRESS on this branch
 
-### 3a. Binder capability panel — DONE, on the branch, verified
+### 3a. Binder capability panel — DONE, merged
 
-Commit `3395525`. The owner's complaint: the "under the hood" content sat on a
-loose sheet *below* the binder and he scrolled straight past it without
-knowing it was there.
+The "under the hood" content used to sit on a loose sheet below the binder and
+was easy to scroll straight past. Three tabs now sit on the top edge of the
+binder page; clicking one opens a partial overlay over the rendered site.
+Project tabs stay on the right. `Systems` reads the active project's own
+feature list; the other two are global, in `app/data/capabilities.ts`.
 
-Now: three tabs sit on the **top edge of the binder page** (above the browser
-chrome, so they read as binder chrome, not the client site's own nav). Clicking
-one opens a partial overlay over the rendered site. Project tabs **stay on the
-right** — the owner explicitly wanted that kept. The loose sheet is deleted.
+The panel starts **closed** so the work stays the largest element — that was
+the whole point of section 2, where the screenshot went from ~610px to ~1054px
+wide at a 1440px viewport. Don't regress it.
 
-- `Systems` reads the **active project's** own feature list.
-- `AI built in` and `Integrations` are global, in `app/data/capabilities.ts`.
-- Panel starts **closed** so the work stays the largest element (that was the
-  whole point of section 2 — the screenshot went from ~610px to ~1054px wide at
-  1440px viewport; don't regress it).
+**Still unverified:** contrast sweep and keyboard operation on the new tabs and
+panel.
 
-**Verified:** renders, 6 cards, panel opens/closes, no console errors, loose
-sheet gone. **Not yet verified:** contrast sweep and keyboard operation on the
-new tabs and panel. Do that before merging.
+### 3b. Scope section — DONE by another assistant, merged
 
-### 3b. Scope section — NOT STARTED
+Folded into the unified homepage process section, with the dove and the quote
+CTA. `app/PricingConfigurator.tsx` still exists but is **no longer imported by
+`app/page.tsx`** — check whether it is dead before extending it.
 
-`app/PricingConfigurator.tsx` (id `#scope`) still contains three numbered
-points using **package and add-on terminology that no longer exists**:
-"Start with the right package", "Add only what belongs" (add-ons), "Confirm the
-final scope together". The owner wants these gone.
+### 3c. Section 6 — Payments — DONE
 
-Replace with the layout from the reference image he supplied:
-- Eyebrow: `SCOPE BEFORE NUMBERS`
-- Heading: *"Tell me what you're building. I'll scope it from there."*
-- Lede: *"There is no public price menu to decode. You start with a quote
-  request, I review what you actually need, and the final scope is confirmed
-  with you before anything is priced or built."*
-- **Add a quote button** linking to `/quote` — he asked for this explicitly.
-- Right side: a line-art dove with an olive branch, gold + navy on cream.
+Built on `claude/section6-payments-qzec6b`. Stripe **Invoicing**, not Checkout.
 
-**Asset gap:** the dove in his reference is an image he generated; it is **not
-in the repo**. `public/ks-dove-mark.png` exists but is the header monogram, a
-different mark. Either ask him to drop the file into `/public`, or build a
-line-art SVG in the palette as a placeholder and tell him it's swappable.
+- `supabase/migrations/20260908120000_stripe_invoicing.sql` — `invoices.kind`
+  (deposit / final / care / other) with a unique index so a project can only
+  ever have one of each; `stripe_events` for idempotency;
+  `projects.final_payment_cleared_at` and `.ownership_transferred_at`; and the
+  **`projects_payment_before_transfer` trigger**, which refuses any write that
+  sets `ownership_transferred_at` without a cleared final payment. That rule is
+  in the database on purpose — a route bug or a hand-written PostgREST call
+  must not be able to bypass it.
+- `app/lib/stripe.ts` — dependency-free REST client. **`requireTestKey()`
+  throws on anything that is not `sk_test_`**, so a live key in the environment
+  fails loudly instead of quietly charging someone.
+- `app/lib/stripeInvoicing.ts` — 50/50 split (odd cents land on the deposit so
+  the halves always sum to the agreed total), draft → finalise → send, and care
+  plans as separate monthly subscriptions cancelled at period end.
+- `app/api/stripe/webhook/route.ts` — rewritten. Claims the event id **before**
+  any state change, so a duplicate delivery is a no-op. Real state changes, not
+  `console.log`. Handles `invoice.*` and `customer.subscription.*`.
+- Admin routes: `POST /api/portal/admin/invoices` (raise deposit or final from
+  the project's agreed total), `POST /api/portal/admin/handoff`,
+  `POST|DELETE /api/portal/admin/care-plan`.
 
-### 3c. Section 6 — Payments — NOT STARTED
+**Verified** — `node scripts/stripe-webhook-check.js` (22 assertions:
+signature, replay rejection, idempotency, final-vs-deposit gating) and
+`npx tsx app/lib/stripe.check.ts` (26 assertions: key guard, money split, form
+encoding). See `scripts/README.md`.
 
-Full spec from the owner:
-
-- **Stripe Invoicing, NOT Checkout.** Services with agreed scope get invoices,
-  not fixed-price products.
-- 50% deposit to start, 50% on approval before handoff.
-- Invoices generated from agreed scope, sent by email, tracked in the portal
-  when it exists.
-- Care plans as Stripe **subscriptions**, monthly, separate from project
-  invoices, cancellable.
-- Webhook: signature verification, **idempotency on duplicate events**, and a
-  **recorded state change on payment — not a `console.log`**.
-- **Test mode only. Do not touch live keys. No secret values in any file.**
-- **Hard rule to encode in the flow: final payment clears BEFORE account
-  transfer. Ownership passes on payment.**
-
-**Groundwork already surveyed:**
-
-`app/api/stripe/webhook/route.ts` exists and already has *good* HMAC signature
-verification with a timestamp tolerance and `timingSafeEqual`. Keep that. It
-has exactly the three gaps the spec names:
-1. `console.log` instead of a recorded state change.
-2. No idempotency.
-3. Listens for `checkout.session.*` — wrong model; should be `invoice.*` and
-   `customer.subscription.*`.
-
-The Supabase schema **already has the tables** (`supabase/migrations/`):
-```sql
-invoices(id, project_id, amount, status, stripe_invoice_id UNIQUE,
-         due_at, paid_at, created_at)
-  status IN ('draft','open','paid','void','past_due')
-
-care_plans(id, project_id UNIQUE, status, stripe_subscription_id UNIQUE,
-           started_at, cancelled_at, created_at)
-  status IN ('inactive','active','past_due','cancelled')
-
-projects(id, client_id, name, slug, status, tier, quoted_total, ...)
-```
-
-**Suggested plan (not yet built):**
-1. New migration adding: `invoices.kind` (`deposit` | `final` | `care`), a
-   `stripe_events(event_id primary key, type, received_at)` table for
-   idempotency, and `projects.final_payment_cleared_at` +
-   `projects.ownership_transferred_at`.
-2. **Encode the hard rule as a database trigger** that refuses to set
-   `ownership_transferred_at` unless `final_payment_cleared_at` is set. A DB
-   constraint is the strongest place for it — application code can be bypassed.
-3. `app/lib/stripeInvoicing.ts` — build the 50/50 invoices from an agreed
-   scope. **Add a guard that throws if the key doesn't start with `sk_test_`**,
-   so live keys cannot be used by accident.
-4. Rewrite the webhook: insert the event id first and bail on conflict
-   (idempotency), then update `invoices` / `care_plans` rows.
-
-Use `app/lib/supabaseAdmin.ts` (`supabaseAdminRequest`) for DB writes — it's
-the existing server-only PostgREST helper. Env vars: `SUPABASE_URL`,
-`SUPABASE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `RESEND_API_KEY`,
-`CAPTURE_TO_EMAIL`, `CAPTURE_FROM_EMAIL`. **Never write values for these into
-a file.**
-
----
+**NOT YET DONE for section 6:**
+- **The migration has not been applied to Supabase.** Run it before using any
+  of this.
+- No portal UI for these routes — they are API-only until the portal exists.
+- `STRIPE_SECRET_KEY` (test), `STRIPE_WEBHOOK_SECRET` and
+  `STRIPE_CARE_PRICE_ID` need setting in the environment. Never in a file.
+- Never exercised against real Stripe. The harness stubs it.
 
 ## 4. Still outstanding after the above
 
