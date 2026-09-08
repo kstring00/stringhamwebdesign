@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 
-import ProcessTimesheet from "./ProcessTimesheet";
 import { processIntro, processSteps } from "./data/process";
 import styles from "./ProcessSteps.module.css";
 
@@ -145,12 +144,6 @@ export default function ProcessSteps({
                 {step.detail.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}
-
-                {step.number === "05" ? (
-                  <div className={styles.artifact}>
-                    <ProcessTimesheet />
-                  </div>
-                ) : null}
               </div>
             </div>
           </li>
@@ -291,11 +284,6 @@ export default function ProcessSteps({
               {active.detail.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
-              {active.number === "05" ? (
-                <div className={styles.homeArtifact}>
-                  <ProcessTimesheet />
-                </div>
-              ) : null}
             </div>
 
             <span className={styles.homeDetailCurve} aria-hidden="true" />
