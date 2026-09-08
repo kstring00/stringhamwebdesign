@@ -146,9 +146,9 @@
     inset 0 0 0 1px rgba(255, 255, 255, 0.76);
 }
 
-.projectPage {
-  animation: none !important;
-}
+/* The page turn is defined in SelectedWork.module.css, on .sitePage. Do not
+   reintroduce an `animation` declaration here: this sheet loads after that one
+   and would silently win. */
 
 .browserBarPolish {
   height: 2.45rem !important;
@@ -501,7 +501,7 @@
   border: 1px solid rgba(153, 117, 45, 0.31);
   border-radius: 999px;
   background: rgba(214, 183, 101, 0.16);
-  color: #795b20;
+  color: #5f4718;
   font-size: 0.43rem;
   font-weight: 850;
   letter-spacing: 0.13em;
@@ -553,7 +553,15 @@
   line-height: 1.44 !important;
 }
 
+/* `.featureSheetPolish > *` puts every child into relative positioning, which
+   turns the foot's absolute left/right insets into offsets and shoves it onto
+   the paper's right edge. In this layout the foot belongs in normal flow. */
 .featureSheetPolish :global([class*="sheetFoot"]) {
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  margin-top: clamp(1.25rem, 2vw, 1.9rem) !important;
   padding-top: 0.9rem !important;
   border-top-color: rgba(169, 131, 61, 0.2) !important;
 }
@@ -694,5 +702,188 @@
   .featurePolish {
     animation: none !important;
     transition: none !important;
+  }
+}
+
+/* =====================================================================
+   Widened binder.
+
+   The work is the point of this section, so the binder takes the whole
+   column and the "under the hood" sheet moves below it instead of
+   competing for width beside it. On a 1440px viewport this takes the
+   rendered site from roughly 610px wide to roughly 1050px.
+   ===================================================================== */
+
+.sectionPolish {
+  padding-left: clamp(1.25rem, 3.2vw, 3.25rem) !important;
+  padding-right: clamp(1.25rem, 3.2vw, 3.25rem) !important;
+}
+
+.sectionPolish :global([class*="headingWrap"]),
+.sectionPolish :global([class*="stage"]),
+.sectionPolish :global([class*="underStage"]) {
+  width: min(100%, 102rem) !important;
+}
+
+.stagePolish {
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: clamp(2rem, 3.5vw, 3.75rem) !important;
+  align-items: start !important;
+}
+
+.binderPolish {
+  /* One value drives the cover width and the ring position, so the gold
+     binding always lands on the spine no matter how the binder scales. */
+  --cover-w: clamp(11.5rem, 17.5%, 19rem);
+  grid-template-columns: var(--cover-w) minmax(0, 1fr) !important;
+  min-height: clamp(34rem, 46vw, 52rem) !important;
+}
+
+.binderPolish :global([class*="rings"]) {
+  left: calc(var(--cover-w) - 1.16rem) !important;
+}
+
+/* The loose sheet: set down slightly crooked and offset, the way a page
+   pulled from the binder actually lands. */
+.sheetZonePolish {
+  align-self: start;
+  width: min(100%, 60rem);
+  margin-left: clamp(0rem, 6vw, 7rem);
+  padding-block: 0;
+  transform: rotate(-0.75deg) translateX(0.6rem) !important;
+  transform-origin: left top;
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sheetZonePolish:hover {
+  transform: rotate(-0.75deg) translateX(0.6rem) translateY(-3px) !important;
+}
+
+.featureSheetPolish {
+  min-height: 0 !important;
+  height: auto;
+  transition: box-shadow 260ms ease;
+}
+
+.sheetZonePolish:hover .featureSheetPolish {
+  box-shadow:
+    0 3.4rem 7rem rgba(0, 0, 0, 0.3),
+    0 0.9rem 2.2rem rgba(0, 0, 0, 0.16),
+    inset 0 0 0 1px rgba(59, 47, 34, 0.055);
+}
+
+/* Tabs take a small physical press. */
+.tabButton:active {
+  transform: translateX(0.06rem) scale(0.985) !important;
+  box-shadow:
+    inset 1px 0 rgba(255, 255, 255, 0.3),
+    0 1px 3px rgba(13, 27, 38, 0.14) !important;
+  transition-duration: 70ms !important;
+}
+
+.tabButtonActive:active {
+  transform: translateX(0.24rem) scale(0.985) !important;
+}
+
+/* Focus rings clear 3:1 against both the tab face and the navy binder. */
+.tabButton:focus-visible {
+  outline: 2px solid #0d1b26 !important;
+  outline-offset: 1px;
+  box-shadow: 0 0 0 5px rgba(226, 197, 138, 0.96) !important;
+  z-index: 9;
+}
+
+/* Below 60rem the cover is too narrow to hold its own display type without
+   spilling onto the navy, and the page needs the width more than the binder
+   needs a cover. Drop the cover and the rings here rather than at 44rem. */
+@media (max-width: 60rem) {
+  .binderPolish {
+    grid-template-columns: minmax(0, 1fr) !important;
+    min-height: clamp(30rem, 92vw, 44rem) !important;
+  }
+
+  .binderPolish :global([class*="coverLeft"]),
+  .binderPolish :global([class*="rings"]) {
+    display: none !important;
+  }
+
+  .binderPolish :global([class*="pageStack"]) {
+    padding-left: 0.86rem !important;
+  }
+
+  /* The base sheet pulls itself up by -5rem to tuck under the old side-by-side
+     binder. In the stacked layout that drags it over the binder, putting the
+     cover and sheet labels on the navy ground. */
+  .sheetZonePolish {
+    width: 100%;
+    margin-top: 0 !important;
+    margin-left: 0;
+    justify-self: stretch !important;
+    transform: none !important;
+  }
+
+  .sheetZonePolish:hover {
+    transform: none !important;
+  }
+}
+
+/* Below 44rem the base stylesheet drops the cover and the rings and lays the
+   tabs out as a row under the page. These !important overrides have to stand
+   down for that, or the binder keeps a two-column grid at phone widths and the
+   rendered site is squeezed to about 80px. */
+@media (max-width: 44rem) {
+  .binderPolish {
+    grid-template-columns: minmax(0, 1fr) !important;
+    min-height: 0 !important;
+    padding: 0.75rem !important;
+  }
+
+  .binderPolish :global([class*="coverLeft"]),
+  .binderPolish :global([class*="rings"]) {
+    display: none !important;
+  }
+
+  /* The stack is height:100% at desktop; on mobile the tab row lives inside it,
+     so it has to grow or the second row spills out over the sheet below. */
+  .binderPolish :global([class*="pageStack"]) {
+    height: auto !important;
+    padding: 0 !important;
+  }
+
+  /* Four tabs, so two even rows rather than a 3 + 1 orphan. */
+  .tabsPolish {
+    position: relative !important;
+    inset: auto !important;
+    width: auto !important;
+    height: auto !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    filter: none;
+  }
+
+  .tabButton,
+  .tabButtonActive {
+    border-radius: 0.45rem !important;
+    transform: none !important;
+  }
+
+  .tabButton:hover {
+    transform: translateY(-0.12rem) !important;
+  }
+
+  .tabButton:active,
+  .tabButtonActive:active {
+    transform: translateY(0.06rem) scale(0.985) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheetZonePolish,
+  .sheetZonePolish:hover,
+  .featureSheetPolish {
+    transition: none !important;
+  }
+
+  .sheetZonePolish:hover {
+    transform: rotate(-0.75deg) translateX(0.6rem) !important;
   }
 }
