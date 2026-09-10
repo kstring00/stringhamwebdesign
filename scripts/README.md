@@ -101,3 +101,32 @@ right that are easy to get wrong:
   and every element reports `rgba(0,0,0,0)`;
 - it waits for the scroll to settle before screenshotting — too short a wait
   and neighbouring gold accents get sampled as the backdrop.
+
+### Step 4 checks — read receipts and notifications
+
+`portal-notify-check.js` asserts **who** each notification reaches. That is the
+part worth testing: a mistake there mails one party's activity to another.
+
+It needs a mail capture endpoint and, for the admin-only check-in route, the
+stub's session role switched:
+
+```bash
+node scripts/portal-data-stub.js &
+
+SUPABASE_URL=http://localhost:4200 \
+SUPABASE_SECRET_KEY=stub \
+PORTAL_URL=http://localhost:3000/portal \
+RESEND_API_KEY=stub-key \
+PORTAL_MAIL_ENDPOINT=http://localhost:4200/__mail \
+CAPTURE_TO_EMAIL=kyle@admin.test \
+npm run dev &
+
+node scripts/portal-read-receipts-check.js   # 6 assertions
+node scripts/portal-notify-check.js          # 11 assertions
+```
+
+`PORTAL_MAIL_ENDPOINT` is honoured only outside production — an env-settable
+mail endpoint on a live server would be a way to redirect client mail.
+
+Stub endpoints used by these: `/__mail`, `/__mail_reset`, `/__messages`,
+`/__reset`, and `/__role?admin|client`.

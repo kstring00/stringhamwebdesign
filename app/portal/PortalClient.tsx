@@ -229,6 +229,16 @@ export default function PortalClient() {
 
     const payload = (await response.json()) as { messages: Message[] };
     setMessages(payload.messages);
+
+    // Clear the unread count for whoever is looking. The database refuses to
+    // mark your own messages read, so this only ever touches the other side's.
+    if (payload.messages.some((message) => !message.read_at)) {
+      fetch("/api/portal/messages", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId }),
+      }).catch(() => undefined);
+    }
   }, []);
 
   useEffect(() => {
