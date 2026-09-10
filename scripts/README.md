@@ -62,3 +62,42 @@ node scripts/portal-auth-check.js                  # exits non-zero on failure
 ```
 
 No real Supabase project, no real keys, no mail leaves the machine.
+
+## Client portal checks
+
+`portal-data-stub.js` stands in for Supabase with one client, one project, a
+five-item checklist and some logged hours. It enforces the same rules the real
+database does — RLS hides other projects, the column grant rejects any write
+outside `status` / `value` / `file_id`, and `accepted` is refused — so the UI is
+exercised against the real constraints without a Supabase project.
+
+```bash
+node scripts/portal-data-stub.js &                 # stub on :4200
+
+SUPABASE_URL=http://localhost:4200 \
+SUPABASE_SECRET_KEY=stub \
+PORTAL_URL=http://localhost:3000/portal \
+npm run dev &                                      # dev, not start: see below
+
+export NODE_PATH=./node_modules
+node scripts/portal-client-check.js                # 15 behaviour assertions
+node scripts/portal-a11y-check.js                  # keyboard, focus, touch targets
+node scripts/portal-contrast-check.js 1440 onboarding
+node scripts/portal-contrast-check.js 375 timesheet
+```
+
+Use `npm run dev`. Session cookies are `Secure` in a production build and are
+dropped over plain HTTP.
+
+### On the contrast checker
+
+It measures one element at a time: scroll into view, blank only that element's
+glyphs, screenshot the viewport, sample under its own text rects. A batched
+sweep was tried first and produced false positives that survived several fixes;
+the per-element version is slower but its results hold up. Two things it gets
+right that are easy to get wrong:
+
+- the painted colour is read **before** the element is blanked — read it after
+  and every element reports `rgba(0,0,0,0)`;
+- it waits for the scroll to settle before screenshotting — too short a wait
+  and neighbouring gold accents get sampled as the backdrop.

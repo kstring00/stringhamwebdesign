@@ -59,10 +59,19 @@ type OnboardingItem = {
   status: "pending" | "submitted" | "accepted" | "needs_changes" | "not_applicable";
   note: string | null;
   value: string | null;
+  file_id: string | null;
   position: number;
   submitted_at: string | null;
   accepted_at: string | null;
   updated_at: string;
+};
+
+/** The 10-hour marks already sent, so the client timesheet can show them. */
+type TimeCheckin = {
+  id: string;
+  project_id: string;
+  hours_mark: number;
+  sent_at: string;
 };
 
 export async function GET() {
@@ -73,7 +82,15 @@ export async function GET() {
   }
 
   try {
-    const [projects, clients, fileRows, timeEntries, invoices, onboardingItems] = await Promise.all([
+    const [
+      projects,
+      clients,
+      fileRows,
+      timeEntries,
+      invoices,
+      onboardingItems,
+      timeCheckins,
+    ] = await Promise.all([
       userRest<Project[]>(
         "projects?select=id,client_id,name,slug,status,tier,quoted_total,started_at,launched_at,created_at&order=created_at.desc",
         session.accessToken,
@@ -95,7 +112,11 @@ export async function GET() {
         session.accessToken,
       ),
       userRest<OnboardingItem[]>(
-        "project_onboarding_items?select=id,project_id,name,item_type,status,note,value,position,submitted_at,accepted_at,updated_at&order=position.asc,created_at.asc",
+        "project_onboarding_items?select=id,project_id,name,item_type,status,note,value,file_id,position,submitted_at,accepted_at,updated_at&order=position.asc,created_at.asc",
+        session.accessToken,
+      ),
+      userRest<TimeCheckin[]>(
+        "time_checkins?select=id,project_id,hours_mark,sent_at&order=hours_mark.asc",
         session.accessToken,
       ),
     ]);
@@ -108,6 +129,7 @@ export async function GET() {
       timeEntries,
       invoices,
       onboardingItems,
+      timeCheckins,
     });
   } catch (error) {
     console.error("Portal dashboard load failed", error);
