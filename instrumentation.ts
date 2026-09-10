@@ -1,3 +1,4 @@
+import { portalUrlWarning } from "./app/lib/portalUrl";
 import { normalizeSupabaseUrl, supabaseUrlWarning } from "./app/lib/supabaseUrl";
 
 /**
@@ -11,6 +12,11 @@ import { normalizeSupabaseUrl, supabaseUrlWarning } from "./app/lib/supabaseUrl"
 export function register() {
   // register() is invoked for each runtime; only the Node server reads these.
   if (process.env.NEXT_RUNTIME !== "nodejs") return;
+
+  // A portal URL left at the localhost default in production sends clients a
+  // sign-in link pointing at their own machine.
+  const portalWarning = portalUrlWarning();
+  if (portalWarning) console.warn(portalWarning);
 
   const supabaseUrl = normalizeSupabaseUrl(process.env.SUPABASE_URL);
 

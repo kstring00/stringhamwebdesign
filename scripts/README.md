@@ -41,3 +41,24 @@ node scripts/stripe-webhook-check.js             # exits non-zero on failure
 npx tsx app/lib/stripe.check.ts         # test-mode guard, 50/50 split, form encoding
 npx tsx app/lib/businessDays.check.ts   # reply-date rules and US federal holidays
 ```
+
+## Portal sign-in checks
+
+Confirms the portal stays invite-only and that a caller cannot tell a real
+client address from an unknown one — by response body **or by timing**. The
+stub deliberately makes the mail send slow (300ms); if the response ever waited
+on it, the timing assertion would catch it.
+
+```bash
+node scripts/portal-auth-stub.js &                 # Supabase stand-in on :4100
+
+SUPABASE_URL=http://localhost:4100 \
+SUPABASE_SECRET_KEY=stub \
+PORTAL_ADMIN_EMAIL=admin@known.test \
+PORTAL_URL=http://localhost:3000/portal \
+npm run start &                                    # app on :3000
+
+node scripts/portal-auth-check.js                  # exits non-zero on failure
+```
+
+No real Supabase project, no real keys, no mail leaves the machine.
