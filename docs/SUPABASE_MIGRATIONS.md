@@ -194,19 +194,55 @@ it, because the app talks to PostgREST with `SUPABASE_SECRET_KEY` instead.
 Linking writes `supabase/.temp/`, which the generated `supabase/.gitignore`
 already excludes.
 
-### 3. Tell it what is already applied — do not skip this
+### 3. Reconcile the migration history — do not skip this
 
-This is the one step that will bite you if you miss it.
+This is the step that will bite you if you miss it, and the shape of the
+problem was not what I expected before looking.
 
-`db push` decides what to run by comparing the files here against a
-`supabase_migrations.schema_migrations` table in your project. Everything so
-far was applied by pasting SQL, which never touched that table. So as far as
-the CLI is concerned, **nothing has ever been applied**, and a first
-`db push` would try to run all ten from the top.
+`db push` never inspects your schema. It decides what to run by comparing the
+files here against a `supabase_migrations.schema_migrations` table in your
+project. That table is the entire source of truth, and it had drifted from
+reality in two directions at once.
 
-They are idempotent enough that this would most likely be survivable, but
-"most likely survivable" is not how to treat a production database. Mark them
-applied instead:
+**Run `npm run db:status` first and read both columns as separate lists.** On
+2026-09-11 it printed this:
+
+- Five versions in **Remote** with no matching file: `20260904232210`,
+  `20260906213110`, `20260906213234`, `20260906213309`, `20260907020833`.
+- Nine local files with **nothing in Remote**.
+- Exactly one version in both: `20260906225427`.
+
+Two different histories, from two different ways of applying SQL:
+
+- Migrations applied through Supabase's MCP `apply_migration` tool *do* write
+  to the history table, stamped with their own timestamp — seconds or minutes
+  off the repo filename. Those were the five orphans, and querying their
+  `name` column showed each one matched a repo file exactly
+  (`create_client_portal`, `harden_portal_rls_helpers`, and so on).
+- Migrations pasted into the SQL editor write nothing at all. Those were the
+  four newest, invisible to the CLI despite being live in the database.
+
+**Before deleting any history row, read what it is.** In the SQL editor:
+
+```sql
+select version, name
+from supabase_migrations.schema_migrations
+order by version;
+```
+
+If every remote-only row names a migration you also have as a file, the
+records are duplicates under different names and clearing them loses nothing.
+If one names schema work that exists *only* there, deleting the record would
+hide that fact permanently — stop and reconcile it into a file first.
+
+Then, once the names check out, drop the duplicate records:
+
+```bash
+npx supabase migration repair --linked --status reverted \
+  20260904232210 20260906213110 20260906213234 20260906213309 20260907020833
+```
+
+and record the files you actually have:
 
 ```bash
 npx supabase migration repair --linked --status applied \
@@ -215,13 +251,14 @@ npx supabase migration repair --linked --status applied \
   20260910120000 20260910140000
 ```
 
-`migration repair` only writes to that bookkeeping table. It does not run any
-SQL from your migrations and does not alter your schema.
+`migration repair` only writes to that bookkeeping table. Neither status runs
+any SQL from your migrations — `reverted` deletes a row, it does not roll
+anything back. Your tables, policies and triggers are untouched by both
+commands.
 
-Pass the full list only if you have already applied #8, #9 and #10 via Route
-1. If you skipped Route 1 and want the CLI to apply them, repair the first
-seven only (`20260904232200` through `20260908120000`) and let `db push` do
-the rest.
+This reconciliation is a one-time fix for how this project was built. Once
+`db push` is the only way migrations reach the database, the history stays
+correct on its own and none of the above is needed again.
 
 ### 4. Confirm
 
@@ -229,8 +266,17 @@ the rest.
 npm run db:status
 ```
 
-Every row should show a version in both the Local and Remote columns. A
-version present locally but blank remotely is a migration still to apply.
+Ten rows, the same version in both the Local and Remote columns on every one,
+and no row carrying a Remote value with a blank Local. A version present
+locally but blank remotely is a migration still to apply; a version present
+remotely but blank locally is history describing a file you do not have.
+
+```bash
+npm run db:push -- --dry-run
+```
+
+`Remote database is up to date.` — that is the CLI and the database agreeing,
+and it is the point of all of the above.
 
 ### From then on
 
