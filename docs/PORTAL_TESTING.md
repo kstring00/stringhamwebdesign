@@ -6,6 +6,16 @@ was impossible. `PORTAL_URL` now controls that.
 
 ---
 
+## Before you start
+
+The onboarding and read-receipt features below need
+`20260910120000_client_onboarding_submissions.sql` and
+`20260910140000_message_read_receipts.sql` applied. Without them the UI renders
+but every submit and every read receipt comes back as a permission error.
+See `docs/SUPABASE_MIGRATIONS.md`.
+
+---
+
 ## One-time setup
 
 ### 1. Environment
