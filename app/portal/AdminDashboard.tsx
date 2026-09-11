@@ -72,11 +72,31 @@ export default function AdminDashboard({user,onLogout}:{user:AdminUser;onLogout:
     return out.slice(0,8);
   },[data,search]);
 
+  // The client side clears its unread count when a thread loads. This is the
+  // admin half, which was missing: without it `read_at` stayed null on every
+  // client message and the bell badge could only ever climb — the same phantom
+  // count the read-receipt migration exists to stop.
+  //
+  // Opening a message from the list is the read signal. Merely rendering the
+  // dashboard is not, even though it shows a body preview: clearing on load
+  // would empty the badge every time and make it mean nothing.
+  const markRead=useCallback(async(projectId:string)=>{
+    if(!projectId)return;
+    try{
+      const r=await fetch("/api/portal/messages",{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({projectId})});
+      const p=await r.json().catch(()=>null) as {marked?:number}|null;
+      if(p?.marked)await load();
+    }catch{/* Read receipts are a convenience; never surface a failure here. */}
+  },[load]);
+
   function open(m:Exclude<Modal,null>,project=""){
     setQuick(false);
     setChangeItem(null);
     setModalProject(project||selected||data?.projects[0]?.id||"");
     setModal(m);
+    // Only when a specific message was clicked — the quick-add compose box
+    // arrives here with no project and has read nothing.
+    if(m==="message"&&project)void markRead(project);
   }
 
   async function action(url:string,options:RequestInit){

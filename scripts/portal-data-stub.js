@@ -6,6 +6,7 @@ const http = require('http');
 const CLIENT_ID = '11111111-1111-4111-8111-111111111111';
 const PROJECT_ID = '22222222-2222-4222-8222-222222222222';
 const USER_ID = '33333333-3333-4333-8333-333333333333';
+const ADMIN_ID = 'admin-user';
 const OTHER_PROJECT = '99999999-9999-4999-8999-999999999999';
 
 let items, files, messages, checkins, mail = [], role = 'client';
@@ -53,7 +54,13 @@ http.createServer((req, res) => {
     const [path, query = ''] = req.url.split('?');
     const q = decodeURIComponent(query);
 
-    if (path === '/auth/v1/user') return json(res, 200, { id: USER_ID, email: 'client@test.dev' });
+    // The admin is a different person, not the client wearing a hat. Returning
+    // the client's id under role=admin made `sender_id=neq.<me>` filter the
+    // wrong way and hid the admin read-receipt path entirely.
+    if (path === '/auth/v1/user')
+      return json(res, 200, role === 'admin'
+        ? { id: ADMIN_ID, email: 'kyle@test.dev' }
+        : { id: USER_ID, email: 'client@test.dev' });
 
     if (path === '/rest/v1/users' && q.includes('id=in.'))
       return json(res, 200, [
@@ -62,7 +69,9 @@ http.createServer((req, res) => {
       ]);
 
     if (path === '/rest/v1/users')
-      return json(res, 200, [{ id: USER_ID, email: 'client@test.dev', role, name: role === 'admin' ? 'Kyle Stringham' : 'Test Client', created_at: '2026-09-01T00:00:00Z' }]);
+      return json(res, 200, [role === 'admin'
+        ? { id: ADMIN_ID, email: 'kyle@test.dev', role: 'admin', name: 'Kyle Stringham', created_at: '2026-09-01T00:00:00Z' }
+        : { id: USER_ID, email: 'client@test.dev', role: 'client', name: 'Test Client', created_at: '2026-09-01T00:00:00Z' }]);
 
     if (path === '/rest/v1/projects' && q.includes('clients(users(email))'))
       return json(res, 200, [{ name: 'Test Website', clients: { users: { email: 'client@test.dev' } } }]);

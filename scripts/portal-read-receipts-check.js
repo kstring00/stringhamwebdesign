@@ -39,6 +39,35 @@ const msgs = () => fetch('http://localhost:4200/__messages').then(r => r.json())
   ok('send was not blocked by the notifier', elapsed < 4000, `${elapsed}ms`);
   ok('no page errors', errs.length === 0, JSON.stringify(errs));
 
+  // The admin half. The client side cleared its own count from the start; the
+  // admin side never called PATCH at all, so a client's message stayed unread
+  // forever and the bell badge could only climb.
+  await fetch('http://localhost:4200/__reset');
+  await fetch('http://localhost:4200/__role?role=admin');
+
+  const admin = await ctx.newPage();
+  const adminErrs = []; admin.on('pageerror', e => adminErrs.push(e.message));
+  // Same-origin so the cookie is sent and the fetch is not cross-origin.
+  await admin.goto('http://localhost:3000/portal', { waitUntil: 'domcontentloaded' });
+  const marked = await admin.evaluate(async () => {
+    const r = await fetch('/api/portal/messages', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ projectId: '22222222-2222-4222-8222-222222222222' }),
+    });
+    return r.json();
+  }).catch(() => null);
+
+  const adminAfter = await msgs();
+  const clientRead = adminAfter.filter(m => m.sender_id.startsWith('3333') && m.read_at).length;
+  const ownRead = adminAfter.filter(m => m.sender_id === 'admin-user' && m.read_at).length;
+  ok("client's message marked read for the admin", clientRead === 1, `${clientRead}/1`);
+  ok("admin's OWN messages never marked read", ownRead === 0,
+     `${ownRead} self-read — nobody may mark their own message read`);
+  ok('admin mark-read reported a result', !!marked, JSON.stringify(marked));
+  ok('no admin page errors', adminErrs.length === 0, JSON.stringify(adminErrs));
+  await fetch('http://localhost:4200/__role?role=client');
+
   await b.close();
   console.log(fails ? `\n${fails} FAILURE(S)` : '\nstep 4 checks passed');
   process.exit(fails?1:0);

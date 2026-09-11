@@ -33,6 +33,8 @@ export function Glyph({name}:{name:GlyphName}){return <span data-glyph aria-hidd
 // settings, so it is gone until there is a settings page to point at.
 export const NAV:[string,GlyphName,string][]=[["Dashboard","home","#dashboard"],["Clients","clients","#clients"],["Projects","projects","#projects"],["Time Logs","time","#time-log"],["Messages","messages","#messages"],["Files","files","#files"]];
 export const money=(n:number)=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(n||0);
+/** "1 project", not "1 projects". Counts are read at a glance; the mismatch reads as a bug in the data. */
+export const plural=(n:number,word:string)=>`${n} ${n===1?word:`${word}s`}`;
 function parseDate(v:string){return /^\d{4}-\d{2}-\d{2}$/.test(v)?new Date(`${v}T12:00:00`):new Date(v)}
 export function dateText(v:string|null,year=true){if(!v)return "No activity yet";const d=parseDate(v);if(Number.isNaN(d.getTime()))return v;return new Intl.DateTimeFormat("en-US",{month:"short",day:"numeric",...(year?{year:"numeric" as const}:{})}).format(d)}
 export function phase(v:string){return ({consultation:"Consultation",plan_quote:"Plan & quote",build:"Build",launch:"Launch",complete:"Complete",paused:"Paused",archived:"Archived"} as Record<string,string>)[v]||v.replaceAll("_"," ")}

@@ -166,11 +166,29 @@ by month with a running total, and a meter showing hours since the last
 check-in. An entry that crosses a 10-hour boundary is marked inline, saying
 "sent" if you marked the check-in sent as admin and "reached" if you have not.
 
-**Messages tab and read receipts.** Send a message as admin, then open the
-Messages tab as the client. Reload the admin window — the unread dot on that
-message should now be gone. Before the read-receipt migration that dot could
-only ever accumulate. A client cannot mark their *own* message read, and
-nothing can mark a message unread again; both are rejected by a trigger.
+**Messages tab and read receipts.** Test this in both directions — they are
+wired separately and each side clears only the other side's messages.
+
+*Client reads Kyle's message.* Send one from the admin dashboard, open the
+Messages tab as the client, then reload the client window. The message is
+there and `read_at` is stamped.
+
+*Kyle reads the client's message.* Reply as the client, then reload the admin
+dashboard: Recent messages shows it with an unread dot and the bell badge
+counts it. Click that message. The dot clears.
+
+Note which direction the admin dot tracks, because it is easy to test the
+wrong thing: `app/api/portal/admin/dashboard/route.ts` computes
+`unread: sender.role === "client" && !read_at`. A message *Kyle* sends never
+shows an unread dot on Kyle's own dashboard — there is nothing there to
+clear, and seeing no dot after sending one proves nothing.
+
+Clicking is the read signal on the admin side, not loading the page. The
+dashboard shows a body preview, but clearing on load would empty the badge
+every time and make it meaningless.
+
+A client cannot mark their *own* message read, and nothing can mark a message
+unread again; both are rejected by the trigger, not by the UI.
 
 Tabs are in the URL (`?tab=onboarding`), so a reload keeps your place and the
 back button works.
