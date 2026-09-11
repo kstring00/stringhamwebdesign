@@ -32,6 +32,13 @@ PORTAL_ADMIN_EMAIL=stringham00@gmail.com   # optional; this is the default
 the boot log prints a warning — because clients would otherwise be mailed a link
 to their own machine.
 
+**Two different email senders are in play, and only one is needed to sign in.**
+Magic links come from Supabase Auth's own SMTP (`/auth/v1/otp`), so sign-in
+works with `RESEND_API_KEY` unset. Portal *notifications* — new message, new
+file, the ten-hour check-in — go through Resend, and `app/lib/portalEmail.ts`
+returns `{ sent: false, reason: "no-api-key" }` without it. Nothing errors; the
+mail simply never arrives. Set `RESEND_API_KEY` if you want to test step 7.
+
 ### 2. Supabase redirect allow-list — do not skip
 
 Supabase refuses any redirect target it has not been told about, and it fails
@@ -132,6 +139,42 @@ Keep both windows open side by side.
 
 Reload the other window after each action — live updates are not wired up yet.
 
+### Step 7 — the client-side tabs
+
+These are what the two 2026-09-10 migrations exist for. If any of them come
+back as a permission error, the migration did not apply — check
+`docs/SUPABASE_MIGRATIONS.md`.
+
+**Onboarding tab.** The 8 cloned items, split into *Yours to do* and *With
+Kyle*. As the client:
+
+1. Type an answer into **Brand colors** and **Send to Kyle**. It moves to *With
+   Kyle*, status "With Kyle for review".
+2. Click **Change my answer** on it. It comes back to *Yours to do*. This is
+   the pull-back path, and it is allowed.
+3. Upload something to **Logo files**. It uploads through the files route
+   first, then attaches.
+4. As admin, **Request changes** on one item with a note. As the client it
+   reappears under *Yours to do* with the note shown.
+
+The rule worth confirming by hand: a client can submit and retract, and can
+never accept. `accepted_at` is outside the column grant, so even a forged
+request cannot set it — only the admin route can.
+
+**Timesheet tab.** After logging time as admin, the client sees entries grouped
+by month with a running total, and a meter showing hours since the last
+check-in. An entry that crosses a 10-hour boundary is marked inline, saying
+"sent" if you marked the check-in sent as admin and "reached" if you have not.
+
+**Messages tab and read receipts.** Send a message as admin, then open the
+Messages tab as the client. Reload the admin window — the unread dot on that
+message should now be gone. Before the read-receipt migration that dot could
+only ever accumulate. A client cannot mark their *own* message read, and
+nothing can mark a message unread again; both are rejected by a trigger.
+
+Tabs are in the URL (`?tab=onboarding`), so a reload keeps your place and the
+back button works.
+
 ---
 
 ## Cleaning up
@@ -162,6 +205,8 @@ Then delete the auth user under **Authentication → Users**.
 | "This sign-in link has expired" | Links are single-use and expire in 15 minutes. Request another |
 | No email at all | Expected for an address with no account — the portal is invite-only and deliberately gives the same answer either way. Check the server log for `Portal sign-in requested for unknown account` |
 | Repeated requests send nothing | 60-second resend throttle |
+| Emails stop arriving partway through this runbook | Supabase's **built-in** SMTP is rate limited per hour (a handful of messages on the default setting). This walkthrough sends three. Dashboard → Authentication → Rate Limits shows the ceiling; wait it out, or configure custom SMTP |
+| Notification emails never arrive, sign-in works fine | `RESEND_API_KEY` unset. Sign-in uses Supabase SMTP, notifications use Resend |
 
 ## Related checks
 
