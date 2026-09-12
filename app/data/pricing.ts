@@ -158,3 +158,36 @@ export const faq = [
     a: "Yes, at an agreed rate after handoff. It's a separate plan, it's monthly, and you can cancel it whenever you like.",
   },
 ];
+
+/* ---------- carrying a tier from /pricing into the brief ---------- */
+
+/**
+ * The "Get started" button on each tier links to /quote?package=<id>, so the
+ * brief opens with that tier already chosen. These helpers are the only place
+ * that decides which ids are real: the link, the quote page and the API route
+ * all validate through them, so a bogus ?package= is treated as no choice at
+ * all rather than reaching the form or the email.
+ */
+export const PACKAGE_IDS = tiers.map((tier) => tier.id);
+
+/** The value used when nobody picked a tier, and for "Not sure yet". */
+export const PACKAGE_UNSPECIFIED = "unspecified";
+
+/** What the owner email and the receipt show when no tier was chosen. */
+export const PACKAGE_UNSPECIFIED_LABEL = "Not specified";
+
+export function isPackageId(value: unknown): value is string {
+  return typeof value === "string" && PACKAGE_IDS.includes(value);
+}
+
+/** "standard" → "Standard". Anything unrecognised returns null. */
+export function packageNameFor(value: unknown) {
+  if (!isPackageId(value)) return null;
+  return tiers.find((tier) => tier.id === value)?.name ?? null;
+}
+
+/** The choices the brief offers, in page order, with "Not sure yet" last. */
+export const PACKAGE_CHOICES = [
+  ...tiers.map((tier) => ({ id: tier.id, name: tier.name })),
+  { id: PACKAGE_UNSPECIFIED, name: "Not sure yet" },
+];

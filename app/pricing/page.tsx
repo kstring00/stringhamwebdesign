@@ -165,14 +165,17 @@ export default function PricingPage() {
                   <dd>{tier.timeline}</dd>
                 </dl>
 
+                {/* Carries the tier into the brief, which opens with it
+                    already chosen. The generic CTAs above and below stay
+                    bare, so arriving from them leaves the choice open. */}
                 <div className={styles.cardAction}>
                   {tier.common ? (
-                    <a className={headerStyles.getStarted} href="/quote">
+                    <a className={headerStyles.getStarted} href={`/quote?package=${tier.id}`}>
                       <span>Get started</span>
                       <span className={headerStyles.arrowShell} aria-hidden="true"><Arrow /></span>
                     </a>
                   ) : (
-                    <a className={heroStyles.secondary} href="/quote">
+                    <a className={heroStyles.secondary} href={`/quote?package=${tier.id}`}>
                       Get started <Arrow />
                     </a>
                   )}

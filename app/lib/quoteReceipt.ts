@@ -17,7 +17,8 @@ export type QuoteField =
   | "current"
   | "goal"
   | "timeline"
-  | "contact";
+  | "contact"
+  | "package";
 
 export const QUOTE_FIELD_LABELS: Record<QuoteField, string> = {
   name: "Your name",
@@ -28,6 +29,7 @@ export const QUOTE_FIELD_LABELS: Record<QuoteField, string> = {
   goal: "What the site needs to accomplish",
   timeline: "Rough timeline",
   contact: "How you prefer to talk",
+  package: "Package selected",
 };
 
 /** Order the confirmation page and the email echo answers back in. */
@@ -40,6 +42,7 @@ export const QUOTE_FIELD_ORDER: QuoteField[] = [
   "goal",
   "timeline",
   "contact",
+  "package",
 ];
 
 const MAX_LENGTHS: Record<QuoteField, number> = {
@@ -51,6 +54,7 @@ const MAX_LENGTHS: Record<QuoteField, number> = {
   goal: 600,
   timeline: 120,
   contact: 120,
+  package: 40,
 };
 
 export type QuoteAnswers = Record<QuoteField, string>;
