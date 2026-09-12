@@ -121,23 +121,58 @@ not to send a client.
 
 ---
 
-## 4. Production environment variables
+## 4. Production environment variables (Vercel)
 
-Worth an explicit check, because the failure is silent and only shows up for a
-real client.
+Every variable the app reads, what it does, and what actually breaks without
+it. Set these under **Vercel → Project → Settings → Environment Variables →
+Production**. Vercel does not restart on a change, so **redeploy after
+editing** or the running instance keeps the old values.
 
-- `PORTAL_URL` must be set in **Vercel** to
-  `https://www.stringhamwebdesign.com/portal`. If it is unset in a production
-  build, `portalUrlWarning()` in `app/lib/portalUrl.ts` prints a loud warning
-  at boot — but the fallback is `http://localhost:3000/portal`, which would
-  mail a real client a link to their own machine.
-- `https://www.stringhamwebdesign.com/portal` must be in Supabase under
-  **Authentication → URL Configuration → Redirect URLs**. Supabase refuses
-  unlisted redirect targets *quietly*: the link works and drops the user on the
-  site root with no error. The localhost entry was added on 2026-09-11; the
-  production entry has not been re-verified since.
+### Required — the portal does not work without these
 
----
+| Variable | Missing behaviour |
+|---|---|
+| `SUPABASE_URL` | `config()` in `app/lib/portalSupabase.ts` throws "Supabase server environment variables are not configured." Every portal route, sign-in included, returns 500. `instrumentation.ts` also warns at boot. Must be the **bare** project URL — a trailing `/rest/v1` triggers a loud boot warning and is corrected in memory, but fix the value. |
+| `SUPABASE_SECRET_KEY` | Same throw, same result. This is the `sb_secret_*` key (formerly service_role) — server-only, it bypasses RLS. Never expose it to the browser. |
+| `PORTAL_URL` | **The dangerous one.** Falls back to `NEXT_PUBLIC_SITE_URL + /portal`, then to `http://localhost:3000/portal`. Nothing errors — clients are simply mailed a sign-in link pointing at *their own machine*, which fails for them and looks fine to you. `portalUrlWarning()` prints at boot in production, but only in the log. Set it to `https://www.stringhamwebdesign.com/portal`. |
+
+### Required for email to actually send
+
+| Variable | Missing behaviour |
+|---|---|
+| `RESEND_API_KEY` | Silent no-op. `portalEmail.ts` returns `{ sent: false, reason: "no-api-key" }`, nothing throws, nothing logs an error. Kills the new-message, new-file and ten-hour check-in notifications, plus `/api/capture` and `/api/quote` confirmations. **Sign-in is unaffected** — magic links come from Supabase's own SMTP. Blocked on the DNS work in §3. |
+| `PORTAL_FROM_EMAIL` | Falls back to `CAPTURE_FROM_EMAIL`, then `onboarding@resend.dev`, which lands in spam. Mail sends; clients may not see it. |
+| `CAPTURE_TO_EMAIL` | Defaults differ per route — `kyle@stringhamwebdesign.com` in `/api/capture`, `stringham00@gmail.com` in `/api/quote` and `portalEmail.ts`. Inquiries still arrive, possibly at an address you do not read. Worth setting explicitly for that reason alone. |
+| `CAPTURE_FROM_EMAIL` | Falls back to `onboarding@resend.dev`. Same spam problem. |
+
+### Optional — sensible defaults, set them anyway
+
+| Variable | Missing behaviour |
+|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Only used as the fallback base for `PORTAL_URL`. Harmless if `PORTAL_URL` is set explicitly. **Public** — inlined into the client bundle, so never put anything secret here. |
+| `PORTAL_ADMIN_EMAIL` | Defaults to `stringham00@gmail.com` (`DEFAULT_ADMIN_EMAIL` in `portalSupabase.ts`). Only that one address gets promoted to `admin` on first sign-in. If you ever change your address, setting this is what stops you locking yourself out. |
+
+### Stripe — read the guard before setting these
+
+`app/lib/stripe.ts` `requireTestKey()` **throws on anything that is not
+`sk_test_`**. `sk_live_`, restricted (`rk_`) and publishable (`pk_`) keys all
+fail. That is deliberate, and it means **the payments paths will not work in
+production until someone consciously removes that guard.** Do not "fix" it by
+pasting a live key; it will throw, not charge.
+
+| Variable | Missing behaviour |
+|---|---|
+| `STRIPE_SECRET_KEY` | `StripeNotConfiguredError`. Invoice issuing and care plans are unavailable; `isStripeConfigured()` lets the needs route degrade rather than crash. |
+| `STRIPE_WEBHOOK_SECRET` | Signature verification cannot run, so `/api/stripe/webhook` rejects everything. Payments would never be recorded — and the payment-before-transfer trigger depends on that record. |
+| `STRIPE_CARE_PRICE_ID` | Only a fallback when `/api/portal/admin/care-plan` is called without a `priceId`; that route 400s if neither is present. |
+
+### Not an environment variable, but in the same failure class
+
+`https://www.stringhamwebdesign.com/portal` must be listed in Supabase under
+**Authentication → URL Configuration → Redirect URLs**. Supabase refuses
+unlisted redirect targets **quietly**: the magic link works, the user lands on
+the site root, and nothing anywhere explains why. The localhost entry was
+added 2026-09-11; the production entry has not been re-verified since.
 
 ## 5. Portfolio brief — sections 7, 8, 9
 
@@ -223,11 +258,13 @@ rather than discovered one blocker at a time:
   cleanup. `20260904232200_create_ai_intake_schema.sql` also creates the
   `pgcrypto` extension and an `intake-uploads` storage bucket; both would
   need consideration.
-- **`BUSINESS_TIME_ZONE` is `America/New_York` with a 17:00 cutoff**, inferred
-  from Lake City, FL and never confirmed. Both are single constants in
-  `app/lib/businessDays.ts`. They decide the reply date a client is promised on
-  `/quote/received`, so a wrong guess here is a promise you did not mean to
-  make.
+- **`BUSINESS_TIME_ZONE` is `America/Chicago` with a 17:00 cutoff.** Both
+  confirmed 2026-09-12 and settled — not open questions. The zone had been
+  `America/New_York`, inferred from a misreading of the *client* project "Lake
+  City Self Storage"; League City, TX is correct. The 17:00 cutoff is correct
+  as written. Both are single constants in `app/lib/businessDays.ts` and both
+  decide a date the site promises a client in writing on `/quote/received`, so
+  neither should be changed casually.
 - **The binder headline "The work, up close." stays.** Confirmed 2026-09-12 —
   shipping it rather than holding the section for a rewrite.
 - **`AGENTS.md` / `CLAUDE.md` stay committed.** Confirmed 2026-09-12. They are

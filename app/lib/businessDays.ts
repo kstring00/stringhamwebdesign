@@ -8,17 +8,29 @@
  *
  * All arithmetic happens on civil dates (plain year/month/day) held in UTC
  * Date objects. Nothing is ever converted back to a local timestamp, so there
- * is no DST edge to get wrong — 1 March in New York is 1 March whatever the
+ * is no DST edge to get wrong — 1 March in Houston is 1 March whatever the
  * offset happens to be that week.
  */
 
-/** The business runs on Eastern time. One constant, one place to change it. */
-export const BUSINESS_TIME_ZONE = "America/New_York";
+/**
+ * The business runs on Central time — League City, TX. One constant, one place
+ * to change it.
+ *
+ * This decides a date the site promises a client in writing, so it is not a
+ * display preference. Changing it moves the boundary in real terms: the same
+ * submission instant can land on a different business day, which is why
+ * `businessDays.check.ts` pins the cutoff to explicit UTC instants rather than
+ * to a wall-clock hour.
+ */
+export const BUSINESS_TIME_ZONE = "America/Chicago";
 
 /**
- * Submissions at or after this hour (Eastern) are treated as arriving the
+ * Submissions at or after this hour (Central) are treated as arriving the
  * next business day. Evening and weekend submissions therefore get an honest
  * date rather than one that assumes work happens at 11pm.
+ *
+ * Confirmed 2026-09-12. Like the timezone above, this is a promise and not a
+ * preference: moving it moves which business day a real submission lands on.
  */
 export const BUSINESS_DAY_END_HOUR = 17;
 

@@ -272,8 +272,11 @@ only because a real run exposed what the stub could not.
    referents. The three Supabase tables were **kept** —
    `public.prospects.intake_id` has a foreign key to `public.intakes`. See
    `docs/OPEN_WORK.md` §6.
-2. **`BUSINESS_TIME_ZONE` is `America/New_York`** with a 17:00 cutoff, inferred
-   from Lake City, FL. Both are single constants in `app/lib/businessDays.ts`.
+2. ~~**`BUSINESS_TIME_ZONE` is `America/New_York`**~~ Resolved 2026-09-12:
+   `America/Chicago`. The Eastern value came from misreading the client project
+   "Lake City Self Storage" as Kyle's own location — `app/about/page.tsx`
+   already said League City, Texas. The 17:00 cutoff was confirmed correct the
+   same day.
 3. ~~The binder headline **"The work, up close."** is a placeholder.~~ Resolved
    2026-09-12: it stays as written.
 4. ~~Do the `AGENTS.md` / `CLAUDE.md` generated files stay committed?~~ Resolved
