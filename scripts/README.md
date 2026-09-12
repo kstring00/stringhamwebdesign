@@ -131,6 +131,29 @@ mail endpoint on a live server would be a way to redirect client mail.
 Stub endpoints used by these: `/__mail`, `/__mail_reset`, `/__messages`,
 `/__reset`, and `/__role?admin|client`.
 
+## Sitewide motion
+
+`app/SiteMotion.tsx` is mounted once in the root layout and re-runs on every
+route. Pages opt in with data attributes (`data-hero`, `data-reveal-group`,
+`data-reveal`, `data-rule`, `data-parallax`) — nothing imports it. Every tween
+is `from`-based, so the markup is authored finished and reduced motion is an
+instant final state.
+
+```bash
+node scripts/site-motion-check.js   # every route, 1440 and 375: reduced motion renders
+                                    # finished with nothing hidden; with motion on, the
+                                    # hero entrance completes and every reveal completes
+                                    # after scrolling through; no page errors, no overflow
+```
+
+Requires `playwright` (and `pngjs` for the pricing pixel sampler). Neither is
+a dependency; install both together or `npm install --no-save` prunes
+whichever you left out:
+
+```bash
+npm install --no-save playwright pngjs
+```
+
 ## /pricing
 
 Two checks, both against a plain `npm run dev` on port 3000 — no stub needed,
@@ -144,9 +167,8 @@ node scripts/pricing-check.js            # title/meta/H1, nav order, "from $X" o
 node scripts/pricing-contrast-check.js   # every text style vs its real backdrop
 ```
 
-The contrast check uses computed styles rather than the rendered-pixel method
-the portal check uses. That is a deliberate shortcut, not a lapse: /pricing has
-only flat opaque backgrounds — no photographs, gradients or overlays — so the
-computed background of the nearest painted ancestor is the rendered pixel. If
-that ever stops being true (a photo band, a gradient wash), switch to the
-portal method.
+`pricing-contrast-check.js` uses computed styles, which is exact for the flat
+sections. The FAQ glass and the close band sit over photographs, where a
+computed background says nothing — so `pricing-check.js` measures those the
+README way: blank the text, screenshot with the fixed masthead hidden, sample
+every pixel under each glyph box, and compare the worst one.

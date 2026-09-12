@@ -12,19 +12,22 @@ the real thing lands.
 
 ## 1. Photographs — `/pricing`
 
-Three image slots, each currently a solid warm block with a small typographic
-mark so the composition holds. Replace by dropping a file into `/public` and
-pointing the slot at it; the placeholder markup is in `app/pricing/page.tsx`,
-each one commented "Image slot".
+Two of the three slots are filled as of 2026-09-12. Sources were uploaded to
+the repo root and are kept in history at `d856b4d`; the tree carries only the
+sized WebPs under `/public/pricing/`.
 
-| Slot | Today | Wants | Size |
-|---|---|---|---|
-| Hero, right of the headline | cream block, gold disc, navy card reading "Ideas / Brands / Websites / that last" | a still life: laptop, desk, something warm and physical | **1400 × 1120** (5:4) at 2×; crops to 16:9 under 64rem |
-| FAQ, left of the questions | cream block with the caption "Good websites create opportunity." | landscape or a working space, calm, cool tones to sit against the cream | **1000 × 1250** (4:5) at 2×; crops to 16:9 under 64rem |
-| Close, right of the CTA on navy | dark navy block with the caption "Same discipline. Different mountains." | dark, textural — marble, stone, night — must stay dark for the cream text beside it | **1200 × 900** (4:3) at 2×; crops to 16:9 under 64rem |
+| Slot | Today | Wants |
+|---|---|---|
+| **FAQ** | `faq-thinker.webp` (1482 × 1061, 193 KB) + a 900w variant. The dissolving Thinker, behind glass panels. | Done. A higher-resolution source would let the desktop crop breathe at very wide viewports; not urgent. |
+| **Close** | `close-forest.webp` (2000 × 1333, 412 KB) + a 1200w variant. The foggy valley, full bleed, scrimmed on the left. | Done. |
+| **Hero, right of the headline** | cream block, gold disc, navy card reading "Ideas / Brands / Websites / that last" | Still open: a still life — laptop, desk, something warm and physical. **1400 × 1120** (5:4) at 2×; crops to 16:9 under 64rem. |
 
-Compress before committing: WebP, quality 80, under 250 KB each. The work
-pages already ship WebP for this reason (`/public/work/**`).
+Compress before committing: WebP, quality ~80, under 450 KB for full-bleed
+and under 250 KB otherwise. `sharp` ships with Next, so from the repo root:
+
+```bash
+node -e "require('sharp')('source.jpg').resize({width:2000}).webp({quality:80}).toFile('public/pricing/name.webp')"
+```
 
 Optional, from the design reference: a handwritten "Build Something
 Meaningful" script mark beside the packages heading. Needs a script typeface

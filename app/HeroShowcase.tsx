@@ -22,18 +22,18 @@ export default function HeroShowcase() {
       <div className={styles.inner}>
         <div className={styles.heroMain}>
           <div className={styles.copy}>
-            <p className={styles.entrySignal}>01 / ENTRY SIGNAL</p>
-            <p className={styles.eyebrow}>
+            <p className={styles.entrySignal} data-hero>01 / ENTRY SIGNAL</p>
+            <p className={styles.eyebrow} data-hero>
               Websites for storage, ABA, and small business
             </p>
 
-            <h1>
+            <h1 data-hero>
               Websites built
               <br />
               around <em>your business.</em>
             </h1>
 
-            <p className={styles.lede}>
+            <p className={styles.lede} data-hero>
               I design and build custom websites for storage facilities, ABA and
               counseling practices, course creators, and other small businesses —
               built around how your business actually works, not a template with
@@ -42,16 +42,16 @@ export default function HeroShowcase() {
 
             {/* The one price on the homepage: under the paragraph where the
                 "can I afford this?" doubt forms, and nowhere else. */}
-            <p className={styles.anchor}>
+            <p className={styles.anchor} data-hero>
               {startingLine}{" "}
               <a href="/pricing">
                 See the range <span aria-hidden="true">→</span>
               </a>
             </p>
 
-            <span className={styles.goldRule} aria-hidden="true" />
+            <span className={styles.goldRule} aria-hidden="true" data-hero data-rule />
 
-            <div className={styles.actions}>
+            <div className={styles.actions} data-hero>
               <a className={styles.primary} href="/work">
                 See the work <Arrow />
               </a>
@@ -61,13 +61,13 @@ export default function HeroShowcase() {
             </div>
           </div>
 
-          <div className={styles.gridVisual}>
+          <div className={styles.gridVisual} data-hero="media">
             <HeroTileGrid />
             <p className={styles.gridCaption}>SIGNAL / SYSTEM / INTERFACE</p>
           </div>
         </div>
 
-        <div className={styles.highlights} aria-label="What you can expect">
+        <div className={styles.highlights} aria-label="What you can expect" data-reveal-group>
           {highlights.map(([title, text]) => (
             <div className={styles.highlight} key={title}>
               <strong>{title}</strong>

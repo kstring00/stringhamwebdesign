@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 
 import Header from "../../Header";
 import SiteFooter from "../../SiteFooter";
-import SiteMotion from "../../SiteMotion";
 import { getProjectBySlug, projects } from "../../data/projects";
 import { StatusBadge } from "../ProjectUI";
 import detailStyles from "../CaseStudyCompact.module.css";
@@ -57,7 +56,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </Link>
 
             <div className={detailStyles.railIdentity}>
-              <h1>{project.title}</h1>
+              <h1 data-hero>{project.title}</h1>
               <StatusBadge status={project.status} />
             </div>
 
@@ -92,7 +91,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             ) : null}
           </aside>
 
-          <article className={detailStyles.projectContent}>
+          <article className={detailStyles.projectContent} data-reveal-group>
             <figure className={detailStyles.heroFigure}>
               <img
                 src={heroScreenshot.src || project.heroImage}
@@ -162,7 +161,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </nav>
       </main>
       <SiteFooter />
-      <SiteMotion />
     </>
   );
 }

@@ -83,11 +83,61 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
       const sctx = await b.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, reducedMotion: 'reduce' });
       const sp = await sctx.newPage();
       await sp.goto('http://localhost:3000/pricing', { waitUntil: 'networkidle' });
+      // Lazy images below the fold have not decoded at networkidle; scroll
+      // through so they request, then wait for every one before capturing.
+      await sp.evaluate(async () => { const h = document.documentElement.scrollHeight; for (let y = 0; y <= h; y += 400) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 40)); } window.scrollTo(0, 0); });
+      await sp.evaluate(() => Promise.all([...document.images].map(i => i.complete ? Promise.resolve() : new Promise(r => { i.onload = i.onerror = r; }))));
       await sp.waitForTimeout(400);
       await sp.screenshot({ path: `${OUT}/pricing-${name}.png`, fullPage: true });
       console.log(`saved pricing-${name}.png`);
       await sctx.close();
     }
+  }
+
+  // Photographs: both must actually load, and both are decorative (alt="").
+  {
+    const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+    const p = await ctx.newPage();
+    await p.goto('http://localhost:3000/pricing', { waitUntil: 'networkidle' });
+    await p.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await p.waitForTimeout(900);
+    const imgs = await p.$$eval('img[src^="/pricing/"]', els => els.map(e => ({ src: e.getAttribute('src'), alt: e.getAttribute('alt'), w: e.naturalWidth, complete: e.complete })));
+    ok('both photographs load', imgs.length === 2 && imgs.every(i => i.complete && i.w > 0), JSON.stringify(imgs));
+    ok('photographs are decorative (empty alt, in aria-hidden scenes)', imgs.every(i => i.alt === ''), JSON.stringify(imgs.map(i => i.alt)));
+
+    // Rendered-pixel contrast under the glass and on the valley, the README
+    // method: blank the text, screenshot, sample the pixels under each glyph
+    // box, compare the worst backdrop against the text colour. Computed
+    // backgrounds cannot answer this — a photograph is behind both.
+    const lum = ([r, g, bb]) => { const f = c => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(bb); };
+    const ratio = (a, c) => { const [x, y] = [lum(a), lum(c)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
+    const targets = await p.$$eval('#questions h3 button > span:first-child, [aria-labelledby="close-title"] p:not([aria-hidden])', els => els.map(e => {
+      const cs = getComputedStyle(e); const m = cs.color.match(/[\d.]+/g).map(Number);
+      const boxes = []; const range = document.createRange(); range.selectNodeContents(e);
+      for (const r of range.getClientRects()) if (r.width > 4 && r.height > 4) boxes.push([r.left + window.scrollX, r.top + window.scrollY, r.width, r.height]);
+      e.style.color = 'transparent';
+      return { text: e.textContent.trim().slice(0, 28), color: m.slice(0, 3), size: parseFloat(cs.fontSize), boxes };
+    }));
+    // The fixed masthead is not content; in a full-page capture it sits over
+    // whatever is at the scroll position and would be sampled as backdrop.
+    await p.addStyleTag({ content: 'header { visibility: hidden !important; }' });
+    const png = require('fs').readFileSync((await (async () => { const f = `${OUT}/.contrast-sample.png`; await p.screenshot({ path: f, fullPage: true }); return f; })()));
+    const { PNG } = require('pngjs');
+    const img = PNG.sync.read(png);
+    let worstLine = '';
+    for (const t of targets) {
+      let worst = Infinity, worstPx = null;
+      for (const [x, y, w, h] of t.boxes) {
+        for (let yy = Math.floor(y); yy < y + h; yy += 2) for (let xx = Math.floor(x); xx < x + w; xx += 2) {
+          if (xx < 0 || yy < 0 || xx >= img.width || yy >= img.height) continue;
+          const i = (yy * img.width + xx) * 4; const px = [img.data[i], img.data[i + 1], img.data[i + 2]];
+          const r = ratio(t.color, px); if (r < worst) { worst = r; worstPx = px; }
+        }
+      }
+      const need = t.size >= 24 ? 3 : 4.5;
+      ok(`rendered contrast ≥ ${need} for "${t.text}"`, worst >= need, `${worst.toFixed(2)}:1 worst pixel rgb(${worstPx})`);
+    }
+    await ctx.close();
   }
 
   // Reduced motion: the page must render finished with no animation pass at
@@ -105,10 +155,10 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
   }
 
   // Homepage anchor line
-  const ctx = await b.newContext({ viewport: { width: 1440, height: 900 } });
+  const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
   const p = await ctx.newPage();
   await p.goto('http://localhost:3000/', { waitUntil: 'networkidle' });
-  const anchor = await p.evaluate(() => { const a = document.querySelector('p > a[href="/pricing"]'); return a ? a.closest('p')?.innerText.trim() : null; });
+  const anchor = await p.evaluate(() => { const a = document.querySelector('p > a[href="/pricing"]'); return a ? a.closest('p')?.textContent.replace(/\s+/g, ' ').trim() : null; });
   ok('homepage anchor line present and links to /pricing', /Projects start at \$900\./.test(anchor || ''), anchor);
   await p.locator('main, body').first();
   await p.screenshot({ path: `${OUT}/home-anchor.png`, clip: { x: 0, y: 0, width: 1440, height: 900 } });

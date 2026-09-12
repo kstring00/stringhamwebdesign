@@ -17,14 +17,14 @@ export default function AboutPage() {
       <main className={styles.page}>
         <section className={styles.hero} aria-labelledby="about-title">
           <div className={styles.heroCopy}>
-            <p className={styles.eyebrow}>About</p>
-            <h1 id="about-title">I build the thing I wish more small businesses had.</h1>
-            <p className={styles.meta}>
+            <p className={styles.eyebrow} data-hero>About</p>
+            <h1 id="about-title" data-hero>I build the thing I wish more small businesses had.</h1>
+            <p className={styles.meta} data-hero>
               Kyle Stringham — Web Design &amp; Development · League City, Texas
             </p>
           </div>
 
-          <figure className={styles.portrait}>
+          <figure className={styles.portrait} data-hero="media">
             <img
               src="https://raw.githubusercontent.com/kstring00/stringhamwebdesign/62150537aa73260bb47bb7799f12d3ea3485f811/IMG_0157.jpg"
               alt="Portrait of Kyle Stringham"
@@ -36,7 +36,7 @@ export default function AboutPage() {
         </section>
 
         <article className={styles.story}>
-          <div className={styles.prose}>
+          <div className={styles.prose} data-reveal-group>
             <p>
               I work in ABA. I spend my days around behavior analysts, therapists, and the
               families they serve — which is how this started.
@@ -59,7 +59,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <section className={styles.section} aria-labelledby="why-title">
+          <section className={styles.section} aria-labelledby="why-title" data-reveal-group>
             <h2 id="why-title">Why I do this</h2>
             <div className={styles.prose}>
               <p>
@@ -77,7 +77,7 @@ export default function AboutPage() {
             </div>
           </section>
 
-          <section className={styles.section} aria-labelledby="how-title">
+          <section className={styles.section} aria-labelledby="how-title" data-reveal-group>
             <h2 id="how-title">How I work</h2>
             <div className={styles.prose}>
               <p className={styles.pillar}>
@@ -97,7 +97,7 @@ export default function AboutPage() {
             </div>
           </section>
 
-          <footer className={styles.closing}>
+          <footer className={styles.closing} data-reveal-group>
             <p>
               God&apos;s the reason I do this. The care I try to put into the work comes from
               there.

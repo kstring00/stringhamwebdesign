@@ -20,15 +20,15 @@ export default function QuotePage() {
       <main className={styles.page}>
         <div className={styles.grid}>
           <div className={styles.intro}>
-            <p className={styles.eyebrow}>Project intake</p>
-            <h1>Tell me what you&apos;re building.</h1>
-            <p className={styles.lede}>
+            <p className={styles.eyebrow} data-hero>Project intake</p>
+            <h1 data-hero>Tell me what you&apos;re building.</h1>
+            <p className={styles.lede} data-hero>
               Seven questions, one at a time. About five minutes. You don&apos;t
               need to know what you want built — that&apos;s my job. You just
               need to know what&apos;s not working now.
             </p>
 
-            <dl className={styles.facts}>
+            <dl className={styles.facts} data-reveal-group>
               <div>
                 <dt>Reply</dt>
                 <dd>Within one business day, with a link to book a call.</dd>
@@ -44,7 +44,9 @@ export default function QuotePage() {
             </dl>
           </div>
 
-          <QuoteForm />
+          <div data-hero="media">
+            <QuoteForm />
+          </div>
         </div>
       </main>
 
