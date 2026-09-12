@@ -1,0 +1,539 @@
+/* /resources
+   Same ground, ink and gold as /pricing, declared the same way, so the section
+   reads as part of the site rather than a docs theme bolted onto it. */
+
+.page {
+  --ground: #f5f0e8;
+  --paper: #fbf9f5;
+  --ink: #0d1b26;
+  --muted: #4f6474;
+  --gold: #a9833d;
+  --gold-rule: #c9a227;
+  --gold-ink: #6f5620;
+  --navy: #102f4c;
+  --navy-deep: #0d1b26;
+  --ink-soft: #17344d;
+  --gold-on-dark: #e2c58a;
+  --hair-gold: rgba(201, 162, 39, 0.34);
+  --hair-navy: rgba(38, 66, 89, 0.16);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  min-height: 100svh;
+  background: var(--ground);
+  color: var(--ink);
+}
+
+.inner {
+  width: min(100%, 78rem);
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+/* The small mono signal the pricing page numbers its sections with. */
+.signal {
+  margin: 0 0 1rem;
+  color: rgba(13, 27, 38, 0.68);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.rule {
+  width: 100%;
+  height: 1px;
+  margin: clamp(1.6rem, 3vw, 2.4rem) 0 0;
+  border: 0;
+  background: var(--hair-gold);
+}
+
+/* ---------- index ---------- */
+
+.hero {
+  padding-top: clamp(7.5rem, 10vw, 9.5rem);
+  padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: end;
+}
+
+.heroCopy {
+  max-width: 40rem;
+}
+
+.hero h1,
+.doc h1 {
+  max-width: 14ch;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(2.9rem, 5.4vw, 5.2rem);
+  font-weight: 300;
+  letter-spacing: -0.05em;
+  line-height: 0.94;
+}
+
+.hero h1 em {
+  color: #a17b3d;
+  font-style: italic;
+  font-weight: 300;
+}
+
+.lede {
+  max-width: 36rem;
+  margin: clamp(1.3rem, 2vw, 1.7rem) 0 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.25vw, 1.12rem);
+  line-height: 1.72;
+}
+
+/* The row under the pricing hero, values copied from pricing.module.css. */
+.heroTrust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.1rem clamp(1.5rem, 3vw, 2.5rem);
+  margin: 0;
+  padding: clamp(1.25rem, 2vw, 1.6rem) 0 0;
+  border-top: 1px solid var(--hair-navy);
+  list-style: none;
+}
+
+.heroTrust li {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.heroTrust strong,
+.heroTrust small {
+  display: block;
+  line-height: 1.3;
+}
+
+.heroTrust strong {
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.heroTrust small {
+  margin-top: 0.15rem;
+  color: var(--muted);
+  font-size: 0.66rem;
+}
+
+.trustIcon {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  color: var(--gold);
+}
+
+.index {
+  padding-top: clamp(1rem, 2vw, 1.5rem);
+  padding-bottom: clamp(4rem, 7vw, 6.5rem);
+}
+
+/* One lead card across the top, then two by two, all rows stretched so the
+   READ line sits at the same height across a row. */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  min-width: 0;
+}
+
+.card:first-child {
+  grid-column: 1 / -1;
+}
+
+/* The whole card is the link: one focusable element, nothing nested. Hover
+   and focus are the same state — a gold hairline, a 2px lift, the arrow
+   slides — and reduced motion keeps the colour and drops the movement. */
+.cardLink {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 44px;
+  padding: clamp(1.4rem, 2.4vw, 2rem) clamp(1.2rem, 2.2vw, 1.8rem);
+  background: var(--paper);
+  border: 1px solid var(--hair-navy);
+  border-radius: 14px;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 150ms ease-out, border-color 150ms ease-out;
+}
+
+.cardLink:hover,
+.cardLink:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--gold);
+  outline: none;
+}
+
+.cardLink:focus-visible {
+  box-shadow: 0 0 0 3px rgba(169, 131, 61, 0.28);
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.cardIcon {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  color: var(--gold);
+}
+
+.cardSignal {
+  color: var(--gold-ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.cardBody,
+.featuredCopy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.cardTitle {
+  color: var(--ink);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+/* The opening paragraph of the document, clamped to two lines so every card
+   sits at the same rhythm whatever the paragraph's length. */
+.cardSummary {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+/* Pushed to the bottom, so it lines up across a row of unequal titles. */
+.cardMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 0.9rem;
+}
+
+.cardRead {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--gold-ink);
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.2em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.cardRead svg {
+  transition: transform 150ms ease-out;
+}
+
+.cardLink:hover .cardRead svg,
+.cardLink:focus-visible .cardRead svg {
+  transform: translateX(4px);
+}
+
+.cardTime {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+/* ---- the featured card: /pricing's "Most popular" treatment ---- */
+
+.cardFeatured .cardLink {
+  background: var(--navy-deep);
+  border-color: rgba(226, 197, 138, 0.28);
+  color: #f5f0e8;
+  box-shadow: 0 36px 60px -34px rgba(5, 23, 47, 0.65);
+}
+
+.cardFeatured .cardLink:hover,
+.cardFeatured .cardLink:focus-visible {
+  border-color: var(--gold-on-dark);
+}
+
+.cardBadge {
+  margin: 0 0 1.2rem;
+  color: var(--gold-on-dark);
+  font-size: 0.6rem;
+  font-weight: 750;
+  letter-spacing: 0.22em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.cardFeatured .cardSignal,
+.cardFeatured .cardRead {
+  color: var(--gold-on-dark);
+}
+
+.cardFeatured .cardTitle {
+  color: #f5f0e8;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+}
+
+.cardFeatured .cardSummary,
+.cardFeatured .cardTime {
+  color: rgba(245, 240, 232, 0.72);
+}
+
+.featuredGrid {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: center;
+}
+
+/* The pricing hero's progress strip, held still. Same tracks, same fills,
+   same labels; nothing animates. */
+.strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.stripPhase {
+  min-width: 0;
+}
+
+.stripTrack {
+  display: block;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(226, 197, 138, 0.22);
+  overflow: hidden;
+}
+
+.stripFill {
+  display: block;
+  height: 100%;
+  background: var(--gold-rule);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+.stripPhase[data-state="done"] .stripFill {
+  transform: scaleX(1);
+}
+
+.stripPhase[data-state="active"] .stripFill {
+  transform: scaleX(0.45);
+}
+
+.stripName {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.stripPhase[data-state="done"] .stripName,
+.stripPhase[data-state="active"] .stripName {
+  color: var(--gold-on-dark);
+}
+
+.stripPhase[data-state="idle"] .stripName {
+  color: #93a3ae;
+}
+
+.stripCheck {
+  flex: none;
+  color: var(--gold-rule);
+}
+
+/* ---------- document ---------- */
+
+.docHead {
+  padding-top: clamp(7rem, 9.5vw, 9rem);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  margin-bottom: clamp(1.2rem, 2vw, 1.8rem);
+  color: var(--gold-ink);
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.2em;
+  line-height: 1.2;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.back:hover .backArrow {
+  transform: translateX(-3px);
+}
+
+.back:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.backArrow {
+  display: inline-flex;
+  transform: scaleX(-1);
+  transition: transform 200ms var(--ease);
+}
+
+.back:hover .backArrow {
+  transform: scaleX(-1) translateX(3px);
+}
+
+.doc h1 {
+  max-width: 16ch;
+}
+
+.docMeta {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* Long-form width. 68ch of the body face at this size is about 42rem. */
+.prose {
+  max-width: 42rem;
+  padding-top: clamp(2rem, 3.5vw, 3rem);
+}
+
+.docFoot {
+  padding-bottom: clamp(4rem, 7vw, 6.5rem);
+}
+
+.docFoot .rule {
+  max-width: 42rem;
+  margin-top: clamp(2.5rem, 4vw, 3.5rem);
+}
+
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem 2rem;
+  max-width: 42rem;
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+.ctaLine {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 48rem) {
+  /* The reassurance row stacks under the intro. */
+  .heroGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .heroTrust {
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .cardFeatured .cardTitle {
+    font-size: clamp(1.6rem, 6vw, 2rem);
+  }
+
+  /* The strip drops below the copy. Four tracks fit 360px because the labels
+     are 9.6px and the gap is small; measured, not assumed. */
+  .featuredGrid {
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+  }
+
+  .strip {
+    gap: 0.5rem;
+  }
+
+  .stripName {
+    gap: 0.2rem;
+    font-size: 0.5rem;
+    letter-spacing: 0.06em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cardLink,
+  .cardRead svg {
+    transition: none;
+  }
+
+  .cardLink:hover,
+  .cardLink:focus-visible {
+    transform: none;
+  }
+
+  .cardLink:hover .cardRead svg,
+  .cardLink:focus-visible .cardRead svg {
+    transform: none;
+  }
+}

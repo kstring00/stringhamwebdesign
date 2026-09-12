@@ -143,6 +143,7 @@ export default function PortalPreview() {
     if (still) return;
     setIndex((i) => (i + 1) % SLIDES.length);
   };
+  const go = (delta: number) => setIndex((i) => (i + delta + SLIDES.length) % SLIDES.length);
 
   const active = SLIDES[index].phase;
   const halted = paused || !visible;
@@ -176,17 +177,20 @@ export default function PortalPreview() {
           <p className={styles.portalProject}>Harbor Dental — Standard build</p>
         </div>
 
-        {/* The strip is illustration: its state rotates, so announcing it would
-            describe a project that does not exist. The phase names themselves
-            are read as real text in section 04. */}
-        <ol className={styles.portalPhases} aria-hidden="true">
+        {/* The strip is both illustration and control. Each phase name is a
+            real button that jumps to its screen, so it is not hidden from
+            assistive technology: a screen-reader user gets the same four
+            direct jumps a mouse user does. The bars and checks stay
+            decorative; the rotating state is carried only by aria-current,
+            which describes which screen is showing, not a real project. */}
+        <ol className={styles.portalPhases} aria-label="Portal screens">
           {phases.map((phase, i) => (
             <li
               className={styles.portalPhase}
               key={phase.name}
               data-state={i < active ? "done" : i === active ? "active" : "idle"}
             >
-              <span className={styles.portalTrack}>
+              <span className={styles.portalTrack} aria-hidden="true">
                 {/* Done: full. Idle: empty. Active: sweeps over --hold, and its
                     end is what moves the sequence on. Only the active bar
                     animates, so only it can fire this. */}
@@ -195,10 +199,16 @@ export default function PortalPreview() {
                   onAnimationEnd={i === active ? advance : undefined}
                 />
               </span>
-              <span className={styles.portalPhaseName}>
+              <button
+                type="button"
+                className={styles.portalPhaseName}
+                onClick={() => setIndex(SLIDES.findIndex((slide) => slide.phase === i))}
+                aria-label={`Show ${phase.name} screen`}
+                aria-current={i === active ? "true" : undefined}
+              >
                 {phase.name}
                 {i < active ? <Check className={styles.portalCheck} /> : null}
-              </span>
+              </button>
             </li>
           ))}
         </ol>
@@ -253,6 +263,25 @@ export default function PortalPreview() {
               )}
             </div>
           ))}
+        </div>
+
+        {/* Real controls, outside the hidden stage. The labels say what the
+            buttons do rather than where they go, since the slides themselves
+            are not announced. */}
+        <div className={styles.portalNav}>
+          <span className={styles.portalNavCount} aria-hidden="true">
+            {index + 1} / {SLIDES.length}
+          </span>
+          <button type="button" className={styles.portalNavButton} onClick={() => go(-1)} aria-label="Previous screen">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M10 3L5 8l5 5" />
+            </svg>
+          </button>
+          <button type="button" className={styles.portalNavButton} onClick={() => go(1)} aria-label="Next screen">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M6 3l5 5-5 5" />
+            </svg>
+          </button>
         </div>
       </div>
 

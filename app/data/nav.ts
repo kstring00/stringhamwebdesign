@@ -20,6 +20,7 @@ export const siteNav: NavItem[] = [
   { label: "Home", href: "/", inHeader: true },
   { label: "About", href: "/about", inHeader: true },
   { label: "Portfolio", href: "/work", inHeader: true },
+  { label: "Resources", href: "/resources", inHeader: true },
   { label: "Pricing", href: "/pricing", inHeader: true },
 ];
 

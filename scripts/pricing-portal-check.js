@@ -111,7 +111,27 @@ const readSlides = () => ({
     ok('a quarter of the way in, the bar is about a quarter full', q1 > 0.15 && q1 < 0.4, q1.toFixed(2));
     ok('three quarters in, about three quarters full', q3 > 0.6 && q3 < 0.9, q3.toFixed(2));
     ok('and it only climbs', q3 > q1, `${q1.toFixed(2)} → ${q3.toFixed(2)}`);
-    ok('no carousel arrows or dots', await p.locator('[data-hero="media"] button').count() === 0);
+    // Previous / next live outside the hidden stage, are labelled by what they
+    // do, and actually move the sequence. Jumping restarts that slide's bar.
+    const nav = await p.evaluate(() => {
+      const btns = [...document.querySelectorAll('[data-hero="media"] button[aria-label$=" screen"]')].filter(b => /^(Previous|Next) screen$/.test(b.getAttribute('aria-label')));
+      return btns.map(b => ({ label: b.getAttribute('aria-label'), h: Math.round(b.getBoundingClientRect().height), w: Math.round(b.getBoundingClientRect().width), hidden: !!b.closest('[aria-hidden="true"]') }));
+    });
+    ok('two labelled navigation buttons', nav.length === 2 && nav.every(b => /previous|next/i.test(b.label)), JSON.stringify(nav.map(b => b.label)));
+    ok('they are outside the aria-hidden stage', nav.every(b => !b.hidden));
+    ok('they are 44px tap targets', nav.every(b => b.h >= 44 && b.w >= 44), JSON.stringify(nav.map(b => [b.w, b.h])));
+    const before = (await p.evaluate(readSlides)).activeIndex;
+    await p.click('[data-hero="media"] button[aria-label="Next screen"]');
+    const afterNext = (await p.evaluate(readSlides)).activeIndex;
+    ok('Next advances one slide', afterNext === (before + 1) % 4, `${before} → ${afterNext}`);
+    await p.click('[data-hero="media"] button[aria-label="Previous screen"]');
+    const afterPrev = (await p.evaluate(readSlides)).activeIndex;
+    ok('Previous goes back one', afterPrev === before, `${afterNext} → ${afterPrev}`);
+    // Clicking a phase name jumps straight to its slide.
+    await p.click('[class*="portalPhaseName"]:has-text("Launch")');
+    ok('a phase name jumps to its slide', (await p.evaluate(readSlides)).activeIndex === 3);
+    await p.mouse.move(0, 0);
+    ok('the panel behind the card is gone', await p.evaluate(() => getComputedStyle(document.querySelector('[data-hero="media"]')).backgroundImage === 'none'));
 
     // Rotation, and the phase strip tracking it.
     const start = s.activeIndex;
@@ -152,12 +172,29 @@ const readSlides = () => ({
     // nothing to focus. The handler stays on the card as a guard in case
     // anything interactive is ever added.
     const focusable = await p.evaluate(() => {
-      const card = document.querySelector('[class*="portalStage"]').closest('div');
+      const card = document.querySelector('[data-hero="media"] > div');
       return [...card.querySelectorAll('a, button, input, select, textarea, [tabindex]')]
         .filter(e => e.getAttribute('tabindex') !== '-1')
         .map(e => e.tagName);
     });
-    ok('nothing in the card can take keyboard focus', focusable.length === 0, JSON.stringify(focusable));
+    ok('six buttons take keyboard focus: four phase jumps and previous/next', focusable.length === 6 && focusable.every(t => t === 'BUTTON'), JSON.stringify(focusable));
+    // The phase jumps must be real controls: labelled, outside any hidden
+    // subtree, in the tab order, one marked current.
+    const jumps = await p.evaluate(() => [...document.querySelectorAll('[class*="portalPhaseName"]')].map(b => ({
+      label: b.getAttribute('aria-label'), hidden: !!b.closest('[aria-hidden="true"]'), tab: b.tabIndex, current: b.getAttribute('aria-current'),
+    })));
+    ok('phase jumps are labelled and not inside aria-hidden', jumps.length === 4 && jumps.every(j => /^Show .+ screen$/.test(j.label) && !j.hidden && j.tab === 0), JSON.stringify(jumps));
+    ok('exactly one phase jump is aria-current', jumps.filter(j => j.current === 'true').length === 1, JSON.stringify(jumps.map(j => j.current)));
+    await p.keyboard.press('Tab'); // from the page start, Tab should reach a phase jump before previous/next
+    
+    // Tab into one of them from the page and the rotation must hold.
+    await p.focus('[data-hero="media"] button[aria-label="Next screen"]');
+    await p.keyboard.press('Shift+Tab'); await p.keyboard.press('Tab'); // real keyboard focus, so :focus-visible applies
+    const k1 = (await p.evaluate(readSlides)).activeIndex;
+    await p.waitForTimeout(5500);
+    const k2 = (await p.evaluate(readSlides)).activeIndex;
+    ok('keyboard focus on a button pauses the rotation', k1 === k2, `${k1} → ${k2}`);
+    await p.evaluate(() => document.activeElement.blur());
 
     // Regression: a plain click must not pause it. The slides used to carry
     // tabIndex -1, so clicking the card focused one, and a click-focused element
@@ -201,7 +238,7 @@ const readSlides = () => ({
     // Force each slide in turn and measure the card and the section below it.
     const heights = await p.evaluate(async () => {
       const slides = [...document.querySelectorAll('[class*="portalSlide"]')];
-      const card = document.querySelector('[class*="portalStage"]').closest('div');
+      const card = document.querySelector('[data-hero="media"] > div');
       const below = document.querySelectorAll('main > section')[1];
       const seen = [];
       for (const s of slides) {
@@ -254,7 +291,7 @@ const readSlides = () => ({
     await p.waitForTimeout(200);
     const info = await p.evaluate(() => {
       const media = document.querySelector('[data-hero="media"]');
-      const card = document.querySelector('[class*="portalStage"]').closest('div');
+      const card = document.querySelector('[data-hero="media"] > div');
       const vis = el => getComputedStyle(el).display !== 'none';
       return {
         docOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
