@@ -50,6 +50,50 @@ const ratio = (a, c) => { const [x, y] = [lum(a), lum(c)].sort((m, n) => n - m);
     ok(`${name}: no horizontal overflow`, info.overflow <= 0, `${info.overflow}px`);
     ok(`${name}: no page errors`, errs.length === 0, JSON.stringify(errs));
 
+    // Stepping between tabs: the fill must travel and the panel must swap, and
+    // both must land — an interrupted tween leaving copy at opacity 0 is the
+    // failure that matters.
+    if (name === 'desktop') {
+      // The homepage has a second tablist (the selected-work binder), so every
+      // selector here is scoped to #process or it drives the wrong component.
+      const fillAt = () => p.$eval('#process [class*="homeFill"]', e => {
+        const m = new DOMMatrixReadOnly(getComputedStyle(e).transform); return Math.round(m.a * 1000) / 1000;
+      });
+      const before = await fillAt();
+      await p.locator('#process [role="tab"]').nth(3).click();
+      await p.waitForTimeout(900);
+      const after = await fillAt();
+      ok('fill travels when a later step is chosen', after > before, `${before} -> ${after}`);
+      const panel = await p.$eval('#process [role="tabpanel"]', e => ({
+        heading: e.querySelector('h3')?.textContent.trim(),
+        hidden: [...e.querySelectorAll('[data-step-part]')].filter(d => { const cs = getComputedStyle(d); return cs.opacity !== '1' || cs.visibility === 'hidden'; }).length,
+        x: [...e.querySelectorAll('[data-step-part]')].map(d => getComputedStyle(d).transform),
+      }));
+      ok('panel swapped to the chosen step', /account/i.test(panel.heading || ''), panel.heading);
+      ok('panel parts settle fully visible', panel.hidden === 0, `${panel.hidden} still hidden`);
+      ok('panel parts settle back to x: 0', panel.x.every(t => t === 'none' || /matrix\(1, 0, 0, 1, 0, 0\)/.test(t)), JSON.stringify(panel.x));
+
+      // Stepping backwards must also land.
+      await p.locator('#process [role="tab"]').nth(1).click();
+      await p.waitForTimeout(900);
+      const back = await fillAt();
+      ok('fill travels back when an earlier step is chosen', back < after, `${after} -> ${back}`);
+      const stillHidden = await p.$$eval('#process [role="tabpanel"] [data-step-part]', els => els.filter(d => getComputedStyle(d).opacity !== '1').length);
+      ok('panel parts settle after stepping backwards', stillHidden === 0, `${stillHidden} hidden`);
+    }
+
+    // Reduced motion: the fill is already at the active step, nothing tweens.
+    {
+      const rctx = await b.newContext({ viewport: { width: w, height: h }, reducedMotion: 'reduce' });
+      const rp = await rctx.newPage();
+      await rp.goto('http://localhost:3000/', { waitUntil: 'networkidle' });
+      await rp.waitForTimeout(300);
+      await rp.locator('#process [role="tab"]').nth(4).click();
+      const immediate = await rp.$eval('#process [role="tabpanel"]', e => [...e.querySelectorAll('[data-step-part]')].every(d => getComputedStyle(d).opacity === '1'));
+      ok(`${name}: reduced motion swaps instantly, nothing at opacity 0`, immediate);
+      await rctx.close();
+    }
+
     const targets = await p.evaluate(() => {
       const sec = document.querySelector('#process');
       return [...sec.querySelectorAll('*')].filter(e => !e.closest('[aria-hidden="true"]') && [...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())).map(e => {
