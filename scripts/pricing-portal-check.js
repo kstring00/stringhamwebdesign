@@ -120,13 +120,30 @@ const readSlides = () => ({
     ok('hover pauses the rotation', held.activeIndex === stillHeld.activeIndex, `${held.activeIndex} → ${stillHeld.activeIndex}`);
     await p.mouse.move(0, 0);
 
-    // Pause on keyboard focus inside the card.
-    await p.evaluate(() => document.querySelector('[class*="portalSlide"][data-active]').focus());
-    const f1 = await p.evaluate(readSlides);
+    // Keyboard focus. The card holds no links, buttons or inputs and the whole
+    // swapping region is aria-hidden, so a keyboard user cannot land inside it
+    // at all — the pause-on-focus requirement is satisfied by there being
+    // nothing to focus. The handler stays on the card as a guard in case
+    // anything interactive is ever added.
+    const focusable = await p.evaluate(() => {
+      const card = document.querySelector('[class*="portalStage"]').closest('div');
+      return [...card.querySelectorAll('a, button, input, select, textarea, [tabindex]')]
+        .filter(e => e.getAttribute('tabindex') !== '-1')
+        .map(e => e.tagName);
+    });
+    ok('nothing in the card can take keyboard focus', focusable.length === 0, JSON.stringify(focusable));
+
+    // Regression: a plain click must not pause it. The slides used to carry
+    // tabIndex -1, so clicking the card focused one, and a click-focused element
+    // does not blur until focus moves elsewhere — the rotation stopped dead
+    // until you clicked somewhere else on the page.
+    await p.click('[class*="portalStage"]');
+    await p.mouse.move(0, 0); // the pointer must leave, or hover pauses it legitimately
+    const c1 = await p.evaluate(readSlides);
     await p.waitForTimeout(6000);
-    const f2 = await p.evaluate(readSlides);
-    ok('focus inside the card pauses the rotation', f1.activeIndex === f2.activeIndex, `${f1.activeIndex} → ${f2.activeIndex}`);
-    await p.evaluate(() => document.activeElement.blur());
+    const c2 = await p.evaluate(readSlides);
+    ok('it resumes after a click once the pointer leaves', c1.activeIndex !== c2.activeIndex, `${c1.activeIndex} → ${c2.activeIndex}`);
+    ok('nothing inside the card is click-focusable', await p.evaluate(() => !document.querySelector('[data-hero="media"]').contains(document.activeElement)));
 
     // Pause when scrolled away.
     await p.evaluate(() => window.scrollTo(0, document.body.scrollHeight));

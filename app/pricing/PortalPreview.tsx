@@ -150,7 +150,16 @@ export default function PortalPreview() {
         data-still={still ? "" : undefined}
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
-        onFocusCapture={() => setPaused(true)}
+        // Keyboard focus only. A mouse click used to land on a slide and pause
+        // the rotation for good, because a click-focused element does not blur
+        // until focus moves somewhere else — so the card sat on one slide until
+        // you clicked elsewhere on the page. :focus-visible is the difference
+        // between someone tabbing in to read and someone tapping the card.
+        onFocusCapture={(event) => {
+          if (event.target instanceof Element && event.target.matches(":focus-visible")) {
+            setPaused(true);
+          }
+        }}
         onBlurCapture={() => setPaused(false)}
       >
         {/* Chrome. Real text, announced: this is the one claim in the card that
@@ -194,9 +203,6 @@ export default function PortalPreview() {
               className={styles.portalSlide}
               key={slide.label}
               data-active={i === index ? "" : undefined}
-              // inert is not in React 18's types for every element, so the
-              // stacked slides are kept out of the tab order the blunt way.
-              tabIndex={-1}
             >
               <p className={styles.portalStageLabel}>{slide.label}</p>
 
