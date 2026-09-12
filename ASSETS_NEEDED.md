@@ -144,3 +144,14 @@ let it take the gold and navy from CSS.
 
 Not an asset, but it gates every notification email. The four DNS records
 are in `docs/OPEN_WORK.md` §3.
+
+## 1c. Hero headshot cutout — `/about`
+
+**Stand-in.** `public/about/headshot.png` (sampled for the particle version)
+and `headshot.webp` (the plain image, 19 KB) are cut from the full-size selfie
+by a colour threshold, not a real background removal: the edge is rough and
+the left of the face sits on the frame edge. Drop the real cutout — transparent
+background, the whole head and shoulders, roughly 600–900px wide — at
+`public/about/headshot.png`, re-export the webp beside it under 120 KB, and the
+page picks both up with no code change.
+

@@ -315,3 +315,18 @@ actually hold at 120px.
     BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/about-body-check.js
 
 `about-check.js` (the hero) now honours BASE as well.
+
+## about-hero-check.js
+
+The /about hero headshot. A plain <img> is the LCP element everywhere, with
+width, height, high priority and descriptive alt; Three is imported only on
+desktop with a fine pointer after the load event and the canvas fades in over
+the image once the first frame renders, in a box that does not change size
+(measured untransformed, since the hero entrance scales the media in); never
+on a phone, never under reduced motion, and a phone requests nothing beyond
+the compressed headshot. Plus one h1, 44px hero links, no overflow at 360px,
+the webp under 120 KB, and no placeholder text.
+
+    BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/about-hero-check.js
+
+Chromium is launched with SwiftShader so WebGL works headless.

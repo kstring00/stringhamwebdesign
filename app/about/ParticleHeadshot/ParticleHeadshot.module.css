@@ -1,0 +1,47 @@
+/* A fixed 4:5 box. The image and the canvas share it exactly, so swapping
+   one for the other moves nothing on the page. */
+.box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  min-width: 0;
+  overflow: visible;
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  transition: opacity 600ms ease;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 600ms ease;
+}
+
+/* Once the first frame has rendered: canvas in, image out, together. */
+.box[data-live] .image {
+  opacity: 0;
+}
+
+.box[data-live] .canvas {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image,
+  .canvas {
+    transition: none;
+  }
+}

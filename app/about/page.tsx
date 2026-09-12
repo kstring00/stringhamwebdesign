@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Header from "../Header";
 import headerStyles from "../Header.module.css";
 import SiteFooter from "../SiteFooter";
+import ParticleHeadshot from "./ParticleHeadshot";
 import styles from "./about.module.css";
 
 export const metadata: Metadata = {
@@ -67,7 +68,7 @@ export default function AboutPage() {
           />
           <span className={styles.heroScrim} aria-hidden="true" />
 
-          <div className={styles.heroInner}>
+          <div className={`${styles.heroInner} ${styles.heroGrid}`}>
             <div className={styles.heroCopy}>
               <p className={styles.eyebrow} data-hero>
                 02 / The person <span className={styles.eyebrowRule} aria-hidden="true" data-rule />
@@ -100,6 +101,12 @@ export default function AboutPage() {
                   </li>
                 ))}
               </ul>
+            </div>
+
+            {/* The headshot. A plain image for everyone; on desktop with a mouse,
+                after load, the particle version fades in over it. */}
+            <div className={styles.heroMedia} data-hero="media">
+              <ParticleHeadshot />
             </div>
           </div>
         </section>
