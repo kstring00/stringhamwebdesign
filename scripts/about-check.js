@@ -36,7 +36,7 @@ async function frameStats(page, seconds) {
     const errs = []; p.on('pageerror', e => errs.push(e.message));
     const cdp = await ctx.newCDPSession(p);
     await cdp.send('Emulation.setCPUThrottlingRate', { rate: throttle });
-    await p.goto('http://localhost:3000/about', { waitUntil: 'networkidle' });
+    await p.goto((process.env.BASE || 'http://localhost:3000') + '/about', { waitUntil: 'networkidle' });
     await p.waitForTimeout(1800); // let the hero entrance finish
     const f = await frameStats(p, 3);
     // 60fps is 16.7ms. p95 under 34ms means at worst an occasional dropped frame.
@@ -61,7 +61,7 @@ async function frameStats(page, seconds) {
   {
     const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
     const p = await ctx.newPage();
-    await p.goto('http://localhost:3000/about', { waitUntil: 'networkidle' });
+    await p.goto((process.env.BASE || 'http://localhost:3000') + '/about', { waitUntil: 'networkidle' });
     await p.waitForTimeout(300);
     const hidden = await p.$$eval('[data-hero], [data-reveal-group] > *', els => els.filter(e => { const cs = getComputedStyle(e); return cs.opacity !== '1' || cs.visibility === 'hidden'; }).length);
     ok('reduced motion: hero and story in final state', hidden === 0, `${hidden} hidden`);
@@ -96,7 +96,7 @@ async function frameStats(page, seconds) {
   for (const [w, h, name] of [[1440, 900, 'desktop'], [375, 812, 'mobile']]) {
     const ctx = await b.newContext({ viewport: { width: w, height: h }, reducedMotion: 'reduce' });
     const p = await ctx.newPage();
-    await p.goto('http://localhost:3000/about', { waitUntil: 'networkidle' });
+    await p.goto((process.env.BASE || 'http://localhost:3000') + '/about', { waitUntil: 'networkidle' });
     await p.evaluate(async () => { const hh = document.documentElement.scrollHeight; for (let y = 0; y <= hh; y += 400) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 40)); } window.scrollTo(0, 0); });
     await p.evaluate(() => Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }))));
     await p.waitForTimeout(400);

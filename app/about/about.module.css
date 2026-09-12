@@ -56,6 +56,33 @@
   max-width: 38rem;
 }
 
+/* From 1024px the copy and the headshot share the hero; below that the
+   headshot sits under the copy at a modest size. */
+.heroGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 24rem);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+
+.heroMedia {
+  min-width: 0;
+  justify-self: end;
+  width: 100%;
+}
+
+@media (max-width: 63.99rem) {
+  .heroGrid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .heroMedia {
+    justify-self: start;
+    max-width: 16rem;
+  }
+}
+
 .eyebrow {
   display: flex;
   align-items: center;
@@ -172,28 +199,50 @@
 
 /* ---------- story ---------- */
 
-.story {
-  width: min(100%, 78rem);
-  margin: 0 auto;
-  padding: clamp(4.5rem, 7vw, 6.5rem) var(--gutter) clamp(5rem, 8vw, 7rem);
-}
+/* ---------- body: a 12-column grid ---------- */
 
-.storyLead {
+.body {
+  --ink: #0d1b26;
+  --ink-soft: #17344d;
+  --muted: #4f6474;
+  --gold: #a9833d;
+  --gold-ink: #6f5620;
+  --gold-rule: #c9a227;
+  --hair-gold: rgba(201, 162, 39, 0.34);
+  --hair-navy: rgba(38, 66, 89, 0.16);
+  /* 96px between sections on desktop, split either side of the rule. */
+  --gap: 3rem;
+  --sticky-top: 120px;
+
   display: grid;
-  grid-template-columns: minmax(0, 68ch) minmax(14rem, 18rem);
-  gap: clamp(2.5rem, 6vw, 6rem);
-  align-items: start;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 1.5rem;
+  width: min(100%, 75rem);
+  margin: 0 auto;
+  padding: clamp(4.5rem, 7vw, 6rem) var(--gutter) calc(var(--gap) * 2);
 }
 
-.storyLead .prose {
-  order: 1;
+/* Columns 10–12, stuck beside the copy for the whole article. */
+.sidebar {
+  position: sticky;
+  top: var(--sticky-top);
+  grid-column: 10 / 13;
+  /* Explicit rows on both the sidebar and the sections, so they may share
+     rows. With "1 / -1" the sidebar took row one alone and auto-placement
+     pushed the first section beneath it. */
+  grid-row: 1 / 6;
+  align-self: start;
+  min-width: 0;
 }
+
+.sec:nth-of-type(1) { grid-row: 1; }
+.sec:nth-of-type(2) { grid-row: 2; }
+.sec:nth-of-type(3) { grid-row: 3; }
+.sec:nth-of-type(4) { grid-row: 4; }
 
 .portrait {
-  order: 2;
   width: 100%;
   margin: 0;
-  justify-self: end;
 }
 
 .portrait img {
@@ -214,20 +263,144 @@
   text-transform: uppercase;
 }
 
-.section h2 {
+.sideRule {
+  height: 1px;
+  margin: 1.4rem 0 0;
+  border: 0;
+  background: var(--hair-gold);
+}
+
+/* The three-item row used under the pricing hero, stacked here. */
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+  margin: 1.3rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.facts li {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.facts strong,
+.facts small {
+  display: block;
+  line-height: 1.3;
+}
+
+.facts strong {
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.facts small {
+  margin-top: 0.15rem;
+  color: var(--muted);
+  font-size: 0.66rem;
+}
+
+.factIcon {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  color: var(--gold);
+}
+
+.sideLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  margin-top: 1rem;
+  color: var(--gold-ink);
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.2em;
+  line-height: 1.2;
+  text-decoration: none;
   text-transform: uppercase;
 }
 
-.prose,
-.section,
-.closing {
-  width: min(100%, 68ch);
+.sideLink svg {
+  transition: transform 150ms ease-out;
 }
 
-.prose p,
-.closing p {
+.sideLink:hover svg {
+  transform: translateX(4px);
+}
+
+.sideLink:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
+/* A section spans all twelve columns with its own matching grid, so the
+   label can live in 1–2 and stick, while the rule and copy start at 3. */
+.sec {
+  grid-column: 1 / 13;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 1.5rem;
+  padding-bottom: var(--gap);
+}
+
+.label {
+  grid-column: 1 / 3;
+  /* Stretched to the section's full height on purpose: the sticky span inside
+     needs that room to travel, or it never sticks. */
+  align-self: stretch;
   margin: 0;
-  color: #4f6474;
+  text-align: right;
+}
+
+.label span {
+  position: sticky;
+  top: var(--sticky-top);
+  display: block;
+  color: var(--gold-ink);
+  font-size: 0.64rem;
+  font-weight: 750;
+  letter-spacing: 0.18em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+/* Columns 3–12: the rule runs the full width; the copy stops at 8. */
+.secBody {
+  grid-column: 3 / 13;
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  column-gap: 1.5rem;
+  min-width: 0;
+}
+
+.sec + .sec .secBody {
+  padding-top: var(--gap);
+  border-top: 1px solid var(--hair-gold);
+}
+
+.sec + .sec .label span {
+  /* The label sits level with the copy below the rule, not with the rule. */
+  margin-top: var(--gap);
+}
+
+.prose {
+  grid-column: 1 / 7;
+  max-width: 65ch;
+  min-width: 0;
+}
+
+.prose p {
+  margin: 0;
+  color: var(--muted);
   font-size: clamp(1rem, 1.2vw, 1.08rem);
   line-height: 1.78;
 }
@@ -236,41 +409,37 @@
   margin-top: 1.55rem;
 }
 
-.pivot {
-  margin-top: clamp(3rem, 5vw, 4.5rem) !important;
-  margin-bottom: clamp(3rem, 5vw, 4.5rem) !important;
-  color: #17344d !important;
+.prose a {
+  color: var(--gold-ink);
+  text-decoration: underline;
+  text-decoration-color: rgba(201, 162, 39, 0.6);
+  text-underline-offset: 0.18em;
+}
+
+.prose a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* Serif pull-headings, with a little more air above than they had. */
+.pull {
+  margin: clamp(3.4rem, 5.5vw, 5rem) 0 clamp(2.4rem, 4vw, 3.4rem);
+  color: var(--ink-soft);
   font-family: var(--font-cormorant), Georgia, serif;
-  font-size: clamp(1.85rem, 3vw, 2.65rem) !important;
+  font-size: clamp(1.85rem, 3vw, 2.65rem);
   font-weight: 300;
   letter-spacing: -0.025em;
-  line-height: 1.08 !important;
+  line-height: 1.08;
 }
 
-.section {
-  margin-top: clamp(4.5rem, 7vw, 6rem);
-}
-
-.section h2 {
-  margin: 0 0 1.35rem;
-  color: #a9833d;
-  font-family: var(--font-inter), Arial, sans-serif;
-  font-size: 0.69rem;
-  font-weight: 750;
-  letter-spacing: 0.2em;
-  line-height: 1.25;
+.prose > .pull:first-child {
+  margin-top: 0.4rem;
 }
 
 .pillar {
   position: relative;
-  margin: 0 0 clamp(2rem, 3vw, 2.6rem) !important;
   padding-left: 1.4rem;
-  color: #17344d !important;
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: clamp(1.9rem, 3vw, 2.7rem) !important;
-  font-weight: 300;
-  letter-spacing: -0.025em;
-  line-height: 1.05 !important;
+  line-height: 1.05;
 }
 
 .pillar::before {
@@ -280,46 +449,44 @@
   bottom: 0.08em;
   left: 0;
   width: 1px;
-  background: #c9a227;
+  background: var(--gold-rule);
 }
 
-.pillar strong {
-  font-weight: 300;
-}
-
-.closing {
-  margin-top: clamp(5rem, 8vw, 7rem);
-  padding-top: 2rem;
-  border-top: 1px solid rgba(201, 162, 39, 0.42);
-}
-
-.closing p {
-  color: #17344d;
+.sub {
+  margin: 2.4rem 0 0.8rem;
+  color: var(--ink-soft);
   font-family: var(--font-cormorant), Georgia, serif;
-  font-size: clamp(1.5rem, 2.5vw, 2rem);
-  line-height: 1.3;
-}
-
-.closing a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-top: 1.5rem;
-  padding-bottom: 0.22rem;
-  color: #17344d;
-  border-bottom: 1px solid rgba(201, 162, 39, 0.62);
-  font-size: 0.88rem;
-  font-weight: 700;
+  font-size: clamp(1.3rem, 1.8vw, 1.55rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
   line-height: 1.2;
 }
 
-.closing a span {
-  color: #a9833d;
+.sub + p {
+  margin-top: 0;
 }
 
-.closing a:focus-visible {
-  outline: 2px solid #a9833d;
-  outline-offset: 5px;
+.motto {
+  color: var(--ink-soft) !important;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.25rem, 1.8vw, 1.5rem) !important;
+  font-style: italic;
+}
+
+/* Closing: columns 3–8, 96px above and 96px below before the footer. The
+   article's bottom padding is the 96 below; the section above gives 48 and
+   this gives 48. */
+.closing {
+  grid-column: 3 / 9;
+  grid-row: 5;
+  margin-top: var(--gap);
+}
+
+.closingSub {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
 @media (max-width: 64rem) {
@@ -341,18 +508,67 @@
       linear-gradient(90deg, rgba(4, 14, 28, 0.5) 0%, rgba(4, 14, 28, 0.18) 55%, rgba(4, 14, 28, 0) 100%);
   }
 
-  .storyLead {
-    grid-template-columns: 1fr;
+  /* One column: photo and caption first, then the facts in a row, then the
+     sections with their label as an eyebrow. Nothing sticks. 64px between
+     sections, split either side of the rule. */
+  .body {
+    --gap: 2rem;
+    display: block;
+    padding-bottom: calc(var(--gap) * 2);
+  }
+
+  .sidebar {
+    position: static;
+    margin-bottom: calc(var(--gap) * 2);
   }
 
   .portrait {
-    order: 0;
     max-width: 16rem;
-    justify-self: start;
   }
 
-  .storyLead .prose {
-    order: 1;
+  .facts {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.9rem 2rem;
+  }
+
+  .sec {
+    display: block;
+  }
+
+  .label {
+    text-align: left;
+    margin-bottom: 1rem;
+  }
+
+  .label span {
+    position: static;
+  }
+
+  .sec + .sec .label span {
+    margin-top: 0;
+  }
+
+  .secBody {
+    display: block;
+  }
+
+  .sec + .sec {
+    padding-top: var(--gap);
+    border-top: 1px solid var(--hair-gold);
+  }
+
+  .sec + .sec .secBody {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .prose {
+    max-width: 65ch;
+  }
+
+  .closing {
+    margin-top: var(--gap);
   }
 }
 
@@ -392,15 +608,6 @@
     max-width: none;
   }
 
-  .story {
-    padding: 4rem 1.1rem 4.5rem;
-  }
 
-  .section {
-    margin-top: 4.25rem;
-  }
 
-  .closing {
-    margin-top: 4.75rem;
-  }
 }
