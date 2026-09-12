@@ -25,16 +25,35 @@ const TRUST = [
   { label: "Real results", icon: <path d="M2 14V9M6 14V5M10 14V7M14 14V2" /> },
 ];
 
+/* Line icons in the site's one style: a 16-unit box, one stroke weight. */
+const FACTS = [
+  {
+    label: "League City, Texas",
+    detail: "serving Houston-area businesses",
+    icon: <><path d="M8 14.5s-4.5-4.2-4.5-7.5a4.5 4.5 0 0 1 9 0c0 3.3-4.5 7.5-4.5 7.5z" /><circle cx="8" cy="7" r="1.6" /></>,
+  },
+  {
+    label: "RBT, Texas ABA Centers",
+    detail: "where Common Ground started",
+    icon: <><rect x="2" y="5" width="12" height="8.5" rx="1.5" /><path d="M5.5 5V3.5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1V5M2 8.5h12" /></>,
+  },
+  {
+    label: "Projects from $900",
+    detail: "fixed price, in writing",
+    icon: <><path d="M2 8.5V3a1 1 0 0 1 1-1h5.5l5.5 5.5-6 6L2 8.5z" /><circle cx="5.5" cy="5.5" r="1" /></>,
+  },
+];
+
 export default function AboutPage() {
   return (
     <>
       <Header />
       <main className={styles.page}>
         <section className={styles.hero} aria-labelledby="about-title">
-          {/* Sunrise over a sea of cloud. Unlike the image it replaced, this one
-              is bright across the top, so the scrim below does more work than a
-              deepening pass — the copy sits on the photograph and the gradient
-              is what keeps it readable. Eager and high priority: LCP element. */}
+          {/* Sunrise over a sea of cloud. Bright across the top, so the scrim
+              below does more work than a deepening pass — the copy sits on
+              the photograph and the gradient keeps it readable. Eager and
+              high priority: LCP element. */}
           <img
             className={styles.heroImage}
             src="/about/hero-mountains.webp"
@@ -51,10 +70,10 @@ export default function AboutPage() {
           <div className={styles.heroInner}>
             <div className={styles.heroCopy}>
               <p className={styles.eyebrow} data-hero>
-                About <span className={styles.eyebrowRule} aria-hidden="true" data-rule />
+                02 / The person <span className={styles.eyebrowRule} aria-hidden="true" data-rule />
               </p>
               <h1 id="about-title" data-hero>
-                I build the things I wish more <em>small businesses had.</em>
+                I build websites for people who are busy doing <em>the real work.</em>
               </h1>
               <p className={styles.lede} data-hero>
                 Clean systems. Thoughtful design. Real functionality. Built with purpose,
@@ -85,89 +104,172 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <article className={styles.story}>
-          <div className={styles.storyLead}>
+        {/* The body: a 12-column grid. Labels sit in columns 1–2 and stick
+            beside their section; copy runs in 3–8; the portrait, facts and a
+            text link stick in 10–12. Below 1024px it is one column, photo
+            first, and nothing sticks. */}
+        <article className={styles.body}>
+          <aside className={styles.sidebar} aria-label="At a glance" data-reveal-group>
             <figure className={styles.portrait} data-reveal>
               <img
                 src="/about/portrait.webp"
-                alt="Portrait of Kyle Stringham"
-                width="263"
-                height="278"
+                alt="Kyle Stringham, photographed head-on against a plain wall, looking at the camera with a slight smile"
+                width="380"
+                height="475"
                 loading="lazy"
                 decoding="async"
               />
               <figcaption>Kyle Stringham — Web Design &amp; Development · League City, Texas</figcaption>
             </figure>
 
-            <div className={styles.prose} data-reveal-group>
-              <p>
-                I work in ABA. I spend my days around behavior analysts, therapists, and the
-                families they serve — which is how this started.
-              </p>
+            <hr className={styles.sideRule} data-rule />
 
-              <p>
-                Parents of autistic kids were suffering quietly. Scattered resources, no clear
-                next step, a lot of energy spent searching instead of being present with their
-                own children. I pitched a site that would close that gap, and I built it.
-                That&apos;s Common Ground.
-              </p>
+            <ul className={styles.facts} data-reveal>
+              {FACTS.map((fact) => (
+                <li key={fact.label}>
+                  <span className={styles.factIcon}>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      {fact.icon}
+                    </svg>
+                  </span>
+                  <span>
+                    <strong>{fact.label}</strong>
+                    <small>{fact.detail}</small>
+                  </span>
+                </li>
+              ))}
+            </ul>
 
-              <p className={styles.pivot}>Nine months ago I didn&apos;t know how to do any of this.</p>
+            <a className={styles.sideLink} href="/quote" data-reveal>
+              Start a project <Arrow />
+            </a>
+          </aside>
 
-              <p>
-                I taught myself. Budgeting apps, personal systems, a journaling app built
-                around faith called <a href="/work/with-little">With Little</a>. I learned by
-                building things that were broken and then fixing them, which is still mostly
-                how I work.
-              </p>
-            </div>
-          </div>
-
-          <section className={styles.section} aria-labelledby="why-title" data-reveal-group>
-            <h2 id="why-title">Why I do this</h2>
-            <div className={styles.prose}>
-              <p>
-                I&apos;m an introvert. This work suits me — long stretches of solving something
-                carefully, then handing someone a thing that makes their life easier. AI is a
-                large part of how I build, and I&apos;m grateful for it. It&apos;s a tool that lets one
-                person serve more people than one person used to be able to.
-              </p>
-
-              <p>
-                The businesses I build for are ones where the owner is the brand — coaches,
-                clinicians, family businesses. My dad owns a storage facility. My friend
-                coaches. I work in ABA. These aren&apos;t abstract markets to me.
-              </p>
-            </div>
-          </section>
-
-          <section className={styles.section} id="how" aria-labelledby="how-title" data-reveal-group>
-            <h2 id="how-title">How I work</h2>
-            <div className={styles.prose}>
-              <p className={styles.pillar}>
-                <strong>Equal exchange. That&apos;s the pillar.</strong>
-              </p>
-
-              <p>
-                You know what you&apos;re paying and what you&apos;re getting before I start. You see
-                the hours as they&apos;re logged. The price doesn&apos;t move unless the scope does, and
-                the scope doesn&apos;t move without both of us agreeing. When it&apos;s finished, it&apos;s
-                yours — the code, the repo, the domain. No hostage situations.
-              </p>
-
-              <p>
-                I work hard to make things right. Not &quot;good enough for the price,&quot; but right.
-              </p>
+          <section className={styles.sec} aria-label="How it started">
+            <p className={styles.label}><span>How it started</span></p>
+            <div className={styles.secBody}>
+              <div className={styles.prose} data-reveal-group>
+                <p data-reveal>
+                  I&apos;m a Registered Behavior Technician at Texas ABA Centers. I work with
+                  kids on the autism spectrum, and I work with their parents.
+                </p>
+                <p data-reveal>
+                  Early on I noticed something the job description didn&apos;t cover: the
+                  parents were carrying loads nobody had prepared them for. Paperwork,
+                  waitlists, insurance, school meetings, and a hundred questions with no clear
+                  place to ask them. So I built one. Common Ground is a resource site for
+                  those families, and it grew from a side project into something clinical
+                  leadership is now helping develop.
+                </p>
+                <h2 className={styles.pull} data-reveal>
+                  Nine months ago I didn&apos;t know how to do any of this.
+                </h2>
+                <p data-reveal>
+                  I had no coding experience when I started it. What I had was a problem I
+                  could see clearly and the stubbornness to keep going until it worked.
+                </p>
+              </div>
             </div>
           </section>
 
-          <footer className={styles.closing} data-reveal-group>
-            <p>
-              God&apos;s the reason I do this. The care I try to put into the work comes from
-              there.
+          <section className={styles.sec} aria-label="Why I do this">
+            <p className={styles.label}><span>Why I do this</span></p>
+            <div className={styles.secBody}>
+              <div className={styles.prose} data-reveal-group>
+                <p data-reveal>
+                  There&apos;s a moment I&apos;ve never gotten tired of. Someone tells me what
+                  they wish they had, they assume it&apos;s out of reach, and then I show it to
+                  them, working, on their phone. The look on their face is the whole reason.
+                </p>
+                <p data-reveal>
+                  Most of my portfolio is that moment, repeated. A resource site for parents.
+                  A prep site for a behavior analyst. A site for a life coach. People inside my
+                  own circle who needed something and didn&apos;t know where to start.
+                  That&apos;s where I want to spend my career, and I&apos;d like to spend some of
+                  it on your project.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section className={styles.sec} id="how" aria-label="How I work">
+            <p className={styles.label}><span>How I work</span></p>
+            <div className={styles.secBody}>
+              <div className={styles.prose} data-reveal-group>
+                <h2 className={`${styles.pull} ${styles.pillar}`} data-reveal>
+                  Equal exchange. That&apos;s the pillar.
+                </h2>
+
+                <h3 className={styles.sub} data-reveal>How I price</h3>
+                <p data-reveal>
+                  I don&apos;t believe in charging what the market will bear. I believe in an
+                  even exchange.
+                </p>
+                <p data-reveal>
+                  That means I build something that adds real value to your business, and
+                  the number on the quote reflects that value, fairly, for both of us. No
+                  inflated agency rates. No cutting corners to hit a lowball. If the site
+                  isn&apos;t worth what I&apos;m asking, I haven&apos;t scoped it right.
+                </p>
+                <p data-reveal>
+                  Every project gets a fixed price in writing before I start. Projects start
+                  at $900, and the <a href="/pricing">pricing page</a> explains exactly what
+                  that covers.
+                </p>
+
+                <h3 className={styles.sub} data-reveal>How I build</h3>
+                <p data-reveal>
+                  Plainly: I build with AI tools. I&apos;m not going to pretend otherwise,
+                  because the rest of this site promises you straight answers and this is
+                  one.
+                </p>
+                <p data-reveal>
+                  What the tools don&apos;t do is the part you&apos;re paying for. Understanding
+                  what your business actually needs. Deciding what to build and what to leave
+                  out. Writing copy that sounds like you. Testing on a real phone, checking
+                  every link, getting the search setup right, and putting every account in
+                  your name so the site is yours. That&apos;s judgment, and it&apos;s mine.
+                </p>
+                <p data-reveal>
+                  The result is custom code you own outright, built faster and priced fairer
+                  than it could have been a few years ago.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section className={styles.sec} aria-label="What it's rooted in">
+            <p className={styles.label}><span>What it&apos;s rooted in</span></p>
+            <div className={styles.secBody}>
+              <div className={styles.prose} data-reveal-group>
+                <p data-reveal>
+                  I&apos;m a Christian. My deepest hope is that my work honors the God who
+                  saved me, and the freedom He bought me with His blood.
+                </p>
+                <p data-reveal>
+                  Practically, that shapes how I treat you. It&apos;s why the pricing is
+                  honest, why the scope is written down, why you own everything, and why
+                  I&apos;ll tell you when I&apos;m not the right fit. You don&apos;t have to
+                  share my faith to work with me. But you should know the work is built on
+                  it.
+                </p>
+                <p className={styles.motto} lang="la" data-reveal>
+                  Soli Deo Gloria.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <div className={styles.closing} data-reveal-group>
+            <a className={headerStyles.getStarted} href="/quote" data-reveal>
+              <span>Start a project</span>
+              <span className={headerStyles.arrowShell} aria-hidden="true"><Arrow /></span>
+            </a>
+            <p className={styles.closingSub} data-reveal>
+              Tell me what you&apos;re building. I&apos;ll tell you straight whether I&apos;m
+              the right fit.
             </p>
-            <a href="/quote">Start a project <span aria-hidden="true">→</span></a>
-          </footer>
+          </div>
         </article>
       </main>
       <SiteFooter />

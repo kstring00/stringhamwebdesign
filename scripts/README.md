@@ -300,3 +300,18 @@ controls, no placeholder text in the new files, and all six routes in
 sitemap.xml.
 
     BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/resources-check.js
+
+## about-body-check.js
+
+The /about body: a 12-column grid with section labels sticky in columns 1–2
+and the portrait, facts and text link sticky in 10–12 on desktop; one column
+with nothing sticky below 1024px. Asserts one h1, the two pull-headings as h2
+and the four labels as not-headings, the h3 sub-heads, rules spanning columns
+3–12, 96px between sections and around the closing CTA on desktop (64px on a
+phone), a descriptive portrait alt, 44px controls, no overflow at 360px, no
+placeholder text, and that scrolled deep the sidebar and the section label
+actually hold at 120px.
+
+    BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/about-body-check.js
+
+`about-check.js` (the hero) now honours BASE as well.
