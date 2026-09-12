@@ -51,18 +51,17 @@ size above.
 
 ## 1b. Hero — `/about`
 
-Filled 2026-09-12. `public/about/hero-liquid.webp` (1920 × 819, 77 KB) with
-1280w and 900w variants. Gold liquid in glass against near-black; the left
-third of the composition is what the hero copy sits on, so the scrim only
-deepens what is already there rather than laying a panel over the picture.
-Source PNG is in history at `ac25fd1`.
+Filled 2026-09-12. `public/about/hero-mountains.webp` (2000 × 1333, 181 KB)
+with 1280w and 900w variants — sunrise over a sea of cloud, from an Unsplash
+photograph by Sam Ferrara. Source JPEG is in history at `2214abd`.
 
-## 2b. Portrait — `/about`
-
-The only portrait in the repo is **263 × 278**, and it was being hotlinked
-from a raw GitHub URL. It is now served from `/public/about/portrait.webp`,
-but at that size it is soft in its 4:5 slot on desktop. Supply a new one at
-**1000 × 1250** (4:5) or larger, WebP, and drop it in at the same path.
+This replaced an AI-generated gold-liquid render. Worth noting for whoever
+swaps it next: the liquid image was near-black down its left third, so its
+scrim only had to deepen what was already there. This one is bright across the
+top, so the gradient is doing real work to keep the copy readable — check
+`scripts/about-check.js` after any change to the image or its
+`object-position`, because a crop that moves the bright sky under the headline
+will fail contrast without looking obviously wrong.
 
 ## 1c. Homepage process scene
 
