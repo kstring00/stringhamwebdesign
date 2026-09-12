@@ -17,6 +17,24 @@ export default function WorkPage() {
       <Header />
       <main className={styles.page}>
         <section className={styles.indexHero} id="top">
+          {/* Low sun through a stand of pines. The frame is near-black down the
+              left and warm where the light breaks through on the right, so the
+              copy column already sits on the darkest part of the photograph and
+              the scrim only has to finish the job. Eager and high priority:
+              this is the LCP element. */}
+          <img
+            className={styles.indexHeroImage}
+            src="/work/hero-forest.webp"
+            srcSet="/work/hero-forest-900.webp 900w, /work/hero-forest-1280.webp 1280w, /work/hero-forest.webp 2000w"
+            sizes="100vw"
+            alt=""
+            width="2000"
+            height="1333"
+            fetchPriority="high"
+            decoding="async"
+          />
+          <span className={styles.indexHeroScrim} aria-hidden="true" />
+
           <div className={styles.indexHeroInner}>
             <p className={styles.eyebrow} data-hero>Projects / Work</p>
             <h1 data-hero>Custom sites. Built around the business.</h1>
