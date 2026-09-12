@@ -230,3 +230,14 @@ text that is actually 15:1. And it **clips each rect to its scrolling
 ancestor** — the step row scrolls horizontally, so steps 3+ report rects
 running past its right edge, and sampling there reads pixels where that text
 is not painted at all.
+
+## work-hero-check.js
+
+The /work hero sits on a photograph, so contrast is a property of the rendered
+pixels rather than of the declared colours. This loads /work at 1440px and
+375px, blanks each text run, screenshots, and samples the real backdrop under
+every glyph box. It also checks the image decodes, offers three widths, stays
+under 300 KB, is marked high priority as the LCP element, and that the page
+still has exactly one h1.
+
+    BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/work-hero-check.js

@@ -50,10 +50,25 @@ Each project's hero slot is **16:9** (`app/work/work.module.css`). Supply at
 | Common Ground | `/hero-crt/common-ground.png` — PNG, should be WebP |
 | BCBA Prep | `/hero-crt/bcba-prep.png` — PNG, should be WebP |
 | Lake City Self Storage | `/work/lake-city-self-storage/home.webp` |
-| With Little | `/work/with-little/dashboard.webp` |
+| With Little | `/hero-crt/with-little-daily.png` — PNG, should be WebP |
 
 The two PNGs are the size problem on the work pages; re-export as WebP at the
 size above.
+
+`/work/with-little/dashboard.webp` is still on disk but is **not a WebP file** —
+its bytes are arbitrary binary and it decodes to nothing. It is unreferenced.
+Drop a real 1920 × 1080 WebP at that path and point `app/data/projects.ts` back
+at it.
+
+## 2b. Hero — `/work`
+
+Filled 2026-09-12. `public/work/hero-forest.webp` (2000 × 1333, 210 KB) with
+1280 and 900 variants, from a Niilo Isotalo photograph. Low sun through pines:
+near-black down the left where the copy sits, warm light breaking through on
+the right. Nothing needed here unless the photograph is being replaced — if it
+is, match the shape (dark on the side the copy sits on) or the scrim in
+`app/work/work.module.css` has to be re-tuned, and `scripts/work-hero-check.js`
+will say so.
 
 ## 1b. Hero — `/about`
 
