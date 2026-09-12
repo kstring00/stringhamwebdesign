@@ -91,6 +91,33 @@ export function fromPrice(amount: number) {
 /** "Projects start at $900." — used verbatim on the homepage, /quote and /pricing. */
 export const startingLine = `Projects start at ${formatAmount(startingPrice)}.`;
 
+/**
+ * The four-phase summary /pricing shows beside its process heading. It is a
+ * summary of the seven steps in data/process.ts, not a second process: each
+ * phase names the steps it covers so the two descriptions cannot contradict.
+ */
+export const phases = [
+  { number: "01", name: "Discovery", line: "You send the brief, I reply within a business day, and we agree the scope in writing.", covers: "Steps 01–03" },
+  { number: "02", name: "Design", line: "You get a portal login and we look at the same screen together before anything is built.", covers: "Step 04" },
+  { number: "03", name: "Build", line: "Clean code, a timesheet every ten hours, and a hard cap I can't cross without you.", covers: "Step 05" },
+  { number: "04", name: "Launch", line: "Final walkthrough, revisions, your approval. Then everything moves to your name.", covers: "Steps 06–07" },
+];
+
+/** Under the tiers: the four things every build has in common. */
+export const trust = [
+  { icon: "design", label: "Custom design", detail: "for your brand" },
+  { icon: "code", label: "You own the code", detail: "every line of it" },
+  { icon: "performance", label: "Built for performance", detail: "speed and launch QA" },
+  { icon: "support", label: "Ongoing support", detail: "available after handoff" },
+] as const;
+
+/** Under the hero: three small reassurances before the numbers. */
+export const heroTrust = [
+  { icon: "fixed", label: "Fixed price", detail: "at the quote" },
+  { icon: "process", label: "Transparent process", detail: "and updates" },
+  { icon: "support", label: "Ongoing support", detail: "available" },
+] as const;
+
 export const launchNote =
   "Every project includes a testimonial from you at launch and permission to feature the site in my portfolio.";
 

@@ -13,7 +13,9 @@ const blend = (fg, bg) => fg.slice(0, 3).map((c, i) => Math.round(c * fg[3] + bg
   const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
   let fails = 0;
   for (const w of [1440, 375]) {
-    const p = await b.newPage({ viewport: { width: w, height: 900 } });
+    // Reduced motion: every reveal element is in its final, visible state, so
+    // the whole page is measurable rather than just what is above the fold.
+    const p = await b.newPage({ viewport: { width: w, height: 900 }, reducedMotion: 'reduce' });
     await p.goto('http://localhost:3000/pricing', { waitUntil: 'networkidle' });
     // open every accordion so hidden panels get measured too
     await p.$$eval('main h3 button', bs => bs.forEach(b => b.getAttribute('aria-expanded') === 'false' && b.click()));

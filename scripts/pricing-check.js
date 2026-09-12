@@ -27,7 +27,8 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
       scrollW: document.documentElement.scrollWidth,
       clientW: document.documentElement.clientWidth,
       prices: [...document.querySelectorAll('main')].map(m => (m.innerText.match(/\$[\d,]+/g) || [])).flat(),
-      fromCount: (document.querySelector('main').innerText.match(/from \$[\d,]+/gi) || []).length, priceTexts: [...document.querySelectorAll('main article p')].filter(p => /\$/.test(p.textContent)).map(p => p.textContent.trim() + ' | rendered: ' + p.innerText.trim().replace(/\n/g, '⏎')),
+      // textContent, not innerText: cards below the fold are still at opacity 0 here; what matters is the document text every reader and search index gets.
+      fromCount: (document.querySelector('main').textContent.match(/from \$[\d,]+/gi) || []).length, priceTexts: [...document.querySelectorAll('main article p')].filter(p => /\$/.test(p.textContent)).map(p => p.textContent.trim() + ' | rendered: ' + p.innerText.trim().replace(/\n/g, '⏎')),
     }));
     if (name === 'desktop') {
       console.log('title:      ', meta.title);
@@ -64,9 +65,42 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
     ok('Enter opens FAQ, aria-expanded=true, panel visible', aria.exp === 'true' && aria.panelVisible === 'visible', JSON.stringify(aria));
     await faqBtn.press('Enter'); await p.waitForTimeout(400);
 
+    // Scroll through in steps so every ScrollTrigger fires, then nothing may
+    // remain hidden — the reveals must complete, not just start.
+    await p.evaluate(async () => { const h = document.documentElement.scrollHeight; for (let y = 0; y <= h; y += 300) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 60)); } });
+    await p.waitForTimeout(1600);
+    const stillHidden = await p.$$eval('[data-reveal], [data-featured], [data-phase-num]', els => els.filter(e => { const cs = getComputedStyle(e); return cs.opacity !== '1' || cs.visibility === 'hidden'; }).map(e => e.tagName + ':' + (e.textContent || '').trim().slice(0, 20)));
+    ok('after scrolling through, every reveal has completed', stillHidden.length === 0, JSON.stringify(stillHidden));
+    const counted = await p.$$eval('[data-count]', els => els.map(e => e.textContent.trim()));
+    ok('count-up settles on the exact floors', JSON.stringify(counted) === JSON.stringify(['$900', '$1,800', '$3,500']), JSON.stringify(counted));
     ok('no page errors', errs.length === 0, JSON.stringify(errs));
-    await p.screenshot({ path: `${OUT}/pricing-${name}.png`, fullPage: true });
-    console.log(`saved pricing-${name}.png`);
+    await ctx.close();
+
+    // Screenshots are taken in the finished state, which is what a reader sees
+    // after scrolling; a full-page capture of the animated page would show the
+    // unrevealed sections at opacity 0.
+    {
+      const sctx = await b.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, reducedMotion: 'reduce' });
+      const sp = await sctx.newPage();
+      await sp.goto('http://localhost:3000/pricing', { waitUntil: 'networkidle' });
+      await sp.waitForTimeout(400);
+      await sp.screenshot({ path: `${OUT}/pricing-${name}.png`, fullPage: true });
+      console.log(`saved pricing-${name}.png`);
+      await sctx.close();
+    }
+  }
+
+  // Reduced motion: the page must render finished with no animation pass at
+  // all — nothing left at opacity 0, nothing translated off its place.
+  {
+    const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+    const p = await ctx.newPage();
+    await p.goto('http://localhost:3000/pricing', { waitUntil: 'networkidle' });
+    await p.waitForTimeout(300);
+    const hidden = await p.$$eval('[data-reveal], [data-hero], [data-featured], [data-phase-num]', els => els.filter(e => { const cs = getComputedStyle(e); return cs.opacity !== '1' || cs.visibility === 'hidden' || (cs.transform !== 'none' && cs.transform !== 'matrix(1, 0, 0, 1, 0, 0)'); }).map(e => e.tagName + ':' + (e.textContent || '').trim().slice(0, 20)));
+    ok('reduced motion: every animated element is in its final state', hidden.length === 0, JSON.stringify(hidden));
+    const prices = await p.$$eval('[data-count]', els => els.map(e => e.textContent.trim()));
+    ok('reduced motion: prices show their real value, not a count-up start', JSON.stringify(prices) === JSON.stringify(['$900', '$1,800', '$3,500']), JSON.stringify(prices));
     await ctx.close();
   }
 

@@ -76,7 +76,9 @@
 }
 
 .copy h1 em {
-  color: #b58c46;
+  /* was #b58c46 — 2.72:1 on this ground, under 3:1 for display text.
+     #a17b3d is the nav's active gold and clears it at 3.4:1. */
+  color: #a17b3d;
   font-weight: 300;
 }
 
