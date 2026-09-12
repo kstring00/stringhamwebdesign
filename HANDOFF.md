@@ -154,8 +154,10 @@ panel.
 ### 3b. Scope section — DONE by another assistant, merged
 
 Folded into the unified homepage process section, with the dove and the quote
-CTA. `app/PricingConfigurator.tsx` still exists but is **no longer imported by
-`app/page.tsx`** — check whether it is dead before extending it.
+CTA. `app/PricingConfigurator.tsx` and `app/ProcessTimesheet.tsx` lingered with
+no importers until 2026-09-12, when both were traced (no libs, routes or schema
+behind them) and removed. Pricing now lives on `/pricing`, with every figure in
+`app/data/pricing.ts`.
 
 ### 3c. Section 6 — Payments — DONE
 

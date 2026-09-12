@@ -1,0 +1,998 @@
+/* /pricing
+   Same ground, ink and gold as /about and the homepage hero. Those pages use
+   these exact hex values rather than the tokens in globals.css, so matching
+   them is what makes this page look native. Declared once here so the whole
+   page can be retargeted to the tokens in one place. */
+
+.page {
+  --ground: #f5f0e8;
+  --ground-2: #f0ebe1;
+  --paper: #fbf9f5;
+  --ink: #0d1b26;
+  --ink-soft: #17344d;
+  --muted: #4f6474;
+  --gold: #a9833d;
+  --gold-rule: #c9a227;
+  /* Small uppercase labels: #a9833d is ~3.4:1 on cream, under AA at 0.68rem.
+     The process strip already uses this darker ink of the same hue. */
+  --gold-ink: #6f5620;
+  --gold-on-dark: #e2c58a;
+  --navy: #102f4c;
+  --navy-deep: #0d1b26;
+  --hair-gold: rgba(201, 162, 39, 0.34);
+  --hair-navy: rgba(38, 66, 89, 0.16);
+  --hair-light: rgba(245, 240, 232, 0.16);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration: 320ms;
+
+  min-height: 100svh;
+  background: var(--ground);
+  color: var(--ink);
+}
+
+.inner {
+  width: min(100%, 78rem);
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+/* The tiny monospace line above a section — the homepage hero's "01 / ENTRY SIGNAL". */
+.signal {
+  margin: 0 0 0.75rem;
+  /* .52 alpha measured 3.48:1 on cream — under AA for 9px text. .68 is ~5.7:1. */
+  color: rgba(13, 27, 38, 0.68);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.signalLight {
+  color: rgba(245, 240, 232, 0.72);
+}
+
+.eyebrow {
+  margin: 0 0 1.2rem;
+  color: var(--gold-ink);
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.22em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+  position: relative;
+  padding-top: clamp(7.5rem, 10vw, 9.5rem);
+  padding-bottom: clamp(3rem, 5vw, 4.5rem);
+  border-bottom: 1px solid var(--hair-gold);
+  overflow: hidden;
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+
+.heroCopy {
+  max-width: 40rem;
+}
+
+.hero h1 {
+  max-width: 11ch;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(3.6rem, 6.2vw, 6.4rem);
+  font-weight: 300;
+  letter-spacing: -0.055em;
+  line-height: 0.9;
+}
+
+.hero h1 em {
+  /* #b58c46 (the homepage value) is 2.72:1 on cream — under 3:1 even for
+     display text. #a17b3d is the nav's active gold and clears it at 3.4:1. */
+  color: #a17b3d;
+  font-style: italic;
+  font-weight: 300;
+}
+
+.lede {
+  max-width: 36rem;
+  margin: clamp(1.4rem, 2.2vw, 1.8rem) 0 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.15vw, 1.06rem);
+  line-height: 1.75;
+}
+
+.lede strong {
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: clamp(1.5rem, 2.4vw, 2rem);
+}
+
+.heroSecondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  color: var(--ink-soft);
+  border-bottom: 1px solid rgba(201, 162, 39, 0.62);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.heroSecondary:hover {
+  border-bottom-color: var(--ink-soft);
+}
+
+.heroSecondary:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
+.heroTrust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.1rem clamp(1.5rem, 3vw, 2.5rem);
+  margin: clamp(2rem, 3.5vw, 2.75rem) 0 0;
+  padding: clamp(1.25rem, 2vw, 1.6rem) 0 0;
+  border-top: 1px solid var(--hair-navy);
+  list-style: none;
+}
+
+.heroTrust li,
+.trustStrip li {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.heroTrust strong,
+.heroTrust small,
+.trustStrip strong,
+.trustStrip small {
+  display: block;
+  line-height: 1.3;
+}
+
+.heroTrust strong,
+.trustStrip strong {
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.heroTrust small,
+.trustStrip small {
+  margin-top: 0.15rem;
+  color: var(--muted);
+  font-size: 0.66rem;
+}
+
+.trustIcon {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  color: var(--gold);
+}
+
+/* Image slot: a warm block, a gold disc and a small dark card — enough
+   composition to hold the space until a photograph replaces it. */
+.heroMedia {
+  position: relative;
+  aspect-ratio: 5 / 4;
+  min-height: 18rem;
+  background: linear-gradient(160deg, #ebe4d8 0%, #e2d9c9 100%);
+  overflow: hidden;
+}
+
+.mediaDisc {
+  position: absolute;
+  top: 12%;
+  right: 14%;
+  width: 46%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #e6cf9a 0%, #c9a75f 55%, #a8863f 100%);
+  opacity: 0.9;
+}
+
+.mediaCard {
+  position: absolute;
+  left: 10%;
+  bottom: 12%;
+  width: 52%;
+  padding: 1.5rem 1.4rem;
+  background: var(--navy-deep);
+  color: var(--gold-on-dark);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.1rem, 1.6vw, 1.5rem);
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  line-height: 1.25;
+  text-transform: uppercase;
+  box-shadow: 0 28px 48px -28px rgba(5, 23, 47, 0.7);
+}
+
+.mediaCard span {
+  display: block;
+}
+
+/* ---------- sections ---------- */
+
+.section {
+  padding-top: clamp(3.5rem, 6vw, 5.5rem);
+  padding-bottom: clamp(3.5rem, 6vw, 5.5rem);
+}
+
+.section + .section {
+  border-top: 1px solid var(--hair-gold);
+}
+
+.sectionHead {
+  margin-bottom: clamp(2rem, 3.5vw, 3rem);
+}
+
+.section h2,
+.processCopy h2,
+.faqCopy h2 {
+  max-width: 14ch;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(2.5rem, 4.6vw, 3.8rem);
+  font-weight: 300;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+}
+
+.sectionIntro {
+  max-width: 36rem;
+  margin: 1.1rem 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.72;
+}
+
+/* ---------- tier cards ---------- */
+
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  align-items: stretch;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: clamp(1.75rem, 2.6vw, 2.4rem) clamp(1.35rem, 2.2vw, 1.9rem) clamp(1.5rem, 2.2vw, 1.9rem);
+  background: var(--paper);
+  border: 1px solid var(--hair-navy);
+  border-radius: 14px;
+  text-align: center;
+  transition: transform 260ms var(--ease), box-shadow 260ms var(--ease), border-color 260ms var(--ease);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(201, 162, 39, 0.5);
+  box-shadow: 0 30px 50px -34px rgba(13, 27, 38, 0.35);
+}
+
+.cardFeatured {
+  background: var(--navy-deep);
+  border-color: rgba(226, 197, 138, 0.28);
+  color: #f5f0e8;
+  box-shadow: 0 36px 60px -34px rgba(5, 23, 47, 0.65);
+}
+
+.cardFeatured:hover {
+  border-color: rgba(226, 197, 138, 0.5);
+  box-shadow: 0 44px 70px -36px rgba(5, 23, 47, 0.75);
+}
+
+.cardBadge {
+  margin: -0.5rem 0 1.2rem;
+  color: var(--gold-on-dark);
+  font-size: 0.6rem;
+  font-weight: 750;
+  letter-spacing: 0.22em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.cardIcon {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: 0 auto 0.9rem;
+  color: var(--gold);
+}
+
+.cardFeatured .cardIcon {
+  color: var(--gold-on-dark);
+}
+
+.card h3 {
+  margin: 0;
+  color: inherit;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.9rem, 2.3vw, 2.3rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.cardFit {
+  margin: 0.55rem auto 0;
+  max-width: 24ch;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.cardFeatured .cardFit {
+  color: rgba(245, 240, 232, 0.72);
+}
+
+/* "From" as a small-caps eyebrow beside the number. Block layout keeps the
+   text node "From $900" for find-in-page, copy and screen readers. */
+.price {
+  display: block;
+  margin: 1.35rem 0 0;
+  color: inherit;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(2.3rem, 3vw, 2.9rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.price small {
+  display: inline-block;
+  margin-right: 0.45rem;
+  vertical-align: 0.4em;
+  color: var(--muted);
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.cardFeatured .price small {
+  color: rgba(245, 240, 232, 0.72);
+}
+
+.price b {
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+}
+
+.plus {
+  margin: 1.5rem 0 0;
+  color: var(--gold-ink);
+  font-size: 0.6rem;
+  font-weight: 750;
+  letter-spacing: 0.18em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.cardFeatured .plus {
+  color: var(--gold-on-dark);
+}
+
+.includes {
+  flex: 1;
+  margin: 1.35rem 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.plus + .includes {
+  margin-top: 0.7rem;
+}
+
+.includes li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--hair-navy);
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.cardFeatured .includes li {
+  border-bottom-color: var(--hair-light);
+  color: rgba(245, 240, 232, 0.9);
+}
+
+.tick {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.05rem;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #fbf9f5;
+}
+
+.cardFeatured .tick {
+  background: var(--gold-on-dark);
+  color: var(--navy-deep);
+}
+
+.timeline {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin: 1.2rem 0 0;
+}
+
+.timeline dt {
+  color: var(--gold-ink);
+  font-size: 0.6rem;
+  font-weight: 750;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.cardFeatured .timeline dt {
+  color: var(--gold-on-dark);
+}
+
+.timeline dd {
+  margin: 0;
+  color: inherit;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.cardAction {
+  margin-top: 1.5rem;
+}
+
+.cardAction a {
+  width: 100%;
+  justify-content: center;
+}
+
+.launchNote {
+  max-width: 44rem;
+  margin: clamp(1.75rem, 3vw, 2.5rem) auto 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.65;
+  text-align: center;
+}
+
+/* ---------- trust strip ---------- */
+
+.trustStrip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin: clamp(2rem, 3.5vw, 2.75rem) 0 0;
+  padding: clamp(1.25rem, 2vw, 1.6rem) 0 0;
+  border-top: 1px solid var(--hair-navy);
+  list-style: none;
+}
+
+.trustStrip li + li {
+  padding-left: 1rem;
+  border-left: 1px solid var(--hair-navy);
+}
+
+/* ---------- not included ---------- */
+
+.facts {
+  width: min(100%, 44rem);
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--hair-navy);
+}
+
+.facts > div {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: baseline;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--hair-navy);
+}
+
+.facts dt {
+  color: var(--gold-ink);
+  font-size: 0.64rem;
+  font-weight: 750;
+  letter-spacing: 0.18em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.facts dd {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.68;
+}
+
+/* ---------- bands ---------- */
+
+.band {
+  padding-top: clamp(4rem, 7vw, 6.5rem);
+  padding-bottom: clamp(4rem, 7vw, 6.5rem);
+  border-top: 1px solid var(--hair-gold);
+}
+
+.bandCream {
+  background: var(--ground-2);
+}
+
+/* ---------- process ---------- */
+
+.processGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: start;
+}
+
+.deposit {
+  max-width: 36rem;
+  margin: 1.4rem 0 0;
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--hair-navy);
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.depositLabel {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--gold-ink);
+  font-size: 0.6rem;
+  font-weight: 750;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.processAction {
+  margin-top: clamp(1.5rem, 2.4vw, 2rem);
+}
+
+.phases {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.phase {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+  padding: 1.35rem 0;
+  border-bottom: 1px solid var(--hair-navy);
+}
+
+.phase:first-child {
+  padding-top: 0.25rem;
+}
+
+.phaseNum {
+  display: inline-grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  background: #ece5d6;
+  color: var(--ink);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.phase h3 {
+  margin: 0.35rem 0 0.3rem;
+  color: var(--ink);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.45rem, 1.9vw, 1.7rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.phase p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.phase small {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--gold-ink);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ---------- faq ---------- */
+
+.faqGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: start;
+}
+
+/* Image slot. Solid until a photograph exists — see ASSETS_NEEDED.md. */
+.faqMedia {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  min-height: 20rem;
+  background: linear-gradient(170deg, #e4dccc 0%, #d6cdb9 100%);
+  overflow: hidden;
+}
+
+.mediaCaption,
+.mediaCaptionLight {
+  position: absolute;
+  left: 1.5rem;
+  bottom: 1.5rem;
+  padding: 1.25rem 1.2rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  line-height: 1.9;
+  text-transform: uppercase;
+}
+
+.mediaCaption {
+  background: rgba(245, 240, 232, 0.8);
+  color: var(--ink-soft);
+}
+
+.mediaCaptionLight {
+  color: var(--gold-on-dark);
+  border-left: 1px solid rgba(226, 197, 138, 0.5);
+  padding-left: 1.2rem;
+  background: transparent;
+}
+
+.faqList {
+  width: min(100%, 48rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--hair-navy);
+}
+
+.faqItem {
+  border-bottom: 1px solid var(--hair-navy);
+}
+
+.faqHeading {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+.faqTrigger {
+  width: 100%;
+  min-height: 3.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.05rem 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.faqTrigger:focus-visible {
+  outline: 2px solid var(--gold-ink);
+  outline-offset: -2px;
+  border-radius: 2px;
+}
+
+.faqQuestion {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.35rem, 1.8vw, 1.6rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.faqTrigger:hover .faqQuestion {
+  color: var(--gold-ink);
+}
+
+.faqMarker {
+  position: relative;
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: none;
+}
+
+.faqMarker i {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+  background: var(--gold-ink);
+  transition: transform var(--duration) var(--ease);
+}
+
+.faqMarker i:last-child {
+  transform: rotate(90deg);
+}
+
+.faqOpen .faqMarker i:last-child {
+  transform: rotate(0deg);
+}
+
+.faqPanel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration) var(--ease);
+}
+
+.faqOpen .faqPanel {
+  grid-template-rows: 1fr;
+}
+
+.faqPanelInner {
+  overflow: hidden;
+  visibility: hidden;
+  transition: visibility 0s linear var(--duration);
+}
+
+.faqOpen .faqPanelInner {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.faqPanelInner p {
+  max-width: 42rem;
+  margin: 0;
+  padding: 0 0 1.35rem;
+  color: var(--muted);
+  font-size: 0.97rem;
+  line-height: 1.72;
+}
+
+/* ---------- close ---------- */
+
+.close {
+  background: var(--navy-deep);
+  color: #f5f0e8;
+  padding-top: clamp(4rem, 7vw, 6.5rem);
+  padding-bottom: clamp(4rem, 7vw, 6.5rem);
+}
+
+.closeGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: center;
+}
+
+.closeCopy h2 {
+  max-width: 14ch;
+  margin: 0;
+  color: #f5f0e8;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(2.5rem, 4.6vw, 3.8rem);
+  font-weight: 300;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+}
+
+.closeBody {
+  max-width: 34rem;
+  margin: 1.2rem 0 0;
+  color: rgba(245, 240, 232, 0.72);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.closeAction {
+  margin-top: clamp(1.6rem, 2.5vw, 2.2rem);
+}
+
+/* Image slot. Solid until a photograph exists — see ASSETS_NEEDED.md. */
+.closeMedia {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  min-height: 16rem;
+  background: linear-gradient(160deg, #142a3d 0%, #0a1725 100%);
+  border: 1px solid rgba(226, 197, 138, 0.18);
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 64rem) {
+  .heroGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .heroMedia {
+    aspect-ratio: 16 / 9;
+    min-height: 14rem;
+  }
+
+  .tiers {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .card {
+    max-width: 30rem;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .trustStrip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem 1rem;
+  }
+
+  .trustStrip li + li {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .trustStrip li:nth-child(even) {
+    padding-left: 1rem;
+    border-left: 1px solid var(--hair-navy);
+  }
+
+  .processGrid,
+  .faqGrid,
+  .closeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .faqMedia {
+    order: 2;
+    aspect-ratio: 16 / 9;
+    min-height: 12rem;
+  }
+
+  .closeMedia {
+    aspect-ratio: 16 / 9;
+    min-height: 10rem;
+  }
+}
+
+@media (max-width: 44rem) {
+  .inner {
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
+  }
+
+  .hero {
+    padding-top: 6.6rem;
+    padding-bottom: 2.75rem;
+  }
+
+  .hero h1 {
+    max-width: 10ch;
+    font-size: clamp(3rem, 13vw, 4.4rem);
+  }
+
+  .signal {
+    font-size: 0.52rem;
+  }
+
+  .heroActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .heroActions a {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .heroTrust {
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .card {
+    text-align: left;
+  }
+
+  .cardIcon,
+  .cardFit {
+    margin-left: 0;
+  }
+
+  .trustStrip {
+    grid-template-columns: 1fr;
+  }
+
+  .trustStrip li:nth-child(even) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .facts > div {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
+  .phase {
+    grid-template-columns: 2.6rem minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .phaseNum {
+    width: 2.6rem;
+    height: 2.6rem;
+    font-size: 0.95rem;
+  }
+
+  .processAction a,
+  .closeAction a {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .faqMarker i,
+  .faqPanel,
+  .faqPanelInner {
+    transition: none;
+  }
+
+  .card:hover {
+    transform: none;
+  }
+}

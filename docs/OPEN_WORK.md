@@ -221,27 +221,23 @@ Constraint that applies throughout: every motion must have a
 `prefers-reduced-motion` path, and the reduced path is an instant final state,
 not a faster animation.
 
-### Section 9 — `ASSETS_NEEDED.md`
+### Section 9 — `ASSETS_NEEDED.md` — done 2026-09-12
 
-Not started. A single document listing everything that has to come from you
-before the site is genuinely finished, so it can be gathered in one sitting
-rather than discovered one blocker at a time:
-
-- Screenshots for each work entry, **with the exact pixel dimensions** each
-  slot expects.
-- Copy that could not be written without you — anything currently carrying
-  placeholder text.
-- The Cal.com booking link.
-- Stripe product and price IDs (test mode), specifically
-  `STRIPE_CARE_PRICE_ID`.
-- The business email address that should appear publicly.
-- Legal page content — privacy policy, terms.
-- **The dove illustration** referenced in section 3b and never supplied.
+Written at the repo root. Three photograph slots on `/pricing` with exact
+sizes, the `/work` screenshot spec, the dove, the Cal.com link, Stripe price
+id, business email, legal pages, and testimonials.
 
 ---
 
 ## 6. Known-and-accepted, listed so they are not rediscovered as bugs
 
+- **`/pricing` describes the process in four phases; everywhere else it is
+  seven steps.** Deliberate, from the 2026-09-12 design reference. The four
+  phases live in `app/data/pricing.ts` and each one names the steps of the
+  seven it covers ("Steps 01–03 of the seven"), so the two cannot contradict.
+  The deposit terms are one string, `depositTerms` in `app/data/process.ts`,
+  shown in step 03 and under the four phases. If the seven steps change,
+  check the four phases still summarise them.
 - **Live updates are not wired.** After an action in one window, the other
   needs a manual reload. Deliberately deferred. Supabase Realtime on
   `messages`, `files`, `time_entries` and `project_onboarding_items` is the

@@ -1,3 +1,4 @@
+import { startingLine } from "./data/pricing";
 import HeroTileGrid from "./HeroTileGrid";
 import styles from "./HeroShowcase.module.css";
 
@@ -37,6 +38,15 @@ export default function HeroShowcase() {
               counseling practices, course creators, and other small businesses —
               built around how your business actually works, not a template with
               the name swapped out.
+            </p>
+
+            {/* The one price on the homepage: under the paragraph where the
+                "can I afford this?" doubt forms, and nowhere else. */}
+            <p className={styles.anchor}>
+              {startingLine}{" "}
+              <a href="/pricing">
+                See the range <span aria-hidden="true">→</span>
+              </a>
             </p>
 
             <span className={styles.goldRule} aria-hidden="true" />

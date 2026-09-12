@@ -181,7 +181,7 @@ export default function ProcessSteps({
         <div className={styles.homeInner} ref={sectionRef}>
           <div className={styles.homeHeader}>
             <div className={styles.homeCopy}>
-              <p className={styles.homeEyebrow}>Scope before numbers</p>
+              <p className={styles.homeEyebrow}>Scope before the final number</p>
               <h2 id={`${baseId}-home-heading`}>How this goes.</h2>
               <p className={styles.homeIntro}>{processIntro}</p>
 

@@ -43,7 +43,9 @@
 
 .entrySignal {
   margin: 0 0 0.75rem;
-  color: rgba(13, 27, 38, 0.52);
+  /* .52 alpha measured 3.48:1 on the cream ground — under AA for 9px text.
+     .68 lands at ~5.9:1 and still reads as a quiet signal line. */
+  color: rgba(13, 27, 38, 0.68);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.58rem;
   font-weight: 700;
@@ -74,7 +76,9 @@
 }
 
 .copy h1 em {
-  color: #b58c46;
+  /* was #b58c46 — 2.72:1 on this ground, under 3:1 for display text.
+     #a17b3d is the nav's active gold and clears it at 3.4:1. */
+  color: #a17b3d;
   font-weight: 300;
 }
 
@@ -84,6 +88,35 @@
   color: #566c7f;
   font-size: clamp(0.96rem, 1.05vw, 1.06rem);
   line-height: 1.68;
+}
+
+.anchor {
+  max-width: 39rem;
+  margin: 1.1rem 0 0;
+  color: #566c7f;
+  font-size: clamp(0.88rem, 0.98vw, 0.96rem);
+  line-height: 1.6;
+}
+
+.anchor a {
+  color: #15334d;
+  border-bottom: 1px solid rgba(201, 162, 39, 0.62);
+  padding-bottom: 0.12rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.anchor a span {
+  color: #a9833d;
+}
+
+.anchor a:hover {
+  border-bottom-color: #15334d;
+}
+
+.anchor a:focus-visible {
+  outline: 2px solid #a9833d;
+  outline-offset: 4px;
 }
 
 .goldRule {
@@ -322,6 +355,11 @@
   .lede {
     margin-top: 1.4rem;
     font-size: 0.94rem;
+  }
+
+  .anchor {
+    margin-top: 0.9rem;
+    font-size: 0.88rem;
   }
 
   .goldRule {

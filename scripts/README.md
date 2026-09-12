@@ -130,3 +130,23 @@ mail endpoint on a live server would be a way to redirect client mail.
 
 Stub endpoints used by these: `/__mail`, `/__mail_reset`, `/__messages`,
 `/__reset`, and `/__role?admin|client`.
+
+## /pricing
+
+Two checks, both against a plain `npm run dev` on port 3000 — no stub needed,
+the page reads nothing from the database.
+
+```bash
+node scripts/pricing-check.js            # title/meta/H1, nav order, "from $X" on
+                                         # every tier, heading hierarchy, no overflow
+                                         # at 1440/375, tiers stack, 44px targets,
+                                         # FAQ aria + focus ring; saves screenshots
+node scripts/pricing-contrast-check.js   # every text style vs its real backdrop
+```
+
+The contrast check uses computed styles rather than the rendered-pixel method
+the portal check uses. That is a deliberate shortcut, not a lapse: /pricing has
+only flat opaque backgrounds — no photographs, gradients or overlays — so the
+computed background of the nearest painted ancestor is the rendered pixel. If
+that ever stops being true (a photo band, a gradient wash), switch to the
+portal method.
