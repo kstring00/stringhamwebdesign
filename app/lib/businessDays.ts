@@ -28,6 +28,9 @@ export const BUSINESS_TIME_ZONE = "America/Chicago";
  * Submissions at or after this hour (Central) are treated as arriving the
  * next business day. Evening and weekend submissions therefore get an honest
  * date rather than one that assumes work happens at 11pm.
+ *
+ * Confirmed 2026-09-12. Like the timezone above, this is a promise and not a
+ * preference: moving it moves which business day a real submission lands on.
  */
 export const BUSINESS_DAY_END_HOUR = 17;
 

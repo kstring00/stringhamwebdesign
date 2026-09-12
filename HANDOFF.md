@@ -275,7 +275,8 @@ only because a real run exposed what the stub could not.
 2. ~~**`BUSINESS_TIME_ZONE` is `America/New_York`**~~ Resolved 2026-09-12:
    `America/Chicago`. The Eastern value came from misreading the client project
    "Lake City Self Storage" as Kyle's own location — `app/about/page.tsx`
-   already said League City, Texas. The 17:00 cutoff is still unconfirmed.
+   already said League City, Texas. The 17:00 cutoff was confirmed correct the
+   same day.
 3. ~~The binder headline **"The work, up close."** is a placeholder.~~ Resolved
    2026-09-12: it stays as written.
 4. ~~Do the `AGENTS.md` / `CLAUDE.md` generated files stay committed?~~ Resolved

@@ -258,13 +258,13 @@ rather than discovered one blocker at a time:
   cleanup. `20260904232200_create_ai_intake_schema.sql` also creates the
   `pgcrypto` extension and an `intake-uploads` storage bucket; both would
   need consideration.
-- **`BUSINESS_TIME_ZONE` is `America/Chicago` with a 17:00 cutoff.** The zone
-  was confirmed 2026-09-12 (League City, TX); it had been `America/New_York`,
-  inferred from a misreading of the *client* project "Lake City Self Storage".
-  **The 17:00 cutoff is still an unconfirmed assumption** — it decides whether
-  an evening submission is promised tomorrow or the day after. Both are single
-  constants in `app/lib/businessDays.ts`, and both decide a date the site
-  promises a client in writing on `/quote/received`.
+- **`BUSINESS_TIME_ZONE` is `America/Chicago` with a 17:00 cutoff.** Both
+  confirmed 2026-09-12 and settled — not open questions. The zone had been
+  `America/New_York`, inferred from a misreading of the *client* project "Lake
+  City Self Storage"; League City, TX is correct. The 17:00 cutoff is correct
+  as written. Both are single constants in `app/lib/businessDays.ts` and both
+  decide a date the site promises a client in writing on `/quote/received`, so
+  neither should be changed casually.
 - **The binder headline "The work, up close." stays.** Confirmed 2026-09-12 —
   shipping it rather than holding the section for a rewrite.
 - **`AGENTS.md` / `CLAUDE.md` stay committed.** Confirmed 2026-09-12. They are
