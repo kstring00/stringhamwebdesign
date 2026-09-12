@@ -14,9 +14,30 @@ const statusClass: Record<ProjectStatus, string> = {
   "CASE STUDY": styles.statusCaseStudy,
 };
 
-export function StatusBadge({ status }: { status: ProjectStatus }) {
+const statusClassOnDark: Record<ProjectStatus, string> = {
+  LIVE: styles.statusLive,
+  "IN PILOT": styles.statusPilot,
+  "LAUNCHING SOON": styles.statusSoonDark,
+  "CASE STUDY": styles.statusCaseStudyDark,
+};
+
+/**
+ * `onDark` swaps only the two variants that are drawn in ink on a transparent
+ * ground — #806635 and #60676d are chosen for cream and fall to about 2.9:1
+ * on the navy band. The filled variants carry their own background and need
+ * no change, so the treatment stays one component and one shape.
+ */
+export function StatusBadge({
+  status,
+  onDark = false,
+}: {
+  status: ProjectStatus;
+  onDark?: boolean;
+}) {
   return (
-    <span className={`${styles.statusBadge} ${statusClass[status]}`}>
+    <span
+      className={`${styles.statusBadge} ${(onDark ? statusClassOnDark : statusClass)[status]}`}
+    >
       {status}
     </span>
   );

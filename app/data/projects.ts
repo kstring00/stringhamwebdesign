@@ -133,11 +133,11 @@ export const projects: Project[] = [
     description: "A local-first journaling and life-planning app with optional cloud sync, built around faithfulness in small things.",
     status: "LIVE",
     tech: ["Vanilla JS", "Supabase", "Local-first", "Auth"],
-    heroImage: "/work/with-little/dashboard.webp",
+    heroImage: "/hero-crt/with-little-daily.png",
     heroImageAlt: "With Little daily ledger dashboard showing planning, habits, must-dos, a thought journal, and scripture",
     screenshots: [
       {
-        src: "/work/with-little/dashboard.webp",
+        src: "/hero-crt/with-little-daily.png",
         alt: "With Little daily ledger dashboard showing planning, habits, must-dos, a thought journal, and scripture",
         caption: "Daily Ledger dashboard and morning planning view.",
       },

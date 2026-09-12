@@ -1,553 +1,70 @@
-"use client";
+import Link from "next/link";
 
-import {
-  CSSProperties,
-  KeyboardEvent as ReactKeyboardEvent,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { capabilityPanels } from "./data/capabilities";
+import { projects } from "./data/projects";
+import { StatusBadge } from "./work/ProjectUI";
 import styles from "./SelectedWork.module.css";
-import polish from "./SelectedWorkPolish.module.css";
 
-type Feature = {
-  label: string;
-  detail: string;
-};
+/**
+ * Three cards, not a binder.
+ *
+ * A homepage visitor has not decided they care yet, so asking them to open
+ * tabs and explore costs more attention than they have spent. Three
+ * screenshots let them read the range in a few seconds and leave.
+ *
+ * Everything shown comes from data/projects.ts — the same source /work reads —
+ * so a title, description or status changed there changes in both places. The
+ * pill is the portfolio page's own component rather than a copy of it.
+ */
+const FEATURED = ["common-ground", "bcba-prep", "with-little"] as const;
 
-type Project = {
-  id: string;
-  tab: string;
-  title: string;
-  category: string;
-  year: string;
-  status: string;
-  eyebrow: string;
-  headline: string;
-  body: string;
-  accent: "navy" | "gold" | "plum" | "forest";
-  siteUrl: string;
-  screenshots?: string[];
-  features: Feature[];
-};
-
-const projects: Project[] = [
-  {
-    id: "with-little",
-    tab: "With Little",
-    title: "With Little",
-    category: "Personal project",
-    year: "2026",
-    status: "Live",
-    eyebrow: "SMALL STEPS. BIGGER POSSIBILITIES.",
-    headline: "A calmer digital home for families.",
-    body: "A gentle, useful experience built around clarity, trust, and the next right step.",
-    accent: "plum",
-    siteUrl: "withlittle.com",
-    screenshots: [
-      "/selected-work/with-little-01.png",
-      "/selected-work/with-little-02.png",
-    ],
-    features: [
-      { label: "Email / CRM", detail: "Follow-up and nurturing flows" },
-      { label: "Intake forms", detail: "Structured client information" },
-      { label: "Analytics", detail: "See what visitors actually use" },
-      { label: "CMS", detail: "Simple content updates" },
-      { label: "Payments", detail: "Ready for secure checkout" },
-      { label: "Client portal", detail: "Private resources and access" },
-    ],
-  },
-  {
-    id: "common-ground",
-    tab: "Common Ground",
-    title: "Common Ground",
-    category: "ABA / autism support",
-    year: "2026",
-    status: "Piloted",
-    eyebrow: "PARENT NAVIGATION, WITHOUT THE OVERWHELM.",
-    headline: "One place to know what comes next.",
-    body: "A parent-navigation platform that turns scattered information into guided next steps.",
-    accent: "gold",
-    siteUrl: "texasabacenterscg.com",
-    screenshots: ["/hero-crt/common-ground.png"],
-    features: [
-      { label: "Guided intake", detail: "Personalized parent pathways" },
-      { label: "Resource system", detail: "Curated tools in one place" },
-      { label: "Analytics", detail: "Understand parent usage" },
-      { label: "Care-plan logic", detail: "Adaptive next-step planning" },
-      { label: "Provider tools", detail: "Interview and evaluation guides" },
-      { label: "Support routing", detail: "Clear paths to human help" },
-    ],
-  },
-  {
-    id: "bcba-prep",
-    tab: "BCBA Prep",
-    title: "BCBA Prep",
-    category: "Exam prep · licensing",
-    year: "2026",
-    status: "Pre-launch",
-    eyebrow: "NINE DOMAINS. ONE STUDY EXPERIENCE.",
-    headline: "A study storefront that feels like a library.",
-    body: "Custom commerce and member architecture wrapped in an interactive book-based experience.",
-    accent: "plum",
-    siteUrl: "Bee the Behavior Bae",
-    screenshots: [
-      "/selected-work/bcba-prep-01.png",
-      "/selected-work/bcba-prep-02.png",
-    ],
-    features: [
-      { label: "Stripe", detail: "Server-side product pricing" },
-      { label: "Member access", detail: "Account-based study library" },
-      { label: "Bundles", detail: "Domain and full-library pricing" },
-      { label: "Testimonials", detail: "Social-proof collection" },
-      { label: "Analytics", detail: "Launch behavior insights" },
-      { label: "Licensing", detail: "Personal-use access structure" },
-    ],
-  },
-  {
-    id: "yours-here",
-    tab: "Yours Here",
-    title: "Your business",
-    category: "Next project",
-    year: "—",
-    status: "Available",
-    eyebrow: "THIS TAB IS STILL EMPTY.",
-    headline: "Your business could be the next page.",
-    body: "A custom build shaped around the way your business actually works — not a template with the name swapped out.",
-    accent: "gold",
-    siteUrl: "yourbusiness.com",
-    features: [
-      { label: "Email / CRM", detail: "Nurture leads automatically" },
-      { label: "Intake forms", detail: "Collect exactly what you need" },
-      { label: "Analytics", detail: "Know what is working" },
-      { label: "CMS", detail: "Update content without friction" },
-      { label: "Payments", detail: "Take secure online payments" },
-      { label: "Client portal", detail: "Give clients a private home" },
-    ],
-  },
-];
-
-const featureGlyphs = ["✉", "▤", "⌁", "▦", "▣", "◎"];
-
-function GeneratedPreview({ active }: { active: Project }) {
-  return (
-    <div className={styles.siteScroller} key={active.id}>
-      <div className={styles.siteHero}>
-        <div className={styles.fakeNav}>
-          <strong>{active.title}</strong>
-          <span>Home</span>
-          <span>Work</span>
-          <span>About</span>
-          <b>Let&apos;s talk</b>
-        </div>
-
-        <div className={styles.siteHeroGrid}>
-          <div>
-            <p className={styles.mockEyebrow}>{active.eyebrow}</p>
-            <h3>{active.headline}</h3>
-            <p>{active.body}</p>
-            <span className={styles.mockButton}>Explore the project →</span>
-          </div>
-          <div className={styles.heroArtwork} aria-hidden="true">
-            <span className={styles.artOrb} />
-            <span className={styles.artCard} />
-            <span className={styles.artLine} />
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.mockStats}>
-        <div>
-          <strong>Custom</strong>
-          <span>Built around the workflow</span>
-        </div>
-        <div>
-          <strong>Responsive</strong>
-          <span>Designed across devices</span>
-        </div>
-        <div>
-          <strong>Maintainable</strong>
-          <span>Made to grow after launch</span>
-        </div>
-      </div>
-
-      <div className={styles.mockFeatureBlock}>
-        <div className={styles.mockPhoto} aria-hidden="true" />
-        <div>
-          <p>THE SYSTEM BEHIND THE SCREEN</p>
-          <h4>Design is only the front layer.</h4>
-          <span>
-            Forms, payments, analytics, content, automation and client access can all
-            live behind the same experience.
-          </span>
-        </div>
-      </div>
-
-      <div className={styles.mockFooter}>
-        <strong>{active.title}</strong>
-        <span>{active.category}</span>
-        <span>{active.year}</span>
-      </div>
-    </div>
-  );
-}
+const featured = FEATURED.map((slug) => {
+  const project = projects.find((item) => item.slug === slug);
+  if (!project) throw new Error(`Homepage featured slug not in projects data: ${slug}`);
+  return project;
+});
 
 export default function SelectedWork() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [shotIndex, setShotIndex] = useState(0);
-  const [entered, setEntered] = useState(false);
-  // Which way the page flips. Set from the tab you came from, so moving down
-  // the tabs turns the page forward and moving up turns it back.
-  const [turnDirection, setTurnDirection] = useState<"forward" | "back">("forward");
-  // Which "under the hood" panel is open over the rendered site. Null keeps
-  // the work itself the largest thing on screen, which is the point of the
-  // section; the tabs stay visible either way so the panels are discoverable.
-  const [openPanel, setOpenPanel] = useState<string | null>(null);
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-
-  const active = projects[activeIndex];
-  const shotCount = active.screenshots?.length ?? 0;
-  const total = projects.length;
-  const totalLabel = String(total).padStart(2, "0");
-
-  useEffect(() => {
-    const node = sectionRef.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setEntered(true);
-      },
-      { threshold: 0.18 },
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    setShotIndex(0);
-    if (shotCount < 2) return;
-
-    const timer = window.setInterval(() => {
-      setShotIndex((current) => (current + 1) % shotCount);
-    }, 6500);
-
-    return () => window.clearInterval(timer);
-  }, [active.id, shotCount]);
-
-  const activePanel = openPanel
-    ? capabilityPanels.find((panel) => panel.id === openPanel) ?? null
-    : null;
-
-  const capabilityCards = activePanel
-    ? activePanel.fromProject
-      ? active.features.map((feature, index) => ({
-          label: feature.label,
-          detail: feature.detail,
-          glyph: featureGlyphs[index % featureGlyphs.length],
-        }))
-      : activePanel.cards ?? []
-    : [];
-
-  const accentClass = useMemo(() => {
-    return styles[`accent_${active.accent}`] ?? "";
-  }, [active.accent]);
-
-  const previousShot = () => {
-    if (shotCount < 2) return;
-    setShotIndex((current) => (current - 1 + shotCount) % shotCount);
-  };
-
-  const nextShot = () => {
-    if (shotCount < 2) return;
-    setShotIndex((current) => (current + 1) % shotCount);
-  };
-
-  const selectProject = (index: number) => {
-    if (index === activeIndex) return;
-    setTurnDirection(index > activeIndex ? "forward" : "back");
-    setActiveIndex(index);
-    setShotIndex(0);
-  };
-
-  // Roving tabindex: only the selected tab is in the tab order, and the arrow
-  // keys move between tabs the way the tablist pattern expects.
-  const onTabKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
-    const keys = ["ArrowDown", "ArrowRight", "ArrowUp", "ArrowLeft", "Home", "End"];
-    if (!keys.includes(event.key)) return;
-    event.preventDefault();
-
-    let next = activeIndex;
-    if (event.key === "ArrowDown" || event.key === "ArrowRight") {
-      next = (activeIndex + 1) % total;
-    } else if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
-      next = (activeIndex - 1 + total) % total;
-    } else if (event.key === "Home") {
-      next = 0;
-    } else if (event.key === "End") {
-      next = total - 1;
-    }
-
-    selectProject(next);
-    tabRefs.current[next]?.focus();
-  };
-
   return (
-    <section
-      ref={sectionRef}
-      className={`${styles.section} ${polish.sectionPolish} ${entered ? styles.entered : ""}`}
-      id="selected-work"
-      aria-labelledby="selected-work-heading"
-    >
-      <div className={styles.headingWrap}>
-        <p className={styles.eyebrow}>Selected work</p>
-        <div className={styles.headingRow}>
-          <h2 id="selected-work-heading">The work, up close.</h2>
-          <p className={styles.headingNote}>
-            Open the binder. Pick a tab. See the site at full size, then see the
-            system behind it.
-          </p>
+    <section className={styles.section} id="selected-work" aria-labelledby="selected-work-heading">
+      <div className={styles.inner}>
+        <div className={styles.head}>
+          <div>
+            <p className={styles.eyebrow}>Selected work</p>
+            <h2 id="selected-work-heading">The work, up close.</h2>
+          </div>
+          <Link className={styles.viewAll} href="/work">
+            View all work <span aria-hidden="true">→</span>
+          </Link>
         </div>
-      </div>
 
-      <div className={`${styles.stage} ${polish.stagePolish} ${accentClass}`}>
-        <div className={styles.tableGlow} aria-hidden="true" />
-
-        <div
-          className={`${styles.binder} ${polish.binderPolish}`}
-          aria-label="Selected project binder"
-        >
-          <div className={styles.coverLeft}>
-            <div className={`${styles.coverPaper} ${polish.coverPolish}`}>
-              <p className={styles.coverKicker}>Selected work</p>
-              <p className={`${styles.coverLine} ${polish.coverLinePolish}`}>
-                Thoughtful websites,
-                <br />
-                built around
-                <br />
-                real businesses.
-              </p>
-              <span className={styles.coverRule} />
-              <p className={styles.coverSmall}>
-                Strategy
-                <br />
-                design
-                <br />
-                systems
-                <br />
-                launch
-              </p>
-              <blockquote>“Good design makes the next step obvious.”</blockquote>
-            </div>
-          </div>
-
-          <div className={styles.rings} aria-hidden="true">
-            {[0, 1, 2, 3, 4].map((ring) => (
-              <span key={ring} />
-            ))}
-          </div>
-
-          <div className={styles.pageStack} data-turn={turnDirection}>
-            <div className={styles.backPage} aria-hidden="true" />
-
-            {/* Capability tabs sit on the top edge of the page, above the
-                browser chrome, so they read as part of the binder rather than
-                as navigation belonging to the client's site. */}
-            <div className={styles.topTabs}>
-              <span className={styles.topTabsLabel} aria-hidden="true">
-                Under the hood
-              </span>
-
-              {capabilityPanels.map((panel) => {
-                const open = openPanel === panel.id;
-                return (
-                  <button
-                    aria-controls="binder-capability-panel"
-                    aria-expanded={open}
-                    className={`${styles.topTab} ${open ? styles.topTabActive : ""}`}
-                    key={panel.id}
-                    onClick={() => setOpenPanel(open ? null : panel.id)}
-                    type="button"
-                  >
-                    {panel.tab}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div
-              className={`${styles.sitePage} ${polish.sitePagePolish}`}
-              key={active.id}
-              id={`binder-panel-${active.id}`}
-              role="tabpanel"
-              aria-labelledby={`binder-tab-${active.id}`}
-              tabIndex={0}
-            >
-              <span className={styles.turnShade} aria-hidden="true" />
-              <div className={`${styles.browserBar} ${polish.browserBarPolish}`}>
-                <span className={styles.browserDots} aria-hidden="true">
-                  <i />
-                  <i />
-                  <i />
+        <ul className={styles.grid} data-reveal-group>
+          {featured.map((project) => (
+            <li className={styles.card} key={project.slug} data-reveal>
+              <Link className={styles.cardLink} href={`/work/${project.slug}`}>
+                <span className={styles.media}>
+                  <img
+                    src={project.heroImage}
+                    alt={project.heroImageAlt}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span className={styles.mediaScrim} aria-hidden="true" />
                 </span>
-                <span className={styles.browserAddress}>{active.siteUrl}</span>
-                <span className={styles.browserAction}>↗</span>
-              </div>
 
-              <div className={`${styles.siteViewport} ${polish.viewportPolish}`}>
-                {activePanel ? (
-                  <div
-                    className={styles.capabilityPanel}
-                    id="binder-capability-panel"
-                    key={`${activePanel.id}-${active.id}`}
-                    role="region"
-                    aria-label={`${activePanel.tab} — ${active.title}`}
-                  >
-                    <div className={styles.capabilityHead}>
-                      <div>
-                        <p className={styles.capabilityEyebrow}>
-                          {activePanel.tab}
-                          <span aria-hidden="true"> / </span>
-                          {active.title}
-                        </p>
-                        <h3 className={styles.capabilityTitle}>
-                          {activePanel.title}
-                        </h3>
-                      </div>
-
-                      <button
-                        aria-label="Close this panel and show the site"
-                        className={styles.capabilityClose}
-                        onClick={() => setOpenPanel(null)}
-                        type="button"
-                      >
-                        <span aria-hidden="true">×</span>
-                      </button>
-                    </div>
-
-                    <p className={styles.capabilityIntro}>{activePanel.intro}</p>
-
-                    <div className={styles.capabilityGrid}>
-                      {capabilityCards.map((card, index) => (
-                        <div
-                          className={styles.capabilityCard}
-                          key={`${activePanel.id}-${card.label}`}
-                          style={{ ["--i" as string]: index }}
-                        >
-                          <span className={styles.capabilityGlyph} aria-hidden="true">
-                            {card.glyph}
-                          </span>
-                          <div>
-                            <strong>{card.label}</strong>
-                            <p>{card.detail}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ) : null}
-
-                {shotCount > 0 ? (
-                  <div className={polish.screenshotStage}>
-                    {active.screenshots?.map((src, index) => (
-                      <img
-                        alt={`${active.title} website screen ${index + 1}`}
-                        className={`${polish.screenshotImage} ${index === shotIndex ? polish.screenshotActive : ""}`}
-                        decoding="async"
-                        key={src}
-                        loading={index === 0 ? "eager" : "lazy"}
-                        src={src}
-                      />
-                    ))}
-
-                    {shotCount > 1 ? (
-                      <div className={polish.shotNavigator} aria-label="Website screenshot navigation">
-                        <button
-                          aria-label={`Show previous ${active.title} screenshot`}
-                          onClick={previousShot}
-                          type="button"
-                        >
-                          ←
-                        </button>
-                        <div className={polish.shotReadout}>
-                          <span>Screen</span>
-                          <strong>
-                            {String(shotIndex + 1).padStart(2, "0")} / {String(shotCount).padStart(2, "0")}
-                          </strong>
-                          <i className={polish.shotProgress} key={`${active.id}-${shotIndex}`} />
-                        </div>
-                        <button
-                          aria-label={`Show next ${active.title} screenshot`}
-                          onClick={nextShot}
-                          type="button"
-                        >
-                          →
-                        </button>
-                      </div>
-                    ) : (
-                      <div className={polish.captureLabel} aria-hidden="true">
-                        <span>Live screen</span>
-                        <b>01 / 01</b>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <GeneratedPreview active={active} />
-                )}
-              </div>
-
-              <div className={`${styles.pageMeta} ${polish.pageMetaPolish}`}>
-                <div>
-                  <span>{String(activeIndex + 1).padStart(2, "0")} / {totalLabel}</span>
-                  <strong>{active.title}</strong>
-                </div>
-                <div>
-                  <span>{active.category}</span>
-                  <strong className={polish.statusBadge}>{active.status}</strong>
-                </div>
-              </div>
-            </div>
-
-            <div
-              className={`${styles.tabs} ${polish.tabsPolish}`}
-              role="tablist"
-              aria-label="Portfolio projects"
-            >
-              {projects.map((project, index) => (
-                <button
-                  type="button"
-                  role="tab"
-                  id={`binder-tab-${project.id}`}
-                  aria-selected={index === activeIndex}
-                  aria-controls={`binder-panel-${project.id}`}
-                  tabIndex={index === activeIndex ? 0 : -1}
-                  ref={(node) => {
-                    tabRefs.current[index] = node;
-                  }}
-                  className={`${index === activeIndex ? styles.activeTab : ""} ${polish.tabButton} ${index === activeIndex ? polish.tabButtonActive : ""}`}
-                  key={project.id}
-                  onClick={() => selectProject(index)}
-                  onKeyDown={onTabKeyDown}
-                >
-                  {project.tab}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <div className={styles.underStage}>
-        <p>
-          The binder is the work. The tabs along the top open the systems that
-          make each build useful once someone lands on it.
-        </p>
-        <a href="/work">View all work <span>→</span></a>
+                <span className={styles.body}>
+                  <span className={styles.status}>
+                    <StatusBadge status={project.status} onDark />
+                  </span>
+                  <span className={styles.title}>{project.title}</span>
+                  <span className={styles.description}>{project.description}</span>
+                  <span className={styles.more} aria-hidden="true">
+                    View case study <span>→</span>
+                  </span>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
