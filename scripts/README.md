@@ -286,3 +286,17 @@ scroll-behavior: smooth, and Next 16 stopped overriding that during route
 transitions unless <html> carries data-scroll-behavior="smooth".
 
     BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/nav-scroll-check.js
+
+## resources-check.js
+
+The /resources index and its five documents against the brief: one h1 per page
+(the document title), unique title and description in the "[Doc title] —
+Stringham Web Design, League City" format, five cards in the briefed order with
+summaries from each document's opening, Resources in the nav between Portfolio
+and Pricing and in the footer, a back link and exactly one CTA on each document,
+a 65–72ch reading width, every internal link fetched (the /pricing links inside
+the documents included), no overflow at 360px on the pages with tables, 44px
+controls, no placeholder text in the new files, and all six routes in
+sitemap.xml.
+
+    BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/resources-check.js

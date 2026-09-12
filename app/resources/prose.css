@@ -1,0 +1,207 @@
+/* Typography for the rendered Markdown on /resources/[slug].
+
+   Global rather than a CSS module because the HTML is produced by the
+   Markdown renderer and cannot carry hashed class names. Everything is scoped
+   under .resourceProse so nothing here reaches the rest of the site. Colours
+   are the same values /pricing declares. */
+
+.resourceProse {
+  color: #0d1b26;
+  font-size: clamp(1.02rem, 1.2vw, 1.12rem);
+  line-height: 1.78;
+}
+
+/* Vertical rhythm from the top margin of each block. The resets below zero
+   only the bottom margins, so they cannot outrank this. */
+.resourceProse > * + * {
+  margin-top: 1.15em;
+}
+
+.resourceProse p,
+.resourceProse ul,
+.resourceProse ol {
+  margin-bottom: 0;
+}
+
+.resourceProse > p:first-child {
+  margin-top: 0;
+}
+
+/* Section headings in the serif, sat on a little more air, with a short gold
+   rule above so the eye can find the next section while scrolling. */
+.resourceProse h2 {
+  position: relative;
+  margin: 2.6em 0 0;
+  padding-top: 1.1em;
+  color: #0d1b26;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.75rem, 2.6vw, 2.25rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
+
+.resourceProse h2::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2.25rem;
+  height: 1px;
+  background: #c9a227;
+}
+
+.resourceProse h2 + * {
+  margin-top: 0.9em;
+}
+
+.resourceProse h3 {
+  margin: 1.9em 0 0;
+  color: #0d1b26;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.3rem, 1.8vw, 1.55rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.resourceProse h3 + * {
+  margin-top: 0.55em;
+}
+
+/* Sub-lines under phase headings in "What happens" are italic paragraphs. */
+.resourceProse h2 + p > em:only-child {
+  color: #4f6474;
+  font-style: italic;
+}
+
+.resourceProse strong {
+  color: #0d1b26;
+  font-weight: 650;
+}
+
+.resourceProse a {
+  color: #6f5620;
+  text-decoration: underline;
+  text-decoration-color: rgba(201, 162, 39, 0.6);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: text-decoration-color 200ms ease;
+}
+
+.resourceProse a:hover {
+  text-decoration-color: #c9a227;
+}
+
+.resourceProse a:focus-visible {
+  outline: 2px solid #a9833d;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.resourceProse code {
+  padding: 0.1em 0.4em;
+  background: rgba(38, 66, 89, 0.08);
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.86em;
+}
+
+.resourceProse ul,
+.resourceProse ol {
+  padding-left: 1.3em;
+}
+
+.resourceProse li {
+  padding-left: 0.2em;
+}
+
+.resourceProse li + li {
+  margin-top: 0.45em;
+}
+
+.resourceProse li::marker {
+  color: #a9833d;
+}
+
+/* The "---" between sections becomes a gold hairline that draws in. */
+.resourceProse hr {
+  height: 1px;
+  margin: 2.4em 0 0;
+  border: 0;
+  background: rgba(201, 162, 39, 0.34);
+}
+
+/* After a divider the heading's own short rule would double it up, so the
+   divider stands alone and the heading sits closer. */
+.resourceProse hr + h2 {
+  margin-top: 1.6em;
+  padding-top: 0;
+}
+
+.resourceProse hr + h2::before {
+  display: none;
+}
+
+.resourceProse blockquote {
+  margin: 0;
+  padding-left: 1.2em;
+  border-left: 2px solid #c9a227;
+  color: #4f6474;
+}
+
+/* Tables. The wrapper scrolls sideways on a phone, so the page never gets
+   wider than the screen; a minimum width keeps the columns readable rather
+   than letting them crush to a word per line. */
+.resourceProse .tableWrap {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid rgba(38, 66, 89, 0.16);
+  border-radius: 10px;
+  background: #fbf9f5;
+}
+
+.resourceProse .tableWrap:focus-visible {
+  outline: 2px solid #a9833d;
+  outline-offset: 2px;
+}
+
+.resourceProse table {
+  width: 100%;
+  min-width: 34rem;
+  border-collapse: collapse;
+  font-size: 0.92em;
+  line-height: 1.5;
+}
+
+.resourceProse th,
+.resourceProse td {
+  padding: 0.75em 0.9em;
+  border-bottom: 1px solid rgba(38, 66, 89, 0.12);
+  text-align: left;
+  vertical-align: top;
+}
+
+.resourceProse th {
+  color: #6f5620;
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.16em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.resourceProse tr:last-child td {
+  border-bottom: 0;
+}
+
+.resourceProse td:first-child {
+  font-weight: 600;
+}
+
+@media (max-width: 30rem) {
+  .resourceProse {
+    font-size: 1rem;
+  }
+}
