@@ -22,8 +22,8 @@ export function register() {
 
   if (!supabaseUrl) {
     console.warn(
-      "\n  SUPABASE_URL is not set. The portal, the AI intake and the Stripe\n" +
-        "  webhook will all fail until it is. See .env.example.\n",
+      "\n  SUPABASE_URL is not set. The portal and the Stripe webhook will\n" +
+        "  both fail until it is. See .env.example.\n",
     );
     return;
   }
