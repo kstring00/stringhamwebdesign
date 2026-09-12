@@ -9,6 +9,9 @@ import {
   useState,
 } from "react";
 
+import ActivityFeed from "./ActivityFeed";
+import OnboardingPanel, { type OnboardingItem } from "./OnboardingPanel";
+import TimesheetPanel, { type TimeCheckin } from "./TimesheetPanel";
 import styles from "./portal.module.css";
 
 type PortalUser = {
@@ -87,7 +90,26 @@ type DashboardPayload = {
   files: PortalFile[];
   timeEntries: TimeEntry[];
   invoices: Invoice[];
+  onboardingItems: OnboardingItem[];
+  timeCheckins: TimeCheckin[];
 };
+
+/** Tabs double as URL segments under /portal/projects. */
+const TABS = [
+  ["overview", "Overview"],
+  ["onboarding", "Onboarding"],
+  ["timesheet", "Timesheet"],
+  ["files", "Files"],
+  ["messages", "Messages"],
+] as const;
+
+type TabId = (typeof TABS)[number][0];
+
+function tabFromPath(pathname: string): TabId {
+  const last = pathname.split("/").filter(Boolean).pop() ?? "";
+  const match = TABS.find(([id]) => id === last);
+  return match ? match[0] : "overview";
+}
 
 function money(value: number | null) {
   if (value === null) return "Not set";
@@ -126,6 +148,24 @@ export default function PortalClient() {
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
   const [uploadBusy, setUploadBusy] = useState(false);
+  const [tab, setTab] = useState<TabId>("overview");
+
+  // The catch-all /portal/projects/[[...slug]] route already accepts these
+  // segments, so the tab can live in the URL without a route rewrite. Using
+  // history directly rather than a router push keeps the client-side data
+  // loaded instead of re-running the server component on every tab change.
+  useEffect(() => {
+    setTab(tabFromPath(window.location.pathname));
+    const onPop = () => setTab(tabFromPath(window.location.pathname));
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
+  function selectTab(next: TabId) {
+    setTab(next);
+    const path = next === "overview" ? "/portal/projects" : `/portal/projects/${next}`;
+    window.history.pushState(null, "", path);
+  }
   const [inviteOpen, setInviteOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -189,6 +229,16 @@ export default function PortalClient() {
 
     const payload = (await response.json()) as { messages: Message[] };
     setMessages(payload.messages);
+
+    // Clear the unread count for whoever is looking. The database refuses to
+    // mark your own messages read, so this only ever touches the other side's.
+    if (payload.messages.some((message) => !message.read_at)) {
+      fetch("/api/portal/messages", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId }),
+      }).catch(() => undefined);
+    }
   }, []);
 
   useEffect(() => {
@@ -477,7 +527,37 @@ export default function PortalClient() {
                 </span>
               </header>
 
-              <div className={styles.summaryGrid}>
+              <nav className={styles.tabBar} aria-label="Project sections">
+                {TABS.map(([id, label]) => {
+                  const open =
+                    id === "onboarding"
+                      ? (dashboard?.onboardingItems ?? []).filter(
+                          (item) =>
+                            item.project_id === selectedProjectId &&
+                            (item.status === "pending" || item.status === "needs_changes"),
+                        ).length
+                      : 0;
+
+                  return (
+                    <button
+                      aria-current={tab === id ? "page" : undefined}
+                      className={tab === id ? styles.tabActive : ""}
+                      key={id}
+                      onClick={() => selectTab(id)}
+                      type="button"
+                    >
+                      {label}
+                      {open > 0 ? (
+                        <i className={styles.tabCount} aria-label={`${open} waiting on you`}>
+                          {open}
+                        </i>
+                      ) : null}
+                    </button>
+                  );
+                })}
+              </nav>
+
+              <div className={styles.summaryGrid} hidden={tab !== "overview"}>
                 <article>
                   <span>Current phase</span>
                   <strong>{statusLabel(selectedProject.status)}</strong>
@@ -499,8 +579,42 @@ export default function PortalClient() {
                 </article>
               </div>
 
-              <div className={styles.mainGrid}>
-                <section className={styles.messagesPanel} aria-labelledby="messages-title">
+              {tab === "overview" ? (
+                <ActivityFeed
+                  currentUserId={user?.id ?? ""}
+                  files={dashboard?.files ?? []}
+                  messages={messages}
+                  onboardingItems={dashboard?.onboardingItems ?? []}
+                  projectId={selectedProjectId}
+                  timeEntries={dashboard?.timeEntries ?? []}
+                />
+              ) : null}
+
+              {tab === "onboarding" ? (
+                <OnboardingPanel
+                  items={dashboard?.onboardingItems ?? []}
+                  onChanged={async () => {
+                    await loadDashboard();
+                  }}
+                  onError={setError}
+                  projectId={selectedProjectId}
+                />
+              ) : null}
+
+              {tab === "timesheet" ? (
+                <TimesheetPanel
+                  checkins={dashboard?.timeCheckins ?? []}
+                  entries={dashboard?.timeEntries ?? []}
+                  projectId={selectedProjectId}
+                />
+              ) : null}
+
+              <div className={styles.mainGrid} hidden={tab !== "messages" && tab !== "files"}>
+                <section
+                  className={styles.messagesPanel}
+                  aria-labelledby="messages-title"
+                  hidden={tab !== "messages"}
+                >
                   <div className={styles.panelHeading}>
                     <div>
                       <p className={styles.eyebrow}>Conversation</p>
@@ -557,7 +671,7 @@ export default function PortalClient() {
                   </form>
                 </section>
 
-                <div className={styles.sideStack}>
+                <div className={styles.sideStack} hidden={tab !== "files"}>
                   <section className={styles.filesPanel} aria-labelledby="files-title">
                     <div className={styles.panelHeading}>
                       <div>
@@ -599,35 +713,6 @@ export default function PortalClient() {
                       <span>{uploadBusy ? "Uploading…" : "+ Upload a file"}</span>
                       <small>20 MB max</small>
                     </label>
-                  </section>
-
-                  <section className={styles.timesheetPanel} aria-labelledby="time-title">
-                    <div className={styles.panelHeading}>
-                      <div>
-                        <p className={styles.eyebrow}>Work log</p>
-                        <h2 id="time-title">Timesheet</h2>
-                      </div>
-                      <span>{totalHours.toFixed(1)}h</span>
-                    </div>
-
-                    {selectedTimeEntries.length ? (
-                      <div className={styles.timeList}>
-                        {selectedTimeEntries.slice(0, 6).map((entry) => (
-                          <div key={entry.id}>
-                            <time>{entry.date}</time>
-                            <span>
-                              <strong>{entry.phase}</strong>
-                              <small>{entry.description}</small>
-                            </span>
-                            <b>{Number(entry.hours).toFixed(1)}</b>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className={styles.emptySmall}>
-                        Entries will appear here as work is logged.
-                      </p>
-                    )}
                   </section>
 
                   <section className={styles.invoicePanel} aria-labelledby="invoice-title">

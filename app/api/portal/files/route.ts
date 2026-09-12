@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import { after } from "next/server";
 import { normalizeSupabaseUrl } from "@/app/lib/supabaseUrl";
 
 import {
+  adminRest,
   getPortalSession,
   storageUserRequest,
   userRest,
 } from "../../../lib/portalSupabase";
+import { adminAddress, notifyNewFile } from "../../../lib/portalEmail";
 
 const MAX_FILE_SIZE = 20 * 1024 * 1024;
 const UUID_RE =
@@ -97,6 +100,15 @@ export async function POST(request: NextRequest) {
       }),
     });
 
+    after(() =>
+      notifyFileRecipient(
+        projectId,
+        session.profile.role,
+        session.profile.name,
+        file.name,
+      ),
+    );
+
     const { storage_path: _storagePath, ...publicFile } = inserted[0];
     return NextResponse.json({ file: publicFile });
   } catch (error) {
@@ -162,4 +174,38 @@ export async function GET(request: NextRequest) {
     : `${base}/storage/v1${signedPath.startsWith("/") ? "" : "/"}${signedPath}`;
 
   return NextResponse.json({ url, filename: row.filename });
+}
+
+
+/** Mails whoever did not upload the file. Never fails the upload. */
+async function notifyFileRecipient(
+  projectId: string,
+  senderRole: "admin" | "client",
+  senderName: string,
+  filename: string,
+) {
+  try {
+    const projects = await adminRest<
+      { name: string; clients: { users: { email: string } | null } | null }[]
+    >(
+      `projects?id=eq.${encodeURIComponent(projectId)}` +
+        "&select=name,clients(users(email))&limit=1",
+    );
+
+    const project = projects[0];
+    if (!project) return;
+
+    const toRole = senderRole === "admin" ? "client" : "admin";
+    const to = toRole === "admin" ? adminAddress() : project.clients?.users?.email ?? "";
+
+    await notifyNewFile({
+      to,
+      toRole,
+      fromName: senderName,
+      filename,
+      projectName: project.name,
+    });
+  } catch (error) {
+    console.error("File notification lookup failed", projectId, error);
+  }
 }

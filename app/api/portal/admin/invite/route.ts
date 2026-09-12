@@ -6,9 +6,9 @@ import {
   getPortalSession,
   sendPortalMagicLink,
 } from "../../../../lib/portalSupabase";
+import { portalUrl } from "../../../../lib/portalUrl";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PORTAL_URL = "https://www.stringhamwebdesign.com/portal";
 
 function slugify(value: string) {
   const base = value
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
     });
 
     try {
-      await sendPortalMagicLink(email, PORTAL_URL);
+      await sendPortalMagicLink(email, portalUrl());
     } catch (error) {
       const windowId = windows[0]?.id;
       if (windowId) {

@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { after } from "next/server";
 
 import {
   adminRest,
   getPortalSession,
   userRest,
 } from "../../../lib/portalSupabase";
+import { adminAddress, notifyNewMessage } from "../../../lib/portalEmail";
 
 type MessageRow = {
   id: string;
@@ -84,6 +86,10 @@ export async function POST(request: NextRequest) {
       }),
     });
 
+    // Tell whoever did not write it. Scheduled after the response so a mail
+    // outage cannot fail a message that was already saved.
+    after(() => notifyRecipient(projectId, session.profile.role, session.profile.name));
+
     return NextResponse.json({
       message: {
         ...inserted[0],
@@ -96,5 +102,83 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Portal message send failed", error);
     return NextResponse.json({ error: "Could not send the message." }, { status: 500 });
+  }
+}
+
+
+/**
+ * Resolves who should hear about a new message and mails them.
+ *
+ * Uses the service key deliberately: a client cannot read the admin's row, and
+ * the admin cannot be expected to be online. This reads two columns to build
+ * an address and nothing else.
+ */
+async function notifyRecipient(
+  projectId: string,
+  senderRole: "admin" | "client",
+  senderName: string,
+) {
+  try {
+    const projects = await adminRest<
+      { name: string; clients: { users: { email: string } | null } | null }[]
+    >(
+      `projects?id=eq.${encodeURIComponent(projectId)}` +
+        "&select=name,clients(users(email))&limit=1",
+    );
+
+    const project = projects[0];
+    if (!project) return;
+
+    const clientEmail = project.clients?.users?.email ?? "";
+    const toRole = senderRole === "admin" ? "client" : "admin";
+    const to = toRole === "admin" ? adminAddress() : clientEmail;
+
+    await notifyNewMessage({
+      to,
+      toRole,
+      fromName: senderName,
+      projectName: project.name,
+    });
+  } catch (error) {
+    console.error("Message notification lookup failed", projectId, error);
+  }
+}
+
+/**
+ * Marks every message on a project read, except your own.
+ *
+ * The database decides what that means: the policy excludes rows you sent and
+ * rows already read, `read_at` is stamped by a trigger, and UPDATE is granted
+ * on that one column. This just names the project.
+ */
+export async function PATCH(request: NextRequest) {
+  const session = await getPortalSession();
+  if (!session) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+
+  const body = (await request.json().catch(() => null)) as
+    | { projectId?: string }
+    | null;
+  const projectId = body?.projectId?.trim() ?? "";
+  if (!projectId) {
+    return NextResponse.json({ error: "Project is required." }, { status: 400 });
+  }
+
+  try {
+    const updated = await userRest<{ id: string }[]>(
+      `messages?project_id=eq.${encodeURIComponent(projectId)}` +
+        `&sender_id=neq.${encodeURIComponent(session.user.id)}&read_at=is.null`,
+      session.accessToken,
+      {
+        method: "PATCH",
+        returnRepresentation: true,
+        body: JSON.stringify({ read_at: new Date().toISOString() }),
+      },
+    );
+
+    return NextResponse.json({ ok: true, marked: updated?.length ?? 0 });
+  } catch (error) {
+    // Read receipts are a convenience. Never fail the thread over one.
+    console.error("Marking messages read failed", projectId, error);
+    return NextResponse.json({ ok: true, marked: 0 });
   }
 }

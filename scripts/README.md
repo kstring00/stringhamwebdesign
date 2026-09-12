@@ -41,3 +41,92 @@ node scripts/stripe-webhook-check.js             # exits non-zero on failure
 npx tsx app/lib/stripe.check.ts         # test-mode guard, 50/50 split, form encoding
 npx tsx app/lib/businessDays.check.ts   # reply-date rules and US federal holidays
 ```
+
+## Portal sign-in checks
+
+Confirms the portal stays invite-only and that a caller cannot tell a real
+client address from an unknown one — by response body **or by timing**. The
+stub deliberately makes the mail send slow (300ms); if the response ever waited
+on it, the timing assertion would catch it.
+
+```bash
+node scripts/portal-auth-stub.js &                 # Supabase stand-in on :4100
+
+SUPABASE_URL=http://localhost:4100 \
+SUPABASE_SECRET_KEY=stub \
+PORTAL_ADMIN_EMAIL=admin@known.test \
+PORTAL_URL=http://localhost:3000/portal \
+npm run start &                                    # app on :3000
+
+node scripts/portal-auth-check.js                  # exits non-zero on failure
+```
+
+No real Supabase project, no real keys, no mail leaves the machine.
+
+## Client portal checks
+
+`portal-data-stub.js` stands in for Supabase with one client, one project, a
+five-item checklist and some logged hours. It enforces the same rules the real
+database does — RLS hides other projects, the column grant rejects any write
+outside `status` / `value` / `file_id`, and `accepted` is refused — so the UI is
+exercised against the real constraints without a Supabase project.
+
+```bash
+node scripts/portal-data-stub.js &                 # stub on :4200
+
+SUPABASE_URL=http://localhost:4200 \
+SUPABASE_SECRET_KEY=stub \
+PORTAL_URL=http://localhost:3000/portal \
+npm run dev &                                      # dev, not start: see below
+
+export NODE_PATH=./node_modules
+node scripts/portal-client-check.js                # 15 behaviour assertions
+node scripts/portal-a11y-check.js                  # keyboard, focus, touch targets
+node scripts/portal-contrast-check.js 1440 onboarding
+node scripts/portal-contrast-check.js 375 timesheet
+```
+
+Use `npm run dev`. Session cookies are `Secure` in a production build and are
+dropped over plain HTTP.
+
+### On the contrast checker
+
+It measures one element at a time: scroll into view, blank only that element's
+glyphs, screenshot the viewport, sample under its own text rects. A batched
+sweep was tried first and produced false positives that survived several fixes;
+the per-element version is slower but its results hold up. Two things it gets
+right that are easy to get wrong:
+
+- the painted colour is read **before** the element is blanked — read it after
+  and every element reports `rgba(0,0,0,0)`;
+- it waits for the scroll to settle before screenshotting — too short a wait
+  and neighbouring gold accents get sampled as the backdrop.
+
+### Step 4 checks — read receipts and notifications
+
+`portal-notify-check.js` asserts **who** each notification reaches. That is the
+part worth testing: a mistake there mails one party's activity to another.
+
+It needs a mail capture endpoint and, for the admin-only check-in route, the
+stub's session role switched:
+
+```bash
+node scripts/portal-data-stub.js &
+
+SUPABASE_URL=http://localhost:4200 \
+SUPABASE_SECRET_KEY=stub \
+PORTAL_URL=http://localhost:3000/portal \
+RESEND_API_KEY=stub-key \
+PORTAL_MAIL_ENDPOINT=http://localhost:4200/__mail \
+CAPTURE_TO_EMAIL=kyle@admin.test \
+npm run dev &
+
+node scripts/portal-read-receipts-check.js   # 6 assertions
+node scripts/portal-notify-check.js          # 11 assertions
+```
+
+`PORTAL_MAIL_ENDPOINT` is honoured only outside production — an env-settable
+mail endpoint on a live server would be a way to redirect client mail.
+
+Stub endpoints used by these: `/__mail`, `/__mail_reset`, `/__messages`,
+`/__reset`, and `/__role?admin|client`.

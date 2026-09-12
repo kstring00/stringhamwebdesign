@@ -21,6 +21,7 @@ Test mode only. `requireTestKey()` throws on anything that is not `sk_test_`.
 - `STRIPE_SECRET_KEY` is an `sk_test_` key, and `STRIPE_CARE_PRICE_ID` points at
   a **test-mode** recurring price if you intend step 6.
 - Migrations applied through `20260908180000_grant_stripe_events_to_service_role.sql`.
+  See `docs/SUPABASE_MIGRATIONS.md` for how to apply and how to check.
 - Your admin email matches `PORTAL_ADMIN_EMAIL` (or the hardcoded default in
   `app/lib/portalSupabase.ts`) — `bootstrapAdminIfNeeded` only promotes that one
   address to `admin`.

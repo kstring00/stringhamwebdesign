@@ -1,5 +1,5 @@
 import type { Item } from "./adminTypes";
-export type GlyphName="home"|"clients"|"projects"|"time"|"messages"|"files"|"settings"|"search"|"plus"|"bell"|"folder"|"money"|"people"|"upload"|"check"|"warn"|"pending"|"review"|"menu";
+export type GlyphName="home"|"clients"|"projects"|"time"|"messages"|"files"|"settings"|"search"|"plus"|"bell"|"folder"|"money"|"people"|"upload"|"check"|"warn"|"pending"|"review"|"menu"|"open";
 // Drawn as paths rather than unicode: the sidebar font has no glyph for several of
 // the characters this used to rely on, so Clients, Messages and Files all fell back
 // to tofu boxes and read as the same icon.
@@ -23,10 +23,18 @@ const G:Record<GlyphName,string>={
   pending:"M20 12a8 8 0 11-16 0 8 8 0 0116 0",
   review:"M2.6 12S6.2 6.6 12 6.6 21.4 12 21.4 12 17.8 17.4 12 17.4 2.6 12 2.6 12M14.5 12a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0",
   menu:"M6.4 12a1.4 1.4 0 11-2.8 0 1.4 1.4 0 012.8 0M13.4 12a1.4 1.4 0 11-2.8 0 1.4 1.4 0 012.8 0M20.4 12a1.4 1.4 0 11-2.8 0 1.4 1.4 0 012.8 0",
+  // Rows that open something get a chevron. A "menu" glyph on a row with no
+  // menu behind it reads as a broken control.
+  open:"M9.5 5.5L16 12l-6.5 6.5",
 };
 export function Glyph({name}:{name:GlyphName}){return <span data-glyph aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d={G[name]}/></svg></span>}
-export const NAV:[string,GlyphName,string][]=[["Dashboard","home","#dashboard"],["Clients","clients","#clients"],["Projects","projects","#projects"],["Time Logs","time","#time-log"],["Messages","messages","#messages"],["Files","files","#files"],["Settings","settings","#settings"]];
+// These are in-page anchors, not routes — every target is a section of the
+// dashboard. "Settings" used to point at the Quick-actions block, which is not
+// settings, so it is gone until there is a settings page to point at.
+export const NAV:[string,GlyphName,string][]=[["Dashboard","home","#dashboard"],["Clients","clients","#clients"],["Projects","projects","#projects"],["Time Logs","time","#time-log"],["Messages","messages","#messages"],["Files","files","#files"]];
 export const money=(n:number)=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(n||0);
+/** "1 project", not "1 projects". Counts are read at a glance; the mismatch reads as a bug in the data. */
+export const plural=(n:number,word:string)=>`${n} ${n===1?word:`${word}s`}`;
 function parseDate(v:string){return /^\d{4}-\d{2}-\d{2}$/.test(v)?new Date(`${v}T12:00:00`):new Date(v)}
 export function dateText(v:string|null,year=true){if(!v)return "No activity yet";const d=parseDate(v);if(Number.isNaN(d.getTime()))return v;return new Intl.DateTimeFormat("en-US",{month:"short",day:"numeric",...(year?{year:"numeric" as const}:{})}).format(d)}
 export function phase(v:string){return ({consultation:"Consultation",plan_quote:"Plan & quote",build:"Build",launch:"Launch",complete:"Complete",paused:"Paused",archived:"Archived"} as Record<string,string>)[v]||v.replaceAll("_"," ")}

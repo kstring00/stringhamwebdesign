@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { adminRest, getPortalSession, userRest } from "../../../../lib/portalSupabase";
+import { isStripeConfigured, stripeRequest } from "../../../../lib/stripe";
 
 type ProjectRow = { id: string; name: string; client_id: string };
 type ClientRow = { id: string; business_name: string };
@@ -56,24 +57,22 @@ export async function PATCH(request: NextRequest) {
       const invoice = invoices[0];
       if (!invoice) return NextResponse.json({ error: "Invoice not found." }, { status: 404 });
       const amount = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(Number(invoice.amount));
+      // This route used to read STRIPE_SECRET_KEY and call Stripe directly, so
+      // a live key in the environment would have sent a real invoice. Going
+      // through stripeRequest applies requireTestKey(), which refuses anything
+      // that is not an sk_test_ key.
       let stripeResent = false;
-      const stripeSecret = process.env.STRIPE_SECRET_KEY;
-      if (stripeSecret && invoice.stripe_invoice_id) {
-        const stripeResponse = await fetch(
-          `https://api.stripe.com/v1/invoices/${encodeURIComponent(invoice.stripe_invoice_id)}/send`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${stripeSecret}`,
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: "",
-          },
-        );
-        stripeResent = stripeResponse.ok;
-        if (!stripeResponse.ok) {
-          const detail = await stripeResponse.text().catch(() => "");
-          console.error("Stripe invoice resend failed", stripeResponse.status, detail.slice(0, 300));
+      if (isStripeConfigured() && invoice.stripe_invoice_id) {
+        try {
+          await stripeRequest(
+            `/invoices/${encodeURIComponent(invoice.stripe_invoice_id)}/send`,
+          );
+          stripeResent = true;
+        } catch (stripeError) {
+          console.error(
+            "Stripe invoice resend failed",
+            stripeError instanceof Error ? stripeError.message : stripeError,
+          );
         }
       }
       message = `Invoice reminder: ${invoiceLabel(invoice)} for ${amount} is still outstanding. If you already handled it, thank you — otherwise please take a look when you can.`;
