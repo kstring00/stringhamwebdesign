@@ -251,3 +251,27 @@ three uploads turned out to be truncated: the files existed, listed at a
 plausible size, and rendered nothing.
 
     BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/project-images-check.js
+
+## pricing-portal-check.js
+
+Asserts every constraint on the /pricing hero portal card, which is a four-slide
+auto-rotating sequence: all four slides present with their rows, the chrome that
+never swaps, cross-fade on opacity and transform only at 400ms ease-out, the
+progress fill transitioning rather than jumping, the strip tracking the active
+slide with earlier phases checked, looping back to slide one, pausing on hover,
+on focus within the card and when scrolled off-screen, reduced motion pinning
+the timesheet frame with zero transitions, one card height on every slide at
+three widths so the page cannot shift, no img and no added image or font
+request, one h1, no heading inside the card, 44px tap targets, no overflow at
+360px with the hero CTA above the fold, and AA by rendered pixel on each of the
+four slides at both widths.
+
+Two things it has to do carefully, both learned the hard way: pin the component
+with reduced motion before toggling slides by hand, or its own timer re-renders
+underneath the measurement; and scroll the card into view before waiting on the
+rotation, because on a phone it correctly sits below the fold and stays paused.
+
+    BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/pricing-portal-check.js
+
+`lighthouse-check.js` now honours BASE too, so both can run against the same
+server.

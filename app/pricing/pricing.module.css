@@ -193,46 +193,296 @@
   color: var(--gold);
 }
 
-/* Image slot: a warm block, a gold disc and a small dark card — enough
-   composition to hold the space until a photograph replaces it. */
+/* Hero media: a preview of the client portal, drawn in CSS. No photograph, no
+   text baked into a picture — every word here is selectable and announced. */
 .heroMedia {
   position: relative;
-  aspect-ratio: 5 / 4;
-  min-height: 18rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  min-width: 0;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
   background: linear-gradient(160deg, #ebe4d8 0%, #e2d9c9 100%);
-  overflow: hidden;
 }
 
-.mediaDisc {
-  position: absolute;
-  top: 12%;
-  right: 14%;
-  width: 46%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #e6cf9a 0%, #c9a75f 55%, #a8863f 100%);
-  opacity: 0.9;
-}
-
-.mediaCard {
-  position: absolute;
-  left: 10%;
-  bottom: 12%;
-  width: 52%;
-  padding: 1.5rem 1.4rem;
+.portal {
+  min-width: 0;
+  padding: clamp(1.15rem, 2vw, 1.6rem);
   background: var(--navy-deep);
-  color: var(--gold-on-dark);
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: clamp(1.1rem, 1.6vw, 1.5rem);
-  font-weight: 300;
-  letter-spacing: 0.12em;
-  line-height: 1.25;
-  text-transform: uppercase;
+  border-radius: 14px;
   box-shadow: 0 28px 48px -28px rgba(5, 23, 47, 0.7);
 }
 
-.mediaCard span {
+.portalHead {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.portalLabel {
+  margin: 0;
+  color: var(--gold-on-dark);
+  font-size: 0.62rem;
+  font-weight: 750;
+  letter-spacing: 0.22em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.portalProject {
+  margin: 0;
+  color: #f5f0e8;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+/* Progress strip. Four equal tracks; the fill is a scaled pseudo-bar rather
+   than a width, so it costs no layout and animates for free if it ever needs
+   to. State is carried by data-state, never by colour alone — a phase that is
+   not complete says so in text for a screen reader. */
+.portalPhases {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: clamp(1.1rem, 2vw, 1.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.portalPhase {
+  min-width: 0;
+}
+
+.portalTrack {
   display: block;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(226, 197, 138, 0.22);
+  overflow: hidden;
+}
+
+.portalFill {
+  display: block;
+  height: 100%;
+  background: var(--gold-rule);
+  transform-origin: left center;
+  transform: scaleX(0);
+  /* Done and idle bars ease to their resting size; the active one is driven
+     by the sweep below, and an animation outranks a transition. */
+  transition: transform 520ms var(--ease);
+}
+
+.portalPhase[data-state="done"] .portalFill {
+  transform: scaleX(1);
+}
+
+/* The active bar is the clock. It sweeps left to right, linear because it is
+   measuring time rather than easing into a place, over exactly the hold the
+   component sets in --hold. When it lands the slide changes and the next bar
+   starts from empty, so across the strip the gold reads a quarter, a half,
+   three quarters, full. */
+.portalPhase[data-state="active"] .portalFill {
+  animation: portalSweep var(--hold, 4000ms) linear forwards;
+}
+
+/* Hover, keyboard focus and off-screen all set data-paused on the card. A
+   paused animation never ends, so this is also what pauses the rotation. */
+.portal[data-paused] .portalFill {
+  animation-play-state: paused;
+}
+
+@keyframes portalSweep {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.portalPhaseName {
+  transition: color 400ms var(--ease);
+}
+
+.portalPhaseName {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+/* #e2c58a on #0d1b26 is 9.9:1; the dim state is held at 5.4:1 rather than a
+   low-opacity wash, so "not started" still reads at this size. */
+.portalPhase[data-state="done"] .portalPhaseName,
+.portalPhase[data-state="active"] .portalPhaseName {
+  color: var(--gold-on-dark);
+}
+
+.portalPhase[data-state="idle"] .portalPhaseName {
+  color: #93a3ae;
+}
+
+.portalCheck {
+  flex: none;
+  color: var(--gold-rule);
+}
+
+/* The stage. All four slides live in one grid cell, so the card is always as
+   tall as its tallest slide and nothing below it can move when the visible one
+   changes. Only opacity and transform animate, so none of this touches layout
+   or leaves the compositor. */
+.portalStage {
+  display: grid;
+  margin-top: clamp(1.1rem, 2vw, 1.5rem);
+  padding-top: clamp(0.9rem, 1.6vw, 1.2rem);
+  border-top: 1px solid var(--hair-light);
+}
+
+.portalSlide {
+  grid-area: 1 / 1;
+  min-width: 0;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 400ms ease-out, transform 400ms ease-out;
+  pointer-events: none;
+}
+
+.portalSlide[data-active] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.portalSlide:focus {
+  outline: none;
+}
+
+.portalStageLabel {
+  margin: 0 0 0.7rem;
+  color: var(--gold-on-dark);
+  font-size: 0.6rem;
+  font-weight: 750;
+  letter-spacing: 0.22em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+/* Label-and-value rows: slides 1, 2 and 4. */
+.portalRows,
+.portalEntries {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.portalRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0 0.6rem;
+  min-width: 0;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+/* No check on this row, so the label takes the icon column too. */
+.portalRow > .portalRowLabel:first-child {
+  grid-column: 1 / 3;
+}
+
+.portalRowCheck {
+  align-self: center;
+  color: var(--gold-rule);
+}
+
+.portalRowLabel {
+  min-width: 0;
+  color: #d4dce2;
+}
+
+.portalRowValue {
+  color: #f5f0e8;
+  text-align: right;
+}
+
+/* The stacked wireframe on slide 2: three bars standing in for a homepage,
+   dim enough to read as a thumbnail rather than as content. */
+.portalWire {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 0.8rem;
+  padding: 0.6rem;
+  background: rgba(245, 240, 232, 0.04);
+  border: 1px solid var(--hair-light);
+  border-radius: 8px;
+}
+
+.portalWire span {
+  display: block;
+  height: 0.4rem;
+  border-radius: 2px;
+  background: rgba(226, 197, 138, 0.28);
+}
+
+.portalWire span[data-wire="head"] { width: 58%; background: rgba(226, 197, 138, 0.46); }
+.portalWire span[data-wire="body"] { width: 100%; height: 1.5rem; }
+.portalWire span[data-wire="foot"] { width: 34%; }
+
+/* Timesheet rows: slide 3. */
+.portalEntry {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0 0.7rem;
+  min-width: 0;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.portalEntryDate {
+  color: #93a3ae;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.portalEntryTask {
+  min-width: 0;
+  color: #d4dce2;
+}
+
+.portalEntryHours {
+  color: #f5f0e8;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.portalCaption {
+  margin: 0;
+  color: #2f3f50;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.portalSrOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /* ---------- sections ---------- */
@@ -920,9 +1170,10 @@
     grid-template-columns: 1fr;
   }
 
+  /* Stacked under the hero copy, so the h1, the starting-price line and the
+     "Start a project" button all stay above the fold. */
   .heroMedia {
-    aspect-ratio: 16 / 9;
-    min-height: 14rem;
+    max-width: 34rem;
   }
 
   .tiers {
@@ -1056,5 +1307,64 @@
 
   .card:hover {
     transform: none;
+  }
+}
+
+/* Phones. The card must fit 360px without overflowing and must not push the
+   hero button off screen, so the fourth row of the longer slides is dropped
+   and the phase strip becomes two rows of two. */
+@media (max-width: 30rem) {
+  .heroMedia {
+    padding: 1.1rem;
+    gap: 0.7rem;
+  }
+
+  .portal {
+    padding: 1rem 0.9rem;
+  }
+
+  /* Four 60px tracks force the phase names down to 8px. Two rows of two give
+     each name room to stay legible. */
+  .portalPhases {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.8rem 0.9rem;
+  }
+
+  .portalEntry,
+  .portalRow {
+    gap: 0 0.5rem;
+    font-size: 0.72rem;
+  }
+
+  .portalEntryHours {
+    font-size: 0.92rem;
+  }
+
+  /* Slides 1 and 4 carry four rows. The fourth is dropped here so the card
+     stays short enough to keep the hero button above the fold; the timesheet
+     slide already has three and loses nothing. */
+  .portalRow[data-overflow] {
+    display: none;
+  }
+}
+
+/* Reduced motion. The component stops rotating and pins the timesheet slide;
+   this removes the transitions so nothing eases even on that first paint. */
+@media (prefers-reduced-motion: reduce) {
+  .portalSlide,
+  .portalFill,
+  .portalPhaseName {
+    transition: none;
+  }
+
+  .portalSlide {
+    transform: none;
+  }
+
+  /* No sweep: the active bar sits part-way, the way a paused clock would, and
+     with no animation there is no animationend and so no rotation. */
+  .portalPhase[data-state="active"] .portalFill {
+    animation: none;
+    transform: scaleX(0.45);
   }
 }

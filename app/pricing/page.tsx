@@ -17,6 +17,7 @@ import {
   trust,
 } from "../data/pricing";
 import { depositTerms } from "../data/process";
+import PortalPreview from "./PortalPreview";
 import PricingFaq from "./PricingFaq";
 import PricingMotion from "./PricingMotion";
 import styles from "./pricing.module.css";
@@ -114,16 +115,10 @@ export default function PricingPage() {
               </ul>
             </div>
 
-            {/* Image slot. Solid until a photograph exists — see ASSETS_NEEDED.md. */}
-            <div className={styles.heroMedia} data-hero="media" aria-hidden="true">
-              <span className={styles.mediaDisc} />
-              <span className={styles.mediaCard}>
-                <span>Ideas</span>
-                <span>Brands</span>
-                <span>Websites</span>
-                <span>that last</span>
-              </span>
-            </div>
+            {/* Four slides of the client portal, drawn in CSS. See
+                PortalPreview.tsx for why the swapping region is hidden from
+                assistive technology and the chrome is not. */}
+            <PortalPreview />
           </div>
         </section>
 
