@@ -18,9 +18,15 @@ sized WebPs under `/public/pricing/`.
 
 | Slot | Today | Wants |
 |---|---|---|
-| **FAQ** | `faq-thinker.webp` (1482 × 1061, 193 KB) + a 900w variant. The dissolving Thinker, behind glass panels. | Done. A higher-resolution source would let the desktop crop breathe at very wide viewports; not urgent. |
+| **FAQ** | No photograph and no left column — the questions run full width under their heading. | Nothing needed. This is deliberate — see the note below. |
 | **Close** | `close-forest.webp` (2000 × 1333, 412 KB) + a 1200w variant. The foggy valley, full bleed, scrimmed on the left. | Done. |
 | **Hero, right of the headline** | cream block, gold disc, navy card reading "Ideas / Brands / Websites / that last" | Still open: a still life — laptop, desk, something warm and physical. **1400 × 1120** (5:4) at 2×; crops to 16:9 under 64rem. |
+
+The FAQ carried a dissolving-statue photograph until 2026-09-12, then briefly
+a typographic pull quote, and now nothing — the questions run full width under
+their heading, the way the two sections above them do. If you ever want
+something in that space, the answer is screenshots of real work rather than
+stock or an AI render; that needs three good ones and there are not three yet.
 
 Compress before committing: WebP, quality ~80, under 450 KB for full-bleed
 and under 250 KB otherwise. `sharp` ships with Next, so from the repo root:
@@ -51,18 +57,17 @@ size above.
 
 ## 1b. Hero — `/about`
 
-Filled 2026-09-12. `public/about/hero-liquid.webp` (1920 × 819, 77 KB) with
-1280w and 900w variants. Gold liquid in glass against near-black; the left
-third of the composition is what the hero copy sits on, so the scrim only
-deepens what is already there rather than laying a panel over the picture.
-Source PNG is in history at `ac25fd1`.
+Filled 2026-09-12. `public/about/hero-mountains.webp` (2000 × 1333, 181 KB)
+with 1280w and 900w variants — sunrise over a sea of cloud, from an Unsplash
+photograph by Sam Ferrara. Source JPEG is in history at `2214abd`.
 
-## 2b. Portrait — `/about`
-
-The only portrait in the repo is **263 × 278**, and it was being hotlinked
-from a raw GitHub URL. It is now served from `/public/about/portrait.webp`,
-but at that size it is soft in its 4:5 slot on desktop. Supply a new one at
-**1000 × 1250** (4:5) or larger, WebP, and drop it in at the same path.
+This replaced an AI-generated gold-liquid render. Worth noting for whoever
+swaps it next: the liquid image was near-black down its left third, so its
+scrim only had to deepen what was already there. This one is bright across the
+top, so the gradient is doing real work to keep the copy readable — check
+`scripts/about-check.js` after any change to the image or its
+`object-position`, because a crop that moves the bright sky under the headline
+will fail contrast without looking obviously wrong.
 
 ## 1c. Homepage process scene
 

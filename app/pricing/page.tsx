@@ -267,54 +267,21 @@ export default function PricingPage() {
 
         {/* ---------- faq ---------- */}
         <section className={`${styles.band} ${styles.faqBand}`} id="questions" aria-labelledby="faq-title">
-          {/* The Thinker, dissolving at the edge. Sits behind the glass so the
-              panels have real pixels to refract; the veil fades it into the
-              cream ground before it reaches the copy. */}
-          <div className={styles.faqScene} aria-hidden="true">
-            <img
-              className={styles.faqImage}
-              src="/pricing/faq-thinker.webp"
-              srcSet="/pricing/faq-thinker-900.webp 900w, /pricing/faq-thinker.webp 1482w"
-              sizes="(max-width: 64rem) 100vw, 62vw"
-              alt=""
-              width="1482"
-              height="1061"
-              loading="lazy"
-              decoding="async"
-              data-parallax="-10"
-              data-liquid
-            />
-            <span className={styles.faqVeil} />
-            <span className={styles.faqRing} />
-            <span className={styles.faqBeam} />
-          </div>
-
-          <div className={`${styles.inner} ${styles.faqGrid}`}>
-            <div className={styles.faqCopy}>
-              <div className={styles.sectionHead} data-reveal-group>
-                <p className={styles.signal} data-reveal>05 / FAQ</p>
-                <h2 id="faq-title" data-reveal>
-                  The questions
-                  <br />
-                  I get.
-                </h2>
-                <p className={styles.sectionIntro} data-reveal>
-                  Straight answers. If yours isn&apos;t here, it&apos;s the first thing
-                  we&apos;ll cover on the call.
-                </p>
-              </div>
-              <PricingFaq items={faq} glass />
+          <div className={styles.inner}>
+            <div className={styles.sectionHead} data-reveal-group>
+              <p className={styles.signal} data-reveal>05 / FAQ</p>
+              <h2 id="faq-title" data-reveal>
+                The questions
+                <br />
+                I get.
+              </h2>
+              <p className={styles.sectionIntro} data-reveal>
+                Straight answers. If yours isn&apos;t here, it&apos;s the first thing
+                we&apos;ll cover on the call.
+              </p>
             </div>
+            <PricingFaq items={faq} />
           </div>
-
-          {/* The liquid edge: a slow displacement over the statue's dissolving
-              side, driven by GSAP on the turbulence frequency. */}
-          <svg className={styles.faqFilter} aria-hidden="true" focusable="false">
-            <filter id="pricing-liquid" x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
-              <feTurbulence type="fractalNoise" baseFrequency="0.006 0.011" numOctaves="2" seed="7" result="noise" data-liquid-noise />
-              <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
-            </filter>
-          </svg>
         </section>
 
         {/* ---------- close ---------- */}
@@ -361,10 +328,11 @@ export default function PricingPage() {
               </div>
             </div>
 
-            <p className={styles.closeMark} data-reveal-group aria-hidden="true">
-              <span className={styles.closeMarkRule} data-rule />
-              <span data-reveal>Same discipline.</span>
-              <span data-reveal>Different mountains.</span>
+            {/* Not aria-hidden: the mark it replaced was decorative, this is a
+                statement, and it belongs in the accessibility tree. */}
+            <p className={styles.closeMark} data-reveal-group>
+              <span className={styles.closeMarkRule} aria-hidden="true" data-rule />
+              <span lang="la" data-reveal>Soli Deo gloria</span>
             </p>
           </div>
         </section>

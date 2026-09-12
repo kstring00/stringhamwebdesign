@@ -83,21 +83,7 @@ export default function PricingMotion() {
         scrollTrigger: { trigger: "[data-phases]", start: "top 80%" },
       });
 
-      // 4) The liquid edge on the statue: the turbulence frequency breathes,
-      //    so the dissolving side of the figure ripples like something seen
-      //    through moving water. Slow, small, and never on the text.
-      const noise = root.querySelector<SVGElement>("[data-liquid-noise]");
-      if (noise) {
-        gsap.to(noise, {
-          attr: { baseFrequency: "0.009 0.016" },
-          duration: 7,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1,
-        });
-      }
-
-      // 5) Fog drifts across the valley on three layers at three speeds.
+      // 4) Fog drifts across the valley on three layers at three speeds.
       gsap.utils.toArray<HTMLElement>("[data-fog]").forEach((fog, index) => {
         gsap.to(fog, {
           xPercent: index % 2 ? -9 : 9,
@@ -109,7 +95,7 @@ export default function PricingMotion() {
         });
       });
 
-      // 6) The valley draws back as you scroll past it — a slow Ken Burns,
+      // 5) The valley draws back as you scroll past it — a slow Ken Burns,
       //    on top of the engine's parallax.
       const closeImage = root.querySelector<HTMLElement>("[data-close-image]");
       if (closeImage) {

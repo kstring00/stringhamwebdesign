@@ -1,10 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
 
 import { processIntro, processSteps } from "./data/process";
 import styles from "./ProcessSteps.module.css";
+
+// GSAP reads layout, so it runs before paint on the client and as a plain
+// effect during SSR, where it does nothing.
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 type ProcessStepsProps = {
   /** Rendered as the section heading. */
@@ -28,6 +33,10 @@ export default function ProcessSteps({
   const [openStep, setOpenStep] = useState<number | null>(initialOpen);
   const [entered, setEntered] = useState(false);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const fillRef = useRef<HTMLSpanElement | null>(null);
+  /** Which step the panel is currently showing, so the next change knows its direction. */
+  const shownStep = useRef<number | null>(null);
   const baseId = useId();
 
   useEffect(() => {
@@ -49,6 +58,54 @@ export default function ProcessSteps({
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
+
+  /**
+   * Moving between steps.
+   *
+   * The panel leaves in the direction you are travelling and the next one
+   * arrives from the opposite edge, so a click forward reads as forward. The
+   * fill along the connector runs to the new node at the same time.
+   *
+   * Only the two moving parts are tweened — the panel's two children and the
+   * fill's scaleX — so this stays cheap on a phone. Under reduced motion
+   * nothing is tweened at all and the new step is simply there.
+   */
+  const homeStep = variant === "home" ? (openStep ?? 0) : null;
+  useIsomorphicLayoutEffect(() => {
+    if (homeStep === null) return;
+
+    const fill = fillRef.current;
+    const lastIndex = processSteps.length - 1;
+    const progress = lastIndex > 0 ? homeStep / lastIndex : 0;
+    const previous = shownStep.current;
+    shownStep.current = homeStep;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // First paint, or reduced motion: land on the final state with no tween.
+    if (previous === null || reduced) {
+      if (fill) gsap.set(fill, { scaleX: progress });
+      return;
+    }
+    if (previous === homeStep) return;
+
+    const forward = homeStep > previous;
+    const parts = panelRef.current?.querySelectorAll<HTMLElement>("[data-step-part]");
+
+    const ctx = gsap.context(() => {
+      if (fill) {
+        gsap.to(fill, { scaleX: progress, duration: 0.55, ease: "power3.out", overwrite: true });
+      }
+      if (parts?.length) {
+        gsap.fromTo(
+          parts,
+          { autoAlpha: 0, x: forward ? 26 : -26 },
+          { autoAlpha: 1, x: 0, duration: 0.46, ease: "power3.out", stagger: 0.06, overwrite: true },
+        );
+      }
+    });
+
+    return () => ctx.revert();
+  }, [homeStep]);
 
   const toggle = (index: number) => {
     setOpenStep((current) => (current === index ? null : index));
@@ -182,6 +239,9 @@ export default function ProcessSteps({
             </button>
 
             <div className={styles.homeTabs} role="tablist" aria-label="Project process steps">
+              {/* Runs from the first node to the active one. Decorative: the
+                  selected state is already carried by aria-selected. */}
+              <span className={styles.homeFill} ref={fillRef} aria-hidden="true" />
               {processSteps.map((step, index) => {
                 const selected = activeIndex === index;
                 const tabId = `${baseId}-home-tab-${step.number}`;
@@ -239,18 +299,19 @@ export default function ProcessSteps({
           <div
             className={styles.homeDetail}
             id={`${baseId}-home-panel`}
+            ref={panelRef}
             role="tabpanel"
             aria-labelledby={`${baseId}-home-tab-${active.number}`}
             tabIndex={0}
           >
-            <aside className={styles.homeDetailMeta}>
+            <aside className={styles.homeDetailMeta} data-step-part>
               <span className={styles.homeDetailLabel}>Step</span>
               <strong>{active.number}</strong>
               <span className={styles.homeDetailRule} aria-hidden="true" />
               <span className={styles.homeDetailName}>{active.name}</span>
             </aside>
 
-            <div className={styles.homeDetailCopy}>
+            <div className={styles.homeDetailCopy} data-step-part>
               <h3>{active.line}</h3>
               {active.detail.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>

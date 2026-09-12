@@ -1,11 +1,13 @@
 /**
  * The site's navigation, in one place.
  *
- * The header and the footer each show a subset of the same list rather than
- * keeping two lists that drift. `inHeader` records the one real difference:
- * /work is a live page with four case studies, linked from the homepage hero
- * and from here, but deliberately not in the masthead yet — Kyle's call,
- * 2026-09-12. Flip the flag to put it back.
+ * The header and the footer show subsets of the same list rather than keeping
+ * two lists that drift; `inHeader` is what separates them.
+ *
+ * "Portfolio" points at /work. The label was changed on 2026-09-12 and the
+ * route deliberately was not: /work is linked from the homepage hero, from
+ * four case-study pages and from anything already indexed, and renaming it
+ * would break those for a word only the nav shows.
  */
 
 export type NavItem = {
@@ -17,7 +19,7 @@ export type NavItem = {
 export const siteNav: NavItem[] = [
   { label: "Home", href: "/", inHeader: true },
   { label: "About", href: "/about", inHeader: true },
-  { label: "Work", href: "/work", inHeader: false },
+  { label: "Portfolio", href: "/work", inHeader: true },
   { label: "Pricing", href: "/pricing", inHeader: true },
 ];
 

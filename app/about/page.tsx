@@ -31,18 +31,18 @@ export default function AboutPage() {
       <Header />
       <main className={styles.page}>
         <section className={styles.hero} aria-labelledby="about-title">
-          {/* The hero image. Dark on the left by composition, so the copy sits
-              on the photograph itself rather than on a panel laid over it; the
-              scrim only deepens what is already there. Eager and high priority
-              because this is the LCP element. */}
+          {/* Sunrise over a sea of cloud. Unlike the image it replaced, this one
+              is bright across the top, so the scrim below does more work than a
+              deepening pass — the copy sits on the photograph and the gradient
+              is what keeps it readable. Eager and high priority: LCP element. */}
           <img
             className={styles.heroImage}
-            src="/about/hero-liquid.webp"
-            srcSet="/about/hero-liquid-900.webp 900w, /about/hero-liquid-1280.webp 1280w, /about/hero-liquid.webp 1920w"
+            src="/about/hero-mountains.webp"
+            srcSet="/about/hero-mountains-900.webp 900w, /about/hero-mountains-1280.webp 1280w, /about/hero-mountains.webp 2000w"
             sizes="100vw"
             alt=""
-            width="1920"
-            height="819"
+            width="2000"
+            height="1333"
             fetchPriority="high"
             decoding="async"
           />

@@ -252,7 +252,7 @@
 
 .section h2,
 .processCopy h2,
-.faqCopy h2 {
+.faqBand h2 {
   max-width: 14ch;
   margin: 0;
   color: var(--ink);
@@ -652,7 +652,7 @@
   text-transform: uppercase;
 }
 
-/* ---------- faq: the statue, and glass over it ---------- */
+/* ---------- faq: a pull quote, and the questions ---------- */
 
 .faqBand {
   position: relative;
@@ -661,83 +661,11 @@
   background: var(--ground);
 }
 
-.faqScene {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.faqImage {
-  position: absolute;
-  top: -6%;
-  left: 0;
-  width: 66%;
-  height: 112%;
-  object-fit: cover;
-  object-position: 62% 40%;
-  filter: url(#pricing-liquid) saturate(0.92);
-  will-change: transform;
-}
-
-/* Fades the picture into the ground before it reaches the copy, and lifts
-   the bottom so the band's edge stays clean. */
-.faqVeil {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(90deg, rgba(245, 240, 232, 0) 0%, rgba(245, 240, 232, 0) 34%, rgba(245, 240, 232, 0.72) 52%, var(--ground) 66%),
-    linear-gradient(180deg, rgba(245, 240, 232, 0.55) 0%, rgba(245, 240, 232, 0) 22%, rgba(245, 240, 232, 0) 80%, var(--ground) 100%);
-}
-
-/* Echo of the halo in the photograph: a thin gold ring that turns, slowly. */
-.faqRing {
-  position: absolute;
-  top: 6%;
-  left: 24%;
-  width: min(46vw, 34rem);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg, rgba(201, 162, 39, 0) 0 60%, rgba(201, 162, 39, 0.55) 78%, rgba(201, 162, 39, 0) 100%);
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
-  mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
-  animation: faqRingTurn 26s linear infinite;
-  opacity: 0.9;
-}
-
-@keyframes faqRingTurn {
-  to { transform: rotate(360deg); }
-}
-
-/* The vertical light in the photograph, carried across the band. */
-.faqBeam {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 42%;
-  width: 1px;
-  background: linear-gradient(180deg, rgba(226, 197, 138, 0) 0%, rgba(226, 197, 138, 0.7) 35%, rgba(226, 197, 138, 0.7) 65%, rgba(226, 197, 138, 0) 100%);
-  opacity: 0.6;
-}
-
-.faqFilter {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-}
-
-.faqGrid {
+/* One column: the head and the questions, laid out like the sections above it
+   rather than in a two-column split. */
+.faqBand .sectionHead {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: clamp(2rem, 5vw, 5rem);
-}
-
-.faqCopy {
-  grid-column: 2;
-  min-width: 0;
 }
 
 .faqList {
@@ -750,78 +678,6 @@
 
 .faqItem {
   border-bottom: 1px solid var(--hair-navy);
-}
-
-/* Glass. A cream tint dense enough that navy text clears AA over the darkest
-   pixel the photograph can put behind it (measured, not assumed — see
-   scripts/pricing-check.js), blurred so what shows through reads as light
-   rather than detail, with a specular that follows the pointer. */
-.faqGlass {
-  border-top: 0;
-  display: grid;
-  gap: 0.7rem;
-}
-
-.faqGlass .faqItem {
-  position: relative;
-  overflow: hidden;
-  padding: 0 clamp(1.1rem, 1.8vw, 1.5rem);
-  border: 1px solid rgba(255, 255, 255, 0.62);
-  border-radius: 16px;
-  background: rgba(247, 243, 236, 0.78);
-  -webkit-backdrop-filter: blur(20px) saturate(150%);
-  backdrop-filter: blur(20px) saturate(150%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.75),
-    inset 0 -1px 0 rgba(13, 27, 38, 0.05),
-    0 24px 48px -36px rgba(13, 27, 38, 0.45);
-  transition: transform 320ms var(--ease), box-shadow 320ms var(--ease), background 320ms var(--ease);
-}
-
-.faqGlass .faqItem::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(240px circle at var(--mx, 30%) var(--my, 20%), rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0) 62%);
-  opacity: 0;
-  transition: opacity 360ms var(--ease);
-  pointer-events: none;
-}
-
-.faqGlass .faqItem:hover::before,
-.faqGlass .faqItem:focus-within::before {
-  opacity: 1;
-}
-
-/* A gold seam runs along the top edge of the open panel. */
-.faqGlass .faqItem::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 8%;
-  right: 8%;
-  height: 1px;
-  background: linear-gradient(90deg, rgba(201, 162, 39, 0), rgba(201, 162, 39, 0.9), rgba(201, 162, 39, 0));
-  transform: scaleX(0);
-  transition: transform 480ms var(--ease);
-  pointer-events: none;
-}
-
-.faqGlass .faqItem:hover {
-  transform: translateY(-2px);
-  background: rgba(249, 246, 240, 0.84);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    inset 0 -1px 0 rgba(13, 27, 38, 0.05),
-    0 30px 56px -36px rgba(13, 27, 38, 0.5);
-}
-
-.faqGlass .faqOpen {
-  background: rgba(249, 246, 240, 0.86);
-}
-
-.faqGlass .faqOpen::after {
-  transform: scaleX(1);
 }
 
 .faqHeading {
@@ -1096,51 +952,8 @@
   }
 
   .processGrid,
-  .faqGrid,
   .closeLayout {
     grid-template-columns: 1fr;
-  }
-
-  .faqCopy {
-    grid-column: 1;
-  }
-
-  /* The statue becomes a banner above the questions. */
-  .faqBand {
-    padding-top: 0;
-  }
-
-  .faqScene {
-    position: relative;
-    inset: auto;
-    aspect-ratio: 16 / 10;
-    max-height: 26rem;
-  }
-
-  .faqImage {
-    top: -6%;
-    width: 100%;
-    height: 112%;
-    object-position: 55% 30%;
-  }
-
-  .faqVeil {
-    background:
-      linear-gradient(180deg, rgba(245, 240, 232, 0.25) 0%, rgba(245, 240, 232, 0) 30%, rgba(245, 240, 232, 0) 62%, var(--ground) 100%);
-  }
-
-  .faqRing {
-    top: 4%;
-    left: 44%;
-    width: 60vw;
-  }
-
-  .faqBeam {
-    left: 58%;
-  }
-
-  .faqGrid {
-    margin-top: -3.5rem;
   }
 
   .closeMark {
@@ -1223,10 +1036,6 @@
     justify-content: center;
   }
 
-  .faqGlass .faqItem {
-    border-radius: 12px;
-  }
-
   .closeScrim {
     background:
       linear-gradient(180deg, rgba(13, 27, 38, 0.9) 0%, rgba(13, 27, 38, 0.86) 55%, rgba(13, 27, 38, 0.6) 80%, rgba(13, 27, 38, 0.9) 100%);
@@ -1241,24 +1050,11 @@
   .card,
   .faqMarker i,
   .faqPanel,
-  .faqPanelInner,
-  .faqGlass .faqItem,
-  .faqGlass .faqItem::before,
-  .faqGlass .faqItem::after {
+  .faqPanelInner {
     transition: none;
   }
 
-  .card:hover,
-  .faqGlass .faqItem:hover {
+  .card:hover {
     transform: none;
-  }
-
-  .faqRing {
-    animation: none;
-  }
-
-  /* No displacement under reduced motion: the statue simply stands still. */
-  .faqImage {
-    filter: saturate(0.92);
   }
 }
