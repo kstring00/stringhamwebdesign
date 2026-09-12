@@ -13,8 +13,8 @@ import * as THREE from "three";
 
 /* ---------- tunables ---------- */
 
-/** Sample every Nth pixel in each axis. 3 = one particle per 3×3 block. */
-export const SAMPLE_STEP = 3;
+/** Sample every Nth pixel in each axis. 2 = one particle per 2×2 block. */
+export const SAMPLE_STEP = 2;
 /** Pixels with alpha below this are background and get no particle. */
 export const ALPHA_MIN = 120;
 /** Height of the assembled portrait, in world units. */
@@ -29,34 +29,16 @@ export const PUSH_STRENGTH = 1.6;
 export const PUSH_TOWARD_CAMERA = 1.2;
 /** Assemble / scatter takes this long, before the per-particle stagger. */
 export const MORPH_DURATION_MS = 2000;
-/** After a click scatters the cloud, it reassembles on its own after this long. */
-export const SCATTER_HOLD_MS = 2200;
-/** The neck dissolves: from this fraction of the height down, pixels are dropped
-    with rising probability, reaching DISSOLVE_MAX at the very bottom. */
-export const DISSOLVE_FROM = 0.78;
-export const DISSOLVE_MAX = 0.95;
-/** A leftover artifact lives in the bottom-left corner; nothing there is sampled. */
-export const CORNER_CUT = 0.15;
-/** Luminance contrast before the ramp: stretch about the middle, then a gamma. */
-export const CONTRAST = 1.6;
-export const GAMMA = 1.3;
-/** Pixels darker than this after the curve get no particle — eyes and nostrils
-    become gaps, not dark dots. */
-export const LUM_MIN = 0.08;
 /** Each particle starts its own morph up to this fraction late. */
 export const MAX_STAGGER = 0.35;
 /** Point size in CSS pixels at the portrait's distance, before the per-particle variance. */
 export const POINT_SIZE = 2.2;
 export const SIZE_VARIANCE = 0.35;
-/** Size follows brightness: dark pixels this much of base, bright ones this much. */
-export const SIZE_DARK = 0.7;
-export const SIZE_BRIGHT = 1.4;
 /** Idle drift amplitude (world units) and the cloud's maximum lean toward the cursor. */
 export const DRIFT = 0.035;
 export const LEAN_DEGREES = 15;
-/** The brand ramp, three segments: 0 → 0.35 deep umber → dark gold, 0.35 → 0.7
-    dark gold → gold, 0.7 → 1 gold → cream. */
-export const RAMP = { deep: "#4a3810", dark: "#7a5c1c", gold: "#b8902e", cream: "#f4e7cc" } as const;
+/** The brand ramp: lum 0 → 0.5 runs navy → gold, 0.5 → 1 runs gold → cream. */
+export const RAMP = { navy: "#0f1d2b", gold: "#b8902e", cream: "#e9dcc0" } as const;
 export const MAX_PIXEL_RATIO = 2;
 
 /* ---------- shaders ---------- */
@@ -128,20 +110,11 @@ const FRAG = /* glsl */ `
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const smoothstep = (x: number) => { const t = Math.min(1, Math.max(0, x)); return t * t * (3 - 2 * t); };
 
-const RAMP_COLORS = {
-  deep: new THREE.Color(RAMP.deep), dark: new THREE.Color(RAMP.dark),
-  gold: new THREE.Color(RAMP.gold), cream: new THREE.Color(RAMP.cream),
-};
 function rampColor(lum: number, out: THREE.Color) {
-  const { deep, dark, gold, cream } = RAMP_COLORS;
-  if (lum < 0.35) return out.copy(deep).lerp(dark, lum / 0.35);
-  if (lum < 0.7) return out.copy(dark).lerp(gold, (lum - 0.35) / 0.35);
-  return out.copy(gold).lerp(cream, (lum - 0.7) / 0.3);
-}
-/** Contrast, then gamma, on a 0..1 luminance. */
-function curve(lum: number) {
-  const stretched = Math.min(1, Math.max(0, (lum - 0.5) * CONTRAST + 0.5));
-  return Math.pow(stretched, GAMMA);
+  const navy = new THREE.Color(RAMP.navy), gold = new THREE.Color(RAMP.gold), cream = new THREE.Color(RAMP.cream);
+  if (lum < 0.5) out.copy(navy).lerp(gold, lum / 0.5);
+  else out.copy(gold).lerp(cream, (lum - 0.5) / 0.5);
+  return out;
 }
 
 function loadImage(src: string) {
@@ -172,21 +145,13 @@ async function sampleParticles(src: string) {
   const [rMin, rMax] = SCATTER_RADIUS;
 
   for (let y = 0; y < h; y += SAMPLE_STEP) {
-    // The neck thins out into nothing: below DISSOLVE_FROM the drop chance
-    // rises on a smoothstep to DISSOLVE_MAX at the last row. No straight edge.
-    const row = y / h;
-    const dissolve = row > DISSOLVE_FROM ? smoothstep((row - DISSOLVE_FROM) / (1 - DISSOLVE_FROM)) * DISSOLVE_MAX : 0;
     for (let x = 0; x < w; x += SAMPLE_STEP) {
       const i = (y * w + x) * 4;
       if (data[i + 3] < ALPHA_MIN) continue;
-      if (dissolve > 0 && Math.random() < dissolve) continue;
-      if (x < w * CORNER_CUT && y > h * (1 - CORNER_CUT)) continue; // the corner artifact
       const r = data[i] / 255, g = data[i + 1] / 255, b = data[i + 2] / 255;
-      const raw = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-      const lum = curve(raw);
-      if (lum < LUM_MIN) continue; // eyes and nostrils are gaps
+      const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
-      portrait.push((x - w / 2) * scale, (h / 2 - y) * scale, (raw - 0.5) * RELIEF);
+      portrait.push((x - w / 2) * scale, (h / 2 - y) * scale, (lum - 0.5) * RELIEF);
 
       // A random point in a loose spherical shell.
       const u = Math.random() * 2 - 1, phi = Math.random() * Math.PI * 2;
@@ -196,8 +161,7 @@ async function sampleParticles(src: string) {
       rampColor(lum, c);
       color.push(c.r, c.g, c.b);
       delay.push(Math.random() * MAX_STAGGER);
-      // Brighter, fewer, bigger: the highlights carry the face.
-      size.push(lerp(SIZE_DARK, SIZE_BRIGHT, lum) * (1 - SIZE_VARIANCE / 2 + Math.random() * SIZE_VARIANCE));
+      size.push(1 - SIZE_VARIANCE / 2 + Math.random() * SIZE_VARIANCE);
       seed.push(Math.random());
     }
   }
@@ -205,8 +169,6 @@ async function sampleParticles(src: string) {
 }
 
 /* ---------- the scene ---------- */
-
-export type MotionState = "assembled" | "scattering" | "assembling";
 
 export type Engine = {
   dispose: () => void;
@@ -220,9 +182,8 @@ export async function start(opts: {
   host: HTMLElement;
   src: string;
   onFirstFrame: () => void;
-  onState?: (state: MotionState) => void;
 }): Promise<Engine> {
-  const { canvas, host, src, onFirstFrame, onState } = opts;
+  const { canvas, host, src, onFirstFrame } = opts;
   const particles = await sampleParticles(src);
 
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false, powerPreference: "high-performance" });
@@ -274,9 +235,6 @@ export async function start(opts: {
   /* ---- state ---- */
   let target = 1;               // 1 assemble, 0 scatter
   let progress = 0;
-  let motion: MotionState = "assembling";
-  let holdTimer = 0;
-  const setMotion = (m: MotionState) => { if (m !== motion) { motion = m; onState?.(m); } };
   let cursorActive = 0, cursorWanted = 0;
   const cursor = new THREE.Vector3();
   const cursorNdc = new THREE.Vector2(0, 0);
@@ -312,14 +270,7 @@ export async function start(opts: {
     leanWantX = -THREE.MathUtils.degToRad(LEAN_DEGREES) * cursorNdc.y;
   }
   function onLeave() { cursorWanted = 0; leanWantX = 0; leanWantY = 0; }
-  // A click scatters, and the cloud comes back by itself after the hold.
-  // Clicks while it is scattering or reassembling are ignored: no toggle.
-  function onClick() {
-    if (motion !== "assembled") return;
-    target = 0;
-    setMotion("scattering");
-    holdTimer = window.setTimeout(() => { target = 1; setMotion("assembling"); }, SCATTER_HOLD_MS);
-  }
+  function onClick() { target = target === 1 ? 0 : 1; }
   host.addEventListener("pointermove", onMove);
   host.addEventListener("pointerleave", onLeave);
   host.addEventListener("click", onClick);
@@ -332,7 +283,6 @@ export async function start(opts: {
     // Master clock toward the target; the shader staggers each particle.
     const step = dt * 1000 / MORPH_DURATION_MS;
     progress = target === 1 ? Math.min(1, progress + step) : Math.max(0, progress - step);
-    if (target === 1 && progress >= 1) setMotion("assembled");
     uniforms.uProgress.value = progress;
     uniforms.uTime.value = clock.getElapsedTime();
 
@@ -360,7 +310,6 @@ export async function start(opts: {
     dispose() {
       disposed = true;
       if (raf) cancelAnimationFrame(raf);
-      if (holdTimer) clearTimeout(holdTimer);
       ro.disconnect();
       host.removeEventListener("pointermove", onMove);
       host.removeEventListener("pointerleave", onLeave);

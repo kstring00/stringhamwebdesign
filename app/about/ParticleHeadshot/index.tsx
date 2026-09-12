@@ -26,8 +26,8 @@ export default function ParticleHeadshot() {
   const [count, setCount] = useState(0);
   /** "loading" once the dynamic import starts, "ready" once the engine runs. Absent when Three was never requested. */
   const [engine, setEngine] = useState<"loading" | "ready" | null>(null);
-  /** The engine's motion state, exposed for the check and for the cue. */
-  const [motion, setMotion] = useState<"assembled" | "scattering" | "assembling" | null>(null);
+  /** Mirrors the engine's own click toggle, so the hint can say what a click will do next. */
+  const [scattered, setScattered] = useState(false);
 
   useEffect(() => {
     const host = box.current, cv = canvas.current;
@@ -49,7 +49,6 @@ export default function ParticleHeadshot() {
           host,
           src: SRC_SAMPLE,
           onFirstFrame: () => { if (!cancelled) setLive(true); },
-          onState: (m) => { if (!cancelled) setMotion(m); },
         });
       } catch {
         return; // the <img> is already showing; nothing to recover
@@ -84,7 +83,7 @@ export default function ParticleHeadshot() {
       data-particles={count || undefined}
       data-live={live ? "" : undefined}
       data-engine={engine ?? undefined}
-      data-motion={motion ?? undefined}
+      onClick={() => { if (live) setScattered((v) => !v); }}
     >
       <img
         className={styles.image}
@@ -106,7 +105,7 @@ export default function ParticleHeadshot() {
           <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 2.5v8.2l2.3-2.1 1.7 3.6 1.6-.8-1.7-3.5H12z" />
           </svg>
-          Click to scatter
+          {scattered ? "Click to bring it back" : "Click to scatter"}
         </p>
       ) : null}
     </div>

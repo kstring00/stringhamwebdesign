@@ -71,23 +71,11 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
     // canvas must accept pointer events now and not throw.
     const hintBefore = await p.evaluate(() => document.querySelector('[data-hero="media"] [class*="hint"]')?.textContent.trim() ?? null);
     ok('desktop: a visible cue says the particles are clickable', hintBefore === 'Click to scatter', String(hintBefore));
-    // Let the load-time assembly finish, then click: it scatters, holds, and
-    // comes back on its own. A second click mid-scatter changes nothing.
-    await p.waitForFunction(() => document.querySelector('[data-hero="media"] > div')?.getAttribute('data-motion') === 'assembled', null, { timeout: 8000 });
     await p.click('[data-hero="media"] canvas');
-    await p.waitForTimeout(150);
-    const m1 = await p.evaluate(() => document.querySelector('[data-hero="media"] > div').getAttribute('data-motion'));
-    ok('desktop: a click scatters', m1 === 'scattering', String(m1));
-    await p.click('[data-hero="media"] canvas'); // ignored
-    await p.waitForTimeout(150);
-    const m2 = await p.evaluate(() => document.querySelector('[data-hero="media"] > div').getAttribute('data-motion'));
-    ok('desktop: a click while scattering is ignored', m2 === 'scattering', String(m2));
-    await p.waitForFunction(() => document.querySelector('[data-hero="media"] > div')?.getAttribute('data-motion') === 'assembled', null, { timeout: 8000 }).catch(() => {});
-    const m3 = await p.evaluate(() => document.querySelector('[data-hero="media"] > div').getAttribute('data-motion'));
-    ok('desktop: it reassembles by itself', m3 === 'assembled', String(m3));
+    await p.waitForTimeout(300);
     ok('desktop: click on the canvas throws nothing', errs.length === 0, JSON.stringify(errs));
     const hintAfter = await p.evaluate(() => document.querySelector('[data-hero="media"] [class*="hint"]')?.textContent.trim() ?? null);
-    ok('desktop: the cue stays "Click to scatter" (no toggle)', hintAfter === 'Click to scatter', String(hintAfter));
+    ok('desktop: after a click the cue says how to bring it back', hintAfter === 'Click to bring it back', String(hintAfter));
     ok('desktop: the cue is aria-hidden like the canvas it describes', await p.evaluate(() => document.querySelector('[data-hero="media"] [class*="hint"]')?.getAttribute('aria-hidden') === 'true'));
     ok('desktop: no page errors', errs.length === 0, JSON.stringify(errs));
     await p.screenshot({ path: `${OUT}/about-hero-particles.png`, clip: { x: 0, y: 0, width: 1440, height: 900 } });
