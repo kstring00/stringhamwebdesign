@@ -47,6 +47,42 @@ const ORDER = ['What happens, step by step', 'Who owns what', 'What it costs to 
   ok('index: card hrefs are the slugs', JSON.stringify(idx.cards.map(c => c.href)) === JSON.stringify(SLUGS.map(s => `/resources/${s}`)), JSON.stringify(idx.cards.map(c => c.href)));
   ok('index: every card has a summary from the doc', idx.cards.every(c => c.summary && c.summary.length > 20), JSON.stringify(idx.cards.map(c => c.summary?.slice(0, 30))));
   ok('index: every card ≥ 44px', idx.cards.every(c => c.h >= 44), JSON.stringify(idx.cards.map(c => c.h)));
+  // The upgraded index: hero row, featured card, icons, one link per card.
+  const up = await p.evaluate(() => {
+    const cards = [...document.querySelectorAll('main ol > li')];
+    const featured = cards[0];
+    const link = featured.querySelector('a');
+    const cs = getComputedStyle(link);
+    const strip = featured.querySelector('[class*="strip"]');
+    return {
+      trust: [...document.querySelectorAll('[class*="heroTrust"] li strong')].map(e => e.textContent.trim()),
+      trustIconsHidden: [...document.querySelectorAll('[class*="heroTrust"] svg')].every(s => s.getAttribute('aria-hidden') === 'true'),
+      badge: featured.querySelector('[class*="cardBadge"]')?.textContent.trim(),
+      featuredBg: cs.backgroundColor,
+      featuredColor: cs.color,
+      stripHidden: strip?.getAttribute('aria-hidden'),
+      stripStates: [...(strip?.querySelectorAll('[data-state]') ?? [])].map(e => e.getAttribute('data-state')),
+      stripAnimated: [...(strip?.querySelectorAll('[class*="stripFill"]') ?? [])].some(f => getComputedStyle(f).animationName !== 'none' || parseFloat(getComputedStyle(f).transitionDuration) > 0),
+      cardIcons: cards.slice(1).map(c => c.querySelector('[class*="cardIcon"] svg')?.getAttribute('aria-hidden')),
+      iconSize: cards.slice(1).map(c => Math.round(c.querySelector('[class*="cardIcon"] svg')?.getBoundingClientRect().width)),
+      linksPerCard: cards.map(c => c.querySelectorAll('a').length),
+      focusablePerCard: cards.map(c => c.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])').length),
+      metaBottoms: cards.slice(1).map(c => Math.round(c.querySelector('[class*="cardMeta"]').getBoundingClientRect().bottom)),
+      cardBottoms: cards.slice(1).map(c => Math.round(c.querySelector('a').getBoundingClientRect().bottom)),
+      transition: cs.transitionProperty + ' ' + cs.transitionDuration + ' ' + cs.transitionTimingFunction,
+      clamp: getComputedStyle(cards[1].querySelector('[class*="cardSummary"]')).webkitLineClamp,
+    };
+  });
+  ok('hero: three reassurances in the briefed order', JSON.stringify(up.trust) === JSON.stringify(['About 20 minutes', 'Written for owners', 'Free, no email']), JSON.stringify(up.trust));
+  ok('hero: reassurance icons are aria-hidden', up.trustIconsHidden);
+  ok('featured: START HERE tag', /^start here$/i.test(up.badge ?? ''), up.badge);
+  ok('featured: navy with cream text', up.featuredBg === 'rgb(13, 27, 38)' && up.featuredColor === 'rgb(245, 240, 232)', `${up.featuredBg} / ${up.featuredColor}`);
+  ok('featured: strip is aria-hidden and static', up.stripHidden === 'true' && !up.stripAnimated);
+  ok('featured: Discovery done, Design active, rest idle', JSON.stringify(up.stripStates) === JSON.stringify(['done', 'active', 'idle', 'idle']), JSON.stringify(up.stripStates));
+  ok('cards: each of the four has a hidden ~20px line icon', up.cardIcons.every(a => a === 'true') && up.iconSize.every(w => w >= 18 && w <= 22), JSON.stringify(up.iconSize));
+  ok('cards: exactly one link, one focusable, per card', up.linksPerCard.every(n => n === 1) && up.focusablePerCard.every(n => n === 1), JSON.stringify(up.linksPerCard));
+  ok('cards: READ row sits at the bottom of every card', up.metaBottoms.every((b, i) => Math.abs(up.cardBottoms[i] - b) < 40), JSON.stringify(up.metaBottoms.map((b, i) => up.cardBottoms[i] - b)));
+  ok('cards: rows share a bottom edge (equal heights)', up.cardBottoms[0] === up.cardBottoms[1] && up.cardBottoms[2] === up.cardBottoms[3], JSON.stringify(up.cardBottoms));
   ok('nav: Resources sits between Portfolio and Pricing', idx.nav.indexOf('Resources') === idx.nav.indexOf('Portfolio') + 1 && idx.nav.indexOf('Pricing') === idx.nav.indexOf('Resources') + 1, JSON.stringify(idx.nav));
   ok('footer: links to /resources', idx.footer.includes('/resources'));
 
@@ -112,8 +148,68 @@ const ORDER = ['What happens, step by step', 'Who owns what', 'What it costs to 
   const m2 = await b.newContext({ viewport: { width: 360, height: 780 }, reducedMotion: 'reduce' });
   const ip = await m2.newPage();
   await ip.goto(BASE + '/resources', { waitUntil: 'networkidle' });
-  ok('360px index: no document overflow', (await ip.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)) <= 0);
+  const mob = await ip.evaluate(() => {
+    const featured = document.querySelector('main ol > li a');
+    const strip = featured.querySelector('[class*="strip"]');
+    const copy = featured.querySelector('[class*="featuredCopy"]');
+    const trust = document.querySelector('[class*="heroTrust"]');
+    const lede = document.querySelector('[class*="lede"]');
+    return {
+      overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      featuredRight: Math.round(featured.getBoundingClientRect().right),
+      stripRight: Math.round(strip.getBoundingClientRect().right),
+      stripScroll: strip.scrollWidth - strip.clientWidth,
+      stripBelowCopy: strip.getBoundingClientRect().top >= copy.getBoundingClientRect().bottom,
+      trustBelowLede: trust.getBoundingClientRect().top >= lede.getBoundingClientRect().bottom,
+      heights: [...document.querySelectorAll('main ol > li a')].map(a => Math.round(a.getBoundingClientRect().height)),
+    };
+  });
+  ok('360px index: no document overflow', mob.overflow <= 0, `${mob.overflow}px`);
+  ok('360px featured: card and strip inside the viewport', mob.featuredRight <= 360 && mob.stripRight <= 360 && mob.stripScroll <= 0, JSON.stringify(mob));
+  ok('360px featured: strip drops below the copy', mob.stripBelowCopy);
+  ok('360px hero: reassurance row stacks under the intro', mob.trustBelowLede);
+  ok('360px: every card ≥ 44px', mob.heights.every(h => h >= 44), JSON.stringify(mob.heights));
   await m2.close();
+
+  // ---- motion: hover and keyboard focus, in a context that allows it ----
+  {
+    const mc = await b.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'no-preference' });
+    const p = await mc.newPage();
+    await p.goto(BASE + '/resources', { waitUntil: 'networkidle' });
+    const up = await p.evaluate(() => { const cs = getComputedStyle(document.querySelector('main ol > li a')); return { transition: cs.transitionProperty + ' ' + cs.transitionDuration + ' ' + cs.transitionTimingFunction, clamp: getComputedStyle(document.querySelector('main ol > li:nth-child(2) [class*="cardSummary"]')).webkitLineClamp }; });
+    ok('cards: 150ms ease-out on transform and border', /transform/.test(up.transition) && /0\.15s/.test(up.transition) && /ease-out/.test(up.transition), up.transition);
+  ok('cards: summaries clamp to two lines', String(up.clamp) === '2', String(up.clamp));
+  // Hover: gold border, 2px lift, no shadow, arrow +4px.
+  await p.hover('main ol > li:nth-child(2) a');
+  await p.waitForTimeout(250);
+  const hov = await p.evaluate(() => {
+    const a = document.querySelector('main ol > li:nth-child(2) a');
+    const cs = getComputedStyle(a);
+    const arrow = getComputedStyle(a.querySelector('[class*="cardRead"] svg'));
+    return { border: cs.borderTopColor, transform: cs.transform, shadow: cs.boxShadow, arrow: arrow.transform };
+  });
+  ok('hover: border goes gold, no shadow', hov.border === 'rgb(169, 131, 61)' && hov.shadow === 'none', `${hov.border} ${hov.shadow}`);
+  ok('hover: card lifts 2px', /matrix\(1, 0, 0, 1, 0, -2\)/.test(hov.transform), hov.transform);
+  ok('hover: arrow slides 4px', /matrix\(1, 0, 0, 1, 4, 0\)/.test(hov.arrow), hov.arrow);
+  await p.mouse.move(0, 0);
+  await p.focus('main ol > li:nth-child(3) a');
+  await p.keyboard.press('Shift+Tab'); await p.keyboard.press('Tab');
+  await p.waitForTimeout(250);
+  const foc = await p.evaluate(() => { const a = document.activeElement; const cs = getComputedStyle(a); return { border: cs.borderTopColor, transform: cs.transform }; });
+  ok('keyboard focus: same gold border and lift', foc.border === 'rgb(169, 131, 61)' && /-2\)/.test(foc.transform), JSON.stringify(foc));
+
+    await mc.close();
+  }
+
+  // ---- reduced motion: colour change stays, movement goes ----
+  const rmc = await b.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+  const rp = await rmc.newPage();
+  await rp.goto(BASE + '/resources', { waitUntil: 'networkidle' });
+  await rp.hover('main ol > li:nth-child(2) a');
+  await rp.waitForTimeout(200);
+  const rm = await rp.evaluate(() => { const cs = getComputedStyle(document.querySelector('main ol > li:nth-child(2) a')); return { border: cs.borderTopColor, transform: cs.transform }; });
+  ok('reduced motion: gold border, no transform', rm.border === 'rgb(169, 131, 61)' && rm.transform === 'none', JSON.stringify(rm));
+  await rmc.close();
 
   // ---- sitemap ----
   const sm = await (await b.newContext()).newPage();
