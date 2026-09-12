@@ -134,12 +134,12 @@ export const projects: Project[] = [
     status: "LIVE",
     tech: ["Next.js", "TypeScript", "Consultation booking"],
     heroImage: "/work/growthgains/home.webp",
-    heroImageAlt: "GrowthGains homepage: the headline 'You know something needs to change' beside a portrait of the coach, with a Book a free consultation button",
+    heroImageAlt: "GrowthGains homepage: the headline 'You know something needs to change' beside an arc from the current chapter to the next — clarity, direction, action — and a portrait of the coach",
     screenshots: [
       {
         src: "/work/growthgains/home.webp",
-        alt: "GrowthGains homepage: the headline 'You know something needs to change' beside a portrait of the coach, with a Book a free consultation button",
-        caption: "The opening frame: the reason someone is here, said plainly, and one button.",
+        alt: "GrowthGains homepage: the headline 'You know something needs to change' beside an arc from the current chapter to the next — clarity, direction, action — and a portrait of the coach",
+        caption: "The opening frame: the reason someone is here said plainly, the path from this chapter to the next drawn beside the person who walks it with you, and one button.",
       },
     ],
     liveUrl: "https://rawrxd-nu.vercel.app/",

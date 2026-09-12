@@ -50,7 +50,7 @@ Each project's hero slot is **16:9** (`app/work/work.module.css`). Supply at
 | Common Ground | `/hero-crt/common-ground.png` — PNG, should be WebP |
 | BCBA Prep | `/hero-crt/bcba-prep.png` — PNG, should be WebP |
 | Lake City Self Storage | `/work/lake-city-self-storage/drive-up.webp` |
-| GrowthGains | `/work/growthgains/home.webp` — **stale**: cut from an older capture; the live hero (arc diagram, blue button, dotted ground) has since changed. Drop a fresh capture of rawrxd-nu.vercel.app into the repo root and it gets swapped in |
+| GrowthGains | `/work/growthgains/home.webp` — current, from a 2026-09-12 capture of the live hero |
 | With Little | `/hero-crt/with-little-daily.png` — PNG, should be WebP |
 
 The two PNGs are the size problem on the work pages; re-export as WebP at the
