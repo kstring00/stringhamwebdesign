@@ -6,7 +6,7 @@
 //   CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome node scripts/lighthouse-check.js /about
 const { execFileSync } = require('child_process');
 const path = process.argv[2] || '/about';
-const url = 'http://localhost:3000' + path;
+const url = (process.env.BASE || 'http://localhost:3000') + path;
 const bin = require.resolve('lighthouse/cli/index.js');
 let fails = 0;
 for (const [label, extra] of [['mobile', []], ['desktop', ['--preset=desktop']]]) {

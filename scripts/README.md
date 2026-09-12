@@ -251,3 +251,17 @@ three uploads turned out to be truncated: the files existed, listed at a
 plausible size, and rendered nothing.
 
     BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/project-images-check.js
+
+## pricing-portal-check.js
+
+Asserts every constraint on the /pricing hero portal card: no img and no raster
+background, no heading tag inside the card, one h1 on the page, phase names read
+from the same data as section 04, the three states, an svg title on the check,
+statuses supplied as text so state is never colour alone, no new image or font
+request, 44px tap targets, no overflow at 360px with the hero CTA still above
+the fold, and AA by rendered pixel inside the navy card at both widths.
+
+    BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/pricing-portal-check.js
+
+`lighthouse-check.js` now honours BASE too, so both can run against the same
+server.
