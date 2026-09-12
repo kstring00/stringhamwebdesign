@@ -76,11 +76,6 @@ export const projects: Project[] = [
         alt: "BCBA Prep contact page with a two-column support form and project navigation",
         caption: "Contact and support experience.",
       },
-      {
-        src: "/work/bcba-prep/dashboard.webp",
-        alt: "BCBA Prep member dashboard showing purchased domains, quick actions, and study journey guidance",
-        caption: "Member dashboard and study-library access.",
-      },
     ],
     liveUrl: null,
     problem: [
@@ -103,13 +98,18 @@ export const projects: Project[] = [
     description: "A storage-facility web experience structured around clear unit discovery and customer decision-making.",
     status: "CASE STUDY",
     tech: ["Web design", "Responsive UI", "Conversion UX"],
-    heroImage: "/work/lake-city-self-storage/home.webp",
-    heroImageAlt: "Lake City Self Storage homepage showing unit selection messaging and an aerial view of the storage facility",
+    heroImage: "/work/lake-city-self-storage/drive-up.webp",
+    heroImageAlt: "Lake City Self Storage drive-up storage page, with an aerial photograph of the facility beside the storage-type explanation",
     screenshots: [
       {
-        src: "/work/lake-city-self-storage/home.webp",
-        alt: "Lake City Self Storage homepage showing unit selection messaging and an aerial view of the storage facility",
-        caption: "Lake City Self Storage homepage and storage-type selection experience.",
+        src: "/work/lake-city-self-storage/drive-up.webp",
+        alt: "Lake City Self Storage drive-up storage page, with an aerial photograph of the facility beside the storage-type explanation",
+        caption: "Drive-up storage: the type decision answered first, with a real photograph of the access style rather than a stock unit.",
+      },
+      {
+        src: "/work/lake-city-self-storage/drive-up-sizes.webp",
+        alt: "Drive-up size cards showing a 5 by 10 and a 10 by 10 unit with square footage, monthly price, and what fits in each",
+        caption: "Step two: size, price, and what actually fits, once the customer knows which storage type they need.",
       },
     ],
     liveUrl: null,

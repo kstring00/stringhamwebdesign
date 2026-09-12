@@ -241,3 +241,13 @@ under 300 KB, is marked high priority as the LCP element, and that the page
 still has exactly one h1.
 
     BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/work-hero-check.js
+
+## project-images-check.js
+
+Decodes every image `app/data/projects.ts` references, then loads the homepage,
+the portfolio index and every case study in a browser and fails on any image
+whose naturalWidth is zero or that is missing an alt attribute. Written after
+three uploads turned out to be truncated: the files existed, listed at a
+plausible size, and rendered nothing.
+
+    BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/project-images-check.js
