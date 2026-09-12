@@ -43,6 +43,7 @@ export const processSteps: ProcessStep[] = [
     detail: [
       "After the call you get a written scope: what I'm building, what I'm not, how many revision rounds are included, what it costs, and when it's done.",
       "You sign it. I sign it. Neither of us starts work on a handshake and a hope.",
+      "Payment is in two halves: 50% to reserve your build slot, 50% within 7 days of launch.",
       "If the scope changes later, it changes in writing, with your approval, before I touch it.",
     ],
   },

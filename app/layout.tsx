@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
+import { startingLine } from "./data/pricing";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -19,7 +20,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Kyle Stringham — websites",
   description:
-    "Custom websites for small businesses, from focused sites to advanced builds with integrations, automation, and AI. Scope is confirmed after consultation.",
+    `Custom websites for small businesses, from focused sites to advanced builds with integrations, automation, and AI. ${startingLine} Every one is scoped after we talk.`,
 };
 
 export default function RootLayout({

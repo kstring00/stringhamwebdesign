@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import Header from "../Header";
 import SiteFooter from "../SiteFooter";
+import { startingLine } from "../data/pricing";
 import QuoteForm from "./QuoteForm";
 import styles from "./quote.module.css";
 
@@ -34,7 +35,7 @@ export default function QuotePage() {
               </div>
               <div>
                 <dt>Cost</dt>
-                <dd>Nothing here is priced. Scope comes first, on the call.</dd>
+                <dd>{startingLine} The exact number comes after we talk.</dd>
               </div>
               <div>
                 <dt>Obligation</dt>

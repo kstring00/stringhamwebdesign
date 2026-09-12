@@ -1,0 +1,492 @@
+/* /pricing
+   Same ground, ink and gold as /about and the homepage hero. Those pages use
+   these exact hex values rather than the tokens in globals.css, so matching
+   them is what makes this page look native. Declared once here so the whole
+   page can be retargeted to the tokens in one place if the two sets are ever
+   reconciled. */
+
+.page {
+  --ground: #f5f0e8;
+  --ink: #0d1b26;
+  --ink-soft: #17344d;
+  --muted: #4f6474;
+  --gold: #a9833d;
+  --gold-rule: #c9a227;
+  /* Small uppercase labels: #a9833d is ~3.4:1 on this cream, which fails AA at
+     0.68rem. The process strip already solves this with a darker ink of the
+     same hue, so the same value is used here. Rules and large type keep the
+     brighter gold. */
+  --gold-ink: #6f5620;
+  --hair-gold: rgba(201, 162, 39, 0.34);
+  --hair-navy: rgba(38, 66, 89, 0.16);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration: 320ms;
+
+  min-height: 100svh;
+  background: var(--ground);
+  color: var(--ink);
+}
+
+.inner {
+  width: min(100%, 78rem);
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+/* The tiny monospace line above a section, exactly as the homepage hero
+   sets "01 / ENTRY SIGNAL". */
+.signal {
+  margin: 0 0 0.75rem;
+  /* .52 alpha measured 3.48:1 on the cream ground — under AA for 9px text.
+     .68 lands at ~5.9:1 and still reads as a quiet signal line. */
+  color: rgba(13, 27, 38, 0.68);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  margin: 0 0 1.2rem;
+  color: var(--gold-ink);
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.22em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+  padding-top: clamp(8.5rem, 11vw, 10.5rem);
+  padding-bottom: clamp(3.5rem, 6vw, 5rem);
+}
+
+.hero h1 {
+  max-width: 11ch;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(4rem, 6.8vw, 7rem);
+  font-weight: 300;
+  letter-spacing: -0.055em;
+  line-height: 0.88;
+}
+
+.lede {
+  max-width: 40rem;
+  margin: clamp(1.6rem, 2.4vw, 2rem) 0 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.2vw, 1.08rem);
+  line-height: 1.78;
+}
+
+.lede strong {
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+/* ---------- sections ---------- */
+
+.section {
+  padding-top: clamp(3.5rem, 6vw, 5rem);
+  padding-bottom: clamp(3.5rem, 6vw, 5rem);
+  border-top: 1px solid var(--hair-gold);
+}
+
+.section h2 {
+  max-width: 14ch;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+  font-weight: 300;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+}
+
+.sectionIntro {
+  max-width: 36rem;
+  margin: 1.1rem 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* ---------- tiers ---------- */
+
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 3rem);
+  margin-top: clamp(2.5rem, 4vw, 3.5rem);
+}
+
+.tier {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--hair-navy);
+}
+
+/* The common choice: a gold rule and a label, not a badge. */
+.tierCommon {
+  border-top: 2px solid var(--gold-rule);
+}
+
+.commonLabel {
+  margin: -0.35rem 0 1.1rem;
+  color: var(--gold-ink);
+  font-size: 0.62rem;
+  font-weight: 750;
+  letter-spacing: 0.2em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.tier h3 {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.9rem, 2.4vw, 2.4rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+/* Block, not flex: keeps the text node literally "from $900" for find-in-page,
+   copy/paste and screen readers, rather than two boxes that only look joined. */
+.price {
+  display: block;
+  margin: 0.9rem 0 0;
+  color: var(--ink);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(2.2rem, 3vw, 2.9rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.price small {
+  display: inline-block;
+  margin-right: 0.35rem;
+  vertical-align: 0.35em;
+  color: var(--muted);
+  font-family: var(--font-inter), Arial, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.fit {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.65;
+}
+
+.plus {
+  margin: 1.6rem 0 0.35rem;
+  color: var(--gold-ink);
+  font-size: 0.62rem;
+  font-weight: 750;
+  letter-spacing: 0.18em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.includes {
+  margin: 1.2rem 0 0;
+  padding: 0;
+  list-style: none;
+  flex: 1;
+}
+
+.tier .plus + .includes {
+  margin-top: 0.4rem;
+}
+
+.includes li {
+  position: relative;
+  padding: 0.6rem 0 0.6rem 1.35rem;
+  border-bottom: 1px solid var(--hair-navy);
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.includes li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.25rem;
+  width: 0.7rem;
+  height: 1px;
+  background: var(--gold-rule);
+}
+
+.timeline {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin: 1.4rem 0 0;
+}
+
+.timeline dt {
+  color: var(--gold-ink);
+  font-size: 0.62rem;
+  font-weight: 750;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.timeline dd {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.launchNote {
+  max-width: 44rem;
+  margin: clamp(2rem, 3.5vw, 2.75rem) 0 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.65;
+}
+
+/* ---------- not included ---------- */
+
+.facts {
+  width: min(100%, 44rem);
+  margin: clamp(2rem, 3.5vw, 2.75rem) 0 0;
+  padding: 0;
+  border-top: 1px solid var(--hair-navy);
+}
+
+.facts > div {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: baseline;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--hair-navy);
+}
+
+.facts dt {
+  color: var(--gold-ink);
+  font-size: 0.64rem;
+  font-weight: 750;
+  letter-spacing: 0.18em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.facts dd {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.68;
+}
+
+/* ---------- faq (mirrors the process strip's disclosure) ---------- */
+
+.faqList {
+  width: min(100%, 48rem);
+  margin: clamp(2rem, 3.5vw, 2.75rem) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--hair-navy);
+}
+
+.faqItem {
+  border-bottom: 1px solid var(--hair-navy);
+}
+
+.faqHeading {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+.faqTrigger {
+  width: 100%;
+  min-height: 3.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.05rem 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.faqTrigger:focus-visible {
+  outline: 2px solid var(--gold-ink);
+  outline-offset: -2px;
+  border-radius: 2px;
+}
+
+.faqQuestion {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.35rem, 1.8vw, 1.6rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.faqTrigger:hover .faqQuestion {
+  color: var(--gold-ink);
+}
+
+.faqMarker {
+  position: relative;
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: none;
+}
+
+.faqMarker i {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+  background: var(--gold-ink);
+  transition: transform var(--duration) var(--ease);
+}
+
+.faqMarker i:last-child {
+  transform: rotate(90deg);
+}
+
+.faqOpen .faqMarker i:last-child {
+  transform: rotate(0deg);
+}
+
+.faqPanel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration) var(--ease);
+}
+
+.faqOpen .faqPanel {
+  grid-template-rows: 1fr;
+}
+
+.faqPanelInner {
+  overflow: hidden;
+  visibility: hidden;
+  transition: visibility 0s linear var(--duration);
+}
+
+.faqOpen .faqPanelInner {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.faqPanelInner p {
+  max-width: 42rem;
+  margin: 0;
+  padding: 0 0 1.35rem;
+  color: var(--muted);
+  font-size: 0.97rem;
+  line-height: 1.72;
+}
+
+/* ---------- close ---------- */
+
+.close {
+  padding-top: clamp(3.5rem, 6vw, 5rem);
+  padding-bottom: clamp(4.5rem, 8vw, 7rem);
+  border-top: 1px solid var(--hair-gold);
+}
+
+.closeStatement {
+  max-width: 22ch;
+  margin: 0;
+  color: var(--ink-soft);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+.closeBody {
+  max-width: 34rem;
+  margin: 1.1rem 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.closeAction {
+  margin-top: clamp(1.6rem, 2.5vw, 2.2rem);
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 64rem) {
+  .tiers {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 44rem) {
+  .inner {
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
+  }
+
+  .hero {
+    padding-top: 7rem;
+    padding-bottom: 3rem;
+  }
+
+  .hero h1 {
+    max-width: 10ch;
+    font-size: clamp(3.25rem, 14vw, 4.8rem);
+  }
+
+  .signal {
+    font-size: 0.52rem;
+  }
+
+  .tiers {
+    grid-template-columns: 1fr;
+    gap: 2.25rem;
+  }
+
+  .facts > div {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
+  .closeAction a {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faqMarker i,
+  .faqPanel,
+  .faqPanelInner {
+    transition: none;
+  }
+}
