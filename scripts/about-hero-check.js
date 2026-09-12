@@ -53,12 +53,14 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
         canvasOpacity: getComputedStyle(box.querySelector('canvas')).opacity,
         imgOpacity: getComputedStyle(box.querySelector('img')).opacity,
         box: [box.offsetWidth, box.offsetHeight],
-        three: typeof window.__THREE__ !== 'undefined',
+        // The component's own signal: absent = Three never requested,
+        // "loading" = import in flight, "ready" = engine running.
+        engine: box.getAttribute('data-engine'),
         dpr: window.devicePixelRatio,
         canvasPx: [box.querySelector('canvas').width, box.querySelector('canvas').height],
       };
     });
-    ok('desktop: Three loaded and the first frame rendered', after.live && after.three, JSON.stringify({ live: after.live, three: after.three }));
+    ok('desktop: the engine was imported, started, and rendered its first frame', after.live && after.engine === 'ready', JSON.stringify({ live: after.live, engine: after.engine }));
     ok('desktop: thousands of particles from the cutout', after.particles > 5000, `${after.particles}`);
     await p.waitForTimeout(700);
     const fade = await p.evaluate(() => { const box = document.querySelector('[data-hero="media"] > div'); return { c: getComputedStyle(box.querySelector('canvas')).opacity, i: getComputedStyle(box.querySelector('img')).opacity }; });
@@ -81,8 +83,8 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
     const p = await ctx.newPage();
     await p.goto(BASE + '/about', { waitUntil: 'load' });
     await p.waitForTimeout(2500);
-    const rm = await p.evaluate(() => ({ three: typeof window.__THREE__ !== 'undefined', live: !!document.querySelector('[data-hero="media"] > div[data-live]'), img: getComputedStyle(document.querySelector('[data-hero="media"] img')).opacity }));
-    ok('reduced motion: no Three, image stays', !rm.three && !rm.live && rm.img === '1', JSON.stringify(rm));
+    const rm = await p.evaluate(() => ({ engine: document.querySelector('[data-hero="media"] > div').getAttribute('data-engine'), live: !!document.querySelector('[data-hero="media"] > div[data-live]'), img: getComputedStyle(document.querySelector('[data-hero="media"] img')).opacity }));
+    ok('reduced motion: the engine is never requested, image stays', rm.engine === null && !rm.live && rm.img === '1', JSON.stringify(rm));
     await ctx.close();
   }
 
@@ -94,13 +96,13 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
     await p.goto(BASE + '/about', { waitUntil: 'load' });
     await p.waitForTimeout(2500);
     const m = await p.evaluate(() => ({
-      three: typeof window.__THREE__ !== 'undefined',
+      engine: document.querySelector('[data-hero="media"] > div').getAttribute('data-engine'),
       live: !!document.querySelector('[data-hero="media"] > div[data-live]'),
       overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
       imgShown: getComputedStyle(document.querySelector('[data-hero="media"] img')).opacity === '1',
       taps: [...document.querySelectorAll('[aria-labelledby="about-title"] a')].map(a => Math.round(a.getBoundingClientRect().height)),
     }));
-    ok('360px: no Three, image shown', !m.three && !m.live && m.imgShown, JSON.stringify(m));
+    ok('360px: the engine is never requested, image shown', m.engine === null && !m.live && m.imgShown, JSON.stringify(m));
     ok('360px: no overflow', m.overflow <= 0, `${m.overflow}px`);
     ok('360px: hero links ≥ 44px', m.taps.every(t => t >= 44), JSON.stringify(m.taps));
     const about = reqs.filter(u => /\/about\//.test(u)).map(u => u.split('/').pop());

@@ -24,6 +24,8 @@ export default function ParticleHeadshot() {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [live, setLive] = useState(false);
   const [count, setCount] = useState(0);
+  /** "loading" once the dynamic import starts, "ready" once the engine runs. Absent when Three was never requested. */
+  const [engine, setEngine] = useState<"loading" | "ready" | null>(null);
 
   useEffect(() => {
     const host = box.current, cv = canvas.current;
@@ -31,15 +33,16 @@ export default function ParticleHeadshot() {
     if (!window.matchMedia(DESKTOP).matches || window.matchMedia(REDUCED).matches) return;
 
     let cancelled = false;
-    let engine: Awaited<ReturnType<typeof import("./engine")["start"]>> | null = null;
+    let running: Awaited<ReturnType<typeof import("./engine")["start"]>> | null = null;
     let io: IntersectionObserver | null = null;
 
     const boot = async () => {
       if (cancelled) return;
+      setEngine("loading");
       const mod = await import("./engine");
       if (cancelled) return;
       try {
-        engine = await mod.start({
+        running = await mod.start({
           canvas: cv,
           host,
           src: SRC_SAMPLE,
@@ -48,14 +51,15 @@ export default function ParticleHeadshot() {
       } catch {
         return; // the <img> is already showing; nothing to recover
       }
-      if (cancelled) { engine.dispose(); return; }
-      setCount(engine.count);
+      if (cancelled) { running.dispose(); return; }
+      setCount(running.count);
+      setEngine("ready");
       // Pause off-screen and when the tab is hidden.
-      io = new IntersectionObserver(([e]) => engine?.setVisible(e.isIntersecting), { threshold: 0.05 });
+      io = new IntersectionObserver(([e]) => running?.setVisible(e.isIntersecting), { threshold: 0.05 });
       io.observe(host);
       document.addEventListener("visibilitychange", onVis);
     };
-    const onVis = () => engine?.setVisible(document.visibilityState === "visible" && (host.getBoundingClientRect().bottom > 0));
+    const onVis = () => running?.setVisible(document.visibilityState === "visible" && (host.getBoundingClientRect().bottom > 0));
 
     // Never on the critical path: wait for the load event.
     if (document.readyState === "complete") boot();
@@ -66,7 +70,7 @@ export default function ParticleHeadshot() {
       window.removeEventListener("load", boot);
       document.removeEventListener("visibilitychange", onVis);
       io?.disconnect();
-      engine?.dispose();
+      running?.dispose();
     };
   }, []);
 
@@ -76,6 +80,7 @@ export default function ParticleHeadshot() {
       ref={box}
       data-particles={count || undefined}
       data-live={live ? "" : undefined}
+      data-engine={engine ?? undefined}
     >
       <img
         className={styles.image}
