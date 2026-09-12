@@ -64,10 +64,10 @@ export default async function QuoteReceivedPage() {
         {/* 1. It went through. */}
         <section className={styles.confirmation} aria-labelledby="received-heading">
           <div className={styles.shell}>
-            <p className={styles.eyebrow}>Signal received</p>
-            <h1 id="received-heading">It went through.</h1>
+            <p className={styles.eyebrow} data-hero>Signal received</p>
+            <h1 id="received-heading" data-hero>It went through.</h1>
 
-            <div className={styles.referenceRow}>
+            <div className={styles.referenceRow} data-hero>
               <div>
                 <span className={styles.metaLabel}>Reference</span>
                 <strong className={styles.reference}>{receipt.reference}</strong>
@@ -92,7 +92,7 @@ export default async function QuoteReceivedPage() {
             </p>
 
             {/* 1b. Echo their answers back. */}
-            <div className={styles.echo}>
+            <div className={styles.echo} data-reveal-group>
               <h2 className={styles.echoHeading}>What you sent me</h2>
               <dl className={styles.echoList}>
                 {answered.map((field) => (
@@ -114,7 +114,7 @@ export default async function QuoteReceivedPage() {
         />
 
         {/* 4. One next action, and only one. */}
-        <section className={styles.nextAction} aria-labelledby="next-action-heading">
+        <section className={styles.nextAction} aria-labelledby="next-action-heading" data-reveal-group>
           <div className={styles.shell}>
             <p className={styles.eyebrow}>One thing, if you need it</p>
             <h2 id="next-action-heading">Forgot something?</h2>

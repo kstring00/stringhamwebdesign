@@ -28,41 +28,11 @@ export default function PricingMotion() {
     if (!root) return;
 
     const ctx = gsap.context(() => {
-      // 1) Hero — a quiet entrance in reading order, media block settling in beside it.
-      gsap
-        .timeline({ defaults: { ease: "power3.out" } })
-        .from("[data-hero='signal'], [data-hero='eyebrow']", { y: 12, autoAlpha: 0, duration: 0.5, stagger: 0.08 })
-        .from("[data-hero='title']", { y: 36, autoAlpha: 0, duration: 1.0 }, "-=0.25")
-        .from("[data-hero='lede'], [data-hero='actions']", { y: 18, autoAlpha: 0, duration: 0.7, stagger: 0.1 }, "-=0.55")
-        .from("[data-hero='trust'] > *", { y: 14, autoAlpha: 0, duration: 0.55, stagger: 0.07 }, "-=0.4")
-        .from("[data-hero='media']", { scale: 0.96, autoAlpha: 0, duration: 1.1, ease: "power2.out" }, 0.15)
-        .from("[data-hero='media'] > *", { autoAlpha: 0, y: 10, duration: 0.6 }, "-=0.5");
+      // Hero entrance, section reveals, rules and parallax are the sitewide
+      // engine's job (app/SiteMotion.tsx). Only what is particular to this
+      // page lives here.
 
-      // 2) Section heads and rules draw in as they arrive.
-      gsap.utils.toArray<HTMLElement>("[data-rule]").forEach((rule) => {
-        gsap.from(rule, {
-          scaleX: 0,
-          transformOrigin: "left center",
-          duration: 0.9,
-          ease: "power3.out",
-          scrollTrigger: { trigger: rule, start: "top 88%" },
-        });
-      });
-
-      // 3) Everything marked for reveal rises in; siblings stagger from one trigger.
-      gsap.utils.toArray<HTMLElement>("[data-reveal-group]").forEach((group) => {
-        const items = group.querySelectorAll<HTMLElement>("[data-reveal]");
-        gsap.from(items, {
-          y: 26,
-          autoAlpha: 0,
-          duration: 0.85,
-          ease: "power3.out",
-          stagger: 0.09,
-          scrollTrigger: { trigger: group, start: "top 82%" },
-        });
-      });
-
-      // 4) The featured card lands a beat after its neighbours and lifts.
+      // 1) The featured card lands a beat after its neighbours.
       const featured = root.querySelector<HTMLElement>("[data-featured]");
       if (featured) {
         gsap.from(featured, {
@@ -75,7 +45,7 @@ export default function PricingMotion() {
         });
       }
 
-      // 5) Prices count up to their floor as the cards rise. The tween is only
+      // 2) Prices count up to their floor as the cards rise. The tween is only
       //    created on enter: a tween created up front with a ScrollTrigger is
       //    rendered at progress 0 on init, which would write "$0" into the DOM
       //    before the card is even visible.
@@ -103,7 +73,7 @@ export default function PricingMotion() {
         });
       }
 
-      // 6) Process numbers and the close band.
+      // 3) Process numbers pop in.
       gsap.from("[data-phase-num]", {
         scale: 0.6,
         autoAlpha: 0,
@@ -112,6 +82,52 @@ export default function PricingMotion() {
         stagger: 0.12,
         scrollTrigger: { trigger: "[data-phases]", start: "top 80%" },
       });
+
+      // 4) The liquid edge on the statue: the turbulence frequency breathes,
+      //    so the dissolving side of the figure ripples like something seen
+      //    through moving water. Slow, small, and never on the text.
+      const noise = root.querySelector<SVGElement>("[data-liquid-noise]");
+      if (noise) {
+        gsap.to(noise, {
+          attr: { baseFrequency: "0.009 0.016" },
+          duration: 7,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+        });
+      }
+
+      // 5) Fog drifts across the valley on three layers at three speeds.
+      gsap.utils.toArray<HTMLElement>("[data-fog]").forEach((fog, index) => {
+        gsap.to(fog, {
+          xPercent: index % 2 ? -9 : 9,
+          yPercent: index % 2 ? 5 : -4,
+          duration: 14 + index * 4,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+        });
+      });
+
+      // 6) The valley draws back as you scroll past it — a slow Ken Burns,
+      //    on top of the engine's parallax.
+      const closeImage = root.querySelector<HTMLElement>("[data-close-image]");
+      if (closeImage) {
+        gsap.fromTo(
+          closeImage,
+          { scale: 1.14 },
+          {
+            scale: 1.02,
+            ease: "none",
+            scrollTrigger: {
+              trigger: closeImage.parentElement,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 0.8,
+            },
+          },
+        );
+      }
     }, root);
 
     return () => ctx.revert();

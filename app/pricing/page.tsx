@@ -266,21 +266,30 @@ export default function PricingPage() {
         </section>
 
         {/* ---------- faq ---------- */}
-        <section className={styles.band} id="questions" aria-labelledby="faq-title">
-          <div className={`${styles.inner} ${styles.faqGrid}`}>
-            {/* Image slot. Solid until a photograph exists — see ASSETS_NEEDED.md. */}
-            <div className={styles.faqMedia} aria-hidden="true">
-              <span className={styles.mediaCaption}>
-                Good
-                <br />
-                websites
-                <br />
-                create
-                <br />
-                opportunity.
-              </span>
-            </div>
+        <section className={`${styles.band} ${styles.faqBand}`} id="questions" aria-labelledby="faq-title">
+          {/* The Thinker, dissolving at the edge. Sits behind the glass so the
+              panels have real pixels to refract; the veil fades it into the
+              cream ground before it reaches the copy. */}
+          <div className={styles.faqScene} aria-hidden="true">
+            <img
+              className={styles.faqImage}
+              src="/pricing/faq-thinker.webp"
+              srcSet="/pricing/faq-thinker-900.webp 900w, /pricing/faq-thinker.webp 1482w"
+              sizes="(max-width: 64rem) 100vw, 62vw"
+              alt=""
+              width="1482"
+              height="1061"
+              loading="lazy"
+              decoding="async"
+              data-parallax="-10"
+              data-liquid
+            />
+            <span className={styles.faqVeil} />
+            <span className={styles.faqRing} />
+            <span className={styles.faqBeam} />
+          </div>
 
+          <div className={`${styles.inner} ${styles.faqGrid}`}>
             <div className={styles.faqCopy}>
               <div className={styles.sectionHead} data-reveal-group>
                 <p className={styles.signal} data-reveal>05 / FAQ</p>
@@ -289,21 +298,56 @@ export default function PricingPage() {
                   <br />
                   I get.
                 </h2>
+                <p className={styles.sectionIntro} data-reveal>
+                  Straight answers. If yours isn&apos;t here, it&apos;s the first thing
+                  we&apos;ll cover on the call.
+                </p>
               </div>
-              <PricingFaq items={faq} />
+              <PricingFaq items={faq} glass />
             </div>
           </div>
+
+          {/* The liquid edge: a slow displacement over the statue's dissolving
+              side, driven by GSAP on the turbulence frequency. */}
+          <svg className={styles.faqFilter} aria-hidden="true" focusable="false">
+            <filter id="pricing-liquid" x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
+              <feTurbulence type="fractalNoise" baseFrequency="0.006 0.011" numOctaves="2" seed="7" result="noise" data-liquid-noise />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+          </svg>
         </section>
 
         {/* ---------- close ---------- */}
         <section className={styles.close} aria-labelledby="close-title">
-          <div className={`${styles.inner} ${styles.closeGrid}`}>
+          {/* The valley, full bleed. Scrimmed heavily on the left so the copy
+              sits on near-navy; the river and fog come through on the right. */}
+          <div className={styles.closeScene} aria-hidden="true">
+            <img
+              className={styles.closeImage}
+              src="/pricing/close-forest.webp"
+              srcSet="/pricing/close-forest-1200.webp 1200w, /pricing/close-forest.webp 2000w"
+              sizes="100vw"
+              alt=""
+              width="2000"
+              height="1333"
+              loading="lazy"
+              decoding="async"
+              data-parallax="-14"
+              data-close-image
+            />
+            <span className={styles.closeScrim} />
+            <span className={`${styles.fog} ${styles.fogA}`} data-fog />
+            <span className={`${styles.fog} ${styles.fogB}`} data-fog />
+            <span className={`${styles.fog} ${styles.fogC}`} data-fog />
+            <span className={styles.closeGrid} />
+          </div>
+
+          <div className={`${styles.inner} ${styles.closeLayout}`}>
             <div className={styles.closeCopy} data-reveal-group>
               <p className={`${styles.signal} ${styles.signalLight}`} data-reveal>06 / LET&apos;S BUILD</p>
-              <h2 id="close-title" data-reveal>
-                Seven questions.
-                <br />
-                About five minutes.
+              <h2 id="close-title">
+                <span className={styles.closeLine} data-reveal>Seven questions.</span>
+                <span className={styles.closeLine} data-reveal>About five minutes.</span>
               </h2>
               <p className={styles.closeBody} data-reveal>
                 Send the brief and I&apos;ll reply within one business day with a straight
@@ -317,18 +361,11 @@ export default function PricingPage() {
               </div>
             </div>
 
-            {/* Image slot. Solid until a photograph exists — see ASSETS_NEEDED.md. */}
-            <div className={styles.closeMedia} aria-hidden="true">
-              <span className={styles.mediaCaptionLight}>
-                Same
-                <br />
-                discipline.
-                <br />
-                Different
-                <br />
-                mountains.
-              </span>
-            </div>
+            <p className={styles.closeMark} data-reveal-group aria-hidden="true">
+              <span className={styles.closeMarkRule} data-rule />
+              <span data-reveal>Same discipline.</span>
+              <span data-reveal>Different mountains.</span>
+            </p>
           </div>
         </section>
       </main>

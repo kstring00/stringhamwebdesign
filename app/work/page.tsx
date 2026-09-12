@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 
 import Header from "../Header";
 import SiteFooter from "../SiteFooter";
-import SiteMotion from "../SiteMotion";
 import { projects } from "../data/projects";
 import { PendingProjectCard, ProjectCard } from "./ProjectUI";
 import styles from "./work.module.css";
@@ -19,9 +18,9 @@ export default function WorkPage() {
       <main className={styles.page}>
         <section className={styles.indexHero} id="top">
           <div className={styles.indexHeroInner}>
-            <p className={styles.eyebrow}>Projects / Work</p>
-            <h1>Custom sites. Built around the business.</h1>
-            <p className={styles.indexHeroCopy}>
+            <p className={styles.eyebrow} data-hero>Projects / Work</p>
+            <h1 data-hero>Custom sites. Built around the business.</h1>
+            <p className={styles.indexHeroCopy} data-hero>
               Custom websites and web applications for small businesses — from
               service companies and practices to coaches and course creators.
             </p>
@@ -34,7 +33,7 @@ export default function WorkPage() {
             <h2 id="projects-heading" className="tag" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}>
               Project case studies
             </h2>
-            <div className={styles.projectGrid}>
+            <div className={styles.projectGrid} data-reveal-group>
               {projects.map((project, index) => (
                 <ProjectCard project={project} index={index} key={project.slug} />
               ))}
@@ -44,7 +43,6 @@ export default function WorkPage() {
         </section>
       </main>
       <SiteFooter />
-      <SiteMotion />
     </>
   );
 }
