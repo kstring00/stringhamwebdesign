@@ -64,13 +64,23 @@ from a raw GitHub URL. It is now served from `/public/about/portrait.webp`,
 but at that size it is soft in its 4:5 slot on desktop. Supply a new one at
 **1000 × 1250** (4:5) or larger, WebP, and drop it in at the same path.
 
+## 1c. Homepage process scene
+
+Filled 2026-09-12. `public/process/doves.webp` (724 × 772, 9 KB) — white doves
+on black, composited with `mix-blend-mode: screen` so the black ground drops
+out and no cut-out was needed. The ridge behind the lower third is
+`public/pricing/close-forest.webp`, reused rather than copied.
+
+The dove source is small; it is soft at very wide viewports. A larger version
+(1600px+ on the long edge, same white-on-black) would sharpen it. Not urgent.
+
 ## 3. The dove illustration
 
-Referenced in section 3b of the brief. A hand-drawn dove currently exists as
-an inline SVG in `app/ProcessSteps.tsx` (`StaticDove`), and a stroked dove
-mark sits in the masthead (`Header.module.css`, `.doveMark`). If a finished
-illustration is coming, it replaces the SVG in `ProcessSteps.tsx`; supply as
-SVG, single colour, so it can take the gold and navy from CSS.
+Resolved 2026-09-12. The inline `StaticDove` SVG in `app/ProcessSteps.tsx` was
+replaced by the photograph above and deleted. A stroked dove mark still sits in
+the masthead (`Header.module.css`, `.doveMark`, from `/ks-dove-mark.png`); if a
+finished illustration is ever supplied for that, SVG in a single colour would
+let it take the gold and navy from CSS.
 
 ## 4. Links and IDs
 

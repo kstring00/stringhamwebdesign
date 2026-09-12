@@ -228,25 +228,85 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: var(--cream);
+  /* Warmer and slightly deeper than the page cream, so the white doves and the
+     pale ridge have something to read against. */
+  background: linear-gradient(180deg, #efe9de 0%, #ece5d8 42%, #e8e0d2 100%);
   color: var(--navy);
   padding: clamp(4.75rem, 7vw, 7rem) var(--gutter) clamp(5rem, 8vw, 8rem);
   border-top: 1px solid var(--line);
 }
 
+/* ---------- the scene ---------- */
+
+/* Deliberately no z-index: a positioned element with one creates a stacking
+   context, and `screen` on the doves would then composite against transparency
+   instead of the section's background — which renders the source's black
+   ground as a solid rectangle. .homeInner carries z-index: 1 to sit above. */
+.homeScene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* A soft grey-warm wash in the top right. Without it the doves are white on
+   cream and vanish; this is the slightly darker ground they sit on. */
+.homeGlow {
+  position: absolute;
+  top: -18%;
+  right: -8%;
+  width: min(64vw, 52rem);
+  aspect-ratio: 1;
+  /* closest-side, and no border-radius: with farthest-corner the gradient was
+     still partly opaque where the round box clipped it, which drew a visible
+     arc across the section. Sized to the box, it reaches zero on its own. */
+  background:
+    radial-gradient(circle closest-side at 50% 50%, rgba(122, 128, 133, 0.26) 0%, rgba(133, 130, 124, 0.15) 40%, rgba(160, 150, 136, 0.05) 68%, rgba(160, 150, 136, 0) 100%);
+}
+
+/* The source is white doves on pure black. `screen` drops the black entirely
+   and keeps the birds, which is why no cut-out was needed. */
+.homeDoves {
+  position: absolute;
+  top: clamp(-4rem, -2vw, -1rem);
+  right: clamp(-2rem, 3vw, 5rem);
+  width: min(34vw, 26rem);
+  height: auto;
+  mix-blend-mode: screen;
+  opacity: 0.9;
+}
+
+/* The valley from /pricing, reused rather than copied. Desaturated, warmed and
+   masked so it fades out of the cream instead of sitting in a frame. */
+.homeRidge {
+  position: absolute;
+  left: 50%;
+  bottom: -6%;
+  width: min(150%, 108rem);
+  height: auto;
+  transform: translateX(-50%);
+  /* Faint, and held to the lower third: at 0.3 with an earlier mask it reached
+     up behind the step row and the copy there fell under AA. */
+  opacity: 0.22;
+  filter: saturate(0.22) sepia(0.34) brightness(1.22) contrast(0.86);
+  mix-blend-mode: multiply;
+  -webkit-mask: linear-gradient(180deg, transparent 0%, transparent 40%, rgba(0, 0, 0, 0.35) 62%, rgba(0, 0, 0, 0.8) 82%, #000 100%);
+  mask: linear-gradient(180deg, transparent 0%, transparent 40%, rgba(0, 0, 0, 0.35) 62%, rgba(0, 0, 0, 0.8) 82%, #000 100%);
+}
+
 .homeInner {
   position: relative;
+  z-index: 1;
   width: min(100%, 90rem);
   margin-inline: auto;
 }
 
 .homeHeader {
   position: relative;
-  min-height: clamp(18rem, 31vw, 27rem);
+  /* Tall enough that the doves have sky to fly in beside the headline. */
+  min-height: clamp(13rem, 22vw, 20rem);
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(19rem, 0.9fr);
   align-items: center;
-  gap: clamp(2rem, 6vw, 6rem);
 }
 
 .homeCopy {
@@ -294,12 +354,23 @@
   line-height: 1.55;
 }
 
+/* The section's one action, after the seven steps, centred so nothing competes
+   with it. */
 .homeActions {
-  display: flex;
-  align-items: center;
-  gap: clamp(1rem, 3vw, 2.4rem);
-  flex-wrap: wrap;
-  margin-top: 1.65rem;
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  margin-top: clamp(2.75rem, 5vw, 4.25rem);
+  text-align: center;
+}
+
+.homeReassure {
+  margin: 0;
+  /* Navy rather than slate: this line sits lowest, over the strongest part of
+     the ridge, and slate did not survive it. */
+  color: var(--navy-deep);
+  font-size: 0.9rem;
+  line-height: 1.6;
 }
 
 .homeCta {
@@ -307,15 +378,16 @@
   align-items: center;
   justify-content: center;
   gap: 1.35rem;
-  min-height: 3.6rem;
-  padding: 0.95rem 1.55rem;
+  min-height: 3.9rem;
+  padding: 1.05rem 2.4rem;
   border-radius: 999px;
   background: var(--navy-deep);
   color: var(--cream-light);
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   font-weight: 750;
   text-decoration: none;
-  box-shadow: 0 12px 28px rgba(5, 23, 47, 0.08);
+  box-shadow: 0 16px 36px rgba(5, 23, 47, 0.16);
+  transition: transform 200ms ease, box-shadow 200ms ease;
 }
 
 .homeCta span {
@@ -324,7 +396,8 @@
 }
 
 .homeCta:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 22px 44px rgba(5, 23, 47, 0.22);
 }
 
 .homeCta:focus-visible {
@@ -339,22 +412,6 @@
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-}
-
-.homeDoveWrap {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  place-items: start end;
-  align-self: stretch;
-  padding-top: 0.25rem;
-}
-
-.homeDove {
-  display: block;
-  width: min(100%, 28rem);
-  height: auto;
-  overflow: visible;
 }
 
 .homeNavigator {
@@ -493,7 +550,9 @@
   padding: clamp(2rem, 4vw, 3.25rem);
   border: 1px solid rgba(160, 131, 72, 0.58);
   border-radius: 0.8rem;
-  background: rgba(248, 245, 239, 0.58);
+  /* Near-opaque: at 0.58 the ridge behind it showed through and dropped the
+     panel copy to 2.3:1. The card still reads as paper on the scene. */
+  background: rgba(248, 245, 239, 0.93);
 }
 
 .homeDetail:focus-visible {
@@ -587,14 +646,20 @@
     grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.7fr);
   }
 
+  /* minmax(0, 1fr) lets every track collapse to nothing, so a child min-width
+     cannot widen them and the seven steps pile up on top of each other. A real
+     track minimum is what makes the row scroll instead. */
   .homeTabs {
+    grid-template-columns: repeat(7, minmax(9.25rem, 1fr));
     overflow-x: auto;
     overscroll-behavior-inline: contain;
+    scroll-snap-type: inline proximity;
     scrollbar-width: thin;
   }
 
   .homeTab {
-    min-width: 9.25rem;
+    min-width: 0;
+    scroll-snap-align: center;
   }
 }
 
@@ -604,13 +669,15 @@
     grid-template-columns: 1fr;
   }
 
-  .homeDoveWrap {
-    position: absolute;
-    top: -1rem;
-    right: -4rem;
-    width: 18rem;
-    opacity: 0.42;
-    pointer-events: none;
+  .homeDoves {
+    width: min(56vw, 20rem);
+    right: -2rem;
+    opacity: 0.8;
+  }
+
+  .homeGlow {
+    width: min(88vw, 28rem);
+    right: -14%;
   }
 
   .homeCopy {
@@ -687,22 +754,32 @@
     max-width: 31rem;
   }
 
-  .homeDoveWrap {
-    position: relative;
-    inset: auto;
-    width: 100%;
-    margin-top: -1.5rem;
-    opacity: 1;
+  /* On a phone the doves sit above the headline rather than beside it, so the
+     copy keeps the full column width. */
+  .homeDoves {
+    top: -2.5rem;
+    right: -2.5rem;
+    width: min(52vw, 13rem);
+    opacity: 0.7;
   }
 
-  .homeDove {
-    width: min(100%, 20rem);
-    margin-left: auto;
+  /* The label wraps to two lines here, which left the trailing rule stranded
+     on a line of its own. */
+  .homeEyebrow::after {
+    display: none;
+  }
+
+  .homeRidge {
+    width: 190%;
+    opacity: 0.24;
   }
 
   .homeActions {
-    align-items: stretch;
-    flex-direction: column;
+    justify-items: stretch;
+  }
+
+  .homeCta {
+    width: 100%;
   }
 
   .homeCta {
@@ -723,13 +800,27 @@
     height: 2.4rem;
   }
 
+  .homeTabs {
+    grid-template-columns: repeat(7, minmax(8.6rem, 1fr));
+  }
+
   .homeTab {
-    min-width: 8.6rem;
     min-height: 10rem;
   }
 
   .homeDetail {
     padding: 1.4rem;
+  }
+
+  /* At 18rem the decorative arc crossed the panel copy on a 375px card. The
+     copy paints above it, so no letterform was obscured, but it read as
+     clutter — pulled back to a corner mark. */
+  .homeDetailCurve {
+    right: -2.5rem;
+    bottom: -4rem;
+    width: 9rem;
+    height: 7rem;
+    opacity: 0.7;
   }
 
   .homeDetailMeta {
