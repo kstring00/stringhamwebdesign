@@ -2,66 +2,236 @@
   min-height: 100svh;
   background: #f5f0e8;
   color: #0d1b26;
-  padding: clamp(8.5rem, 11vw, 10.5rem) var(--gutter) clamp(5rem, 8vw, 7rem);
 }
 
-.hero,
-.story {
-  width: min(100%, 78rem);
-  margin: 0 auto;
-}
+/* ---------- hero: navy, the lamp, the marks ---------- */
 
 .hero {
+  --cream: #f5f0e8;
+  --gold-on-dark: #e2c58a;
+  --gold: #c9a227;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: linear-gradient(180deg, #0b1a2a 0%, #05172f 100%);
+  color: var(--cream);
+  padding: clamp(8.25rem, 11vw, 10.5rem) var(--gutter) clamp(3.5rem, 6vw, 5rem);
+}
+
+/* A faint technical grid, the same one the rest of the dark sections carry. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(rgba(245, 240, 232, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245, 240, 232, 0.06) 1px, transparent 1px);
+  background-size: 3.5rem 3.5rem;
+  -webkit-mask: linear-gradient(90deg, #000 0%, transparent 60%);
+  mask: linear-gradient(90deg, #000 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.heroInner {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 84rem);
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 20rem;
-  gap: clamp(3rem, 7vw, 6.5rem);
-  align-items: end;
-  padding-bottom: clamp(4.5rem, 7vw, 6.5rem);
-  border-bottom: 1px solid rgba(201, 162, 39, 0.34);
+  grid-template-columns: minmax(0, 1fr) minmax(20rem, 32rem) auto;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+  min-height: min(76svh, 52rem);
 }
 
 .heroCopy {
-  max-width: 51rem;
-}
-
-.eyebrow,
-.meta,
-.section h2 {
-  text-transform: uppercase;
+  max-width: 40rem;
 }
 
 .eyebrow {
-  margin: 0 0 1.2rem;
-  color: #a9833d;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 1.4rem;
+  color: var(--gold-on-dark);
   font-size: 0.68rem;
   font-weight: 750;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.eyebrowRule {
+  display: block;
+  width: 4rem;
+  height: 1px;
+  background: rgba(226, 197, 138, 0.6);
+  transform-origin: left center;
 }
 
 .hero h1 {
   max-width: 13ch;
   margin: 0;
-  color: #0d1b26;
+  color: var(--cream);
   font-family: var(--font-cormorant), Georgia, serif;
-  font-size: clamp(4rem, 6.8vw, 7rem);
+  font-size: clamp(3.6rem, 6.2vw, 6.4rem);
   font-weight: 300;
-  letter-spacing: -0.055em;
-  line-height: 0.88;
+  letter-spacing: -0.05em;
+  line-height: 0.92;
 }
 
-.meta {
-  margin: clamp(1.8rem, 3vw, 2.4rem) 0 0;
-  color: #71808b;
+.hero h1 em {
+  color: var(--gold-on-dark);
+  font-style: italic;
+  font-weight: 300;
+}
+
+.lede {
+  max-width: 34rem;
+  margin: clamp(1.4rem, 2.2vw, 1.8rem) 0 0;
+  color: rgba(245, 240, 232, 0.8);
+  font-size: clamp(1.02rem, 1.2vw, 1.12rem);
+  line-height: 1.7;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: clamp(1.6rem, 2.5vw, 2.2rem);
+}
+
+.heroSecondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  color: var(--cream);
+  border-bottom: 1px solid rgba(226, 197, 138, 0.7);
+  padding-bottom: 0.1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.heroSecondary:hover {
+  border-bottom-color: var(--cream);
+}
+
+.heroSecondary:focus-visible {
+  outline: 2px solid var(--gold-on-dark);
+  outline-offset: 4px;
+}
+
+.heroTrust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem 0;
+  margin: clamp(2.25rem, 4vw, 3.25rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.heroTrust li {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0 1.4rem;
+  color: var(--gold-on-dark);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.heroTrust li:first-child {
+  padding-left: 0;
+}
+
+.heroTrust li + li {
+  border-left: 1px solid rgba(226, 197, 138, 0.28);
+}
+
+.heroTrust svg {
+  flex: none;
+  color: var(--gold);
+}
+
+.heroTrust span {
+  max-width: 9ch;
+}
+
+/* The lamp. Masked so its edges dissolve into the navy rather than sitting
+   in a box; the SVG inside fills it and slices to cover. */
+.lamp {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  max-height: min(78svh, 50rem);
+  width: 100%;
+  justify-self: center;
+  -webkit-mask: radial-gradient(ellipse 58% 62% at 50% 50%, #000 52%, transparent 100%);
+  mask: radial-gradient(ellipse 58% 62% at 50% 50%, #000 52%, transparent 100%);
+  contain: paint;
+}
+
+.lamp svg {
+  will-change: transform;
+}
+
+.marks {
+  display: grid;
+  align-content: space-between;
+  gap: 4rem;
+  align-self: stretch;
+  padding: 2rem 0;
+}
+
+.marks p {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  color: var(--gold-on-dark);
   font-size: 0.64rem;
-  font-weight: 650;
-  letter-spacing: 0.16em;
-  line-height: 1.6;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  line-height: 1.55;
+  text-transform: uppercase;
+}
+
+.marks i {
+  display: block;
+  width: 2.5rem;
+  height: 1px;
+  margin-top: 1rem;
+  background: rgba(226, 197, 138, 0.6);
+  transform-origin: left center;
+}
+
+/* ---------- story ---------- */
+
+.story {
+  width: min(100%, 78rem);
+  margin: 0 auto;
+  padding: clamp(4.5rem, 7vw, 6.5rem) var(--gutter) clamp(5rem, 8vw, 7rem);
+}
+
+.storyLead {
+  display: grid;
+  grid-template-columns: minmax(0, 68ch) minmax(14rem, 18rem);
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: start;
+}
+
+.storyLead .prose {
+  order: 1;
 }
 
 .portrait {
+  order: 2;
   width: 100%;
-  max-width: 20rem;
   margin: 0;
   justify-self: end;
 }
@@ -72,12 +242,20 @@
   aspect-ratio: 4 / 5;
   object-fit: cover;
   border: 1px solid rgba(201, 162, 39, 0.52);
-  border-radius: 0;
-  box-shadow: none;
 }
 
-.story {
-  padding-top: clamp(4.5rem, 7vw, 6.5rem);
+.portrait figcaption {
+  margin-top: 0.9rem;
+  color: #71808b;
+  font-size: 0.6rem;
+  font-weight: 650;
+  letter-spacing: 0.16em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.section h2 {
+  text-transform: uppercase;
 }
 
 .prose,
@@ -184,41 +362,88 @@
   outline-offset: 5px;
 }
 
-@media (max-width: 58rem) {
-  .hero {
-    grid-template-columns: minmax(0, 1fr) 17rem;
+@media (max-width: 64rem) {
+  .heroInner {
+    grid-template-columns: 1fr;
+    min-height: 0;
     gap: 2.5rem;
   }
 
-  .hero h1 {
-    font-size: clamp(3.7rem, 8vw, 5.4rem);
+  .lamp {
+    aspect-ratio: 16 / 10;
+    max-height: 26rem;
+    -webkit-mask: radial-gradient(ellipse 62% 70% at 50% 50%, #000 50%, transparent 100%);
+    mask: radial-gradient(ellipse 62% 70% at 50% 50%, #000 50%, transparent 100%);
+  }
+
+  .marks {
+    grid-auto-flow: column;
+    justify-content: space-between;
+    padding: 0;
+    gap: 2rem;
+  }
+
+  .marks i {
+    display: none;
+  }
+
+  .storyLead {
+    grid-template-columns: 1fr;
+  }
+
+  .portrait {
+    order: 0;
+    max-width: 16rem;
+    justify-self: start;
+  }
+
+  .storyLead .prose {
+    order: 1;
   }
 }
 
 @media (max-width: 44rem) {
-  .page {
-    padding: 7rem 1.1rem 4.5rem;
-  }
-
   .hero {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-    align-items: start;
-    padding-bottom: 4rem;
+    padding: 7rem 1.1rem 3rem;
   }
 
   .hero h1 {
     max-width: 11.5ch;
-    font-size: clamp(3.25rem, 14vw, 4.8rem);
+    font-size: clamp(3rem, 13.5vw, 4.6rem);
   }
 
-  .portrait {
-    width: min(100%, 20rem);
-    justify-self: start;
+  .heroActions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .heroActions a {
+    justify-content: center;
+  }
+
+  .heroTrust {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .heroTrust li,
+  .heroTrust li + li {
+    padding: 0;
+    border-left: 0;
+  }
+
+  .heroTrust span {
+    max-width: none;
+  }
+
+  .marks {
+    grid-auto-flow: row;
+    gap: 1.25rem;
   }
 
   .story {
-    padding-top: 4rem;
+    padding: 4rem 1.1rem 4.5rem;
   }
 
   .section {
@@ -227,5 +452,11 @@
 
   .closing {
     margin-top: 4.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lamp svg {
+    will-change: auto;
   }
 }

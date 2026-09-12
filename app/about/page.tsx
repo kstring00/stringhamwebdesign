@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 
 import Header from "../Header";
+import headerStyles from "../Header.module.css";
 import SiteFooter from "../SiteFooter";
+import LavaLamp from "./LavaLamp";
 import styles from "./about.module.css";
 
 export const metadata: Metadata = {
@@ -10,53 +12,120 @@ export const metadata: Metadata = {
     "About Kyle Stringham, a web designer and developer in League City, Texas, building thoughtful custom websites for small businesses.",
 };
 
+function Arrow() {
+  return (
+    <svg width="18" height="10" viewBox="0 0 18 10" fill="none" aria-hidden="true">
+      <path d="M0 5h16M12 1l4 4-4 4" stroke="currentColor" strokeWidth="1.2" />
+    </svg>
+  );
+}
+
+const TRUST = [
+  { label: "Strategic thinking", icon: <path d="M2 5.5h8v8H2zM6 2h8v8" /> },
+  { label: "Clean development", icon: <path d="M5 3L1 8l4 5M11 3l4 5-4 5M9.5 2l-3 12" /> },
+  { label: "Real results", icon: <path d="M2 14V9M6 14V5M10 14V7M14 14V2" /> },
+];
+
 export default function AboutPage() {
   return (
     <>
       <Header />
       <main className={styles.page}>
         <section className={styles.hero} aria-labelledby="about-title">
-          <div className={styles.heroCopy}>
-            <p className={styles.eyebrow} data-hero>About</p>
-            <h1 id="about-title" data-hero>I build the thing I wish more small businesses had.</h1>
-            <p className={styles.meta} data-hero>
-              Kyle Stringham — Web Design &amp; Development · League City, Texas
-            </p>
-          </div>
+          <div className={styles.heroInner}>
+            <div className={styles.heroCopy}>
+              <p className={styles.eyebrow} data-hero>
+                About <span className={styles.eyebrowRule} aria-hidden="true" data-rule />
+              </p>
+              <h1 id="about-title" data-hero>
+                I build the things I wish more <em>small businesses had.</em>
+              </h1>
+              <p className={styles.lede} data-hero>
+                Clean systems. Thoughtful design. Real functionality. Built with purpose,
+                not just profit.
+              </p>
 
-          <figure className={styles.portrait} data-hero="media">
-            <img
-              src="https://raw.githubusercontent.com/kstring00/stringhamwebdesign/62150537aa73260bb47bb7799f12d3ea3485f811/IMG_0157.jpg"
-              alt="Portrait of Kyle Stringham"
-              width="640"
-              height="800"
-              fetchPriority="high"
-            />
-          </figure>
+              <div className={styles.heroActions} data-hero>
+                <a className={headerStyles.getStarted} href="/quote">
+                  <span>Start a project</span>
+                  <span className={headerStyles.arrowShell} aria-hidden="true"><Arrow /></span>
+                </a>
+                <a className={styles.heroSecondary} href="#how">
+                  My approach
+                </a>
+              </div>
+
+              <ul className={styles.heroTrust} data-reveal-group aria-label="How I work">
+                {TRUST.map((item) => (
+                  <li key={item.label}>
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      {item.icon}
+                    </svg>
+                    <span>{item.label}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className={styles.lamp} data-hero="media">
+              <LavaLamp />
+            </div>
+
+            <aside className={styles.marks} aria-hidden="true">
+              <p>
+                <span>Ideas</span>
+                <span>Design</span>
+                <span>Develop</span>
+                <span>Grow</span>
+                <i data-rule />
+              </p>
+              <p>
+                <span>Same</span>
+                <span>discipline.</span>
+                <span>Different</span>
+                <span>businesses.</span>
+                <i data-rule />
+              </p>
+            </aside>
+          </div>
         </section>
 
         <article className={styles.story}>
-          <div className={styles.prose} data-reveal-group>
-            <p>
-              I work in ABA. I spend my days around behavior analysts, therapists, and the
-              families they serve — which is how this started.
-            </p>
+          <div className={styles.storyLead}>
+            <figure className={styles.portrait} data-reveal>
+              <img
+                src="/about/portrait.webp"
+                alt="Portrait of Kyle Stringham"
+                width="263"
+                height="278"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Kyle Stringham — Web Design &amp; Development · League City, Texas</figcaption>
+            </figure>
 
-            <p>
-              Parents of autistic kids were suffering quietly. Scattered resources, no clear
-              next step, a lot of energy spent searching instead of being present with their
-              own children. I pitched a site that would close that gap, and I built it.
-              That&apos;s Common Ground.
-            </p>
+            <div className={styles.prose} data-reveal-group>
+              <p>
+                I work in ABA. I spend my days around behavior analysts, therapists, and the
+                families they serve — which is how this started.
+              </p>
 
-            <p className={styles.pivot}>Nine months ago I didn&apos;t know how to do any of this.</p>
+              <p>
+                Parents of autistic kids were suffering quietly. Scattered resources, no clear
+                next step, a lot of energy spent searching instead of being present with their
+                own children. I pitched a site that would close that gap, and I built it.
+                That&apos;s Common Ground.
+              </p>
 
-            <p>
-              I taught myself. Budgeting apps, personal systems, a journaling app built
-              around faith called <a href="/work/with-little">With Little</a>. I learned by
-              building things that were broken and then fixing them, which is still mostly
-              how I work.
-            </p>
+              <p className={styles.pivot}>Nine months ago I didn&apos;t know how to do any of this.</p>
+
+              <p>
+                I taught myself. Budgeting apps, personal systems, a journaling app built
+                around faith called <a href="/work/with-little">With Little</a>. I learned by
+                building things that were broken and then fixing them, which is still mostly
+                how I work.
+              </p>
+            </div>
           </div>
 
           <section className={styles.section} aria-labelledby="why-title" data-reveal-group>
@@ -77,7 +146,7 @@ export default function AboutPage() {
             </div>
           </section>
 
-          <section className={styles.section} aria-labelledby="how-title" data-reveal-group>
+          <section className={styles.section} id="how" aria-labelledby="how-title" data-reveal-group>
             <h2 id="how-title">How I work</h2>
             <div className={styles.prose}>
               <p className={styles.pillar}>

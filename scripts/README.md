@@ -172,3 +172,28 @@ sections. The FAQ glass and the close band sit over photographs, where a
 computed background says nothing — so `pricing-check.js` measures those the
 README way: blank the text, screenshot with the fixed masthead hidden, sample
 every pixel under each glyph box, and compare the worst one.
+
+## /about
+
+The lava lamp is the one animation on the site that never stops, so it is
+held to a frame budget, not just a "does it render":
+
+```bash
+node scripts/about-check.js         # frame times at 1440 and at 375 with 4x CPU throttling
+                                    # (p95 <= 34ms, <= 3 frames over 50ms); reduced motion
+                                    # holds the lamp still; rendered-pixel contrast on the
+                                    # navy hero; one h1; no overflow; saves screenshots
+```
+
+Lighthouse runs against a **production** build only — dev bundles fail every
+budget and prove nothing:
+
+```bash
+npm run build && npm start &
+CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome node scripts/lighthouse-check.js /about
+```
+
+Mobile (throttled) and desktop presets; all four categories printed;
+performance must clear 88 on both. If the lamp is what pushes it under, the
+knobs are in `app/about/LavaLamp.tsx`: blob count, blur radius, and whether
+the glass displacement runs on narrow viewports.

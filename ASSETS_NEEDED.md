@@ -49,6 +49,13 @@ Each project's hero slot is **16:9** (`app/work/work.module.css`). Supply at
 The two PNGs are the size problem on the work pages; re-export as WebP at the
 size above.
 
+## 2b. Portrait — `/about`
+
+The only portrait in the repo is **263 × 278**, and it was being hotlinked
+from a raw GitHub URL. It is now served from `/public/about/portrait.webp`,
+but at that size it is soft in its 4:5 slot on desktop. Supply a new one at
+**1000 × 1250** (4:5) or larger, WebP, and drop it in at the same path.
+
 ## 3. The dove illustration
 
 Referenced in section 3b of the brief. A hand-drawn dove currently exists as
