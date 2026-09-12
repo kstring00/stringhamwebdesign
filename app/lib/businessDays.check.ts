@@ -45,15 +45,15 @@ eq("Sat 2026-09-05 not business", isBusinessDay({ year: 2026, month: 9, day: 5 }
 eq("Labor Day 2026-09-07 not business", isBusinessDay({ year: 2026, month: 9, day: 7 }), false);
 eq("Tue 2026-09-08 is business", isBusinessDay({ year: 2026, month: 9, day: 8 }), true);
 
-// --- Reply window (Eastern) ---
+// --- Reply window (Central) ---
 const w = (iso: string) => replyWindowFor(new Date(iso));
 
-// Fri 2026-09-04, 10:00 ET -> received Fri, next business day skips the
+// Fri 2026-09-04, 09:00 CT -> received Fri, next business day skips the
 // weekend AND Labor Day -> Tue 8 Sep.
-eq("Fri 10am ET", w("2026-09-04T14:00:00Z").replyByLabel, "Tuesday, September 8");
+eq("Fri 9am CT", w("2026-09-04T14:00:00Z").replyByLabel, "Tuesday, September 8");
 
-// Fri 2026-09-04, 21:00 ET (after cutoff) -> received Tue 8th -> reply Wed 9th.
-eq("Fri 9pm ET", w("2026-09-05T01:00:00Z").replyByLabel, "Wednesday, September 9");
+// Fri 2026-09-04, 20:00 CT (after cutoff) -> received Tue 8th -> reply Wed 9th.
+eq("Fri 8pm CT", w("2026-09-05T01:00:00Z").replyByLabel, "Wednesday, September 9");
 
 // Sat 2026-09-05 midday -> received Tue 8th -> reply Wed 9th.
 eq("Saturday", w("2026-09-05T16:00:00Z").replyByLabel, "Wednesday, September 9");
@@ -61,7 +61,7 @@ eq("Saturday", w("2026-09-05T16:00:00Z").replyByLabel, "Wednesday, September 9")
 // Mon 2026-09-07 is Labor Day -> received Tue 8th -> reply Wed 9th.
 eq("Labor Day", w("2026-09-07T15:00:00Z").replyByLabel, "Wednesday, September 9");
 
-// Mon 2026-09-14 09:00 ET -> reply Tue 15th.
+// Mon 2026-09-14 08:00 CT -> reply Tue 15th.
 eq("ordinary Monday", w("2026-09-14T13:00:00Z").replyByLabel, "Tuesday, September 15");
 
 // Thanksgiving week: Wed 2026-11-25 10am -> Thu is Thanksgiving -> reply Fri 27.
@@ -70,12 +70,14 @@ eq("day before Thanksgiving", w("2026-11-25T15:00:00Z").replyByLabel, "Friday, N
 // Christmas 2026 is Fri 25 Dec. Thu 24th 10am -> reply Mon 28.
 eq("Christmas Eve", w("2026-12-24T15:00:00Z").replyByLabel, "Monday, December 28");
 
-// Timezone honesty: 2026-09-08T02:00:00Z is still Mon 7 Sep 10pm ET (Labor Day).
-eq("UTC date != ET date", w("2026-09-08T02:00:00Z").replyByLabel, "Wednesday, September 9");
+// Timezone honesty: 2026-09-08T02:00:00Z is still Mon 7 Sep 9pm CT (Labor Day).
+eq("UTC date != CT date", w("2026-09-08T02:00:00Z").replyByLabel, "Wednesday, September 9");
 
-// Cutoff boundary: 16:59 ET counts as same day, 17:00 does not.
-eq("16:59 ET Mon 14th", w("2026-09-14T20:59:00Z").replyByLabel, "Tuesday, September 15");
-eq("17:00 ET Mon 14th", w("2026-09-14T21:00:00Z").replyByLabel, "Wednesday, September 16");
+// Cutoff boundary: 16:59 CT counts as same day, 17:00 does not. September is
+// CDT (UTC-5), so the boundary sits at 21:59Z / 22:00Z — not 20:59Z / 21:00Z,
+// which was the Eastern boundary and is 15:59/16:00 here.
+eq("16:59 CT Mon 14th", w("2026-09-14T21:59:00Z").replyByLabel, "Tuesday, September 15");
+eq("17:00 CT Mon 14th", w("2026-09-14T22:00:00Z").replyByLabel, "Wednesday, September 16");
 
 // Year boundary: Thu 2026-12-31 10am. Jan 1 2027 is Fri (holiday) -> Mon 4 Jan.
 eq("New Year rollover", w("2026-12-31T15:00:00Z").replyByLabel, "Monday, January 4");
