@@ -134,7 +134,13 @@ let it take the gold and navy from CSS.
 ## 5. Copy that only you can write
 
 - **Legal pages** — a privacy policy and terms. Neither route exists yet;
-  they are needed before the care-plan subscription is offered publicly.
+  they are needed before the care-plan subscription is offered publicly, and
+  now also before analytics is switched on. Microsoft Clarity is wired up
+  (`app/ClarityAnalytics.tsx`) but inert until `NEXT_PUBLIC_CLARITY_ID` is set
+  in Vercel. Because Clarity records session replays, the policy has to exist
+  first and has to say so — one line naming Microsoft Clarity for usage
+  analytics and session replay, linking
+  https://privacy.microsoft.com/privacystatement. See `docs/OPEN_WORK.md` §4.
 - **`/quote/received` reply-date copy** is done; nothing outstanding there.
 - **Testimonials** — `/pricing` promises one from every client at launch.
   None are on the site yet; there is no slot for them until there is one to

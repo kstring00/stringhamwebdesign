@@ -334,3 +334,24 @@ records the right package.
 The API route rate-limits to five briefs per IP per ten minutes, so the run
 sends four and a second run inside that window will fail on the submissions.
 Restart the server to clear the counter — it is held in memory.
+
+## clarity-check.js
+
+Microsoft Clarity. Must run against a production build, because the component
+does nothing in development by design. Asserts the tag is requested on every
+public page and only after the load event, that the request carries this
+project's id, that nothing at all is requested on /portal, and that clicking
+through to the portal from the site leaves no tag behind. It also asserts the
+brief uses real form controls with no masking opt-outs, which is what keeps
+Clarity's default input masking meaningful.
+
+Expecting the tag, against a build made with the id set:
+
+    BASE=http://localhost:3300 CLARITY_ID=xxxxxxxxxx NODE_PATH=./node_modules node scripts/clarity-check.js
+
+Expecting no tag at all, against a build made without it:
+
+    BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/clarity-check.js
+
+Both runs are worth doing: the second is what proves an unset id really is a
+silent no-op rather than a broken page.
