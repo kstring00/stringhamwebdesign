@@ -114,8 +114,8 @@ export default function AboutPage() {
               <img
                 src="/about/portrait.webp"
                 alt="Kyle Stringham, photographed head-on against a plain wall, looking at the camera with a slight smile"
-                width="380"
-                height="475"
+                width="760"
+                height="950"
                 loading="lazy"
                 decoding="async"
               />
