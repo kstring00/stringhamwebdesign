@@ -1,0 +1,141 @@
+/* Who this is for: a scanning section on cream. No images — four labels and
+   four lines, sized so the eye can take all of them at once. */
+
+.section {
+  --ink: #0d1b26;
+  --muted: #425b6f;
+  /* #a9833d is ~3.4:1 on this ground at label size; the process strip already
+     uses this darker ink of the same hue. */
+  --gold-ink: #6f5620;
+  --hairline: rgba(38, 66, 89, 0.16);
+
+  background: #f5f0e8;
+  color: var(--ink);
+  padding: clamp(4rem, 6.5vw, 6rem) var(--gutter);
+  border-top: 1px solid rgba(201, 162, 39, 0.22);
+}
+
+.inner {
+  width: min(100%, 78rem);
+  margin-inline: auto;
+}
+
+.head {
+  margin-bottom: clamp(2rem, 3.5vw, 3rem);
+}
+
+.eyebrow {
+  margin: 0 0 1rem;
+  color: var(--gold-ink);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.head h2 {
+  max-width: 18ch;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(2.3rem, 4.2vw, 3.4rem);
+  font-weight: 300;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin: 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.item {
+  min-width: 0;
+  padding: clamp(1.5rem, 2.2vw, 2rem) clamp(1.1rem, 1.8vw, 1.6rem);
+}
+
+.item:first-child {
+  padding-left: 0;
+}
+
+.item:last-child {
+  padding-right: 0;
+}
+
+.item + .item {
+  border-left: 1px solid var(--hairline);
+}
+
+.item dt {
+  margin: 0 0 0.55rem;
+  color: var(--ink);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.item dd {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 64rem) {
+  .list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .item:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .item:nth-child(odd) {
+    padding-left: 0;
+  }
+
+  .item:nth-child(even) {
+    padding-right: 0;
+  }
+
+  .item:nth-child(odd) + .item {
+    border-left: 1px solid var(--hairline);
+  }
+
+  .item:nth-child(even) + .item {
+    border-left: 0;
+  }
+}
+
+@media (max-width: 44rem) {
+  .section {
+    padding: 3.5rem 1.1rem;
+  }
+
+  .list {
+    grid-template-columns: 1fr;
+  }
+
+  .item,
+  .item:first-child,
+  .item:last-child,
+  .item:nth-child(odd),
+  .item:nth-child(even) {
+    padding: 1.25rem 0;
+    border-left: 0;
+  }
+
+  .item + .item {
+    border-left: 0;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .item:nth-child(-n + 2) {
+    border-bottom: 0;
+  }
+}

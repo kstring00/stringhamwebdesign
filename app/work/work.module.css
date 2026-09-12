@@ -183,6 +183,20 @@
   color: #60676d;
 }
 
+/* Dark-ground variants of the two ink-on-transparent pills. Same shape, same
+   hues, lifted until they clear AA on #0d1b26. */
+.statusSoonDark {
+  border-color: #c9a227;
+  background: transparent;
+  color: #e2c58a;
+}
+
+.statusCaseStudyDark {
+  border-color: rgba(245, 240, 232, 0.45);
+  background: transparent;
+  color: rgba(245, 240, 232, 0.82);
+}
+
 .cardStatus .statusSoon,
 .cardStatus .statusCaseStudy {
   border-color: rgba(245, 240, 232, 0.72);
