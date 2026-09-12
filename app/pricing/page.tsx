@@ -17,6 +17,7 @@ import {
   trust,
 } from "../data/pricing";
 import { depositTerms } from "../data/process";
+import PortalPreview from "./PortalPreview";
 import PricingFaq from "./PricingFaq";
 import PricingMotion from "./PricingMotion";
 import styles from "./pricing.module.css";
@@ -70,34 +71,6 @@ function Icon({ name, size = 16 }: { name: keyof typeof ICON; size?: number }) {
 
 const TIER_ICON = { starter: "leaf", standard: "diamond", premium: "crown" } as const;
 
-/* The four phases of the hero's portal preview. Names are read from the same
-   `phases` data that section 04 renders, so renaming a phase there renames it
-   here. Only the state of the illustrated project lives locally. */
-const PHASE_STATE = {
-  Discovery: { state: "done", progress: 1, status: "Complete" },
-  Design: { state: "active", progress: 0.4, status: "In progress" },
-  Build: { state: "idle", progress: 0, status: "Not started" },
-  Launch: { state: "idle", progress: 0, status: "Not started" },
-} as const;
-
-const portalPhases = phases.map((phase) => ({
-  name: phase.name,
-  ...(PHASE_STATE[phase.name as keyof typeof PHASE_STATE] ?? {
-    state: "idle" as const,
-    progress: 0,
-    status: "Not started",
-  }),
-}));
-
-/* Three real entries in the voice the timesheet actually uses: what was done,
-   in words a client reads without translating. The third is dropped on the
-   narrowest screens so the card never pushes the hero button below the fold. */
-const portalEntries = [
-  { date: "Mar 4", task: "Homepage layout and mobile pass", hours: "3.5 hrs", overflow: false },
-  { date: "Mar 6", task: "Booking form wired and tested", hours: "2.0 hrs", overflow: false },
-  { date: "Mar 7", task: "Copy revisions from your notes", hours: "1.5 hrs", overflow: true },
-];
-
 export default function PricingPage() {
   return (
     <>
@@ -142,80 +115,10 @@ export default function PricingPage() {
               </ul>
             </div>
 
-            {/* A preview of the portal, drawn in CSS rather than shown as a
-                picture. The page is about what a build costs; the strongest
-                answer to that on a pricing page is what the client actually
-                watches while it happens. Phase names come from the same data
-                as section 04, so the two can never disagree.
-
-                Not aria-hidden. The brief asked for a decorative wrapper, but
-                the card now carries real content — the phase a project is in
-                and three hours entries — and hiding it would make a sighted
-                reader and a screen-reader reader see different pages. The text
-                is real text, selectable and announced, with statuses supplied
-                for the states that are only shown by colour. */}
-            <div className={styles.heroMedia} data-hero="media">
-              <div className={styles.portal}>
-                <div className={styles.portalHead}>
-                  <p className={styles.portalLabel}>Client portal</p>
-                  <p className={styles.portalProject}>Harbor Dental &mdash; Standard build</p>
-                </div>
-
-                <ol className={styles.portalPhases} aria-label="Project phases">
-                  {portalPhases.map((phase) => (
-                    <li
-                      className={styles.portalPhase}
-                      key={phase.name}
-                      data-state={phase.state}
-                    >
-                      <span className={styles.portalTrack} aria-hidden="true">
-                        <span
-                          className={styles.portalFill}
-                          style={{ transform: `scaleX(${phase.progress})` }}
-                        />
-                      </span>
-                      <span className={styles.portalPhaseName}>
-                        {phase.name}
-                        {phase.state === "done" ? (
-                          <svg
-                            className={styles.portalCheck}
-                            viewBox="0 0 12 12"
-                            width="11"
-                            height="11"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.8"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            role="img"
-                          >
-                            <title>Complete</title>
-                            <path d="M2 6.4l2.6 2.6L10 3.2" />
-                          </svg>
-                        ) : (
-                          <span className={styles.portalSrOnly}>{phase.status}</span>
-                        )}
-                      </span>
-                    </li>
-                  ))}
-                </ol>
-
-                <div className={styles.portalTimesheet}>
-                  <p className={styles.portalTimesheetHead}>Timesheet</p>
-                  <ul className={styles.portalEntries}>
-                    {portalEntries.map((entry) => (
-                      <li className={styles.portalEntry} key={entry.date} data-overflow={entry.overflow ? "" : undefined}>
-                        <span className={styles.portalEntryDate}>{entry.date}</span>
-                        <span className={styles.portalEntryTask}>{entry.task}</span>
-                        <span className={styles.portalEntryHours}>{entry.hours}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              <p className={styles.portalCaption}>What you see while I build.</p>
-            </div>
+            {/* Four slides of the client portal, drawn in CSS. See
+                PortalPreview.tsx for why the swapping region is hidden from
+                assistive technology and the chrome is not. */}
+            <PortalPreview />
           </div>
         </section>
 

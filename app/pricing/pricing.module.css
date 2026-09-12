@@ -269,6 +269,11 @@
   height: 100%;
   background: var(--gold-rule);
   transform-origin: left center;
+  transition: transform 520ms var(--ease);
+}
+
+.portalPhaseName {
+  transition: color 400ms var(--ease);
 }
 
 .portalPhaseName {
@@ -299,14 +304,37 @@
   color: var(--gold-rule);
 }
 
-/* Timesheet */
-.portalTimesheet {
+/* The stage. All four slides live in one grid cell, so the card is always as
+   tall as its tallest slide and nothing below it can move when the visible one
+   changes. Only opacity and transform animate, so none of this touches layout
+   or leaves the compositor. */
+.portalStage {
+  display: grid;
   margin-top: clamp(1.1rem, 2vw, 1.5rem);
   padding-top: clamp(0.9rem, 1.6vw, 1.2rem);
   border-top: 1px solid var(--hair-light);
 }
 
-.portalTimesheetHead {
+.portalSlide {
+  grid-area: 1 / 1;
+  min-width: 0;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 400ms ease-out, transform 400ms ease-out;
+  pointer-events: none;
+}
+
+.portalSlide[data-active] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.portalSlide:focus {
+  outline: none;
+}
+
+.portalStageLabel {
   margin: 0 0 0.7rem;
   color: var(--gold-on-dark);
   font-size: 0.6rem;
@@ -316,6 +344,8 @@
   text-transform: uppercase;
 }
 
+/* Label-and-value rows: slides 1, 2 and 4. */
+.portalRows,
 .portalEntries {
   display: grid;
   gap: 0.55rem;
@@ -324,6 +354,60 @@
   list-style: none;
 }
 
+.portalRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0 0.6rem;
+  min-width: 0;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+/* No check on this row, so the label takes the icon column too. */
+.portalRow > .portalRowLabel:first-child {
+  grid-column: 1 / 3;
+}
+
+.portalRowCheck {
+  align-self: center;
+  color: var(--gold-rule);
+}
+
+.portalRowLabel {
+  min-width: 0;
+  color: #d4dce2;
+}
+
+.portalRowValue {
+  color: #f5f0e8;
+  text-align: right;
+}
+
+/* The stacked wireframe on slide 2: three bars standing in for a homepage,
+   dim enough to read as a thumbnail rather than as content. */
+.portalWire {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 0.8rem;
+  padding: 0.6rem;
+  background: rgba(245, 240, 232, 0.04);
+  border: 1px solid var(--hair-light);
+  border-radius: 8px;
+}
+
+.portalWire span {
+  display: block;
+  height: 0.4rem;
+  border-radius: 2px;
+  background: rgba(226, 197, 138, 0.28);
+}
+
+.portalWire span[data-wire="head"] { width: 58%; background: rgba(226, 197, 138, 0.46); }
+.portalWire span[data-wire="body"] { width: 100%; height: 1.5rem; }
+.portalWire span[data-wire="foot"] { width: 34%; }
+
+/* Timesheet rows: slide 3. */
 .portalEntry {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
@@ -354,9 +438,6 @@
   white-space: nowrap;
 }
 
-/* This line sits directly under the card's drop shadow, which darkens the warm
-   panel beneath it, so it measures well below what the panel colour alone
-   implies: #4a5d6b reads 3.3:1 here and #36485a only 4.35:1 at 360px. */
 .portalCaption {
   margin: 0;
   color: #2f3f50;
@@ -1202,9 +1283,9 @@
   }
 }
 
-/* Phones. The card must fit 360px without overflowing, and must not push the
-   hero button off screen, so the third timesheet row is dropped and the phase
-   names shrink rather than wrap. */
+/* Phones. The card must fit 360px without overflowing and must not push the
+   hero button off screen, so the fourth row of the longer slides is dropped
+   and the phase strip becomes two rows of two. */
 @media (max-width: 30rem) {
   .heroMedia {
     padding: 1.1rem;
@@ -1222,7 +1303,8 @@
     gap: 0.8rem 0.9rem;
   }
 
-  .portalEntry {
+  .portalEntry,
+  .portalRow {
     gap: 0 0.5rem;
     font-size: 0.72rem;
   }
@@ -1231,7 +1313,24 @@
     font-size: 0.92rem;
   }
 
-  .portalEntry[data-overflow] {
+  /* Slides 1 and 4 carry four rows. The fourth is dropped here so the card
+     stays short enough to keep the hero button above the fold; the timesheet
+     slide already has three and loses nothing. */
+  .portalRow[data-overflow] {
     display: none;
+  }
+}
+
+/* Reduced motion. The component stops rotating and pins the timesheet slide;
+   this removes the transitions so nothing eases even on that first paint. */
+@media (prefers-reduced-motion: reduce) {
+  .portalSlide,
+  .portalFill,
+  .portalPhaseName {
+    transition: none;
+  }
+
+  .portalSlide {
+    transform: none;
   }
 }
