@@ -244,6 +244,9 @@ only because a real run exposed what the stub could not.
 
 ## 4. Still outstanding after the above
 
+> Superseded by `docs/OPEN_WORK.md`, which is the maintained list. Kept here
+> for the reasoning behind each item.
+
 - **Section 7 audit.** The button exists at `app/TransmissionSubmit.tsx` with a
   demo page at `/transmission-demo`. It was built before this work and has
   never been checked against the written spec (idle carrier pulse, hover
@@ -264,14 +267,17 @@ only because a real run exposed what the stub could not.
 
 ## 5. Open questions for the owner
 
-1. **`AIIntakeSection` is orphaned.** Removing `TimelineShowcase` in section 5
-   left it unreferenced. Its `/api/intake/*` routes and Supabase tables are
-   intact. Keep, rewire, or remove? Not deleted unasked.
+1. ~~**`AIIntakeSection` is orphaned.**~~ Resolved 2026-09-12: removed. The
+   component, its three `/api/intake/*` routes and four supporting libs had no
+   referents. The three Supabase tables were **kept** —
+   `public.prospects.intake_id` has a foreign key to `public.intakes`. See
+   `docs/OPEN_WORK.md` §6.
 2. **`BUSINESS_TIME_ZONE` is `America/New_York`** with a 17:00 cutoff, inferred
    from Lake City, FL. Both are single constants in `app/lib/businessDays.ts`.
-3. The binder headline **"The work, up close."** is a placeholder — he said he'd
-   write it.
-4. Do the `AGENTS.md` / `CLAUDE.md` generated files stay committed?
+3. ~~The binder headline **"The work, up close."** is a placeholder.~~ Resolved
+   2026-09-12: it stays as written.
+4. ~~Do the `AGENTS.md` / `CLAUDE.md` generated files stay committed?~~ Resolved
+   2026-09-12: yes. Commit them with your work rather than reverting.
 
 ---
 
