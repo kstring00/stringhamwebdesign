@@ -267,39 +267,20 @@ export default function PricingPage() {
 
         {/* ---------- faq ---------- */}
         <section className={`${styles.band} ${styles.faqBand}`} id="questions" aria-labelledby="faq-title">
-          <div className={`${styles.inner} ${styles.faqGrid}`}>
-            {/* Typographic, not photographic. The best sentence on the site,
-                set where it gets read, on a field a shade lighter than the band
-                so it reads as intentional. The dove ghosts behind it at 4% —
-                the same device as the KS in the hero grid, so the page feels
-                like one system rather than a stack of sections. */}
-            <figure className={styles.faqQuote} data-reveal-group>
-              <span className={styles.faqQuoteMark} aria-hidden="true" />
-              <blockquote data-reveal>
-                <p>
-                  You don&apos;t need to know what you want built. You just need to
-                  know what&apos;s not working now.
-                </p>
-              </blockquote>
-              <span className={styles.faqQuoteRule} data-reveal data-rule />
-              <figcaption data-reveal>Kyle Stringham — League City, Texas</figcaption>
-            </figure>
-
-            <div className={styles.faqCopy}>
-              <div className={styles.sectionHead} data-reveal-group>
-                <p className={styles.signal} data-reveal>05 / FAQ</p>
-                <h2 id="faq-title" data-reveal>
-                  The questions
-                  <br />
-                  I get.
-                </h2>
-                <p className={styles.sectionIntro} data-reveal>
-                  Straight answers. If yours isn&apos;t here, it&apos;s the first thing
-                  we&apos;ll cover on the call.
-                </p>
-              </div>
-              <PricingFaq items={faq} />
+          <div className={styles.inner}>
+            <div className={styles.sectionHead} data-reveal-group>
+              <p className={styles.signal} data-reveal>05 / FAQ</p>
+              <h2 id="faq-title" data-reveal>
+                The questions
+                <br />
+                I get.
+              </h2>
+              <p className={styles.sectionIntro} data-reveal>
+                Straight answers. If yours isn&apos;t here, it&apos;s the first thing
+                we&apos;ll cover on the call.
+              </p>
             </div>
+            <PricingFaq items={faq} />
           </div>
         </section>
 

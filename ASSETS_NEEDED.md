@@ -18,16 +18,15 @@ sized WebPs under `/public/pricing/`.
 
 | Slot | Today | Wants |
 |---|---|---|
-| **FAQ** | No photograph. A typographic pull quote on a cream field, with the dove mark ghosted behind it at 4%. | Nothing needed. This is deliberate — see the note below. |
+| **FAQ** | No photograph and no left column — the questions run full width under their heading. | Nothing needed. This is deliberate — see the note below. |
 | **Close** | `close-forest.webp` (2000 × 1333, 412 KB) + a 1200w variant. The foggy valley, full bleed, scrimmed on the left. | Done. |
 | **Hero, right of the headline** | cream block, gold disc, navy card reading "Ideas / Brands / Websites / that last" | Still open: a still life — laptop, desk, something warm and physical. **1400 × 1120** (5:4) at 2×; crops to 16:9 under 64rem. |
 
-The FAQ column carried a dissolving-statue photograph until 2026-09-12. It was
-replaced with type on purpose, and the reasoning is worth keeping: a pull quote
-costs nothing, can never look like stock, reinforces a line worth remembering,
-and uses the site's own mark and words. If you ever want an image there again,
-the better answer is screenshots of real work — but that needs three good ones,
-and there are not three yet.
+The FAQ carried a dissolving-statue photograph until 2026-09-12, then briefly
+a typographic pull quote, and now nothing — the questions run full width under
+their heading, the way the two sections above them do. If you ever want
+something in that space, the answer is screenshots of real work rather than
+stock or an AI render; that needs three good ones and there are not three yet.
 
 Compress before committing: WebP, quality ~80, under 450 KB for full-bleed
 and under 250 KB otherwise. `sharp` ships with Next, so from the repo root:
