@@ -114,7 +114,7 @@ const readSlides = () => ({
     // Previous / next live outside the hidden stage, are labelled by what they
     // do, and actually move the sequence. Jumping restarts that slide's bar.
     const nav = await p.evaluate(() => {
-      const btns = [...document.querySelectorAll('[data-hero="media"] button[aria-label]')];
+      const btns = [...document.querySelectorAll('[data-hero="media"] button[aria-label$=" screen"]')].filter(b => /^(Previous|Next) screen$/.test(b.getAttribute('aria-label')));
       return btns.map(b => ({ label: b.getAttribute('aria-label'), h: Math.round(b.getBoundingClientRect().height), w: Math.round(b.getBoundingClientRect().width), hidden: !!b.closest('[aria-hidden="true"]') }));
     });
     ok('two labelled navigation buttons', nav.length === 2 && nav.every(b => /previous|next/i.test(b.label)), JSON.stringify(nav.map(b => b.label)));
@@ -177,7 +177,16 @@ const readSlides = () => ({
         .filter(e => e.getAttribute('tabindex') !== '-1')
         .map(e => e.tagName);
     });
-    ok('only the two navigation buttons can take keyboard focus', focusable.length === 2 && focusable.every(t => t === 'BUTTON'), JSON.stringify(focusable));
+    ok('six buttons take keyboard focus: four phase jumps and previous/next', focusable.length === 6 && focusable.every(t => t === 'BUTTON'), JSON.stringify(focusable));
+    // The phase jumps must be real controls: labelled, outside any hidden
+    // subtree, in the tab order, one marked current.
+    const jumps = await p.evaluate(() => [...document.querySelectorAll('[class*="portalPhaseName"]')].map(b => ({
+      label: b.getAttribute('aria-label'), hidden: !!b.closest('[aria-hidden="true"]'), tab: b.tabIndex, current: b.getAttribute('aria-current'),
+    })));
+    ok('phase jumps are labelled and not inside aria-hidden', jumps.length === 4 && jumps.every(j => /^Show .+ screen$/.test(j.label) && !j.hidden && j.tab === 0), JSON.stringify(jumps));
+    ok('exactly one phase jump is aria-current', jumps.filter(j => j.current === 'true').length === 1, JSON.stringify(jumps.map(j => j.current)));
+    await p.keyboard.press('Tab'); // from the page start, Tab should reach a phase jump before previous/next
+    
     // Tab into one of them from the page and the rotation must hold.
     await p.focus('[data-hero="media"] button[aria-label="Next screen"]');
     await p.keyboard.press('Shift+Tab'); await p.keyboard.press('Tab'); // real keyboard focus, so :focus-visible applies

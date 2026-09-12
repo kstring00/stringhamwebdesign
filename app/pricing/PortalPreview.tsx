@@ -177,17 +177,20 @@ export default function PortalPreview() {
           <p className={styles.portalProject}>Harbor Dental — Standard build</p>
         </div>
 
-        {/* The strip is illustration: its state rotates, so announcing it would
-            describe a project that does not exist. The phase names themselves
-            are read as real text in section 04. */}
-        <ol className={styles.portalPhases} aria-hidden="true">
+        {/* The strip is both illustration and control. Each phase name is a
+            real button that jumps to its screen, so it is not hidden from
+            assistive technology: a screen-reader user gets the same four
+            direct jumps a mouse user does. The bars and checks stay
+            decorative; the rotating state is carried only by aria-current,
+            which describes which screen is showing, not a real project. */}
+        <ol className={styles.portalPhases} aria-label="Portal screens">
           {phases.map((phase, i) => (
             <li
               className={styles.portalPhase}
               key={phase.name}
               data-state={i < active ? "done" : i === active ? "active" : "idle"}
             >
-              <span className={styles.portalTrack}>
+              <span className={styles.portalTrack} aria-hidden="true">
                 {/* Done: full. Idle: empty. Active: sweeps over --hold, and its
                     end is what moves the sequence on. Only the active bar
                     animates, so only it can fire this. */}
@@ -200,7 +203,8 @@ export default function PortalPreview() {
                 type="button"
                 className={styles.portalPhaseName}
                 onClick={() => setIndex(SLIDES.findIndex((slide) => slide.phase === i))}
-                tabIndex={-1}
+                aria-label={`Show ${phase.name} screen`}
+                aria-current={i === active ? "true" : undefined}
               >
                 {phase.name}
                 {i < active ? <Check className={styles.portalCheck} /> : null}
