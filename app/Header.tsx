@@ -2,13 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { headerNav } from "./data/nav";
 import styles from "./Header.module.css";
-
-const NAV = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Pricing", href: "/pricing" },
-] as const;
 
 const DELTA = 6;
 
@@ -112,7 +107,7 @@ export default function Header() {
           aria-label="Primary navigation"
         >
           <div className={styles.navLinks}>
-            {NAV.map((item) => {
+            {headerNav.map((item) => {
               const isActive = active === item.href;
               return (
                 <a

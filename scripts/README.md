@@ -198,3 +198,18 @@ Mobile (throttled) and desktop presets; all four categories printed;
 performance must clear 88 on both. The hero photograph is the LCP element on
 `/about`, so if performance drops the first thing to check is its weight and
 whether `fetchPriority="high"` survived an edit.
+
+## Site footer
+
+```bash
+node scripts/footer-check.js        # structure, every internal link fetched for a real
+                                    # 200, one "Client portal" node, 44px tap targets,
+                                    # rendered-pixel contrast on the navy at 1440 and 375,
+                                    # the year read from the clock; saves both screenshots
+```
+
+Two things the sweep does deliberately. It skips `aria-hidden` subtrees — the
+brand mark's gold "KS" sits over the pale dove graphic, and WCAG 1.4.3 exempts
+logotypes. And it hides the fixed masthead before capturing, because in a
+full-page screenshot a fixed header paints over whatever is at the scroll
+position and would otherwise be sampled as the footer's backdrop.
