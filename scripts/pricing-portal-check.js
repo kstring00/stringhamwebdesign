@@ -85,7 +85,32 @@ const readSlides = () => ({
     });
     ok('slides transition opacity and transform only', /^opacity, transform$/.test(anim.prop), anim.prop);
     ok('400ms ease-out', anim.dur.split(',').every(d => parseFloat(d) === 0.4) && anim.timing.split(',').every(t => t.trim() === 'ease-out'), `${anim.dur} | ${anim.timing}`);
-    ok('the progress fill animates rather than jumping', anim.fillProp === 'transform' && parseFloat(anim.fillDur) > 0, `${anim.fillProp} ${anim.fillDur}`);
+    // The active bar is a linear sweep over the hold; the slide changes when it
+    // lands. Read its scale at two points and it must be climbing, roughly a
+    // quarter and three quarters of the way through.
+    const sweep = await p.evaluate(() => {
+      const fill = document.querySelector('[class*="portalPhase"][data-state="active"] [class*="portalFill"]');
+      const cs = getComputedStyle(fill);
+      return { name: cs.animationName, dur: cs.animationDuration, timing: cs.animationTimingFunction, state: cs.animationPlayState };
+    });
+    ok('the active bar runs a linear sweep', sweep.name !== 'none' && sweep.timing === 'linear', `${sweep.name} ${sweep.timing}`);
+    ok('the sweep takes 4s, the slide hold', parseFloat(sweep.dur) === 4, sweep.dur);
+    ok('it is running, not paused', sweep.state === 'running', sweep.state);
+    const scaleAt = () => p.evaluate(() => {
+      const fill = document.querySelector('[class*="portalPhase"][data-state="active"] [class*="portalFill"]');
+      const t = getComputedStyle(fill).transform; // matrix(a, b, c, d, e, f) — a is scaleX
+      return t === 'none' ? 1 : +t.split('(')[1].split(',')[0];
+    });
+    // Wait for a fresh slide so the sample points are known.
+    await p.waitForFunction(
+      (from) => [...document.querySelectorAll('[class*="portalSlide"]')].findIndex(x => x.hasAttribute('data-active')) !== from,
+      await p.evaluate(() => [...document.querySelectorAll('[class*="portalSlide"]')].findIndex(x => x.hasAttribute('data-active'))), { timeout: 9000 },
+    );
+    await p.waitForTimeout(1000); const q1 = await scaleAt();
+    await p.waitForTimeout(2000); const q3 = await scaleAt();
+    ok('a quarter of the way in, the bar is about a quarter full', q1 > 0.15 && q1 < 0.4, q1.toFixed(2));
+    ok('three quarters in, about three quarters full', q3 > 0.6 && q3 < 0.9, q3.toFixed(2));
+    ok('and it only climbs', q3 > q1, `${q1.toFixed(2)} → ${q3.toFixed(2)}`);
     ok('no carousel arrows or dots', await p.locator('[data-hero="media"] button').count() === 0);
 
     // Rotation, and the phase strip tracking it.
@@ -118,6 +143,7 @@ const readSlides = () => ({
     await p.waitForTimeout(6000);
     const stillHeld = await p.evaluate(readSlides);
     ok('hover pauses the rotation', held.activeIndex === stillHeld.activeIndex, `${held.activeIndex} → ${stillHeld.activeIndex}`);
+    ok('hover freezes the bar too', await p.evaluate(() => getComputedStyle(document.querySelector('[class*="portalPhase"][data-state="active"] [class*="portalFill"]')).animationPlayState) === 'paused');
     await p.mouse.move(0, 0);
 
     // Keyboard focus. The card holds no links, buttons or inputs and the whole
@@ -207,6 +233,12 @@ const readSlides = () => ({
       getComputedStyle(document.querySelector('[class*="portalFill"]')).transitionDuration,
     ]);
     ok('no transitions at all', durs.every(d => parseFloat(d) === 0), JSON.stringify(durs));
+    const parked = await p.evaluate(() => {
+      const fill = document.querySelector('[class*="portalPhase"][data-state="active"] [class*="portalFill"]');
+      const cs = getComputedStyle(fill);
+      return { anim: cs.animationName, scale: +cs.transform.split('(')[1].split(',')[0] };
+    });
+    ok('no sweep; the active bar is parked part-way', parked.anim === 'none' && parked.scale > 0.3 && parked.scale < 0.6, JSON.stringify(parked));
     await p.waitForTimeout(10000);
     const later = await p.evaluate(readSlides);
     ok('it never rotates', later.activeIndex === 2, `index ${later.activeIndex}`);

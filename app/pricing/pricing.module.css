@@ -269,7 +269,34 @@
   height: 100%;
   background: var(--gold-rule);
   transform-origin: left center;
+  transform: scaleX(0);
+  /* Done and idle bars ease to their resting size; the active one is driven
+     by the sweep below, and an animation outranks a transition. */
   transition: transform 520ms var(--ease);
+}
+
+.portalPhase[data-state="done"] .portalFill {
+  transform: scaleX(1);
+}
+
+/* The active bar is the clock. It sweeps left to right, linear because it is
+   measuring time rather than easing into a place, over exactly the hold the
+   component sets in --hold. When it lands the slide changes and the next bar
+   starts from empty, so across the strip the gold reads a quarter, a half,
+   three quarters, full. */
+.portalPhase[data-state="active"] .portalFill {
+  animation: portalSweep var(--hold, 4000ms) linear forwards;
+}
+
+/* Hover, keyboard focus and off-screen all set data-paused on the card. A
+   paused animation never ends, so this is also what pauses the rotation. */
+.portal[data-paused] .portalFill {
+  animation-play-state: paused;
+}
+
+@keyframes portalSweep {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 .portalPhaseName {
@@ -1332,5 +1359,12 @@
 
   .portalSlide {
     transform: none;
+  }
+
+  /* No sweep: the active bar sits part-way, the way a paused clock would, and
+     with no animation there is no animationend and so no rotation. */
+  .portalPhase[data-state="active"] .portalFill {
+    animation: none;
+    transform: scaleX(0.45);
   }
 }

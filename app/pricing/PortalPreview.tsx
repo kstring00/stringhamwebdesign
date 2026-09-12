@@ -18,8 +18,11 @@ import styles from "./pricing.module.css";
  * Phase names come from the same `phases` data section 04 renders.
  */
 
-const HOLD_DESKTOP = 4500;
-const HOLD_MOBILE = 5000;
+/* Each slide holds for exactly as long as its bar takes to sweep. The bar is a
+   CSS animation (see .portalFill in pricing.module.css); the slide advances on
+   its animationend, so the two cannot drift apart and a paused bar is a paused
+   rotation. 4s is the one number to change. */
+export const HOLD_MS = 4000;
 
 type Row = { label: string; value?: string; check?: boolean };
 
@@ -133,14 +136,16 @@ export default function PortalPreview() {
     return () => io.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (still || paused || !visible) return;
-    const hold = window.matchMedia("(max-width: 48rem)").matches ? HOLD_MOBILE : HOLD_DESKTOP;
-    const id = window.setInterval(() => setIndex((i) => (i + 1) % SLIDES.length), hold);
-    return () => window.clearInterval(id);
-  }, [still, paused, visible]);
+  // No timer. The active phase's bar sweeps from empty to full over HOLD_MS and
+  // fires animationend; that is what advances the slide. Pausing sets
+  // animation-play-state, which freezes the bar and therefore the rotation.
+  const advance = () => {
+    if (still) return;
+    setIndex((i) => (i + 1) % SLIDES.length);
+  };
 
   const active = SLIDES[index].phase;
+  const halted = paused || !visible;
 
   return (
     <div className={styles.heroMedia} data-hero="media">
@@ -148,6 +153,8 @@ export default function PortalPreview() {
         className={styles.portal}
         ref={card}
         data-still={still ? "" : undefined}
+        data-paused={halted ? "" : undefined}
+        style={{ "--hold": `${HOLD_MS}ms` } as React.CSSProperties}
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         // Keyboard focus only. A mouse click used to land on a slide and pause
@@ -180,9 +187,12 @@ export default function PortalPreview() {
               data-state={i < active ? "done" : i === active ? "active" : "idle"}
             >
               <span className={styles.portalTrack}>
+                {/* Done: full. Idle: empty. Active: sweeps over --hold, and its
+                    end is what moves the sequence on. Only the active bar
+                    animates, so only it can fire this. */}
                 <span
                   className={styles.portalFill}
-                  style={{ transform: `scaleX(${i < active ? 1 : i === active ? 0.45 : 0})` }}
+                  onAnimationEnd={i === active ? advance : undefined}
                 />
               </span>
               <span className={styles.portalPhaseName}>
