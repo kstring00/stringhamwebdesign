@@ -143,6 +143,7 @@ export default function PortalPreview() {
     if (still) return;
     setIndex((i) => (i + 1) % SLIDES.length);
   };
+  const go = (delta: number) => setIndex((i) => (i + delta + SLIDES.length) % SLIDES.length);
 
   const active = SLIDES[index].phase;
   const halted = paused || !visible;
@@ -195,10 +196,15 @@ export default function PortalPreview() {
                   onAnimationEnd={i === active ? advance : undefined}
                 />
               </span>
-              <span className={styles.portalPhaseName}>
+              <button
+                type="button"
+                className={styles.portalPhaseName}
+                onClick={() => setIndex(SLIDES.findIndex((slide) => slide.phase === i))}
+                tabIndex={-1}
+              >
                 {phase.name}
                 {i < active ? <Check className={styles.portalCheck} /> : null}
-              </span>
+              </button>
             </li>
           ))}
         </ol>
@@ -253,6 +259,25 @@ export default function PortalPreview() {
               )}
             </div>
           ))}
+        </div>
+
+        {/* Real controls, outside the hidden stage. The labels say what the
+            buttons do rather than where they go, since the slides themselves
+            are not announced. */}
+        <div className={styles.portalNav}>
+          <span className={styles.portalNavCount} aria-hidden="true">
+            {index + 1} / {SLIDES.length}
+          </span>
+          <button type="button" className={styles.portalNavButton} onClick={() => go(-1)} aria-label="Previous screen">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M10 3L5 8l5 5" />
+            </svg>
+          </button>
+          <button type="button" className={styles.portalNavButton} onClick={() => go(1)} aria-label="Next screen">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M6 3l5 5-5 5" />
+            </svg>
+          </button>
         </div>
       </div>
 

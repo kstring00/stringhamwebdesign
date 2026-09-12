@@ -30,7 +30,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>
+    // globals.css sets scroll-behavior: smooth. Next 16 no longer overrides that
+    // during route transitions unless told to; without data-scroll-behavior, its
+    // scroll-to-top after a client navigation starts a smooth scroll that is
+    // cancelled before it lands, and /work opens wherever the previous page was
+    // scrolled to.
+    <html lang="en" data-scroll-behavior="smooth" className={`${cormorant.variable} ${inter.variable}`}>
       <body>
         {children}
         <SiteMotion />

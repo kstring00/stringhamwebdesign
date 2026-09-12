@@ -50,6 +50,7 @@ Each project's hero slot is **16:9** (`app/work/work.module.css`). Supply at
 | Common Ground | `/hero-crt/common-ground.png` — PNG, should be WebP |
 | BCBA Prep | `/hero-crt/bcba-prep.png` — PNG, should be WebP |
 | Lake City Self Storage | `/work/lake-city-self-storage/drive-up.webp` |
+| GrowthGains | `/work/growthgains/home.webp` and `journey.webp`, cut from the full-page capture |
 | With Little | `/hero-crt/with-little-daily.png` — PNG, should be WebP |
 
 The two PNGs are the size problem on the work pages; re-export as WebP at the

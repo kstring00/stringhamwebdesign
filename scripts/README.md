@@ -275,3 +275,14 @@ rotation, because on a phone it correctly sits below the fold and stays paused.
 
 `lighthouse-check.js` now honours BASE too, so both can run against the same
 server.
+
+## nav-scroll-check.js
+
+Client navigations must land at the top of the new page. From partway down the
+homepage it clicks "View all work", opens a case study from the bottom of /work,
+and uses the header nav, asserting scrollY is 0 after each. Written after /work
+opened wherever the previous page had been scrolled to: globals.css sets
+scroll-behavior: smooth, and Next 16 stopped overriding that during route
+transitions unless <html> carries data-scroll-behavior="smooth".
+
+    BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/nav-scroll-check.js
