@@ -172,3 +172,61 @@ sections. The FAQ glass and the close band sit over photographs, where a
 computed background says nothing — so `pricing-check.js` measures those the
 README way: blank the text, screenshot with the fixed masthead hidden, sample
 every pixel under each glyph box, and compare the worst one.
+
+## /about
+
+The hero is a photograph with the copy set directly on it, so legibility is
+measured against the image's own pixels rather than a flat colour:
+
+```bash
+node scripts/about-check.js         # rendered-pixel contrast for every hero line against
+                                    # the photograph; hero image loads decorative and
+                                    # high-priority; idle frame times at 1440 and at 375
+                                    # with 4x CPU throttle; reduced motion renders
+                                    # finished; one h1; no overflow; saves screenshots
+```
+
+Lighthouse runs against a **production** build only — dev bundles fail every
+budget and prove nothing:
+
+```bash
+npm run build && npm start &
+CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome node scripts/lighthouse-check.js /about
+```
+
+Mobile (throttled) and desktop presets; all four categories printed;
+performance must clear 88 on both. The hero photograph is the LCP element on
+`/about`, so if performance drops the first thing to check is its weight and
+whether `fetchPriority="high"` survived an edit.
+
+## Site footer
+
+```bash
+node scripts/footer-check.js        # structure, every internal link fetched for a real
+                                    # 200, one "Client portal" node, 44px tap targets,
+                                    # rendered-pixel contrast on the navy at 1440 and 375,
+                                    # the year read from the clock; saves both screenshots
+```
+
+Two things the sweep does deliberately. It skips `aria-hidden` subtrees — the
+brand mark's gold "KS" sits over the pale dove graphic, and WCAG 1.4.3 exempts
+logotypes. And it hides the fixed masthead before capturing, because in a
+full-page screenshot a fixed header paints over whatever is at the scroll
+position and would otherwise be sampled as the footer's backdrop.
+
+## Homepage process section
+
+```bash
+node scripts/process-check.js       # seven steps present and not overlapping, the row
+                                    # scrolls at 375, one CTA below the steps, both scene
+                                    # images decorative, rendered-pixel contrast over the
+                                    # doves and the ridge at 1440 and 375
+```
+
+Two things this sampler does that the others do not, both learned the hard way
+here. It blanks **descendants** before sampling — the gold arrow inside the
+navy CTA kept its own colour and was read as the backdrop, reporting 2.2:1 on
+text that is actually 15:1. And it **clips each rect to its scrolling
+ancestor** — the step row scrolls horizontally, so steps 3+ report rects
+running past its right edge, and sampling there reads pixels where that text
+is not painted at all.

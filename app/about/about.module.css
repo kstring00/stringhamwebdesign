@@ -2,66 +2,196 @@
   min-height: 100svh;
   background: #f5f0e8;
   color: #0d1b26;
-  padding: clamp(8.5rem, 11vw, 10.5rem) var(--gutter) clamp(5rem, 8vw, 7rem);
 }
 
-.hero,
-.story {
-  width: min(100%, 78rem);
+/* ---------- hero: navy, the lamp, the marks ---------- */
+
+.hero {
+  --cream: #f5f0e8;
+  --gold-on-dark: #e2c58a;
+  --gold: #c9a227;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #05172f;
+  color: var(--cream);
+  min-height: min(82svh, 46rem);
+  display: grid;
+  align-items: center;
+  padding: clamp(8.5rem, 11vw, 10.5rem) var(--gutter) clamp(4rem, 7vw, 6rem);
+}
+
+/* The photograph. Its own left third is near-black, which is what the copy
+   sits on; object-position keeps the gold column out of the text column at
+   every width. */
+.heroImage {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% 50%;
+}
+
+/* Deepens what the composition already gives, rather than laying a panel over
+   it: heavy at the left edge, gone by the time it reaches the liquid. */
+.heroScrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(4, 14, 28, 0.94) 0%, rgba(4, 14, 28, 0.88) 26%, rgba(4, 14, 28, 0.6) 44%, rgba(4, 14, 28, 0.12) 62%, rgba(4, 14, 28, 0) 78%),
+    linear-gradient(180deg, rgba(4, 14, 28, 0.5) 0%, rgba(4, 14, 28, 0) 26%, rgba(4, 14, 28, 0) 74%, rgba(4, 14, 28, 0.55) 100%);
+}
+
+.heroInner {
+  position: relative;
+  width: min(100%, 84rem);
   margin: 0 auto;
 }
 
-.hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 20rem;
-  gap: clamp(3rem, 7vw, 6.5rem);
-  align-items: end;
-  padding-bottom: clamp(4.5rem, 7vw, 6.5rem);
-  border-bottom: 1px solid rgba(201, 162, 39, 0.34);
-}
-
 .heroCopy {
-  max-width: 51rem;
-}
-
-.eyebrow,
-.meta,
-.section h2 {
-  text-transform: uppercase;
+  max-width: 38rem;
 }
 
 .eyebrow {
-  margin: 0 0 1.2rem;
-  color: #a9833d;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 1.4rem;
+  color: var(--gold-on-dark);
   font-size: 0.68rem;
   font-weight: 750;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.eyebrowRule {
+  display: block;
+  width: 4rem;
+  height: 1px;
+  background: rgba(226, 197, 138, 0.6);
+  transform-origin: left center;
 }
 
 .hero h1 {
   max-width: 13ch;
   margin: 0;
-  color: #0d1b26;
+  color: var(--cream);
   font-family: var(--font-cormorant), Georgia, serif;
-  font-size: clamp(4rem, 6.8vw, 7rem);
+  font-size: clamp(3.4rem, 5.8vw, 6rem);
   font-weight: 300;
-  letter-spacing: -0.055em;
-  line-height: 0.88;
+  letter-spacing: -0.05em;
+  line-height: 0.94;
 }
 
-.meta {
-  margin: clamp(1.8rem, 3vw, 2.4rem) 0 0;
-  color: #71808b;
-  font-size: 0.64rem;
-  font-weight: 650;
-  letter-spacing: 0.16em;
-  line-height: 1.6;
+.hero h1 em {
+  color: var(--gold-on-dark);
+  font-style: italic;
+  font-weight: 300;
+}
+
+.lede {
+  max-width: 32rem;
+  margin: clamp(1.4rem, 2.2vw, 1.8rem) 0 0;
+  color: rgba(245, 240, 232, 0.84);
+  font-size: clamp(1.02rem, 1.2vw, 1.12rem);
+  line-height: 1.7;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: clamp(1.6rem, 2.5vw, 2.2rem);
+}
+
+.heroSecondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  color: var(--cream);
+  border-bottom: 1px solid rgba(226, 197, 138, 0.7);
+  padding-bottom: 0.1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.heroSecondary:hover {
+  border-bottom-color: var(--cream);
+}
+
+.heroSecondary:focus-visible {
+  outline: 2px solid var(--gold-on-dark);
+  outline-offset: 4px;
+}
+
+.heroTrust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem 0;
+  margin: clamp(2.25rem, 4vw, 3rem) 0 0;
+  padding: clamp(1.4rem, 2.2vw, 1.8rem) 0 0;
+  border-top: 1px solid rgba(226, 197, 138, 0.24);
+  list-style: none;
+}
+
+.heroTrust li {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0 1.4rem;
+  color: var(--gold-on-dark);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.heroTrust li:first-child {
+  padding-left: 0;
+}
+
+.heroTrust li + li {
+  border-left: 1px solid rgba(226, 197, 138, 0.28);
+}
+
+.heroTrust svg {
+  flex: none;
+  color: var(--gold);
+}
+
+.heroTrust span {
+  max-width: 9ch;
+}
+
+/* ---------- story ---------- */
+
+.story {
+  width: min(100%, 78rem);
+  margin: 0 auto;
+  padding: clamp(4.5rem, 7vw, 6.5rem) var(--gutter) clamp(5rem, 8vw, 7rem);
+}
+
+.storyLead {
+  display: grid;
+  grid-template-columns: minmax(0, 68ch) minmax(14rem, 18rem);
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: start;
+}
+
+.storyLead .prose {
+  order: 1;
 }
 
 .portrait {
+  order: 2;
   width: 100%;
-  max-width: 20rem;
   margin: 0;
   justify-self: end;
 }
@@ -72,12 +202,20 @@
   aspect-ratio: 4 / 5;
   object-fit: cover;
   border: 1px solid rgba(201, 162, 39, 0.52);
-  border-radius: 0;
-  box-shadow: none;
 }
 
-.story {
-  padding-top: clamp(4.5rem, 7vw, 6.5rem);
+.portrait figcaption {
+  margin-top: 0.9rem;
+  color: #71808b;
+  font-size: 0.6rem;
+  font-weight: 650;
+  letter-spacing: 0.16em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.section h2 {
+  text-transform: uppercase;
 }
 
 .prose,
@@ -184,41 +322,78 @@
   outline-offset: 5px;
 }
 
-@media (max-width: 58rem) {
+@media (max-width: 64rem) {
   .hero {
-    grid-template-columns: minmax(0, 1fr) 17rem;
-    gap: 2.5rem;
+    min-height: min(74svh, 40rem);
   }
 
-  .hero h1 {
-    font-size: clamp(3.7rem, 8vw, 5.4rem);
+  /* A portrait viewport crops a 2.34:1 image to about a quarter of its width,
+     so the liquid has to be aimed at deliberately or the hero is just dark.
+     This lands the bright column in frame; the scrim then goes vertical —
+     heavy where the copy is, open below it — instead of left-to-right. */
+  .heroImage {
+    object-position: 80% 50%;
+  }
+
+  .heroScrim {
+    background:
+      linear-gradient(180deg, rgba(4, 14, 28, 0.92) 0%, rgba(4, 14, 28, 0.86) 34%, rgba(4, 14, 28, 0.64) 58%, rgba(4, 14, 28, 0.5) 78%, rgba(4, 14, 28, 0.78) 100%),
+      linear-gradient(90deg, rgba(4, 14, 28, 0.5) 0%, rgba(4, 14, 28, 0.18) 55%, rgba(4, 14, 28, 0) 100%);
+  }
+
+  .storyLead {
+    grid-template-columns: 1fr;
+  }
+
+  .portrait {
+    order: 0;
+    max-width: 16rem;
+    justify-self: start;
+  }
+
+  .storyLead .prose {
+    order: 1;
   }
 }
 
 @media (max-width: 44rem) {
-  .page {
-    padding: 7rem 1.1rem 4.5rem;
-  }
-
   .hero {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-    align-items: start;
-    padding-bottom: 4rem;
+    min-height: min(78svh, 36rem);
+    padding: 7rem 1.1rem 3.25rem;
   }
 
   .hero h1 {
     max-width: 11.5ch;
-    font-size: clamp(3.25rem, 14vw, 4.8rem);
+    font-size: clamp(2.9rem, 12.5vw, 4.4rem);
   }
 
-  .portrait {
-    width: min(100%, 20rem);
-    justify-self: start;
+  .heroActions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .heroActions a {
+    justify-content: center;
+  }
+
+  .heroTrust {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .heroTrust li,
+  .heroTrust li + li {
+    padding: 0;
+    border-left: 0;
+  }
+
+  .heroTrust span {
+    max-width: none;
   }
 
   .story {
-    padding-top: 4rem;
+    padding: 4rem 1.1rem 4.5rem;
   }
 
   .section {
