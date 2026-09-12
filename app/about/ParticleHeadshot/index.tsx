@@ -26,6 +26,8 @@ export default function ParticleHeadshot() {
   const [count, setCount] = useState(0);
   /** "loading" once the dynamic import starts, "ready" once the engine runs. Absent when Three was never requested. */
   const [engine, setEngine] = useState<"loading" | "ready" | null>(null);
+  /** Mirrors the engine's own click toggle, so the hint can say what a click will do next. */
+  const [scattered, setScattered] = useState(false);
 
   useEffect(() => {
     const host = box.current, cv = canvas.current;
@@ -81,6 +83,7 @@ export default function ParticleHeadshot() {
       data-particles={count || undefined}
       data-live={live ? "" : undefined}
       data-engine={engine ?? undefined}
+      onClick={() => { if (live) setScattered((v) => !v); }}
     >
       <img
         className={styles.image}
@@ -92,6 +95,19 @@ export default function ParticleHeadshot() {
         decoding="async"
       />
       <canvas className={styles.canvas} ref={canvas} aria-hidden="true" />
+      {/* Only once the particles are live, and only where a pointer exists —
+          which is the only place the canvas is ever shown. Absolutely
+          positioned on the box's bottom edge, so it costs no layout. The
+          interaction is decorative, so the hint is hidden from assistive
+          technology along with the canvas it describes. */}
+      {live ? (
+        <p className={styles.hint} aria-hidden="true">
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 2.5v8.2l2.3-2.1 1.7 3.6 1.6-.8-1.7-3.5H12z" />
+          </svg>
+          {scattered ? "Click to bring it back" : "Click to scatter"}
+        </p>
+      ) : null}
     </div>
   );
 }

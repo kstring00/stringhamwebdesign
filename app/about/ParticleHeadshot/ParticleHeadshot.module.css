@@ -45,3 +45,47 @@
     transition: none;
   }
 }
+
+/* The cue that the particles respond to a click. Gold on the dark hero, the
+   site's small uppercase, pinned to the box's bottom edge. */
+.hint {
+  position: absolute;
+  left: 0;
+  bottom: -2.1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: #e2c58a;
+  font-size: 0.62rem;
+  font-weight: 750;
+  letter-spacing: 0.2em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: hintIn 600ms ease both;
+}
+
+.hint svg {
+  flex: none;
+  animation: hintNudge 2.4s ease-in-out 1.2s infinite;
+}
+
+@keyframes hintIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes hintNudge {
+  0%, 100% { transform: none; }
+  50% { transform: translate(1px, 1px) scale(0.92); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hint,
+  .hint svg {
+    animation: none;
+  }
+}
+

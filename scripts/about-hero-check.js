@@ -69,9 +69,14 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
     ok('desktop: canvas backing store ≤ 2× box (pixel ratio capped)', after.canvasPx[0] <= after.box[0] * 2 + 2 && after.canvasPx[1] <= after.box[1] * 2 + 2, JSON.stringify(after.canvasPx));
     // Click toggles scatter/assemble: the engine exposes nothing, but the
     // canvas must accept pointer events now and not throw.
+    const hintBefore = await p.evaluate(() => document.querySelector('[data-hero="media"] [class*="hint"]')?.textContent.trim() ?? null);
+    ok('desktop: a visible cue says the particles are clickable', hintBefore === 'Click to scatter', String(hintBefore));
     await p.click('[data-hero="media"] canvas');
     await p.waitForTimeout(300);
     ok('desktop: click on the canvas throws nothing', errs.length === 0, JSON.stringify(errs));
+    const hintAfter = await p.evaluate(() => document.querySelector('[data-hero="media"] [class*="hint"]')?.textContent.trim() ?? null);
+    ok('desktop: after a click the cue says how to bring it back', hintAfter === 'Click to bring it back', String(hintAfter));
+    ok('desktop: the cue is aria-hidden like the canvas it describes', await p.evaluate(() => document.querySelector('[data-hero="media"] [class*="hint"]')?.getAttribute('aria-hidden') === 'true'));
     ok('desktop: no page errors', errs.length === 0, JSON.stringify(errs));
     await p.screenshot({ path: `${OUT}/about-hero-particles.png`, clip: { x: 0, y: 0, width: 1440, height: 900 } });
     await ctx.close();
@@ -85,6 +90,7 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
     await p.waitForTimeout(2500);
     const rm = await p.evaluate(() => ({ engine: document.querySelector('[data-hero="media"] > div').getAttribute('data-engine'), live: !!document.querySelector('[data-hero="media"] > div[data-live]'), img: getComputedStyle(document.querySelector('[data-hero="media"] img')).opacity }));
     ok('reduced motion: the engine is never requested, image stays', rm.engine === null && !rm.live && rm.img === '1', JSON.stringify(rm));
+    ok('reduced motion: no click cue', await p.evaluate(() => !document.querySelector('[data-hero="media"] [class*="hint"]')));
     await ctx.close();
   }
 
@@ -104,6 +110,7 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
     }));
     ok('360px: the engine is never requested, image shown', m.engine === null && !m.live && m.imgShown, JSON.stringify(m));
     ok('360px: no overflow', m.overflow <= 0, `${m.overflow}px`);
+    ok('360px: no click cue', await p.evaluate(() => !document.querySelector('[data-hero="media"] [class*="hint"]')));
     ok('360px: hero links ≥ 44px', m.taps.every(t => t >= 44), JSON.stringify(m.taps));
     const about = reqs.filter(u => /\/about\//.test(u)).map(u => u.split('/').pop());
     ok('360px: the only headshot request is the compressed webp', about.includes('headshot.webp') && !about.includes('headshot.png'), JSON.stringify(about));
