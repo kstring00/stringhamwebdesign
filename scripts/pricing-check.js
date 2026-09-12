@@ -36,7 +36,7 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
       ok('exactly one h1', meta.h1s.length === 1, JSON.stringify(meta.h1s));
       ok('title mentions League City', /League City/.test(meta.title));
       ok('description mentions Houston + custom web design', /Houston/.test(meta.description) && /custom web design/i.test(meta.description));
-      ok('nav order Home / About / Pricing / Portal', JSON.stringify(meta.nav) === JSON.stringify(['Home', 'About', 'Pricing', 'Portal']), JSON.stringify(meta.nav));
+      ok('nav order Home / About / Portfolio / Pricing / Portal', JSON.stringify(meta.nav) === JSON.stringify(['Home', 'About', 'Portfolio', 'Pricing', 'Portal']), JSON.stringify(meta.nav));
       ok('Pricing is the active nav item', meta.active === 'Pricing', meta.active);
       ok('every price shows as "from $X"', meta.fromCount === 3, `${meta.fromCount}/3 — ${JSON.stringify(meta.priceTexts)}`);
       // Heading order never skips a level
@@ -102,8 +102,10 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
     await p.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     await p.waitForTimeout(900);
     const imgs = await p.$$eval('img[src^="/pricing/"]', els => els.map(e => ({ src: e.getAttribute('src'), alt: e.getAttribute('alt'), w: e.naturalWidth, complete: e.complete })));
-    ok('both photographs load', imgs.length === 2 && imgs.every(i => i.complete && i.w > 0), JSON.stringify(imgs));
-    ok('photographs are decorative (empty alt, in aria-hidden scenes)', imgs.every(i => i.alt === ''), JSON.stringify(imgs.map(i => i.alt)));
+    // One photograph now: the FAQ's statue was replaced by a typographic pull
+    // quote, leaving the valley on the closing band.
+    ok('the closing photograph loads', imgs.length === 1 && imgs.every(i => i.complete && i.w > 0), JSON.stringify(imgs));
+    ok('photograph is decorative (empty alt, in an aria-hidden scene)', imgs.every(i => i.alt === ''), JSON.stringify(imgs.map(i => i.alt)));
 
     // Rendered-pixel contrast under the glass and on the valley, the README
     // method: blank the text, screenshot, sample the pixels under each glyph
@@ -111,7 +113,7 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
     // backgrounds cannot answer this — a photograph is behind both.
     const lum = ([r, g, bb]) => { const f = c => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(bb); };
     const ratio = (a, c) => { const [x, y] = [lum(a), lum(c)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
-    const targets = await p.$$eval('#questions h3 button > span:first-child, [aria-labelledby="close-title"] p:not([aria-hidden])', els => els.map(e => {
+    const targets = await p.$$eval('#questions h3 button > span:first-child, #questions blockquote p, #questions figcaption, [aria-labelledby="close-title"] p', els => els.map(e => {
       const cs = getComputedStyle(e); const m = cs.color.match(/[\d.]+/g).map(Number);
       const boxes = []; const range = document.createRange(); range.selectNodeContents(e);
       for (const r of range.getClientRects()) if (r.width > 4 && r.height > 4) boxes.push([r.left + window.scrollX, r.top + window.scrollY, r.width, r.height]);
