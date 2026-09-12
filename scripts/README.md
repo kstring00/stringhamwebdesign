@@ -175,14 +175,15 @@ every pixel under each glyph box, and compare the worst one.
 
 ## /about
 
-The lava lamp is the one animation on the site that never stops, so it is
-held to a frame budget, not just a "does it render":
+The hero is a photograph with the copy set directly on it, so legibility is
+measured against the image's own pixels rather than a flat colour:
 
 ```bash
-node scripts/about-check.js         # frame times at 1440 and at 375 with 4x CPU throttling
-                                    # (p95 <= 34ms, <= 3 frames over 50ms); reduced motion
-                                    # holds the lamp still; rendered-pixel contrast on the
-                                    # navy hero; one h1; no overflow; saves screenshots
+node scripts/about-check.js         # rendered-pixel contrast for every hero line against
+                                    # the photograph; hero image loads decorative and
+                                    # high-priority; idle frame times at 1440 and at 375
+                                    # with 4x CPU throttle; reduced motion renders
+                                    # finished; one h1; no overflow; saves screenshots
 ```
 
 Lighthouse runs against a **production** build only — dev bundles fail every
@@ -194,6 +195,6 @@ CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome node scripts/ligh
 ```
 
 Mobile (throttled) and desktop presets; all four categories printed;
-performance must clear 88 on both. If the lamp is what pushes it under, the
-knobs are in `app/about/LavaLamp.tsx`: blob count, blur radius, and whether
-the glass displacement runs on narrow viewports.
+performance must clear 88 on both. The hero photograph is the LCP element on
+`/about`, so if performance drops the first thing to check is its weight and
+whether `fetchPriority="high"` survived an edit.

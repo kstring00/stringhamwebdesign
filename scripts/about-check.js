@@ -1,8 +1,11 @@
-// /about: the lava lamp must be smooth, not just present. Frame times are
-// sampled with the page idle at the hero (the lamp is the only thing moving),
-// at 1440 and at 375 with 4x CPU throttling to stand in for a mid phone.
-// Then: reduced motion renders a still lamp, the hero text clears AA against
-// the navy by rendered pixel, one h1, no overflow, no page errors.
+// /about: the hero is a photograph with the copy set on it, so the thing that
+// can silently break is legibility — the text sits on real pixels, not a flat
+// colour. Every hero line is measured against the image itself.
+//
+// Frame times are still sampled at 1440 and at 375 (4x CPU throttle): nothing
+// animates on the hero any more, so this is a regression guard rather than a
+// budget. Plus: reduced motion renders finished, one h1, no overflow, no
+// page errors.
 const { chromium } = require('playwright');
 const { PNG } = require('pngjs');
 const fs = require('fs');
@@ -34,11 +37,10 @@ async function frameStats(page, seconds) {
     const cdp = await ctx.newCDPSession(p);
     await cdp.send('Emulation.setCPUThrottlingRate', { rate: throttle });
     await p.goto('http://localhost:3000/about', { waitUntil: 'networkidle' });
-    await p.waitForTimeout(1800); // let the hero entrance finish; the lamp keeps going
+    await p.waitForTimeout(1800); // let the hero entrance finish
     const f = await frameStats(p, 3);
-    // 60fps is 16.7ms. p95 under 34ms means at worst a dropped frame here and there; more than
-    // a handful over 50ms is visible stutter.
-    ok(`${name}: lamp runs smoothly (mean ${f.mean.toFixed(1)}ms, p95 ${f.p95.toFixed(1)}ms, max ${f.max.toFixed(0)}ms, ${f.long} frames >50ms of ${f.n})`, f.p95 <= 34 && f.long <= 3);
+    // 60fps is 16.7ms. p95 under 34ms means at worst an occasional dropped frame.
+    ok(`${name}: idle is smooth (mean ${f.mean.toFixed(1)}ms, p95 ${f.p95.toFixed(1)}ms, max ${f.max.toFixed(0)}ms, ${f.long} frames >50ms of ${f.n})`, f.p95 <= 34 && f.long <= 3);
     const over = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     ok(`${name}: no horizontal overflow`, over <= 0, `${over}px`);
     if (name === 'desktop') {
@@ -47,7 +49,9 @@ async function frameStats(page, seconds) {
       const anchor = await p.$eval('a[href="#how"]', a => !!document.querySelector(a.getAttribute('href')));
       ok('"My approach" points at a section that exists', anchor);
       const portrait = await p.$eval('figure img', i => ({ alt: i.alt, w: i.naturalWidth }));
-      ok('portrait present in the story with alt text', portrait.alt.length > 0, JSON.stringify(portrait));
+      ok('portrait present in the story with alt text', portrait.alt.length > 0 && portrait.w > 0, JSON.stringify(portrait));
+      const hero = await p.$eval('section img', i => ({ src: i.getAttribute('src'), alt: i.getAttribute('alt'), fetch: i.getAttribute('fetchpriority'), w: i.naturalWidth, complete: i.complete }));
+      ok('hero photograph loads, decorative, high priority', hero.complete && hero.w > 0 && hero.alt === '' && hero.fetch === 'high', JSON.stringify(hero));
     }
     ok(`${name}: no page errors`, errs.length === 0, JSON.stringify(errs));
     await ctx.close();
@@ -59,10 +63,6 @@ async function frameStats(page, seconds) {
     const p = await ctx.newPage();
     await p.goto('http://localhost:3000/about', { waitUntil: 'networkidle' });
     await p.waitForTimeout(300);
-    const a = await p.$$eval('[data-blob]', els => els.map(e => e.getAttribute('transform') || e.style.transform || ''));
-    await p.waitForTimeout(700);
-    const b2 = await p.$$eval('[data-blob]', els => els.map(e => e.getAttribute('transform') || e.style.transform || ''));
-    ok('reduced motion: blobs do not move', JSON.stringify(a) === JSON.stringify(b2) && a.every(t => t === ''), JSON.stringify(a.slice(0, 2)));
     const hidden = await p.$$eval('[data-hero], [data-reveal-group] > *', els => els.filter(e => { const cs = getComputedStyle(e); return cs.opacity !== '1' || cs.visibility === 'hidden'; }).length);
     ok('reduced motion: hero and story in final state', hidden === 0, `${hidden} hidden`);
 

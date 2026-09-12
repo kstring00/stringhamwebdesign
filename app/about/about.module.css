@@ -14,41 +14,46 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: linear-gradient(180deg, #0b1a2a 0%, #05172f 100%);
+  background: #05172f;
   color: var(--cream);
-  padding: clamp(8.25rem, 11vw, 10.5rem) var(--gutter) clamp(3.5rem, 6vw, 5rem);
+  min-height: min(82svh, 46rem);
+  display: grid;
+  align-items: center;
+  padding: clamp(8.5rem, 11vw, 10.5rem) var(--gutter) clamp(4rem, 7vw, 6rem);
 }
 
-/* A faint technical grid, the same one the rest of the dark sections carry. */
-.hero::before {
-  content: "";
+/* The photograph. Its own left third is near-black, which is what the copy
+   sits on; object-position keeps the gold column out of the text column at
+   every width. */
+.heroImage {
   position: absolute;
   inset: 0;
-  z-index: 0;
-  opacity: 0.18;
-  background-image:
-    linear-gradient(rgba(245, 240, 232, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(245, 240, 232, 0.06) 1px, transparent 1px);
-  background-size: 3.5rem 3.5rem;
-  -webkit-mask: linear-gradient(90deg, #000 0%, transparent 60%);
-  mask: linear-gradient(90deg, #000 0%, transparent 60%);
-  pointer-events: none;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% 50%;
+}
+
+/* Deepens what the composition already gives, rather than laying a panel over
+   it: heavy at the left edge, gone by the time it reaches the liquid. */
+.heroScrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(4, 14, 28, 0.94) 0%, rgba(4, 14, 28, 0.88) 26%, rgba(4, 14, 28, 0.6) 44%, rgba(4, 14, 28, 0.12) 62%, rgba(4, 14, 28, 0) 78%),
+    linear-gradient(180deg, rgba(4, 14, 28, 0.5) 0%, rgba(4, 14, 28, 0) 26%, rgba(4, 14, 28, 0) 74%, rgba(4, 14, 28, 0.55) 100%);
 }
 
 .heroInner {
   position: relative;
-  z-index: 1;
   width: min(100%, 84rem);
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(20rem, 32rem) auto;
-  gap: clamp(2rem, 5vw, 5rem);
-  align-items: center;
-  min-height: min(76svh, 52rem);
 }
 
 .heroCopy {
-  max-width: 40rem;
+  max-width: 38rem;
 }
 
 .eyebrow {
@@ -77,10 +82,10 @@
   margin: 0;
   color: var(--cream);
   font-family: var(--font-cormorant), Georgia, serif;
-  font-size: clamp(3.6rem, 6.2vw, 6.4rem);
+  font-size: clamp(3.4rem, 5.8vw, 6rem);
   font-weight: 300;
   letter-spacing: -0.05em;
-  line-height: 0.92;
+  line-height: 0.94;
 }
 
 .hero h1 em {
@@ -90,9 +95,9 @@
 }
 
 .lede {
-  max-width: 34rem;
+  max-width: 32rem;
   margin: clamp(1.4rem, 2.2vw, 1.8rem) 0 0;
-  color: rgba(245, 240, 232, 0.8);
+  color: rgba(245, 240, 232, 0.84);
   font-size: clamp(1.02rem, 1.2vw, 1.12rem);
   line-height: 1.7;
 }
@@ -129,8 +134,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.9rem 0;
-  margin: clamp(2.25rem, 4vw, 3.25rem) 0 0;
-  padding: 0;
+  margin: clamp(2.25rem, 4vw, 3rem) 0 0;
+  padding: clamp(1.4rem, 2.2vw, 1.8rem) 0 0;
+  border-top: 1px solid rgba(226, 197, 138, 0.24);
   list-style: none;
 }
 
@@ -162,52 +168,6 @@
 
 .heroTrust span {
   max-width: 9ch;
-}
-
-/* The lamp. Masked so its edges dissolve into the navy rather than sitting
-   in a box; the SVG inside fills it and slices to cover. */
-.lamp {
-  position: relative;
-  aspect-ratio: 3 / 4;
-  max-height: min(78svh, 50rem);
-  width: 100%;
-  justify-self: center;
-  -webkit-mask: radial-gradient(ellipse 58% 62% at 50% 50%, #000 52%, transparent 100%);
-  mask: radial-gradient(ellipse 58% 62% at 50% 50%, #000 52%, transparent 100%);
-  contain: paint;
-}
-
-.lamp svg {
-  will-change: transform;
-}
-
-.marks {
-  display: grid;
-  align-content: space-between;
-  gap: 4rem;
-  align-self: stretch;
-  padding: 2rem 0;
-}
-
-.marks p {
-  display: grid;
-  gap: 0.35rem;
-  margin: 0;
-  color: var(--gold-on-dark);
-  font-size: 0.64rem;
-  font-weight: 700;
-  letter-spacing: 0.26em;
-  line-height: 1.55;
-  text-transform: uppercase;
-}
-
-.marks i {
-  display: block;
-  width: 2.5rem;
-  height: 1px;
-  margin-top: 1rem;
-  background: rgba(226, 197, 138, 0.6);
-  transform-origin: left center;
 }
 
 /* ---------- story ---------- */
@@ -363,28 +323,22 @@
 }
 
 @media (max-width: 64rem) {
-  .heroInner {
-    grid-template-columns: 1fr;
-    min-height: 0;
-    gap: 2.5rem;
+  .hero {
+    min-height: min(74svh, 40rem);
   }
 
-  .lamp {
-    aspect-ratio: 16 / 10;
-    max-height: 26rem;
-    -webkit-mask: radial-gradient(ellipse 62% 70% at 50% 50%, #000 50%, transparent 100%);
-    mask: radial-gradient(ellipse 62% 70% at 50% 50%, #000 50%, transparent 100%);
+  /* A portrait viewport crops a 2.34:1 image to about a quarter of its width,
+     so the liquid has to be aimed at deliberately or the hero is just dark.
+     This lands the bright column in frame; the scrim then goes vertical —
+     heavy where the copy is, open below it — instead of left-to-right. */
+  .heroImage {
+    object-position: 80% 50%;
   }
 
-  .marks {
-    grid-auto-flow: column;
-    justify-content: space-between;
-    padding: 0;
-    gap: 2rem;
-  }
-
-  .marks i {
-    display: none;
+  .heroScrim {
+    background:
+      linear-gradient(180deg, rgba(4, 14, 28, 0.92) 0%, rgba(4, 14, 28, 0.86) 34%, rgba(4, 14, 28, 0.64) 58%, rgba(4, 14, 28, 0.5) 78%, rgba(4, 14, 28, 0.78) 100%),
+      linear-gradient(90deg, rgba(4, 14, 28, 0.5) 0%, rgba(4, 14, 28, 0.18) 55%, rgba(4, 14, 28, 0) 100%);
   }
 
   .storyLead {
@@ -404,12 +358,13 @@
 
 @media (max-width: 44rem) {
   .hero {
-    padding: 7rem 1.1rem 3rem;
+    min-height: min(78svh, 36rem);
+    padding: 7rem 1.1rem 3.25rem;
   }
 
   .hero h1 {
     max-width: 11.5ch;
-    font-size: clamp(3rem, 13.5vw, 4.6rem);
+    font-size: clamp(2.9rem, 12.5vw, 4.4rem);
   }
 
   .heroActions {
@@ -437,11 +392,6 @@
     max-width: none;
   }
 
-  .marks {
-    grid-auto-flow: row;
-    gap: 1.25rem;
-  }
-
   .story {
     padding: 4rem 1.1rem 4.5rem;
   }
@@ -452,11 +402,5 @@
 
   .closing {
     margin-top: 4.75rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .lamp svg {
-    will-change: auto;
   }
 }

@@ -49,6 +49,14 @@ Each project's hero slot is **16:9** (`app/work/work.module.css`). Supply at
 The two PNGs are the size problem on the work pages; re-export as WebP at the
 size above.
 
+## 1b. Hero — `/about`
+
+Filled 2026-09-12. `public/about/hero-liquid.webp` (1920 × 819, 77 KB) with
+1280w and 900w variants. Gold liquid in glass against near-black; the left
+third of the composition is what the hero copy sits on, so the scrim only
+deepens what is already there rather than laying a panel over the picture.
+Source PNG is in history at `ac25fd1`.
+
 ## 2b. Portrait — `/about`
 
 The only portrait in the repo is **263 × 278**, and it was being hotlinked

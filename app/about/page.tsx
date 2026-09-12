@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import Header from "../Header";
 import headerStyles from "../Header.module.css";
 import SiteFooter from "../SiteFooter";
-import LavaLamp from "./LavaLamp";
 import styles from "./about.module.css";
 
 export const metadata: Metadata = {
@@ -32,6 +31,23 @@ export default function AboutPage() {
       <Header />
       <main className={styles.page}>
         <section className={styles.hero} aria-labelledby="about-title">
+          {/* The hero image. Dark on the left by composition, so the copy sits
+              on the photograph itself rather than on a panel laid over it; the
+              scrim only deepens what is already there. Eager and high priority
+              because this is the LCP element. */}
+          <img
+            className={styles.heroImage}
+            src="/about/hero-liquid.webp"
+            srcSet="/about/hero-liquid-900.webp 900w, /about/hero-liquid-1280.webp 1280w, /about/hero-liquid.webp 1920w"
+            sizes="100vw"
+            alt=""
+            width="1920"
+            height="819"
+            fetchPriority="high"
+            decoding="async"
+          />
+          <span className={styles.heroScrim} aria-hidden="true" />
+
           <div className={styles.heroInner}>
             <div className={styles.heroCopy}>
               <p className={styles.eyebrow} data-hero>
@@ -55,7 +71,7 @@ export default function AboutPage() {
                 </a>
               </div>
 
-              <ul className={styles.heroTrust} data-reveal-group aria-label="How I work">
+              <ul className={styles.heroTrust} data-hero aria-label="How I work">
                 {TRUST.map((item) => (
                   <li key={item.label}>
                     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -66,27 +82,6 @@ export default function AboutPage() {
                 ))}
               </ul>
             </div>
-
-            <div className={styles.lamp} data-hero="media">
-              <LavaLamp />
-            </div>
-
-            <aside className={styles.marks} aria-hidden="true">
-              <p>
-                <span>Ideas</span>
-                <span>Design</span>
-                <span>Develop</span>
-                <span>Grow</span>
-                <i data-rule />
-              </p>
-              <p>
-                <span>Same</span>
-                <span>discipline.</span>
-                <span>Different</span>
-                <span>businesses.</span>
-                <i data-rule />
-              </p>
-            </aside>
           </div>
         </section>
 
