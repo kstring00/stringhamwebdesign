@@ -49,16 +49,36 @@ Each project's hero slot is **16:9** (`app/work/work.module.css`). Supply at
 |---|---|
 | Common Ground | `/hero-crt/common-ground.png` — PNG, should be WebP |
 | BCBA Prep | `/hero-crt/bcba-prep.png` — PNG, should be WebP |
-| Lake City Self Storage | `/work/lake-city-self-storage/home.webp` |
+| Lake City Self Storage | `/work/lake-city-self-storage/drive-up.webp` |
 | With Little | `/hero-crt/with-little-daily.png` — PNG, should be WebP |
 
 The two PNGs are the size problem on the work pages; re-export as WebP at the
 size above.
 
-`/work/with-little/dashboard.webp` is still on disk but is **not a WebP file** —
-its bytes are arbitrary binary and it decodes to nothing. It is unreferenced.
-Drop a real 1920 × 1080 WebP at that path and point `app/data/projects.ts` back
-at it.
+### Three uploads arrived truncated
+
+`bcba-prep/dashboard.webp`, `lake-city-self-storage/home.webp` and
+`with-little/dashboard.webp` were all committed as partial files. Each one had
+a valid-looking header declaring a length two to three times what was actually
+there, so listings showed a plausible file and every page using one rendered an
+empty box. All three are deleted and their references removed.
+
+Two of the three are now covered by other screenshots. **One slot is genuinely
+empty and worth refilling:**
+
+| Missing | Was |
+|---|---|
+| BCBA Prep member dashboard | `/work/bcba-prep/dashboard.webp` — purchased domains, quick actions, study-journey guidance |
+
+Re-export at 1920 wide as WebP, drop it in, and add it back to that project's
+`screenshots` array. `scripts/project-images-check.js` decodes every referenced
+image and loads each case study in a browser, so a truncated upload fails a
+check now instead of shipping.
+
+Still wanted, not blocking: a real Lake City **homepage** capture. The case
+study currently opens on the drive-up storage page, which carries the facility
+photograph and the storage-type decision, so it reads correctly — but the
+homepage is the stronger opening frame if you have it.
 
 ## 2b. Hero — `/work`
 
