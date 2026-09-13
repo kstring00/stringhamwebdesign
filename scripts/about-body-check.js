@@ -88,7 +88,7 @@ const PULLS = ["Nine months ago I didn't know how to do any of this.", "Equal ex
     ok('desktop: 96px below it before the footer', near(d.closingBelow, 96), `${d.closingBelow}px`);
     ok('desktop: closing sits in the copy column', near(d.closingLeft, d.proseLeft[0]) && d.closingRight < d.sidebarLeft, JSON.stringify([d.closingLeft, d.closingRight, d.sidebarLeft]));
     ok('portrait loads with descriptive alt', d.imgOk && d.alt.length > 40 && /Kyle/.test(d.alt), d.alt);
-    ok('three facts', JSON.stringify(d.facts) === JSON.stringify(['League City, Texas', 'RBT, Texas ABA Centers', 'Projects from $900']), JSON.stringify(d.facts));
+    ok('three facts', JSON.stringify(d.facts) === JSON.stringify(['League City, Texas', 'RBT, Texas ABA Centers', 'Most sites $500 and $1,500']), JSON.stringify(d.facts));
     ok('sidebar link and button ≥ 44px', d.taps.every(t => t >= 44), JSON.stringify(d.taps));
     ok('desktop: no overflow', d.overflow <= 0, `${d.overflow}px`);
     ok('desktop: no page errors', errs.length === 0, JSON.stringify(errs));

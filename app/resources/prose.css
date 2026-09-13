@@ -3,7 +3,7 @@
    Global rather than a CSS module because the HTML is produced by the
    Markdown renderer and cannot carry hashed class names. Everything is scoped
    under .resourceProse so nothing here reaches the rest of the site. Colours
-   are the same values /pricing declares. */
+   are the same values /about declares. */
 
 .resourceProse {
   color: #0d1b26;

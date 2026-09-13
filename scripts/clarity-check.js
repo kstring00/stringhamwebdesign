@@ -14,7 +14,7 @@ const ID = process.env.CLARITY_ID || '';
 let fails = 0;
 const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAIL'} ${l}${x ? '  ' + x : ''}`); };
 
-const PUBLIC_PAGES = ['/', '/about', '/pricing', '/work', '/resources', '/quote'];
+const PUBLIC_PAGES = ['/', '/about', '/work', '/resources', '/quote'];
 const PORTAL_PAGES = ['/portal'];
 
 /** Every request the page made to Clarity, and when the tag tag appeared. */

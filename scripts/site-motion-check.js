@@ -2,7 +2,7 @@
 // with nothing left hidden, (b) complete every reveal once scrolled through
 // with motion on, (c) throw no page errors, (d) never overflow horizontally.
 const { chromium } = require('playwright');
-const ROUTES = ['/', '/about', '/quote', '/work', '/work/common-ground', '/pricing'];
+const ROUTES = ['/', '/about', '/quote', '/work', '/work/common-ground', '/resources'];
 let fails = 0;
 const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAIL'} ${l}${x ? '  ' + x : ''}`); };
 const SEL = '[data-hero], [data-reveal], [data-reveal-group] > *, [data-featured], [data-phase-num]';

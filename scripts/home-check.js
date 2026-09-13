@@ -57,7 +57,7 @@ const ratio = (a, c) => { const [x, y] = [lum(a), lum(c)].sort((m, n) => n - m);
       ok('four audiences, four lines, no images',
         info.audiences.length === 4 && info.audienceLines === 4 && info.audienceImgs === 0, JSON.stringify(info.audiences));
       ok('testimonial slot renders nothing while empty', info.testimonialNodes === 0, `${info.testimonialNodes} nodes`);
-      ok('section order: work, audiences, process', JSON.stringify(info.order.slice(0, 3)) === JSON.stringify(['selected-work', 'who-heading', 'process']), JSON.stringify(info.order));
+      ok('section order: work, audiences, pricing, process', JSON.stringify(info.order.slice(0, 4)) === JSON.stringify(['selected-work', 'who-heading', 'pricing', 'process']), JSON.stringify(info.order));
       // Every internal link must resolve.
       for (const href of [...new Set(info.hrefs.concat('/work'))]) {
         const res = await p.request.get(BASE + href);

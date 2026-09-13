@@ -43,10 +43,10 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
       // The header slides in and out with scroll direction, which Playwright's
       // hit-testing does not always agree with; a dispatched click still goes
       // through Next's Link handler, which is the path under test.
-      await p.evaluate(() => document.querySelector('header a[href="/pricing"]').click());
-      await p.waitForURL(/\/pricing/);
+      await p.evaluate(() => document.querySelector('header a[href="/resources"]').click());
+      await p.waitForURL(/\/resources/);
       await p.waitForTimeout(1200);
-      ok(`${name}: header nav lands at the top of /pricing`, await p.evaluate(() => Math.round(window.scrollY)) === 0);
+      ok(`${name}: header nav lands at the top of /resources`, await p.evaluate(() => Math.round(window.scrollY)) === 0);
     }
     await ctx.close();
   }

@@ -26,9 +26,7 @@ export default function Header() {
       ? "/portal"
       : pathname === "/about"
         ? "/about"
-        : pathname === "/pricing"
-          ? "/pricing"
-          : pathname === "/"
+        : pathname === "/"
             ? "/"
             : "";
 

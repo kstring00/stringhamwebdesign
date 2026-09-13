@@ -53,7 +53,7 @@ If you'll be adding blog posts or updating pages yourself regularly, a content s
 
 ## What I charge after launch
 
-Changes after launch are quoted separately, in writing, before I do them. The details and current rates are on my [pricing page](/pricing).
+Changes after launch are quoted separately, in writing, before I do them.
 
 The short version: small tweaks are quick and cheap, new pages or features get a real quote, and you'll never get a surprise invoice.
 

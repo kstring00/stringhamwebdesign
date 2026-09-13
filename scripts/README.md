@@ -154,24 +154,6 @@ whichever you left out:
 npm install --no-save playwright pngjs
 ```
 
-## /pricing
-
-Two checks, both against a plain `npm run dev` on port 3000 — no stub needed,
-the page reads nothing from the database.
-
-```bash
-node scripts/pricing-check.js            # title/meta/H1, nav order, "from $X" on
-                                         # every tier, heading hierarchy, no overflow
-                                         # at 1440/375, tiers stack, 44px targets,
-                                         # FAQ aria + focus ring; saves screenshots
-node scripts/pricing-contrast-check.js   # every text style vs its real backdrop
-```
-
-`pricing-contrast-check.js` uses computed styles, which is exact for the flat
-sections. The FAQ glass and the close band sit over photographs, where a
-computed background says nothing — so `pricing-check.js` measures those the
-README way: blank the text, screenshot with the fixed masthead hidden, sample
-every pixel under each glyph box, and compare the worst one.
 
 ## /about
 
@@ -252,30 +234,6 @@ plausible size, and rendered nothing.
 
     BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/project-images-check.js
 
-## pricing-portal-check.js
-
-Asserts every constraint on the /pricing hero portal card, which is a four-slide
-auto-rotating sequence: all four slides present with their rows, the chrome that
-never swaps, cross-fade on opacity and transform only at 400ms ease-out, the
-progress fill transitioning rather than jumping, the strip tracking the active
-slide with earlier phases checked, looping back to slide one, pausing on hover,
-on focus within the card and when scrolled off-screen, reduced motion pinning
-the timesheet frame with zero transitions, one card height on every slide at
-three widths so the page cannot shift, no img and no added image or font
-request, one h1, no heading inside the card, 44px tap targets, no overflow at
-360px with the hero CTA above the fold, and AA by rendered pixel on each of the
-four slides at both widths.
-
-Two things it has to do carefully, both learned the hard way: pin the component
-with reduced motion before toggling slides by hand, or its own timer re-renders
-underneath the measurement; and scroll the card into view before waiting on the
-rotation, because on a phone it correctly sits below the fold and stays paused.
-
-    BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/pricing-portal-check.js
-
-`lighthouse-check.js` now honours BASE too, so both can run against the same
-server.
-
 ## nav-scroll-check.js
 
 Client navigations must land at the top of the new page. From partway down the
@@ -294,7 +252,7 @@ The /resources index and its five documents against the brief: one h1 per page
 Stringham Web Design, League City" format, five cards in the briefed order with
 summaries from each document's opening, Resources in the nav between Portfolio
 and Pricing and in the footer, a back link and exactly one CTA on each document,
-a 65–72ch reading width, every internal link fetched (the /pricing links inside
+a 65–72ch reading width, every internal link fetched (the links inside
 the documents included), no overflow at 360px on the pages with tables, 44px
 controls, no placeholder text in the new files, and all six routes in
 sitemap.xml.
@@ -315,25 +273,6 @@ actually hold at 120px.
     BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/about-body-check.js
 
 `about-check.js` (the hero) now honours BASE as well.
-
-
-## quote-package-check.js
-
-Carrying a tier from /pricing into the brief. Each tier's "Get started" links
-to /quote?package=<id> while every generic "Start a project" stays bare; the
-brief opens with that tier selected and a gold note naming it; a missing,
-bogus or repeated param opens unselected with "Not sure yet" among the four
-choices; "change" clears both the selection and the query string without
-moving anything below it; the note and the fallback help line are the same
-height at 1440, 768 and 360; measured layout shift is zero on load; and a real
-submission of each tier walks all seven questions and lands on a receipt that
-records the right package.
-
-    BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/quote-package-check.js
-
-The API route rate-limits to five briefs per IP per ten minutes, so the run
-sends four and a second run inside that window will fail on the submissions.
-Restart the server to clear the counter — it is held in memory.
 
 ## clarity-check.js
 
@@ -398,8 +337,8 @@ Saves `prelaunch-home-375.png` and `prelaunch-pricing-375.png`.
 
 ### Legacy checks fixed in the same audit
 
-`footer-check.js`, `pricing-check.js`, `process-check.js` and
-`site-motion-check.js` hardcoded `localhost:3000` and now honour `BASE` like
+`footer-check.js`, `process-check.js` and `site-motion-check.js` hardcoded
+`localhost:3000` and now honour `BASE` like
 the rest. `footer-check.js` expected no privacy link and `pricing-check.js`
 expected a nav without Resources; both expectations were older than the
 site. `pricing-portal-check.js` now ignores the favicon request, which is
@@ -409,3 +348,12 @@ only for eager images, and for five seconds at most. `site-motion-check.js`
 settles for 2.5 seconds after scrolling through rather than 1.6, which the
 longer /about copy needed — a scroll-through probe confirmed nothing on the
 page actually stays hidden.
+
+## Retired checks
+
+`pricing-check.js`, `pricing-portal-check.js`, `pricing-contrast-check.js`
+and `quote-package-check.js` covered the `/pricing` page and the tier
+carried from it into the brief. Both were removed on 2026-09-13 (`/pricing`
+now redirects to the homepage's "How pricing works" section), and
+`prelaunch-check.js` covers the section, the redirect and the nav in their
+place.

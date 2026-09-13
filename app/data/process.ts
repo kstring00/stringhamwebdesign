@@ -19,8 +19,7 @@ export type ProcessStep = {
 
 /**
  * The payment terms, stated once. Step 03 carries them because that is where
- * cost is agreed; /pricing repeats them under its process summary. One string,
- * so the two can never say different things.
+ * cost is agreed. One string, so nothing can say it differently.
  */
 export const depositTerms =
   "Payment is in two halves: 50% to reserve your build slot, 50% within 7 days of launch.";
@@ -97,3 +96,15 @@ export const processSteps: ProcessStep[] = [
 
 export const processIntro =
   "Seven steps from first message to your site being yours. No surprises in the middle.";
+
+/**
+ * The four-phase summary the resources index shows in its featured card. It
+ * is a summary of the seven steps above, not a second process: each phase
+ * names the steps it covers so the two descriptions cannot contradict.
+ */
+export const phases = [
+  { number: "01", name: "Discovery", line: "You send the brief, I reply within a business day, and we agree the scope in writing.", covers: "Steps 01–03" },
+  { number: "02", name: "Design", line: "You get a portal login and we look at the same screen together before anything is built.", covers: "Step 04" },
+  { number: "03", name: "Build", line: "Clean code, a timesheet every ten hours, and a hard cap I can't cross without you.", covers: "Step 05" },
+  { number: "04", name: "Launch", line: "Final walkthrough, revisions, your approval. Then everything moves to your name.", covers: "Steps 06–07" },
+];

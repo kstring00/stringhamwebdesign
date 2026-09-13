@@ -1,5 +1,5 @@
 /* /resources
-   Same ground, ink and gold as /pricing, declared the same way, so the section
+   Same ground, ink and gold as /about, declared the same way, so the section
    reads as part of the site rather than a docs theme bolted onto it. */
 
 .page {
@@ -287,7 +287,7 @@
   font-size: 0.78rem;
 }
 
-/* ---- the featured card: /pricing's "Most popular" treatment ---- */
+/* ---- the featured card: the "Most popular" treatment ---- */
 
 .cardFeatured .cardLink {
   background: var(--navy-deep);

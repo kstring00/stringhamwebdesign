@@ -10,7 +10,7 @@ the real thing lands.
 
 ---
 
-## 1. Photographs — `/pricing`
+## 1. Photographs — the forest and valley frames
 
 Two of the three slots are filled as of 2026-09-12. Sources were uploaded to
 the repo root and are kept in history at `d856b4d`; the tree carries only the
@@ -49,7 +49,6 @@ Each project's hero slot is **16:9** (`app/work/work.module.css`). Supply at
 |---|---|
 | Common Ground | `/hero-crt/common-ground.png` — PNG, should be WebP |
 | BCBA Prep | `/hero-crt/bcba-prep.png` — PNG, should be WebP |
-| Lake City Self Storage | `/work/lake-city-self-storage/drive-up.webp` |
 | GrowthGains | `/work/growthgains/home.webp` — current, from a 2026-09-12 capture of the live hero |
 | With Little | `/hero-crt/with-little-daily.png` — PNG, should be WebP |
 
@@ -75,11 +74,6 @@ Re-export at 1920 wide as WebP, drop it in, and add it back to that project's
 `screenshots` array. `scripts/project-images-check.js` decodes every referenced
 image and loads each case study in a browser, so a truncated upload fails a
 check now instead of shipping.
-
-Still wanted, not blocking: a real Lake City **homepage** capture. The case
-study currently opens on the drive-up storage page, which carries the facility
-photograph and the storage-type decision, so it reads correctly — but the
-homepage is the stronger opening frame if you have it.
 
 ## 2b. Hero — `/work`
 
@@ -142,7 +136,7 @@ let it take the gold and navy from CSS.
   unconverted brief, ninety days after handoff for portal data) that are a
   commitment once published.
 - **`/quote/received` reply-date copy** is done; nothing outstanding there.
-- **Testimonials** — `/pricing` promises one from every client at launch.
+- **Testimonials** — the site promises one from every client at launch.
   None are on the site yet; there is no slot for them until there is one to
   show.
 

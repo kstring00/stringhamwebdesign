@@ -67,7 +67,7 @@ And I'll ask you for a testimonial that day, while it's fresh.
 
 The site is yours and it keeps running whether or not we ever speak again.
 
-If you want changes later, send them over and you'll get a quote in writing before I start. Ongoing support is available — details on the [pricing page](/pricing).
+If you want changes later, send them over and you'll get a quote in writing before I start. Ongoing support is available; just ask.
 
 ---
 

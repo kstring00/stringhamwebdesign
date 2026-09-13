@@ -21,7 +21,6 @@ export const siteNav: NavItem[] = [
   { label: "About", href: "/about", inHeader: true },
   { label: "Portfolio", href: "/work", inHeader: true },
   { label: "Resources", href: "/resources", inHeader: true },
-  { label: "Pricing", href: "/pricing", inHeader: true },
 ];
 
 export const headerNav = siteNav.filter((item) => item.inHeader);

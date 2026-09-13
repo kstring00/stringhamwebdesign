@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
-import { startingLine } from "./data/pricing";
+import { rangeLine } from "./data/pricing";
 import ClarityAnalytics from "./ClarityAnalytics";
+import HashScroll from "./HashScroll";
 import SiteMotion from "./SiteMotion";
 
 const cormorant = Cormorant_Garamond({
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
     template: "%s",
   },
   description:
-    `Custom websites for small businesses in League City and the Houston area, from focused sites to advanced builds with integrations, automation, and AI. ${startingLine} Every one is scoped after we talk.`,
+    `Custom websites for small businesses in League City and the Houston area, from focused sites to advanced builds with integrations, automation, and AI. Most sites land between ${rangeLine}; every one is quoted after a free consultation.`,
   applicationName: "Stringham Web Design",
   authors: [{ name: "Kyle Stringham", url: SITE_URL }],
   creator: "Kyle Stringham",
@@ -69,6 +70,8 @@ export default function RootLayout({
       <body>
         {children}
         <SiteMotion />
+        {/* Finishes the scroll to a #hash on a fresh load; /pricing redirects to /#pricing. */}
+        <HashScroll />
         {/* Usage analytics. Production only, only with NEXT_PUBLIC_CLARITY_ID
             set, never on the portal, and never before the window has loaded. */}
         <ClarityAnalytics />

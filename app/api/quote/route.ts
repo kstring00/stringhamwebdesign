@@ -14,10 +14,6 @@ import {
   validateAnswers,
 } from "@/app/lib/quoteReceipt";
 import { processSteps } from "@/app/data/process";
-import {
-  PACKAGE_UNSPECIFIED_LABEL,
-  packageNameFor,
-} from "@/app/data/pricing";
 
 /** The brief is written to a cookie, so this must not be cached. */
 export const dynamic = "force-dynamic";
@@ -152,13 +148,6 @@ export async function POST(request: NextRequest) {
   }
 
   const answers = cleanAnswers(body);
-
-  // The package arrives as a tier id and is only ever stored as a name the
-  // tiers actually define, so nothing a client sends can reach the email or
-  // the receipt verbatim. Anything unrecognised, "Not sure yet" included,
-  // records as "Not specified".
-  answers.package = packageNameFor(answers.package) ?? PACKAGE_UNSPECIFIED_LABEL;
-
   const errors = validateAnswers(answers);
 
   if (Object.keys(errors).length > 0) {
@@ -186,7 +175,7 @@ export async function POST(request: NextRequest) {
   // the confirmation page already tells them everything the email does.
   const ownerResult = await sendEmail({
     to: owner,
-    subject: `${receipt.reference} — ${answers.package} brief from ${answers.name}`,
+    subject: `${receipt.reference} — quote brief from ${answers.name}`,
     text: buildOwnerEmail(receipt),
     replyTo: answers.email,
   });

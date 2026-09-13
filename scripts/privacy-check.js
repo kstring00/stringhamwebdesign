@@ -9,7 +9,7 @@ let fails = 0;
 const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAIL'} ${l}${x ? '  ' + x : ''}`); };
 
 // Every page that renders the footer, so the link really is sitewide.
-const PAGES = ['/', '/about', '/work', '/pricing', '/resources', '/quote', '/privacy', '/resources/who-owns-what'];
+const PAGES = ['/', '/about', '/work', '/resources', '/quote', '/privacy', '/resources/who-owns-what'];
 
 // The headings the brief asked for, matched loosely on the wording used.
 const SECTIONS = [

@@ -195,7 +195,7 @@ export default function ProcessSteps({
       <section className={styles.homeSection} id={id} aria-labelledby={`${baseId}-home-heading`}>
         {/* The scene sits behind everything: a warm wash in the top-right for the
             doves to read against, the doves themselves screened so their black
-            ground drops out, and the valley from /pricing faded into the cream
+            ground drops out, and the valley photograph faded into the cream
             along the bottom edge. All decorative. */}
         <div className={styles.homeScene} aria-hidden="true">
           <span className={styles.homeGlow} />

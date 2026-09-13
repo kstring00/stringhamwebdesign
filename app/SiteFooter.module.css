@@ -1,7 +1,7 @@
 /* Site footer.
    Palette and type are the masthead's and /about's, measured against this
    navy rather than assumed: cream 15.4:1, #e2c58a 10.5:1. The darker gold
-   /pricing uses is a cream-background fix and is not needed here. */
+   the cream pages use is a cream-background fix and is not needed here. */
 
 .footer {
   --cream: #f5f0e8;
@@ -139,7 +139,7 @@
   min-width: 0;
 }
 
-/* The eyebrow treatment used on /about and /pricing. */
+/* The eyebrow treatment used on /about and /resources. */
 .columnHead {
   margin: 0 0 1.1rem;
   color: var(--gold-on-dark);

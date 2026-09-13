@@ -35,7 +35,7 @@ const ratio = (a, c) => { const [x, y] = [lum(a), lum(c)].sort((m, n) => n - m);
 
     if (name === 'desktop') {
       ok('four column heads', JSON.stringify(info.heads) === JSON.stringify(['Site', 'Clients', 'Contact']) || info.heads.length === 3, JSON.stringify(info.heads));
-      ok('site column carries every nav item plus the CTA', ['/', '/about', '/work', '/pricing', '/quote'].every(h => info.links.some(l => l.href === h)), JSON.stringify(info.links.map(l => l.href)));
+      ok('site column carries every nav item plus the CTA', ['/', '/about', '/work', '/resources', '/quote'].every(h => info.links.some(l => l.href === h)), JSON.stringify(info.links.map(l => l.href)));
       ok('client portal and quote request present', info.links.some(l => l.href === '/portal') && info.links.filter(l => l.href === '/quote').length >= 2);
       ok('email is a mailto link', info.links.some(l => l.href === 'mailto:kyle@stringhamwebdesign.com'), JSON.stringify(info.links.filter(l => (l.href || '').startsWith('mailto'))));
       ok('exactly one "Client portal" in the footer', info.portalCount === 1, `${info.portalCount} found`);

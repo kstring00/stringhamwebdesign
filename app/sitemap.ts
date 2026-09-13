@@ -26,7 +26,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     at("/about", 0.7, "yearly"),
     at("/work", 0.8, "monthly"),
     ...projects.map((p) => at(`/work/${p.slug}`, 0.6, "yearly")),
-    at("/pricing", 0.9, "monthly"),
     at("/quote", 0.8, "yearly"),
     at("/resources", 0.7, "monthly"),
     ...RESOURCE_ORDER.map((slug) => at(`/resources/${slug}`, 0.6, "yearly")),

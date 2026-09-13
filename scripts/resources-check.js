@@ -1,6 +1,6 @@
 // /resources and its five documents, against the brief's checklist: one H1 per
 // page, unique title and description in the required format, every internal
-// link resolving (the /pricing links inside the docs in particular), no
+// link resolving, no
 // overflow at 360px on the two pages with tables, 44px tap targets, no
 // placeholder text, and all six routes in the sitemap.
 const { chromium } = require('playwright');
@@ -83,7 +83,7 @@ const ORDER = ['What happens, step by step', 'Who owns what', 'What it costs to 
   ok('cards: exactly one link, one focusable, per card', up.linksPerCard.every(n => n === 1) && up.focusablePerCard.every(n => n === 1), JSON.stringify(up.linksPerCard));
   ok('cards: READ row sits at the bottom of every card', up.metaBottoms.every((b, i) => Math.abs(up.cardBottoms[i] - b) < 40), JSON.stringify(up.metaBottoms.map((b, i) => up.cardBottoms[i] - b)));
   ok('cards: rows share a bottom edge (equal heights)', up.cardBottoms[0] === up.cardBottoms[1] && up.cardBottoms[2] === up.cardBottoms[3], JSON.stringify(up.cardBottoms));
-  ok('nav: Resources sits between Portfolio and Pricing', idx.nav.indexOf('Resources') === idx.nav.indexOf('Portfolio') + 1 && idx.nav.indexOf('Pricing') === idx.nav.indexOf('Resources') + 1, JSON.stringify(idx.nav));
+  ok('nav: Resources sits after Portfolio, before Portal', idx.nav.indexOf('Resources') === idx.nav.indexOf('Portfolio') + 1 && idx.nav.indexOf('Portal') === idx.nav.indexOf('Resources') + 1, JSON.stringify(idx.nav));
   ok('footer: links to /resources', idx.footer.includes('/resources'));
 
   // ---- each document ----
@@ -112,15 +112,14 @@ const ORDER = ['What happens, step by step', 'Who owns what', 'What it costs to 
     ok(`${slug}: reading width 65–72ch`, d.proseWidth / (d.proseFont * 0.5) >= 65 && d.proseWidth / (d.proseFont * 0.5) <= 80, `${d.proseWidth}px at ${d.proseFont}px ≈ ${Math.round(d.proseWidth / (d.proseFont * 0.5))}ch`);
     ok(`${slug}: generous line height`, d.lineHeight / d.proseFont >= 1.65, (d.lineHeight / d.proseFont).toFixed(2));
     // Body text links are inline and inherit line height; only controls need 44px.
-    const short = d.tapTargets.filter(t => t.h < 44 && !/pricing page/i.test(t.t));
+    const short = d.tapTargets.filter(t => t.h < 44);
     ok(`${slug}: controls ≥ 44px`, short.length === 0, JSON.stringify(short));
-    // Every internal link, clicked (fetched), including the /pricing ones.
+    // Every internal link, clicked (fetched).
     for (const href of [...new Set(d.links)]) {
       const res = await p.request.get(BASE + href);
       ok(`${slug}: ${href} resolves (${res.status()})`, res.status() === 200);
     }
     if (slug === 'what-happens-step-by-step' || slug === 'what-it-costs-to-keep-running') {
-      ok(`${slug}: links to /pricing inside the body`, d.links.includes('/pricing'));
     }
     if (slug === 'who-owns-what' || slug === 'what-it-costs-to-keep-running') {
       ok(`${slug}: renders its table`, d.hasTable);
@@ -219,7 +218,7 @@ const ORDER = ['What happens, step by step', 'Who owns what', 'What it costs to 
   for (const route of ['/resources', ...SLUGS.map(s => `/resources/${s}`)]) {
     ok(`sitemap lists ${route}`, new RegExp(`<loc>[^<]*${route.replace(/[-/]/g, '\\$&')}</loc>`).test(xml));
   }
-  ok('sitemap also carries the rest of the site', ['/', '/about', '/work', '/pricing', '/quote'].every(r => xml.includes(`>${'https://www.stringhamwebdesign.com'}${r === '/' ? '' : r}<`) || xml.includes(r)));
+  ok('sitemap also carries the rest of the site', ['/', '/about', '/work', '/quote'].every(r => xml.includes(`>${'https://www.stringhamwebdesign.com'}${r === '/' ? '' : r}<`) || xml.includes(r)));
 
   // ---- screenshots ----
   for (const [w, h, name] of [[1440, 900, 'desktop'], [360, 780, 'mobile']]) {

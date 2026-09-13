@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import TransmissionSubmit from "../TransmissionSubmit";
-import { PACKAGE_CHOICES, packageNameFor } from "../data/pricing";
 import {
   QuoteAnswers,
   QuoteField,
@@ -149,7 +148,6 @@ const emptyAnswers: QuoteAnswers = {
   goal: "",
   timeline: "",
   contact: "",
-  package: "",
 };
 
 function validateField(field: QuoteField, value: string) {
@@ -174,18 +172,10 @@ function validateField(field: QuoteField, value: string) {
   return "";
 }
 
-export default function QuoteForm({
-  initialPackage = "",
-}: {
-  /** A tier id validated on the server from ?package=, or "" for no choice. */
-  initialPackage?: string;
-}) {
+export default function QuoteForm() {
   const router = useRouter();
   const [stepIndex, setStepIndex] = useState(0);
-  const [answers, setAnswers] = useState<QuoteAnswers>({
-    ...emptyAnswers,
-    package: initialPackage,
-  });
+  const [answers, setAnswers] = useState<QuoteAnswers>(emptyAnswers);
 
   const [errors, setErrors] = useState<Partial<Record<QuoteField, string>>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -214,12 +204,7 @@ export default function QuoteForm({
           stepIndex?: number;
         };
         if (parsed.answers) {
-          // A tier just clicked on /pricing beats whatever the draft held.
-          setAnswers({
-            ...emptyAnswers,
-            ...parsed.answers,
-            ...(initialPackage ? { package: initialPackage } : {}),
-          });
+          setAnswers({ ...emptyAnswers, ...parsed.answers });
         }
         if (
           typeof parsed.stepIndex === "number" &&
@@ -233,7 +218,7 @@ export default function QuoteForm({
       // A blocked or full sessionStorage must not stop the form working.
     }
     setRestored(true);
-  }, [total, initialPackage]);
+  }, [total]);
 
   useEffect(() => {
     if (!restored) return;
@@ -258,28 +243,6 @@ export default function QuoteForm({
     }
     headingRef.current?.focus();
   }, [stepIndex, restored]);
-
-  /** The tier name to show in the note, or null when no tier is chosen. */
-  const chosenPackage = packageNameFor(answers.package);
-
-  const choosePackage = (value: string) => {
-    setAnswers((current) => ({ ...current, package: value }));
-  };
-
-  /** "change" — drop the selection, and drop ?package= with it so a refresh
-      does not put it straight back. */
-  const clearPackage = () => {
-    setAnswers((current) => ({ ...current, package: "" }));
-    try {
-      const url = new URL(window.location.href);
-      if (url.searchParams.has("package")) {
-        url.searchParams.delete("package");
-        window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
-      }
-    } catch {
-      // The selection is cleared either way; the URL is a nicety.
-    }
-  };
 
   const update = (field: QuoteField, value: string) => {
     setAnswers((current) => ({ ...current, [field]: value }));
@@ -407,53 +370,6 @@ export default function QuoteForm({
             />
           ))}
         </div>
-      </div>
-
-      {/* ---------- package ----------
-          Rendered above the questions rather than as one of them: the seven
-          questions are the brief, this is context that may already be
-          answered by the link that got here. Server-rendered from ?package=,
-          so the note is in the first paint and shifts nothing. */}
-      <div className={styles.packageRow}>
-        <p className={styles.packageLabel}>Package</p>
-
-        <p className={chosenPackage ? styles.packageNote : styles.packageHelp}>
-          {chosenPackage ? (
-            <>
-              <span>
-                Starting from the {chosenPackage} package — we&apos;ll confirm
-                scope on the call.
-              </span>{" "}
-              <button
-                className={styles.packageChange}
-                onClick={clearPackage}
-                type="button"
-              >
-                change
-              </button>
-            </>
-          ) : (
-            "Pick the closest fit, or leave it — we'll confirm scope on the call."
-          )}
-        </p>
-
-        <fieldset className={styles.packageChoices}>
-          <legend className={styles.srOnly}>
-            Which package are you starting from?
-          </legend>
-          {PACKAGE_CHOICES.map((choice) => (
-            <label className={styles.packageChoice} key={choice.id}>
-              <input
-                checked={answers.package === choice.id}
-                name="package"
-                onChange={() => choosePackage(choice.id)}
-                type="radio"
-                value={choice.id}
-              />
-              <span>{choice.name}</span>
-            </label>
-          ))}
-        </fieldset>
       </div>
 
       {/* Step changes are announced here rather than by moving focus alone. */}

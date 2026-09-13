@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import Header from "../Header";
 import SiteFooter from "../SiteFooter";
-import { phases } from "../data/pricing";
+import { phases } from "../data/process";
 import { getResources, signal, type ResourceSlug } from "./lib";
 import styles from "./resources.module.css";
 
@@ -21,8 +21,8 @@ function Arrow() {
   );
 }
 
-/* Line icons in the pricing page's style: one 16-unit box, one stroke weight,
-   all decorative. The clock is the pricing page's "process" icon. */
+/* Line icons in the site's one style: one 16-unit box, one stroke weight,
+   all decorative. */
 const ICON = {
   clock: <><circle cx="8" cy="8" r="6.5" /><path d="M8 4v4l2.5 2" /></>,
   user: <><circle cx="8" cy="5.5" r="3" /><path d="M2.5 14.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5" /></>,
@@ -51,7 +51,7 @@ function Icon({ name, size = 16 }: { name: keyof typeof ICON; size?: number }) {
   );
 }
 
-/* Under the hero: three small reassurances, same pattern as /pricing. */
+/* Under the hero: three small reassurances. */
 const HERO_TRUST = [
   { icon: "clock", label: "About 20 minutes", detail: "all five, start to finish" },
   { icon: "user", label: "Written for owners", detail: "not for web people" },
@@ -65,7 +65,7 @@ const CARD_ICON: Record<Exclude<ResourceSlug, "what-happens-step-by-step">, keyo
   "the-words-ill-use": "book",
 };
 
-/** The pricing hero's strip, held still: Discovery done, Design under way. */
+/** The process strip, held still: Discovery done, Design under way. */
 const STRIP_ACTIVE = 1;
 
 export default function ResourcesPage() {
@@ -108,7 +108,7 @@ export default function ResourcesPage() {
         <section className={styles.index} aria-label="The five resources">
           <div className={styles.inner}>
             <ol className={styles.cards} data-reveal-group>
-              {/* 01, featured: the "Most popular" treatment from /pricing, with
+              {/* 01, featured: the "Most popular" card treatment, with
                   the portal strip held still beside the copy. */}
               <li className={`${styles.card} ${styles.cardFeatured}`} data-reveal>
                 <Link className={styles.cardLink} href={`/resources/${featured.slug}`}>

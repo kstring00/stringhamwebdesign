@@ -2,32 +2,18 @@ import type { Metadata } from "next";
 
 import Header from "../Header";
 import SiteFooter from "../SiteFooter";
-import { isPackageId, startingLine } from "../data/pricing";
+import { pricingSummary } from "../data/pricing";
 import QuoteForm from "./QuoteForm";
 import styles from "./quote.module.css";
 
 export const metadata: Metadata = {
   title: "Start a project — Get a Website Quote · Kyle Stringham, League City TX",
   description:
-    "Seven questions about your business and what you need the site to do. About five minutes, a reply within one business day, and a fixed price in writing. Custom web design for League City and Houston-area businesses.",
+    "Seven questions about your business and what you need the site to do. About five minutes, a reply within one business day, then a free consultation and a fixed price in writing. Custom web design for League City and Houston-area businesses.",
   alternates: { canonical: "/quote" },
 };
 
-/**
- * ?package=standard arrives from a tier's "Get started" button on /pricing.
- * It is read and validated here, on the server, so the form renders with the
- * tier already chosen in its first paint — the note above the field never
- * appears after hydration, so it cannot shift anything. Anything unrecognised
- * is dropped and the brief opens with the choice unmade.
- */
-export default async function QuotePage({
-  searchParams,
-}: {
-  searchParams: Promise<{ package?: string | string[] }>;
-}) {
-  const params = await searchParams;
-  const requested = Array.isArray(params.package) ? params.package[0] : params.package;
-  const initialPackage = isPackageId(requested) ? requested : "";
+export default function QuotePage() {
 
   return (
     <>
@@ -51,7 +37,7 @@ export default async function QuotePage({
               </div>
               <div>
                 <dt>Cost</dt>
-                <dd>{startingLine} The exact number comes after we talk.</dd>
+                <dd>{pricingSummary}</dd>
               </div>
               <div>
                 <dt>Obligation</dt>
@@ -61,7 +47,7 @@ export default async function QuotePage({
           </div>
 
           <div data-hero="media">
-            <QuoteForm initialPackage={initialPackage} />
+            <QuoteForm />
           </div>
         </div>
       </main>

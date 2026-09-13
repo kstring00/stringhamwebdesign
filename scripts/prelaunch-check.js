@@ -94,11 +94,11 @@ const normalize = (href) => href.split('#')[0].split('?')[0] || '/';
     }
   }
 
-  // The header carries the same seven items on every page.
-  const EXPECTED_NAV = ['Home', 'About', 'Portfolio', 'Resources', 'Pricing', 'Portal', 'Start a Project'];
+  // The header carries the same six items on every page.
+  const EXPECTED_NAV = ['Home', 'About', 'Portfolio', 'Resources', 'Portal', 'Start a Project'];
   for (const [path, d] of seen) {
     const missing = EXPECTED_NAV.filter((n) => !d.headerLinks.some((t) => t.toLowerCase().includes(n.toLowerCase())));
-    ok(`${path}: header has the seven nav items`, missing.length === 0, missing.length ? `missing ${missing.join(', ')}` : '');
+    ok(`${path}: header has the six nav items`, missing.length === 0, missing.length ? `missing ${missing.join(', ')}` : '');
   }
 
   // ---- external links ----
@@ -144,6 +144,24 @@ const normalize = (href) => href.split('#')[0].split('?')[0] || '/';
     ok('sitemap.xml lists every crawled public page', missing.length === 0, missing.join(' '));
     const extra = locs.filter((l) => !seen.has(l));
     ok('sitemap.xml lists nothing that is not reachable', extra.length === 0, extra.join(' '));
+    // The retired pricing page: a permanent redirect onto the homepage section.
+    const r = await p.request.get(BASE + '/pricing', { maxRedirects: 0 });
+    ok('/pricing redirects permanently (308)', r.status() === 308, String(r.status()));
+    ok('/pricing lands on /#pricing', /\/#pricing$/.test(r.headers()['location'] || ''), r.headers()['location'] || '');
+    // And the browser actually arrives at the section, not the top of the page.
+    for (const width of [1440, 375]) {
+      const c2 = await b.newContext({ viewport: { width, height: width > 800 ? 900 : 812 } });
+      const p2 = await c2.newPage();
+      await p2.goto(BASE + '/pricing', { waitUntil: 'networkidle' });
+      await p2.waitForTimeout(2500);
+      const landed = await p2.evaluate(() => ({
+        hash: location.hash,
+        headerBottom: Math.round(document.querySelector('header').getBoundingClientRect().bottom),
+        sectionTop: Math.round(document.getElementById('pricing').getBoundingClientRect().top),
+      }));
+      ok(`/pricing @${width}: the page is scrolled to the section, clear of the header`, landed.hash === '#pricing' && landed.sectionTop >= 0 && landed.sectionTop <= landed.headerBottom + 40 && landed.sectionTop < 300, JSON.stringify(landed));
+      await c2.close();
+    }
     for (const url of ['/icon.png', '/apple-icon.png', '/opengraph-image.png']) {
       const r = await p.request.get(BASE + url);
       ok(`${url} is served`, r.status() === 200 && (r.headers()['content-type'] || '').startsWith('image/'), `${r.status()} ${r.headers()['content-type']}`);
@@ -185,29 +203,30 @@ const normalize = (href) => href.split('#')[0].split('?')[0] || '/';
       await p.close();
     }
 
-    // The two named risks: the homepage process carousel and the pricing portal card.
+    // The two named risks: the homepage process carousel and the "How
+    // pricing works" section that replaced the pricing page.
     const p = await ctx.newPage();
     await p.goto(BASE + '/', { waitUntil: 'networkidle' });
     const home = await p.evaluate(() => {
       const el = document.querySelector('[class*="homeSection"]') || document.querySelector('[id*="process"]');
       if (!el) return null;
       const r = el.getBoundingClientRect();
-      const inner = [...el.querySelectorAll('*')].filter((c) => c.scrollWidth > c.clientWidth + 1 && getComputedStyle(c).overflowX !== 'auto' && getComputedStyle(c).overflowX !== 'scroll' && getComputedStyle(c).overflowX !== 'hidden');
-      return { width: Math.round(r.width), clipped: inner.length, right: Math.round(r.right) };
+      return { width: Math.round(r.width), right: Math.round(r.right) };
     });
     ok('homepage process section @375: fits the viewport', home !== null && home.right <= 376 && home.width <= 376, JSON.stringify(home));
-    await p.goto(BASE + '/pricing', { waitUntil: 'networkidle' });
-    await p.waitForTimeout(800);
-    const portal = await p.evaluate(() => {
-      const prev = document.querySelector('button[aria-label="Previous screen"]');
-      const el = prev ? prev.closest('[class*="portal"]:not(button)') : null;
+    const pricing = await p.evaluate(() => {
+      const el = document.getElementById('pricing');
       if (!el) return null;
       const r = el.getBoundingClientRect();
-      const controls = [...el.querySelectorAll('button')].map((b) => ({ h: Math.round(b.getBoundingClientRect().height), w: Math.round(b.getBoundingClientRect().width), label: (b.getAttribute('aria-label') || b.textContent).trim().slice(0, 30) }));
-      return { left: Math.round(r.left), right: Math.round(r.right), width: Math.round(r.width), controls };
+      const wide = [...el.querySelectorAll('*')].filter((c) => c.getBoundingClientRect().right > window.innerWidth + 1).length;
+      const cta = el.querySelector('a[href="/quote"]');
+      return { left: Math.round(r.left), right: Math.round(r.right), wide, cta: cta ? Math.round(cta.getBoundingClientRect().height) : 0, text: el.textContent.replace(/\s+/g, ' ') };
     });
-    ok('pricing portal card @375: fits the viewport', portal !== null && portal.left >= 0 && portal.right <= 376, JSON.stringify(portal && { left: portal.left, right: portal.right, width: portal.width }));
-    ok('pricing portal card @375: its controls are tappable', portal !== null && portal.controls.length > 0 && portal.controls.every((c) => c.h >= 44 || c.w >= 44), JSON.stringify(portal && portal.controls));
+    ok('#pricing section exists on the homepage', pricing !== null);
+    ok('#pricing @375: fits the viewport, nothing spills', pricing !== null && pricing.left >= 0 && pricing.right <= 376 && pricing.wide === 0, JSON.stringify(pricing && { left: pricing.left, right: pricing.right, wide: pricing.wide }));
+    ok('#pricing @375: its call to action is tappable', pricing !== null && pricing.cta >= 44, `${pricing && pricing.cta}px`);
+    ok('#pricing states the range and the free consultation', pricing !== null && /\$500 and \$1,500/.test(pricing.text) && /free 30-minute consultation/.test(pricing.text));
+    ok('#pricing carries no tier names or old prices', pricing !== null && !/Starter|Standard|Premium|\$900|\$1,800|\$3,500/.test(pricing.text));
     await p.screenshot({ path: `${process.cwd()}/prelaunch-pricing-375.png`, fullPage: false });
     await p.goto(BASE + '/', { waitUntil: 'networkidle' });
     await p.screenshot({ path: `${process.cwd()}/prelaunch-home-375.png`, fullPage: true });

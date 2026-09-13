@@ -1,4 +1,4 @@
-import { startingLine } from "./data/pricing";
+import { rangeLine } from "./data/pricing";
 import HeroTileGrid from "./HeroTileGrid";
 import styles from "./HeroShowcase.module.css";
 
@@ -40,12 +40,13 @@ export default function HeroShowcase() {
               the name swapped out.
             </p>
 
-            {/* The one price on the homepage: under the paragraph where the
-                "can I afford this?" doubt forms, and nowhere else. */}
+            {/* The one number in the hero: under the paragraph where the
+                "can I afford this?" doubt forms. The section below the fold
+                explains how a quote happens. */}
             <p className={styles.anchor} data-hero>
-              {startingLine}{" "}
-              <a href="/pricing">
-                See the range <span aria-hidden="true">→</span>
+              Most sites land between {rangeLine}.{" "}
+              <a href="#pricing">
+                How pricing works <span aria-hidden="true">→</span>
               </a>
             </p>
 

@@ -254,13 +254,12 @@ id, business email, legal pages, and testimonials.
 
 ## 6. Known-and-accepted, listed so they are not rediscovered as bugs
 
-- **`/pricing` describes the process in four phases; everywhere else it is
-  seven steps.** Deliberate, from the 2026-09-12 design reference. The four
-  phases live in `app/data/pricing.ts` and each one names the steps of the
-  seven it covers ("Steps 01–03 of the seven"), so the two cannot contradict.
-  The deposit terms are one string, `depositTerms` in `app/data/process.ts`,
-  shown in step 03 and under the four phases. If the seven steps change,
-  check the four phases still summarise them.
+- **The resources index summarises the process in four phases; everywhere
+  else it is seven steps.** Deliberate. The four phases live in
+  `app/data/process.ts` beside the seven steps and each one names the steps
+  it covers, so the two cannot contradict. (They used to live in
+  `data/pricing.ts`; the pricing page was retired on 2026-09-13 and
+  `/pricing` now redirects to the homepage's "How pricing works" section.)
 - **Live updates are not wired.** After an action in one window, the other
   needs a manual reload. Deliberately deferred. Supabase Realtime on
   `messages`, `files`, `time_entries` and `project_onboarding_items` is the
