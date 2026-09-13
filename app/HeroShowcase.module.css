@@ -56,7 +56,9 @@
 
 .eyebrow {
   margin: 0 0 1.35rem;
-  color: #a9833d;
+  /* The ink gold, not the rule gold: #a9833d is 3.3:1 on this ground and
+     failed AA for small text in the 2026-09-13 audit. */
+  color: #6f5620;
   font-size: 0.69rem;
   font-weight: 700;
   letter-spacing: 0.16em;

@@ -89,7 +89,7 @@ export default function Header() {
       onFocusCapture={onFocusCapture}
     >
       <div className={styles.bar}>
-        <a className={styles.brand} href="/" aria-label="Kyle Stringham, home">
+        <a className={styles.brand} href="/">
           <span className={styles.monogramShell} aria-hidden="true">
             <span className={styles.doveMark} />
             <span className={styles.monogram}>KS</span>

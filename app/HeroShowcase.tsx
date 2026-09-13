@@ -70,7 +70,7 @@ export default function HeroShowcase() {
           </div>
         </div>
 
-        <div className={styles.highlights} aria-label="What you can expect" data-reveal-group>
+        <div className={styles.highlights} role="group" aria-label="What you can expect" data-reveal-group>
           {highlights.map(([title, text]) => (
             <div className={styles.highlight} key={title}>
               <strong>{title}</strong>
