@@ -1,0 +1,150 @@
+/* The 404. Same ground, ink and gold as /about and /pricing. */
+
+.page {
+  --ground: #f5f0e8;
+  --ink: #0d1b26;
+  --muted: #4f6474;
+  --gold: #a9833d;
+  --gold-ink: #6f5620;
+  --hair-gold: rgba(201, 162, 39, 0.34);
+
+  display: grid;
+  align-items: center;
+  min-height: 72svh;
+  padding: clamp(7.5rem, 11vw, 10rem) var(--gutter) clamp(4rem, 7vw, 6rem);
+  background: var(--ground);
+  color: var(--ink);
+}
+
+.inner {
+  width: min(100%, 44rem);
+  margin: 0 auto;
+}
+
+.signal {
+  margin: 0 0 1rem;
+  color: rgba(13, 27, 38, 0.68);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.page h1 {
+  margin: 0;
+  max-width: 14ch;
+  color: var(--ink);
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(2.8rem, 6vw, 4.6rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+}
+
+.lede {
+  margin: 1.4rem 0 0;
+  max-width: 34rem;
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+/* The five main pages as a small uppercase row, separated by hairlines. */
+.routes {
+  margin-top: clamp(2rem, 3.5vw, 2.75rem);
+  padding-top: clamp(1.4rem, 2.2vw, 1.8rem);
+  border-top: 1px solid var(--hair-gold);
+}
+
+.routes ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.routes li {
+  display: flex;
+  align-items: center;
+}
+
+.routes li + li::before {
+  content: "";
+  display: block;
+  width: 1px;
+  height: 0.9rem;
+  margin: 0 0.9rem;
+  background: var(--hair-gold);
+}
+
+.routes a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--gold-ink);
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.2em;
+  text-decoration: none;
+  text-transform: uppercase;
+  border-bottom: 1px solid transparent;
+  transition: color 180ms ease, border-color 180ms ease;
+}
+
+.routes a:hover {
+  color: var(--ink);
+  border-bottom-color: var(--gold);
+}
+
+.routes a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.75rem;
+  margin-top: clamp(2rem, 3.5vw, 2.75rem);
+}
+
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid var(--hair-gold);
+  transition: border-color 180ms ease;
+}
+
+.secondary:hover {
+  border-bottom-color: var(--gold);
+}
+
+.secondary:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+@media (max-width: 44rem) {
+  .page {
+    min-height: 64svh;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actions a {
+    justify-content: center;
+  }
+}

@@ -7,9 +7,10 @@ import QuoteForm from "./QuoteForm";
 import styles from "./quote.module.css";
 
 export const metadata: Metadata = {
-  title: "Start a quote — Kyle Stringham",
+  title: "Start a project — Get a Website Quote · Kyle Stringham, League City TX",
   description:
-    "Seven questions about your business and what you need the site to do. Takes about five minutes.",
+    "Seven questions about your business and what you need the site to do. About five minutes, a reply within one business day, and a fixed price in writing. Custom web design for League City and Houston-area businesses.",
+  alternates: { canonical: "/quote" },
 };
 
 /**
