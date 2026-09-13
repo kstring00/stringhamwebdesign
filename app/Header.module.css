@@ -40,6 +40,8 @@
   display: flex;
   align-items: center;
   gap: 0.88rem;
+  /* 44px tap target on a phone, where the root font size shrinks. */
+  min-height: 44px;
 }
 
 .monogramShell {
