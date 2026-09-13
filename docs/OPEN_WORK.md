@@ -172,10 +172,13 @@ pasting a live key; it will throw, not charge.
 |---|---|
 | `NEXT_PUBLIC_CLARITY_ID` | Silent no-op: `app/ClarityAnalytics.tsx` returns without importing or requesting anything, so the site runs with no analytics at all. That is the correct state for local and preview builds. Set it to the Clarity project id under **Production only**. **Public** — inlined into the client bundle and visible in the page source, so it is an account id, not a secret. |
 
-**Gate before setting it.** Microsoft Clarity records session replays. The
-site has no privacy policy page (see §6), and one needs to exist, naming
-Clarity and linking Microsoft's privacy statement, before replay is turned on
-for real visitors. The code is inert until this variable is set, so setting it
+**Read `/privacy` before setting it.** Microsoft Clarity records session
+replays, so the privacy policy had to exist first. It now does
+(`content/privacy.md`, rendered at `/privacy`, linked from the footer and the
+quote form) and it names Clarity, says form fields are masked, says the portal
+is excluded, and links Microsoft's privacy statement. The remaining step is
+yours: read it, make sure the retention periods it commits to match how you
+actually work, then set this variable. The code is inert until you do, so that
 is the moment recording starts.
 
 The portal is excluded in code regardless of this variable: `ClarityAnalytics`

@@ -17,9 +17,9 @@ import styles from "./SiteFooter.module.css";
  * two cannot drift. The year is computed — this renders on the server, so it
  * is the server's year and changes on its own.
  *
- * There is no privacy policy link because there is no privacy policy page;
- * a link to a 404 is worse than no link. Add the route, then add the link.
- * Likewise no social row: no account is referenced anywhere in the codebase.
+ * The bottom bar carries the copyright and the privacy policy, which is the
+ * one legal page that exists. No social row: no account is referenced
+ * anywhere in the codebase.
  */
 export default function SiteFooter() {
   return (
@@ -86,6 +86,9 @@ export default function SiteFooter() {
           <span>
             © {new Date().getFullYear()} {businessName}
           </span>
+          <a className={styles.legal} href="/privacy">
+            Privacy policy
+          </a>
         </div>
       </div>
     </footer>

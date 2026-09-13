@@ -597,6 +597,11 @@ export default function QuoteForm({
         Your answers are kept in this browser tab as you go, so a refresh
         won&apos;t lose them.
       </p>
+
+      <p className={styles.consentNote}>
+        By sending this you agree to the{" "}
+        <a href="/privacy">privacy policy</a>.
+      </p>
     </div>
   );
 }

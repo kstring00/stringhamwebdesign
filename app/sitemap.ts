@@ -30,5 +30,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     at("/quote", 0.8, "yearly"),
     at("/resources", 0.7, "monthly"),
     ...RESOURCE_ORDER.map((slug) => at(`/resources/${slug}`, 0.6, "yearly")),
+    at("/privacy", 0.3, "yearly"),
   ];
 }

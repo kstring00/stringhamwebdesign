@@ -355,3 +355,18 @@ Expecting no tag at all, against a build made without it:
 
 Both runs are worth doing: the second is what proves an unset id really is a
 silent no-op rather than a broken page.
+
+## privacy-check.js
+
+The /privacy page. Asserts one h1, a page-specific title and a real meta
+description, a last-updated date in both machine and human form, every
+section the policy has to carry, and the claims it has to make — Clarity by
+name, masked form fields, the portal excluded, cookies, how to opt out, and
+each processor actually in use. Microsoft's privacy statement has to be
+linked rather than just named, every internal link on the page has to resolve,
+and the footer link has to be present and a 44px target on every page that
+renders the footer. Also checks the quote form's consent line and that
+clicking it lands on the policy, no overflow at 360 and 768, and no
+placeholder text.
+
+    BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/privacy-check.js
