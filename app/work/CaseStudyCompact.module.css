@@ -22,7 +22,9 @@
 
 .backLink {
   display: inline-flex;
-  margin-bottom: 2rem;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: 1.25rem;
   color: #607181;
   font-size: 0.78rem;
   font-weight: 700;
@@ -201,19 +203,6 @@
   object-fit: contain;
   object-position: top;
   background: #ebe4d8;
-}
-
-.screenshotPlaceholder {
-  aspect-ratio: 16 / 9;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(201, 162, 39, 0.42);
-  background: #eee7dc;
-  color: #8b8173;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
 }
 
 .screenshotFigure figcaption {

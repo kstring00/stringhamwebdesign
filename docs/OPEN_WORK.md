@@ -140,9 +140,9 @@ editing** or the running instance keeps the old values.
 
 | Variable | Missing behaviour |
 |---|---|
-| `RESEND_API_KEY` | Silent no-op. `portalEmail.ts` returns `{ sent: false, reason: "no-api-key" }`, nothing throws, nothing logs an error. Kills the new-message, new-file and ten-hour check-in notifications, plus `/api/capture` and `/api/quote` confirmations. **Sign-in is unaffected** — magic links come from Supabase's own SMTP. Blocked on the DNS work in §3. |
+| `RESEND_API_KEY` | Silent no-op. `portalEmail.ts` returns `{ sent: false, reason: "no-api-key" }`, nothing throws, nothing logs an error. Kills the new-message, new-file and ten-hour check-in notifications, plus the `/api/quote` confirmations. **Sign-in is unaffected** — magic links come from Supabase's own SMTP. Blocked on the DNS work in §3. |
 | `PORTAL_FROM_EMAIL` | Falls back to `CAPTURE_FROM_EMAIL`, then `onboarding@resend.dev`, which lands in spam. Mail sends; clients may not see it. |
-| `CAPTURE_TO_EMAIL` | Defaults differ per route — `kyle@stringhamwebdesign.com` in `/api/capture`, `stringham00@gmail.com` in `/api/quote` and `portalEmail.ts`. Inquiries still arrive, possibly at an address you do not read. Worth setting explicitly for that reason alone. |
+| `CAPTURE_TO_EMAIL` | Defaults to `stringham00@gmail.com` in `/api/quote` and `portalEmail.ts`. Inquiries still arrive, possibly at an address you do not read. Worth setting explicitly for that reason alone. |
 | `CAPTURE_FROM_EMAIL` | Falls back to `onboarding@resend.dev`. Same spam problem. |
 
 ### Optional — sensible defaults, set them anyway
@@ -201,9 +201,12 @@ done and merged.
 
 ### Section 7 — Transmission submit button audit
 
-The button already exists at `app/TransmissionSubmit.tsx`, with a demo page at
-`/transmission-demo`. It was built before the spec was written down and has
-**never been checked against it**. This is an audit, not a build: go through
+The button already exists at `app/TransmissionSubmit.tsx`. Its demo page at
+`/transmission-demo` was removed in the 2026-09-13 pre-launch audit (a public,
+unstyled route with no metadata; restore it from git history if the audit
+needs it — the button is also exercised live on the last step of `/quote`).
+It was built before the spec was written down and has **never been checked
+against it**. This is an audit, not a build: go through
 the list, fix what does not match.
 
 The spec, in full:

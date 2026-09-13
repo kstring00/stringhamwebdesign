@@ -26,7 +26,8 @@
 
 /* Two passes. The horizontal one keeps the copy column near the navy the rest
    of the page uses; the vertical one seats the header at the top and hands the
-   section off to the cream band below without a hard edge. Measured, not
+   section off to the cream band below without a hard edge. Measured,
+not
    guessed: scripts/work-hero-check.js samples the rendered pixels under every
    glyph and the worst run clears AA. */
 .indexHeroScrim {
@@ -52,7 +53,8 @@
 }
 
 @media (max-width: 40rem) {
-  /* No room for the photograph to breathe beside the copy at phone width, so
+  /* No room for the photograph to breathe beside the copy at phone width,
+so
      the scrim goes flat and heavy and the image reads as texture. */
   .indexHeroImage {
     object-position: 70% 50%;
@@ -74,8 +76,7 @@
 }
 
 .indexHeroInner,
-.indexInner,
-.detailInner {
+.indexInner {
   width: min(100%, 82rem);
   margin: 0 auto;
 }
@@ -235,25 +236,16 @@
   color: #17344e;
 }
 
-.statusSoon {
-  border-color: #a08348;
-  background: transparent;
-  color: #806635;
-}
-
 .statusCaseStudy {
   border-color: #80858a;
   background: transparent;
   color: #60676d;
 }
 
-/* Dark-ground variants of the two ink-on-transparent pills. Same shape, same
-   hues, lifted until they clear AA on #0d1b26. */
-.statusSoonDark {
-  border-color: #c9a227;
-  background: transparent;
-  color: #e2c58a;
-}
+/* Dark-ground variants of the two ink-on-transparent pills. Same shape,
+same
+   hues,
+lifted until they clear AA on #0d1b26. */
 
 .statusCaseStudyDark {
   border-color: rgba(245, 240, 232, 0.45);
@@ -261,7 +253,6 @@
   color: rgba(245, 240, 232, 0.82);
 }
 
-.cardStatus .statusSoon,
 .cardStatus .statusCaseStudy {
   border-color: rgba(245, 240, 232, 0.72);
   background: rgba(13, 27, 38, 0.28);
@@ -283,6 +274,14 @@
   color: #152c3f;
   font-size: 26px;
   line-height: 1.05;
+}
+
+/* The title is a link: give it a 44px row without moving the type. */
+.cardBody h3 a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin: -0.5rem 0;
 }
 
 .cardDescription {
@@ -320,6 +319,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
+  min-height: 44px;
   margin-top: auto;
   padding-top: 2rem;
   color: #223f56;
@@ -336,19 +336,6 @@
   transform: translateX(4px);
 }
 
-.detailHero {
-  background: #0d1b26;
-  color: var(--cream-light);
-  padding: clamp(8rem, 12vw, 10.5rem) var(--gutter) clamp(4rem, 7vw, 6rem);
-}
-
-.detailHeroTop {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-}
-
 .backLink {
   color: rgba(245, 240, 232, 0.76);
   font-size: 0.8rem;
@@ -359,126 +346,14 @@
   color: var(--gold-on-dark);
 }
 
-.detailTitleRow {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(14rem, 23rem);
-  gap: clamp(2rem, 6vw, 6rem);
-  align-items: end;
-  margin-top: clamp(3.5rem, 7vw, 6rem);
-}
-
-.detailTitleRow h1 {
-  max-width: 11ch;
-  color: var(--cream-light);
-  font-size: clamp(3.8rem, 7vw, 7rem);
-  line-height: 0.86;
-}
-
-.detailSummary {
-  color: rgba(245, 240, 232, 0.76);
-  font-size: clamp(1rem, 1.4vw, 1.15rem);
-}
-
-.detailMeta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.6rem 2.6rem;
-  margin-top: 2.4rem;
-  padding-top: 1.7rem;
-  border-top: 1px solid rgba(245, 240, 232, 0.18);
-}
-
-.detailMeta div {
-  display: grid;
-  gap: 0.35rem;
-}
-
-.detailMeta span:last-child {
-  color: rgba(245, 240, 232, 0.8);
-  font-size: 0.86rem;
-}
-
 .metaLabel {
   color: var(--gold-on-dark) !important;
   font-size: 0.6rem !important;
 }
 
-.heroMediaWrap {
-  background: #0d1b26;
-  padding: 0 var(--gutter) clamp(4rem, 8vw, 7rem);
-}
-
-.mediaFigure {
-  margin: 0;
-}
-
 .heroMedia {
   width: min(100%, 82rem);
   margin: 0 auto;
-}
-
-.mediaImage,
-.mediaPlaceholder {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-}
-
-.mediaImage {
-  display: block;
-  object-fit: cover;
-  object-position: top;
-}
-
-.mediaPlaceholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  border: 1px solid rgba(201, 162, 39, 0.6);
-  background: #f5f0e8;
-  color: #183147;
-  text-align: center;
-  padding: 2rem;
-}
-
-.mediaPlaceholder span,
-.mediaPlaceholder small {
-  color: #7a7468;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.mediaPlaceholder strong {
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: clamp(2rem, 4vw, 4rem);
-  font-weight: 300;
-}
-
-.mediaFigure figcaption {
-  margin-top: 0.7rem;
-  color: #6f7b84;
-  font-size: 0.75rem;
-  line-height: 1.45;
-}
-
-.contentSection {
-  background: var(--cream);
-  padding: clamp(4.5rem, 8vw, 7.5rem) var(--gutter);
-}
-
-.contentSectionDark {
-  background: #0d1b26;
-  color: var(--cream-light);
-  padding: clamp(4.5rem, 8vw, 7.5rem) var(--gutter);
-}
-
-.twoCol {
-  display: grid;
-  grid-template-columns: minmax(13rem, 0.62fr) minmax(0, 1.38fr);
-  gap: clamp(2.5rem, 8vw, 8rem);
 }
 
 .sectionLabel {
@@ -494,28 +369,16 @@
   max-width: 47rem;
 }
 
-.prose h2,
-.featureColumn h2,
-.techColumn h2 {
+.prose h2 {
   color: #183147;
   font-size: clamp(2.8rem, 5vw, 4.5rem);
   line-height: 0.92;
-}
-
-.contentSectionDark .prose h2,
-.contentSectionDark .featureColumn h2,
-.contentSectionDark .techColumn h2 {
-  color: var(--cream-light);
 }
 
 .prose p {
   margin-top: 1.35rem;
   color: #5d6d79;
   font-size: 1rem;
-}
-
-.contentSectionDark .prose p {
-  color: rgba(245, 240, 232, 0.72);
 }
 
 .featureList {
@@ -536,44 +399,6 @@
   position: absolute;
   left: 0;
   color: var(--gold-on-dark);
-}
-
-.screenshotSection {
-  background: #f7f2e9;
-  padding: clamp(4.5rem, 8vw, 7.5rem) var(--gutter);
-}
-
-.screenshotGrid {
-  display: flex;
-  flex-direction: column;
-  gap: 64px;
-  margin-top: 2.4rem;
-}
-
-.screenshotGrid .mediaImage {
-  width: 100%;
-  height: auto;
-  aspect-ratio: auto;
-  object-fit: contain;
-  object-position: top;
-}
-
-.screenshotGrid .mediaPlaceholder {
-  min-height: 24rem;
-  color: #183147;
-}
-
-.techWrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-top: 2rem;
-}
-
-.techWrap .techPill {
-  border-color: rgba(245, 240, 232, 0.25);
-  color: rgba(245, 240, 232, 0.8);
-  padding: 0.55rem 0.85rem;
 }
 
 .visitButton {
@@ -633,15 +458,6 @@
   .projectGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  .detailTitleRow,
-  .twoCol {
-    grid-template-columns: 1fr;
-  }
-
-  .detailTitleRow {
-    align-items: start;
-  }
 }
 
 @media (max-width: 42rem) {
@@ -660,7 +476,7 @@
   }
 
   .projectGrid,
-  .projectNav {
+.projectNav {
     grid-template-columns: 1fr;
   }
 
@@ -672,15 +488,6 @@
     padding: 28px;
   }
 
-  .detailHeroTop {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .screenshotGrid {
-    gap: 64px;
-  }
-
   .projectNav a + a {
     border-left: 0;
     border-top: 1px solid rgba(24, 42, 58, 0.18);
@@ -690,13 +497,13 @@
 
 @media (prefers-reduced-motion: reduce) {
   .projectCard,
-  .cardImage,
-  .cardLink span {
+.cardImage,
+.cardLink span {
     transition: none;
   }
 
   .projectCard:hover,
-  .projectCard:hover .cardImage {
+.projectCard:hover .cardImage {
     transform: none;
   }
 }

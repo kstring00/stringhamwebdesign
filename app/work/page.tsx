@@ -3,12 +3,14 @@ import type { Metadata } from "next";
 import Header from "../Header";
 import SiteFooter from "../SiteFooter";
 import { projects } from "../data/projects";
-import { PendingProjectCard, ProjectCard } from "./ProjectUI";
+import { ProjectCard } from "./ProjectUI";
 import styles from "./work.module.css";
 
 export const metadata: Metadata = {
-  title: "Work | Kyle Stringham Web Design & Development",
-  description: "Custom websites and web applications for small businesses.",
+  title: "Portfolio — Custom Websites for Small Businesses · Kyle Stringham, League City TX",
+  description:
+    "Case studies of custom websites and web applications built by Kyle Stringham for small businesses in League City, Houston and beyond: storage, ABA and autism support, exam prep, coaching.",
+  alternates: { canonical: "/work" },
 };
 
 export default function WorkPage() {
@@ -55,7 +57,6 @@ export default function WorkPage() {
               {projects.map((project, index) => (
                 <ProjectCard project={project} index={index} key={project.slug} />
               ))}
-              <PendingProjectCard index={projects.length} />
             </div>
           </div>
         </section>
