@@ -1,9 +1,17 @@
-export type ProjectStatus = "LIVE" | "IN PILOT" | "LAUNCHING SOON" | "CASE STUDY";
+/**
+ * Every place a project appears — the homepage cards, the /work grid, the
+ * case study rail and its previous/next links, and the sitemap — reads from
+ * this one list, so a status or image changed here changes everywhere.
+ */
+export type ProjectStatus = "LIVE" | "IN PILOT" | "CASE STUDY";
 
 export type ProjectScreenshot = {
   src: string;
   alt: string;
   caption: string;
+  /** Intrinsic pixels, so the <img> reserves its box before it loads. */
+  width: number;
+  height: number;
 };
 
 export type Project = {
@@ -15,6 +23,8 @@ export type Project = {
   tech: string[];
   heroImage: string;
   heroImageAlt: string;
+  heroImageWidth: number;
+  heroImageHeight: number;
   screenshots: ProjectScreenshot[];
   liveUrl: string | null;
   problem: string[];
@@ -33,11 +43,15 @@ export const projects: Project[] = [
     description: "A support and resource experience for Texas ABA families, built around practical guidance and clear pathways.",
     status: "IN PILOT",
     tech: ["Next.js", "TypeScript", "Responsive UI"],
-    heroImage: "/hero-crt/common-ground.png",
+    heroImage: "/work/common-ground/home.webp",
+    heroImageWidth: 1600,
+    heroImageHeight: 2438,
     heroImageAlt: "Common Ground homepage showing autism support resources for Texas families",
     screenshots: [
       {
-        src: "/hero-crt/common-ground.png",
+        src: "/work/common-ground/home.webp",
+        width: 1600,
+        height: 2438,
         alt: "Common Ground homepage showing autism support resources for Texas families",
         caption: "Common Ground homepage and primary support pathways.",
       },
@@ -63,16 +77,22 @@ export const projects: Project[] = [
     description: "An exam-prep storefront and member library organized around the BCBA task-list domains.",
     status: "LIVE",
     tech: ["Next.js", "TypeScript", "Member experience"],
-    heroImage: "/hero-crt/bcba-prep.png",
+    heroImage: "/work/bcba-prep/home.webp",
+    heroImageWidth: 1600,
+    heroImageHeight: 2052,
     heroImageAlt: "BCBA Prep domain library showing a stacked collection of exam study domains",
     screenshots: [
       {
         src: "/work/bcba-prep/library.png",
+        width: 800,
+        height: 441,
         alt: "BCBA Prep domain library with nine exam domains presented as stacked books",
         caption: "Domain library overview.",
       },
       {
         src: "/work/bcba-prep/contact.png",
+        width: 800,
+        height: 441,
         alt: "BCBA Prep contact page with a two-column support form and project navigation",
         caption: "Contact and support experience.",
       },
@@ -99,15 +119,21 @@ export const projects: Project[] = [
     status: "CASE STUDY",
     tech: ["Web design", "Responsive UI", "Conversion UX"],
     heroImage: "/work/lake-city-self-storage/drive-up.webp",
+    heroImageWidth: 1920,
+    heroImageHeight: 927,
     heroImageAlt: "Lake City Self Storage drive-up storage page, with an aerial photograph of the facility beside the storage-type explanation",
     screenshots: [
       {
         src: "/work/lake-city-self-storage/drive-up.webp",
+        width: 1920,
+        height: 927,
         alt: "Lake City Self Storage drive-up storage page, with an aerial photograph of the facility beside the storage-type explanation",
         caption: "Drive-up storage: the type decision answered first, with a real photograph of the access style rather than a stock unit.",
       },
       {
         src: "/work/lake-city-self-storage/drive-up-sizes.webp",
+        width: 1920,
+        height: 1063,
         alt: "Drive-up size cards showing a 5 by 10 and a 10 by 10 unit with square footage, monthly price, and what fits in each",
         caption: "Step two: size, price, and what actually fits, once the customer knows which storage type they need.",
       },
@@ -134,10 +160,14 @@ export const projects: Project[] = [
     status: "LIVE",
     tech: ["Next.js", "TypeScript", "Consultation booking"],
     heroImage: "/work/growthgains/home.webp",
+    heroImageWidth: 1920,
+    heroImageHeight: 1080,
     heroImageAlt: "GrowthGains homepage: the headline 'You know something needs to change' beside an arc from the current chapter to the next — clarity, direction, action — and a portrait of the coach",
     screenshots: [
       {
         src: "/work/growthgains/home.webp",
+        width: 1920,
+        height: 1080,
         alt: "GrowthGains homepage: the headline 'You know something needs to change' beside an arc from the current chapter to the next — clarity, direction, action — and a portrait of the coach",
         caption: "The opening frame: the reason someone is here said plainly, the path from this chapter to the next drawn beside the person who walks it with you, and one button.",
       },
@@ -165,11 +195,15 @@ export const projects: Project[] = [
     description: "A local-first journaling and life-planning app with optional cloud sync, built around faithfulness in small things.",
     status: "LIVE",
     tech: ["Vanilla JS", "Supabase", "Local-first", "Auth"],
-    heroImage: "/hero-crt/with-little-daily.png",
+    heroImage: "/work/with-little/daily.webp",
+    heroImageWidth: 1600,
+    heroImageHeight: 882,
     heroImageAlt: "With Little daily ledger dashboard showing planning, habits, must-dos, a thought journal, and scripture",
     screenshots: [
       {
-        src: "/hero-crt/with-little-daily.png",
+        src: "/work/with-little/daily.webp",
+        width: 1600,
+        height: 882,
         alt: "With Little daily ledger dashboard showing planning, habits, must-dos, a thought journal, and scripture",
         caption: "Daily Ledger dashboard and morning planning view.",
       },
@@ -196,11 +230,4 @@ export const projects: Project[] = [
 
 export function getProjectBySlug(slug: string) {
   return projects.find((project) => project.slug === slug);
-}
-
-export function canVisitProject(project: Project) {
-  return (
-    (project.status === "LIVE" || project.status === "IN PILOT") &&
-    Boolean(project.liveUrl)
-  );
 }
