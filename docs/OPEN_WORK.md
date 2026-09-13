@@ -166,6 +166,26 @@ pasting a live key; it will throw, not charge.
 | `STRIPE_WEBHOOK_SECRET` | Signature verification cannot run, so `/api/stripe/webhook` rejects everything. Payments would never be recorded — and the payment-before-transfer trigger depends on that record. |
 | `STRIPE_CARE_PRICE_ID` | Only a fallback when `/api/portal/admin/care-plan` is called without a `priceId`; that route 400s if neither is present. |
 
+### Analytics — set only after the privacy policy exists
+
+| Variable | Missing behaviour |
+|---|---|
+| `NEXT_PUBLIC_CLARITY_ID` | Silent no-op: `app/ClarityAnalytics.tsx` returns without importing or requesting anything, so the site runs with no analytics at all. That is the correct state for local and preview builds. Set it to the Clarity project id under **Production only**. **Public** — inlined into the client bundle and visible in the page source, so it is an account id, not a secret. |
+
+**Read `/privacy` before setting it.** Microsoft Clarity records session
+replays, so the privacy policy had to exist first. It now does
+(`content/privacy.md`, rendered at `/privacy`, linked from the footer and the
+quote form) and it names Clarity, says form fields are masked, says the portal
+is excluded, and links Microsoft's privacy statement. The remaining step is
+yours: read it, make sure the retention periods it commits to match how you
+actually work, then set this variable. The code is inert until you do, so that
+is the moment recording starts.
+
+The portal is excluded in code regardless of this variable: `ClarityAnalytics`
+returns early on `/portal` and anything under it, so no client dashboard,
+timesheet or invoice is ever recorded. Form inputs keep Clarity's default
+masking; nothing in the app opts a field out of it.
+
 ### Not an environment variable, but in the same failure class
 
 `https://www.stringhamwebdesign.com/portal` must be listed in Supabase under

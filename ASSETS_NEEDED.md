@@ -133,8 +133,14 @@ let it take the gold and navy from CSS.
 
 ## 5. Copy that only you can write
 
-- **Legal pages** — a privacy policy and terms. Neither route exists yet;
-  they are needed before the care-plan subscription is offered publicly.
+- **Terms of service** — still missing. Needed before the care-plan
+  subscription is offered publicly. The privacy policy is written and live at
+  `/privacy` (`content/privacy.md`), linked from the footer on every page and
+  from the quote form; it covers Clarity, so the analytics gate is cleared.
+  Read it before enabling analytics and correct anything that does not match
+  how you actually work — it describes retention periods (two years for an
+  unconverted brief, ninety days after handoff for portal data) that are a
+  commitment once published.
 - **`/quote/received` reply-date copy** is done; nothing outstanding there.
 - **Testimonials** — `/pricing` promises one from every client at launch.
   None are on the site yet; there is no slot for them until there is one to

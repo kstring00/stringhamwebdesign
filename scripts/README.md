@@ -316,3 +316,57 @@ actually hold at 120px.
 
 `about-check.js` (the hero) now honours BASE as well.
 
+
+## quote-package-check.js
+
+Carrying a tier from /pricing into the brief. Each tier's "Get started" links
+to /quote?package=<id> while every generic "Start a project" stays bare; the
+brief opens with that tier selected and a gold note naming it; a missing,
+bogus or repeated param opens unselected with "Not sure yet" among the four
+choices; "change" clears both the selection and the query string without
+moving anything below it; the note and the fallback help line are the same
+height at 1440, 768 and 360; measured layout shift is zero on load; and a real
+submission of each tier walks all seven questions and lands on a receipt that
+records the right package.
+
+    BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/quote-package-check.js
+
+The API route rate-limits to five briefs per IP per ten minutes, so the run
+sends four and a second run inside that window will fail on the submissions.
+Restart the server to clear the counter — it is held in memory.
+
+## clarity-check.js
+
+Microsoft Clarity. Must run against a production build, because the component
+does nothing in development by design. Asserts the tag is requested on every
+public page and only after the load event, that the request carries this
+project's id, that nothing at all is requested on /portal, and that clicking
+through to the portal from the site leaves no tag behind. It also asserts the
+brief uses real form controls with no masking opt-outs, which is what keeps
+Clarity's default input masking meaningful.
+
+Expecting the tag, against a build made with the id set:
+
+    BASE=http://localhost:3300 CLARITY_ID=xxxxxxxxxx NODE_PATH=./node_modules node scripts/clarity-check.js
+
+Expecting no tag at all, against a build made without it:
+
+    BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/clarity-check.js
+
+Both runs are worth doing: the second is what proves an unset id really is a
+silent no-op rather than a broken page.
+
+## privacy-check.js
+
+The /privacy page. Asserts one h1, a page-specific title and a real meta
+description, a last-updated date in both machine and human form, every
+section the policy has to carry, and the claims it has to make — Clarity by
+name, masked form fields, the portal excluded, cookies, how to opt out, and
+each processor actually in use. Microsoft's privacy statement has to be
+linked rather than just named, every internal link on the page has to resolve,
+and the footer link has to be present and a 44px target on every page that
+renders the footer. Also checks the quote form's consent line and that
+clicking it lands on the policy, no overflow at 360 and 768, and no
+placeholder text.
+
+    BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/privacy-check.js

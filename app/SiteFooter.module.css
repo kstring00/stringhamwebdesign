@@ -205,11 +205,28 @@
   border-top: 1px solid var(--hairline);
 }
 
-.bottom span {
+.bottom span,
+.legal {
   color: rgba(245, 240, 232, 0.58);
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   line-height: 1.5;
+}
+
+/* Sits opposite the copyright. The 44px target is on the link itself rather
+   than the bar, so it is reachable on a phone where the two lines wrap. */
+.legal {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  border-bottom: 1px solid transparent;
+  text-decoration: none;
+  transition: color 180ms ease, border-color 180ms ease;
+}
+
+.legal:hover {
+  color: var(--gold-on-dark);
+  border-bottom-color: rgba(226, 197, 138, 0.7);
 }
 
 /* ---------- responsive ---------- */

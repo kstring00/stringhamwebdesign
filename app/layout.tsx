@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { startingLine } from "./data/pricing";
+import ClarityAnalytics from "./ClarityAnalytics";
 import SiteMotion from "./SiteMotion";
 
 const cormorant = Cormorant_Garamond({
@@ -39,6 +40,9 @@ export default function RootLayout({
       <body>
         {children}
         <SiteMotion />
+        {/* Usage analytics. Production only, only with NEXT_PUBLIC_CLARITY_ID
+            set, never on the portal, and never before the window has loaded. */}
+        <ClarityAnalytics />
       </body>
     </html>
   );
