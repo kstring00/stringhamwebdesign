@@ -23,8 +23,15 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   if (!project) return {};
 
   return {
-    title: `${project.title} | Kyle Stringham`,
-    description: project.summary,
+    title: `${project.title} — Web design case study by Kyle Stringham, League City TX`,
+    description: `${project.summary} A custom website by Kyle Stringham, web designer and developer in League City, Texas.`,
+    alternates: { canonical: `/work/${project.slug}` },
+    openGraph: {
+      title: `${project.title} — a custom website by Kyle Stringham`,
+      description: project.summary,
+      url: `/work/${project.slug}`,
+      images: [{ url: project.heroImage, width: project.heroImageWidth, height: project.heroImageHeight, alt: project.heroImageAlt }],
+    },
   };
 }
 
@@ -42,6 +49,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     src: project.heroImage,
     alt: project.heroImageAlt,
     caption: "",
+    width: project.heroImageWidth,
+    height: project.heroImageHeight,
   };
   const remainingScreenshots = project.screenshots.slice(1);
 
@@ -94,9 +103,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <article className={detailStyles.projectContent} data-reveal-group>
             <figure className={detailStyles.heroFigure}>
               <img
-                src={heroScreenshot.src || project.heroImage}
+                src={heroScreenshot.src}
                 alt={heroScreenshot.alt}
+                width={heroScreenshot.width}
+                height={heroScreenshot.height}
                 loading="eager"
+                fetchPriority="high"
                 decoding="async"
               />
             </figure>
@@ -130,17 +142,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <div className={detailStyles.screenshotStack} aria-label={`${project.title} screenshots`}>
                 {remainingScreenshots.map((image, index) => (
                   <figure className={detailStyles.screenshotFigure} key={`${image.caption}-${index}`}>
-                    {image.src ? (
-                      <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
-                    ) : (
-                      <div
-                        className={detailStyles.screenshotPlaceholder}
-                        role="img"
-                        aria-label={image.alt}
-                      >
-                        <span>Screenshot coming soon</span>
-                      </div>
-                    )}
+                    <img
+                      src={image.src}
+                      alt={image.alt}
+                      width={image.width}
+                      height={image.height}
+                      loading="lazy"
+                      decoding="async"
+                    />
                     <figcaption>{image.caption}</figcaption>
                   </figure>
                 ))}

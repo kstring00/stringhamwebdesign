@@ -370,3 +370,42 @@ clicking it lands on the policy, no overflow at 360 and 768, and no
 placeholder text.
 
     BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/privacy-check.js
+
+## prelaunch-check.js
+
+The pre-launch sweep, written for the 2026-09-13 audit. Crawls the public
+site from `/` following every internal link (the portal, the API, the
+per-visitor receipt and the `/start` alias are skipped on purpose) and
+asserts, per page: a 200 and no page errors, exactly one h1, a title that is
+unique across the site and names the service or the place, a meta
+description, an OpenGraph image and Twitter card, the favicon and Apple
+touch icon linked, every `<img>` with an alt attribute, the footer's privacy
+link and a current copyright year, the quote reachable, and the same seven
+header items. Then: every external link with `target="_blank"` carries
+`noopener`; the 404 page returns a real 404, wears the site header and
+footer, is styled and noindex; `robots.txt` keeps the portal and API out and
+names the sitemap; `sitemap.xml` lists every crawled page and nothing else;
+the icon and social image are served. Finally, at 375px on every page: no
+horizontal overflow, and every link, button and control at least 44px tall
+(inline links inside running text are exempt, per WCAG 2.5.8, and an input
+inside a label is measured by its label), plus the two named risks — the
+homepage process carousel and the pricing portal card — fitting the viewport
+with tappable controls.
+
+    BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/prelaunch-check.js
+
+Saves `prelaunch-home-375.png` and `prelaunch-pricing-375.png`.
+
+### Legacy checks fixed in the same audit
+
+`footer-check.js`, `pricing-check.js`, `process-check.js` and
+`site-motion-check.js` hardcoded `localhost:3000` and now honour `BASE` like
+the rest. `footer-check.js` expected no privacy link and `pricing-check.js`
+expected a nav without Resources; both expectations were older than the
+site. `pricing-portal-check.js` now ignores the favicon request, which is
+the page's, not the card's. `work-hero-check.js` waited for every image to
+finish loading and hung forever on lazy images below the fold; it now waits
+only for eager images, and for five seconds at most. `site-motion-check.js`
+settles for 2.5 seconds after scrolling through rather than 1.6, which the
+longer /about copy needed — a scroll-through probe confirmed nothing on the
+page actually stays hidden.

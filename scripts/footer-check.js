@@ -17,7 +17,7 @@ const ratio = (a, c) => { const [x, y] = [lum(a), lum(c)].sort((m, n) => n - m);
     const ctx = await b.newContext({ viewport: { width: w, height: h }, reducedMotion: 'reduce' });
     const p = await ctx.newPage();
     const errs = []; p.on('pageerror', e => errs.push(e.message));
-    await p.goto('http://localhost:3000/', { waitUntil: 'networkidle' });
+    await p.goto((process.env.BASE || 'http://localhost:3000') + '/', { waitUntil: 'networkidle' });
     await p.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     await p.waitForTimeout(500);
 
@@ -40,10 +40,10 @@ const ratio = (a, c) => { const [x, y] = [lum(a), lum(c)].sort((m, n) => n - m);
       ok('email is a mailto link', info.links.some(l => l.href === 'mailto:kyle@stringhamwebdesign.com'), JSON.stringify(info.links.filter(l => (l.href || '').startsWith('mailto'))));
       ok('exactly one "Client portal" in the footer', info.portalCount === 1, `${info.portalCount} found`);
       ok(`bottom bar shows the current year (${new Date().getFullYear()})`, (info.bottom || '').includes(String(new Date().getFullYear())) && (info.bottom || '').includes('Stringham Web Design'), info.bottom);
-      ok('no privacy link (no such page exists)', !info.links.some(l => /privacy|terms|legal/i.test(l.href || '')), JSON.stringify(info.links.map(l => l.href)));
+      ok('links the privacy policy (the page exists as of 2026-09-13)', info.links.some(l => l.href === '/privacy'), JSON.stringify(info.links.map(l => l.href)));
       // Every internal href must resolve, not 404.
       for (const href of [...new Set(info.links.map(l => l.href).filter(x => x && x.startsWith('/')))]) {
-        const res = await p.request.get('http://localhost:3000' + href);
+        const res = await p.request.get((process.env.BASE || 'http://localhost:3000') + href);
         ok(`link ${href} resolves (${res.status()})`, res.status() < 400);
       }
     }
@@ -88,7 +88,7 @@ const ratio = (a, c) => { const [x, y] = [lum(a), lum(c)].sort((m, n) => n - m);
   for (const [w, h, name] of [[1440, 900, 'desktop'], [375, 812, 'mobile']]) {
     const ctx = await b.newContext({ viewport: { width: w, height: h }, reducedMotion: 'reduce' });
     const p = await ctx.newPage();
-    await p.goto('http://localhost:3000/', { waitUntil: 'networkidle' });
+    await p.goto((process.env.BASE || 'http://localhost:3000') + '/', { waitUntil: 'networkidle' });
     await p.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     await p.waitForTimeout(500);
     // The masthead is fixed, so in a full-page capture it paints over whatever

@@ -45,6 +45,8 @@ export default function SelectedWork() {
                   <img
                     src={project.heroImage}
                     alt={project.heroImageAlt}
+                    width={project.heroImageWidth}
+                    height={project.heroImageHeight}
                     loading="lazy"
                     decoding="async"
                   />

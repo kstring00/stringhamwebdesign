@@ -143,8 +143,6 @@ export default function PortalClient() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageText, setMessageText] = useState("");
   const [messageBusy, setMessageBusy] = useState(false);
-  const [email, setEmail] = useState("");
-  const [loginStatus, setLoginStatus] = useState<"idle" | "sending" | "sent">("idle");
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
   const [uploadBusy, setUploadBusy] = useState(false);
@@ -277,28 +275,6 @@ export default function PortalClient() {
     0,
   );
 
-  async function requestMagicLink(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setError("");
-    setLoginStatus("sending");
-
-    const response = await fetch("/api/portal/auth/request-link", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
-
-    if (!response.ok) {
-      const payload = (await response.json().catch(() => null)) as
-        | { error?: string }
-        | null;
-      setError(payload?.error || "Could not send the sign-in link.");
-      setLoginStatus("idle");
-      return;
-    }
-
-    setLoginStatus("sent");
-  }
 
   async function logout() {
     await fetch("/api/portal/auth/session", { method: "DELETE" });

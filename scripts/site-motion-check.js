@@ -17,7 +17,7 @@ const hiddenOf = els => els.filter(e => { const cs = getComputedStyle(e); return
       let ctx = await b.newContext({ viewport: { width: w, height: h }, reducedMotion: 'reduce' });
       let p = await ctx.newPage();
       let errs = []; p.on('pageerror', e => errs.push(e.message));
-      await p.goto('http://localhost:3000' + route, { waitUntil: 'networkidle' });
+      await p.goto((process.env.BASE || 'http://localhost:3000') + route, { waitUntil: 'networkidle' });
       await p.waitForTimeout(250);
       const marked = await p.$$eval(SEL, els => els.length);
       const hiddenReduced = await p.$$eval(SEL, hiddenOf);
@@ -30,12 +30,12 @@ const hiddenOf = els => els.filter(e => { const cs = getComputedStyle(e); return
       ctx = await b.newContext({ viewport: { width: w, height: h } });
       p = await ctx.newPage();
       errs = []; p.on('pageerror', e => errs.push(e.message));
-      await p.goto('http://localhost:3000' + route, { waitUntil: 'networkidle' });
+      await p.goto((process.env.BASE || 'http://localhost:3000') + route, { waitUntil: 'networkidle' });
       await p.waitForTimeout(1400);
       const heroHidden = await p.$$eval('[data-hero]', hiddenOf);
       ok(`${w}px motion: hero entrance completed`, heroHidden.length === 0, JSON.stringify(heroHidden.slice(0, 6)));
       await p.evaluate(async () => { const h = document.documentElement.scrollHeight; for (let y = 0; y <= h; y += 280) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 55)); } });
-      await p.waitForTimeout(1600);
+      await p.waitForTimeout(2500);
       const stillHidden = await p.$$eval(SEL, hiddenOf);
       ok(`${w}px motion: every reveal completed after scrolling through`, stillHidden.length === 0, JSON.stringify(stillHidden.slice(0, 6)));
       ok(`${w}px no page errors`, errs.length === 0, JSON.stringify(errs));

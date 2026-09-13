@@ -13,7 +13,7 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
     const ctx = await b.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1 });
     const p = await ctx.newPage();
     const errs = []; p.on('pageerror', e => errs.push(e.message));
-    await p.goto('http://localhost:3000/pricing', { waitUntil: 'networkidle' });
+    await p.goto((process.env.BASE || 'http://localhost:3000') + '/pricing', { waitUntil: 'networkidle' });
     await p.waitForTimeout(600);
 
     console.log(`\n--- ${name} ${w}px ---`);
@@ -36,7 +36,7 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
       ok('exactly one h1', meta.h1s.length === 1, JSON.stringify(meta.h1s));
       ok('title mentions League City', /League City/.test(meta.title));
       ok('description mentions Houston + custom web design', /Houston/.test(meta.description) && /custom web design/i.test(meta.description));
-      ok('nav order Home / About / Portfolio / Pricing / Portal', JSON.stringify(meta.nav) === JSON.stringify(['Home', 'About', 'Portfolio', 'Pricing', 'Portal']), JSON.stringify(meta.nav));
+      ok('nav order Home / About / Portfolio / Resources / Pricing / Portal', JSON.stringify(meta.nav) === JSON.stringify(['Home', 'About', 'Portfolio', 'Resources', 'Pricing', 'Portal']), JSON.stringify(meta.nav));
       ok('Pricing is the active nav item', meta.active === 'Pricing', meta.active);
       ok('every price shows as "from $X"', meta.fromCount === 3, `${meta.fromCount}/3 — ${JSON.stringify(meta.priceTexts)}`);
       // Heading order never skips a level
@@ -82,7 +82,7 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
     {
       const sctx = await b.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, reducedMotion: 'reduce' });
       const sp = await sctx.newPage();
-      await sp.goto('http://localhost:3000/pricing', { waitUntil: 'networkidle' });
+      await sp.goto((process.env.BASE || 'http://localhost:3000') + '/pricing', { waitUntil: 'networkidle' });
       // Lazy images below the fold have not decoded at networkidle; scroll
       // through so they request, then wait for every one before capturing.
       await sp.evaluate(async () => { const h = document.documentElement.scrollHeight; for (let y = 0; y <= h; y += 400) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 40)); } window.scrollTo(0, 0); });
@@ -98,7 +98,7 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
   {
     const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
     const p = await ctx.newPage();
-    await p.goto('http://localhost:3000/pricing', { waitUntil: 'networkidle' });
+    await p.goto((process.env.BASE || 'http://localhost:3000') + '/pricing', { waitUntil: 'networkidle' });
     await p.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     await p.waitForTimeout(900);
     const imgs = await p.$$eval('img[src^="/pricing/"]', els => els.map(e => ({ src: e.getAttribute('src'), alt: e.getAttribute('alt'), w: e.naturalWidth, complete: e.complete })));
@@ -147,7 +147,7 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
   {
     const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
     const p = await ctx.newPage();
-    await p.goto('http://localhost:3000/pricing', { waitUntil: 'networkidle' });
+    await p.goto((process.env.BASE || 'http://localhost:3000') + '/pricing', { waitUntil: 'networkidle' });
     await p.waitForTimeout(300);
     const hidden = await p.$$eval('[data-reveal], [data-hero], [data-featured], [data-phase-num]', els => els.filter(e => { const cs = getComputedStyle(e); return cs.opacity !== '1' || cs.visibility === 'hidden' || (cs.transform !== 'none' && cs.transform !== 'matrix(1, 0, 0, 1, 0, 0)'); }).map(e => e.tagName + ':' + (e.textContent || '').trim().slice(0, 20)));
     ok('reduced motion: every animated element is in its final state', hidden.length === 0, JSON.stringify(hidden));
@@ -159,7 +159,7 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
   // Homepage anchor line
   const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
   const p = await ctx.newPage();
-  await p.goto('http://localhost:3000/', { waitUntil: 'networkidle' });
+  await p.goto((process.env.BASE || 'http://localhost:3000') + '/', { waitUntil: 'networkidle' });
   const anchor = await p.evaluate(() => { const a = document.querySelector('p > a[href="/pricing"]'); return a ? a.closest('p')?.textContent.replace(/\s+/g, ' ').trim() : null; });
   ok('homepage anchor line present and links to /pricing', /Projects start at \$900\./.test(anchor || ''), anchor);
   await p.locator('main, body').first();

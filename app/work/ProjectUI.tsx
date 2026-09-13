@@ -10,14 +10,12 @@ import styles from "./work.module.css";
 const statusClass: Record<ProjectStatus, string> = {
   LIVE: styles.statusLive,
   "IN PILOT": styles.statusPilot,
-  "LAUNCHING SOON": styles.statusSoon,
   "CASE STUDY": styles.statusCaseStudy,
 };
 
 const statusClassOnDark: Record<ProjectStatus, string> = {
   LIVE: styles.statusLive,
   "IN PILOT": styles.statusPilot,
-  "LAUNCHING SOON": styles.statusSoonDark,
   "CASE STUDY": styles.statusCaseStudyDark,
 };
 
@@ -40,49 +38,6 @@ export function StatusBadge({
     >
       {status}
     </span>
-  );
-}
-
-export function ProjectMedia({
-  src,
-  alt,
-  title,
-  caption,
-  className = "",
-  loading = "lazy",
-}: {
-  src: string;
-  alt: string;
-  title: string;
-  caption?: string;
-  className?: string;
-  loading?: "lazy" | "eager";
-}) {
-  const [imageFailed, setImageFailed] = useState(false);
-
-  return (
-    <figure className={`${styles.mediaFigure} ${className}`}>
-      {src && !imageFailed ? (
-        <img
-          className={styles.mediaImage}
-          src={src}
-          alt={alt}
-          loading={loading}
-          decoding="async"
-          onError={() => setImageFailed(true)}
-        />
-      ) : (
-        <div
-          className={styles.mediaPlaceholder}
-          role="img"
-          aria-label={alt}
-        >
-          <span>Preview coming soon</span>
-          <strong>{title}</strong>
-        </div>
-      )}
-      {caption ? <figcaption>{caption}</figcaption> : null}
-    </figure>
   );
 }
 
@@ -112,6 +67,8 @@ export function ProjectCard({
                 className={`${styles.cardImage} ${project.slug === "bcba-prep" ? fixStyles.bcbaImage : ""}`}
                 src={project.heroImage}
                 alt={project.heroImageAlt}
+                width={project.heroImageWidth}
+                height={project.heroImageHeight}
                 loading="lazy"
                 decoding="async"
                 onError={() => setImageFailed(true)}
@@ -173,46 +130,5 @@ export function ProjectCard({
         </div>
       </div>
     </article>
-  );
-}
-
-export function PendingProjectCard({ index }: { index: number }) {
-  const number = String(index + 1).padStart(2, "0");
-
-  return (
-    <Link
-      className={`${styles.projectCard} ${fixStyles.pendingCard}`}
-      href="/quote"
-      aria-label="Start a project with Kyle Stringham"
-    >
-      <div className={`${styles.cardMedia} ${fixStyles.pendingMedia}`}>
-        <div className={fixStyles.pendingFrame} aria-hidden="true">
-          <span>A place for what&apos;s next</span>
-        </div>
-        <span className={styles.cardIndex}>{number}</span>
-        <span className={styles.cardStatus}>
-          <span className={`${styles.statusBadge} ${fixStyles.statusPending}`}>
-            PENDING
-          </span>
-        </span>
-      </div>
-
-      <div className={styles.cardContent}>
-        <div className={styles.cardBody}>
-          <h3>Yours here</h3>
-          <p className={styles.cardDescription}>
-            The next case study starts with a real business problem worth solving.
-          </p>
-          <div className={styles.techList} aria-label="Project availability">
-            <span className={styles.techPill}>Custom build</span>
-            <span className={styles.techPill}>Open slot</span>
-          </div>
-        </div>
-
-        <span className={`${styles.cardLink} ${fixStyles.cardActionLink}`}>
-          Start a project <span>→</span>
-        </span>
-      </div>
-    </Link>
   );
 }

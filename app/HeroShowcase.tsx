@@ -51,12 +51,15 @@ export default function HeroShowcase() {
 
             <span className={styles.goldRule} aria-hidden="true" data-hero data-rule />
 
+            {/* One dominant action. The quote is the thing the page exists to
+                start; the work is there for the visitor who needs convincing
+                first, and reads as the quieter of the two. */}
             <div className={styles.actions} data-hero>
-              <a className={styles.primary} href="/work">
-                See the work <Arrow />
+              <a className={styles.primary} href="/quote">
+                Start a project <Arrow />
               </a>
-              <a className={styles.secondary} href="/quote">
-                Start a project
+              <a className={styles.secondary} href="/work">
+                See the work
               </a>
             </div>
           </div>
@@ -67,7 +70,7 @@ export default function HeroShowcase() {
           </div>
         </div>
 
-        <div className={styles.highlights} aria-label="What you can expect" data-reveal-group>
+        <div className={styles.highlights} role="group" aria-label="What you can expect" data-reveal-group>
           {highlights.map(([title, text]) => (
             <div className={styles.highlight} key={title}>
               <strong>{title}</strong>

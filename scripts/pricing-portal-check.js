@@ -220,8 +220,8 @@ const readSlides = () => ({
     const imgs = [...new Set(requests.filter(u => /\.(png|jpe?g|webp|avif|gif|svg)(\?|$)/i.test(u)).map(u => u.split('/').pop()))];
     // close-forest.webp is the close band's lazy photograph, pulled in only
     // because this check scrolls to the bottom to test the off-screen pause.
-    const PRE_EXISTING = ['ks-dove-mark.png', 'close-forest.webp', 'close-forest-1200.webp'];
-    ok('the card adds no image request', imgs.every(x => PRE_EXISTING.includes(x)), JSON.stringify(imgs));
+    const PRE_EXISTING = ['ks-dove-mark.png', 'close-forest.webp', 'close-forest-1200.webp', 'icon.png'];
+    ok('the card adds no image request', imgs.every(x => PRE_EXISTING.includes(x.split('?')[0])), JSON.stringify(imgs));
     const fonts = [...new Set(requests.filter(u => /\.woff2?(\?|$)/i.test(u)))];
     ok('no additional web font', fonts.length <= 3, `${fonts.length} files`);
     ok('no page errors', errs.length === 0, JSON.stringify(errs));

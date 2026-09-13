@@ -249,8 +249,8 @@ only because a real run exposed what the stub could not.
 > Superseded by `docs/OPEN_WORK.md`, which is the maintained list. Kept here
 > for the reasoning behind each item.
 
-- **Section 7 audit.** The button exists at `app/TransmissionSubmit.tsx` with a
-  demo page at `/transmission-demo`. It was built before this work and has
+- **Section 7 audit.** The button exists at `app/TransmissionSubmit.tsx` (its
+  `/transmission-demo` page was removed in the 2026-09-13 pre-launch audit). It was built before this work and has
   never been checked against the written spec (idle carrier pulse, hover
   scanline + ghost arrow + 2–3px pull, segmented sending meter with monospace
   counter, sent → gold rule, error → stalled meter with red-shifted gold,

@@ -2,7 +2,6 @@
 
 import {
   ButtonHTMLAttributes,
-  CSSProperties,
   PointerEvent,
   useEffect,
   useRef,

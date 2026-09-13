@@ -2,7 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { phases } from "../data/pricing";
+import { phases, tiers } from "../data/pricing";
+
+/**
+ * The mock-up shows the Standard tier, so its figures come from the tier
+ * itself: the timeline verbatim, and the page count parsed out of the
+ * "Up to N pages" line, so a change to pricing data changes the preview too.
+ */
+const STANDARD = tiers.find((tier) => tier.id === "standard") ?? tiers[0];
+const STANDARD_PAGES = STANDARD.includes.find((line) => /pages/i.test(line))?.match(/\d+/)?.[0] ?? "6";
 import styles from "./pricing.module.css";
 
 /**
@@ -41,9 +49,9 @@ const SLIDES: Slide[] = [
     label: "Scope agreed",
     kind: "rows",
     rows: [
-      { label: "Pages", value: "6" },
+      { label: "Pages", value: STANDARD_PAGES },
       { label: "Booking integration", value: "Included" },
-      { label: "Timeline", value: "3–5 weeks" },
+      { label: "Timeline", value: STANDARD.timeline },
       { label: "Deposit", value: "Received, slot reserved" },
     ],
   },

@@ -19,10 +19,39 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+/**
+ * Site-wide defaults. Every page sets its own title and description; what
+ * lives here is what they share — the origin every relative URL resolves
+ * against, the social card, and the title suffix. app/icon.png,
+ * app/apple-icon.png and app/opengraph-image.png are picked up by file
+ * convention and need no entry.
+ */
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.stringhamwebdesign.com").replace(/\/+$/, "");
+
 export const metadata: Metadata = {
-  title: "Kyle Stringham — websites",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Kyle Stringham — Custom Web Design & Development, League City TX",
+    template: "%s",
+  },
   description:
-    `Custom websites for small businesses, from focused sites to advanced builds with integrations, automation, and AI. ${startingLine} Every one is scoped after we talk.`,
+    `Custom websites for small businesses in League City and the Houston area, from focused sites to advanced builds with integrations, automation, and AI. ${startingLine} Every one is scoped after we talk.`,
+  applicationName: "Stringham Web Design",
+  authors: [{ name: "Kyle Stringham", url: SITE_URL }],
+  creator: "Kyle Stringham",
+  openGraph: {
+    type: "website",
+    siteName: "Stringham Web Design",
+    locale: "en_US",
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

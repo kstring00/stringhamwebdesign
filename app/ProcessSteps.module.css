@@ -423,8 +423,8 @@
 }
 
 .homeArrow {
-  width: 2.8rem;
-  height: 2.8rem;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   border: 1px solid rgba(111, 86, 32, 0.6);
@@ -713,8 +713,9 @@
   }
 
   .homeArrow {
-    width: 2.6rem;
-    height: 2.6rem;
+    /* Never below the 44px tap target, whatever the root font size does. */
+    width: 44px;
+    height: 44px;
   }
 
   .homeDetail {
@@ -820,8 +821,8 @@
   }
 
   .homeArrow {
-    width: 2.4rem;
-    height: 2.4rem;
+    width: 44px;
+    height: 44px;
   }
 
   .homeTabs {
