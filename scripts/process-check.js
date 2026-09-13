@@ -17,7 +17,7 @@ const ratio = (a, c) => { const [x, y] = [lum(a), lum(c)].sort((m, n) => n - m);
     const ctx = await b.newContext({ viewport: { width: w, height: h }, reducedMotion: 'reduce' });
     const p = await ctx.newPage();
     const errs = []; p.on('pageerror', e => errs.push(e.message));
-    await p.goto('http://localhost:3000/', { waitUntil: 'networkidle' });
+    await p.goto((process.env.BASE || 'http://localhost:3000') + '/', { waitUntil: 'networkidle' });
     await p.evaluate(async () => { const hh = document.documentElement.scrollHeight; for (let y = 0; y <= hh; y += 400) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 50)); } });
     await p.evaluate(() => Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }))));
     await p.waitForTimeout(400);
@@ -86,7 +86,7 @@ const ratio = (a, c) => { const [x, y] = [lum(a), lum(c)].sort((m, n) => n - m);
     {
       const rctx = await b.newContext({ viewport: { width: w, height: h }, reducedMotion: 'reduce' });
       const rp = await rctx.newPage();
-      await rp.goto('http://localhost:3000/', { waitUntil: 'networkidle' });
+      await rp.goto((process.env.BASE || 'http://localhost:3000') + '/', { waitUntil: 'networkidle' });
       await rp.waitForTimeout(300);
       await rp.locator('#process [role="tab"]').nth(4).click();
       const immediate = await rp.$eval('#process [role="tabpanel"]', e => [...e.querySelectorAll('[data-step-part]')].every(d => getComputedStyle(d).opacity === '1'));

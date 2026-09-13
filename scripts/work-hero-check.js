@@ -20,7 +20,7 @@ const ratio = (a, c) => { const [x, y] = [lum(a), lum(c)].sort((m, n) => n - m);
     const p = await ctx.newPage();
     const errs = []; p.on('pageerror', e => errs.push(e.message));
     await p.goto(BASE + '/work', { waitUntil: 'networkidle' });
-    await p.evaluate(() => Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }))));
+    await p.evaluate(() => Promise.race([Promise.all([...document.images].filter(i => i.loading !== 'lazy').map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }))), new Promise(r => setTimeout(r, 5000))]));
     await p.waitForTimeout(300);
 
     const info = await p.evaluate(() => {
@@ -102,7 +102,7 @@ const ratio = (a, c) => { const [x, y] = [lum(a), lum(c)].sort((m, n) => n - m);
     const ctx = await b.newContext({ viewport: { width: w, height: h }, reducedMotion: 'reduce' });
     const p = await ctx.newPage();
     await p.goto(BASE + '/work', { waitUntil: 'networkidle' });
-    await p.evaluate(() => Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }))));
+    await p.evaluate(() => Promise.race([Promise.all([...document.images].filter(i => i.loading !== 'lazy').map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }))), new Promise(r => setTimeout(r, 5000))]));
     await p.waitForTimeout(500);
     const box = await p.evaluate(() => {
       const r = document.querySelector('#top').getBoundingClientRect();
