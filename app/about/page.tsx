@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import Header from "../Header";
 import headerStyles from "../Header.module.css";
 import SiteFooter from "../SiteFooter";
-import { rangeLine } from "../data/pricing";
 import styles from "./about.module.css";
 
 export const metadata: Metadata = {
@@ -39,8 +38,8 @@ const FACTS = [
     icon: <><rect x="2" y="5" width="12" height="8.5" rx="1.5" /><path d="M5.5 5V3.5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1V5M2 8.5h12" /></>,
   },
   {
-    label: `Most sites ${rangeLine}`,
-    detail: "fixed price, in writing",
+    label: "Free consultation",
+    detail: "then a fixed price, in writing",
     icon: <><path d="M2 8.5V3a1 1 0 0 1 1-1h5.5l5.5 5.5-6 6L2 8.5z" /><circle cx="5.5" cy="5.5" r="1" /></>,
   },
 ];
@@ -214,9 +213,8 @@ export default function AboutPage() {
                   isn&apos;t worth what I&apos;m asking, I haven&apos;t scoped it right.
                 </p>
                 <p data-reveal>
-                  Every project gets a fixed price in writing before I start. Most sites
-                  land between {rangeLine}; larger builds are quoted on their own. The
-                  number comes after a free call, and the{" "}
+                  Every project gets a fixed price in writing before I start. The number
+                  comes after a free call, and the{" "}
                   <a href="/#pricing">homepage explains how that works</a>.
                 </p>
 

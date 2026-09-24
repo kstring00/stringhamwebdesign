@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
-import { rangeLine } from "./data/pricing";
 import ClarityAnalytics from "./ClarityAnalytics";
 import HashScroll from "./HashScroll";
 import SiteMotion from "./SiteMotion";
@@ -36,7 +35,7 @@ export const metadata: Metadata = {
     template: "%s",
   },
   description:
-    `Custom websites for small businesses in League City and the Houston area, from focused sites to advanced builds with integrations, automation, and AI. Most sites land between ${rangeLine}; every one is quoted after a free consultation.`,
+    `Custom websites for small businesses in League City and the Houston area, from focused sites to advanced builds with integrations, automation, and AI. Every one is quoted after a free consultation, as a fixed price in writing.`,
   applicationName: "Stringham Web Design",
   authors: [{ name: "Kyle Stringham", url: SITE_URL }],
   creator: "Kyle Stringham",
