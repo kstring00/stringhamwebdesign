@@ -6,11 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
-    "db:link": "supabase link",
-    "db:status": "supabase migration list --linked",
-    "db:push": "supabase db push --linked",
-    "db:diff": "supabase db diff --linked"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@microsoft/clarity": "^1.0.2",
@@ -31,7 +27,6 @@
     "@types/react-dom": "^19.2.7",
     "eslint": "^9.39.5",
     "eslint-plugin-react-hooks": "^7.1.1",
-    "supabase": "^2.117.0",
     "typescript": "^7.0.2"
   }
 }
