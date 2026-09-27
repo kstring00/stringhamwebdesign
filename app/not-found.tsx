@@ -1,66 +1,25 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
-import Header from "./Header";
-import headerStyles from "./Header.module.css";
-import SiteFooter from "./SiteFooter";
-import { siteNav } from "./data/nav";
-import styles from "./NotFound.module.css";
+import { cta, nav } from "./data/nav";
+import styles from "./pages.module.css";
 
-export const metadata: Metadata = {
-  title: "Page not found — Stringham Web Design",
-  robots: { index: false, follow: true },
-};
+export const metadata: Metadata = { title: "Page not found", robots: { index: false, follow: true } };
 
-function Arrow() {
-  return (
-    <svg width="18" height="10" viewBox="0 0 18 10" fill="none" aria-hidden="true">
-      <path d="M0 5h16M12 1l4 4-4 4" stroke="currentColor" strokeWidth="1.2" />
-    </svg>
-  );
-}
-
-/**
- * The 404. Same masthead and footer as every other page, the site's own type
- * and colour, one line that says what happened, and the five places a person
- * was most likely trying to reach. Nothing here pretends to be an error
- * console or a joke; it just gets them back on the site.
- */
 export default function NotFound() {
   return (
-    <>
-      <Header />
-      <main className={styles.page}>
-        <div className={styles.inner}>
-          <p className={styles.signal}>404 &middot; No page here</p>
-          <h1>That page isn&apos;t here.</h1>
-          <p className={styles.lede}>
-            The link may be old, or the address may have a typo in it. Nothing
-            you sent is lost. Here&apos;s where you were probably headed.
-          </p>
-
-          <nav className={styles.routes} aria-label="Main pages">
-            <ul>
-              {siteNav.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href}>{item.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div className={styles.actions}>
-            <Link className={headerStyles.getStarted} href="/quote">
-              <span>Start a project</span>
-              <span className={headerStyles.arrowShell} aria-hidden="true"><Arrow /></span>
-            </Link>
-            <Link className={styles.secondary} href="/">
-              Back to the homepage
-            </Link>
-          </div>
+    <div className={`container ${styles.page}`} style={{ paddingBottom: "var(--section)", minHeight: "70svh" }}>
+      <header className={styles.head}>
+        <p className={`label ${styles.headLabel}`}><b>404</b> Not here</p>
+        <h1 className="display-l">This page wandered off.</h1>
+        <p className={`lede ${styles.lede}`}>The link may be old, or the address has a typo. Here's the way home.</p>
+      </header>
+      <section className={styles.section} aria-label="Where to go">
+        <div className={styles.actions}>
+          <a className="btn" href="/">Back to the homepage</a>
+          {nav.map((n) => <a className="u" key={n.href} href={n.href} style={{ minHeight: 44, display: "inline-flex", alignItems: "center" }}>{n.label}</a>)}
+          <a className="u" href={cta.href} style={{ minHeight: 44, display: "inline-flex", alignItems: "center" }}>{cta.label}</a>
         </div>
-      </main>
-      <SiteFooter />
-    </>
+      </section>
+    </div>
   );
 }

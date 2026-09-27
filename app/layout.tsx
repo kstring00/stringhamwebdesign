@@ -1,78 +1,68 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Fraunces, Inter_Tight } from "next/font/google";
+
 import "./globals.css";
 import ClarityAnalytics from "./ClarityAnalytics";
-import HashScroll from "./HashScroll";
-import SiteMotion from "./SiteMotion";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import JsonLd from "./components/JsonLd";
+import Cursor from "./motion/Cursor";
+import PageTransition from "./motion/PageTransition";
+import Reveal from "./motion/Reveal";
+import SmoothScroll from "./motion/SmoothScroll";
+import { site } from "./data/site";
 
-const cormorant = Cormorant_Garamond({
+/* Both faces are self-hosted: next/font downloads them at build and serves
+   them from this origin, subset to latin, preloaded, with no request to
+   Google from a visitor's browser. */
+const fraunces = Fraunces({
   subsets: ["latin"],
-  weight: ["300"],
+  axes: ["opsz", "SOFT"],
+  weight: "variable",
   style: ["normal", "italic"],
   display: "swap",
-  variable: "--font-cormorant",
+  variable: "--font-fraunces",
 });
 
-const inter = Inter({
+const interTight = Inter_Tight({
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
   display: "swap",
-  variable: "--font-inter",
+  variable: "--font-inter-tight",
 });
-
-/**
- * Site-wide defaults. Every page sets its own title and description; what
- * lives here is what they share — the origin every relative URL resolves
- * against, the social card, and the title suffix. app/icon.png,
- * app/apple-icon.png and app/opengraph-image.png are picked up by file
- * convention and need no entry.
- */
-const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.stringhamwebdesign.com").replace(/\/+$/, "");
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: "Kyle Stringham — Custom Web Design & Development, League City TX",
-    template: "%s",
-  },
-  description:
-    `Custom websites for small businesses in League City and the Houston area, from focused sites to advanced builds with integrations, automation, and AI. Every one is quoted after a free consultation, as a fixed price in writing.`,
-  applicationName: "Stringham Web Design",
-  authors: [{ name: "Kyle Stringham", url: SITE_URL }],
-  creator: "Kyle Stringham",
-  openGraph: {
-    type: "website",
-    siteName: "Stringham Web Design",
-    locale: "en_US",
-    url: "/",
-  },
-  twitter: {
-    card: "summary_large_image",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  metadataBase: new URL(site.url),
+  title: { default: `Custom Web Design in League City, TX | ${site.name}`, template: `%s | ${site.name}` },
+  description: "Custom, beautifully crafted websites for clinics, cafés, and the businesses people love. Built in League City, Texas by Kyle Stringham. Owned outright by you.",
+  applicationName: site.name,
+  authors: [{ name: site.person, url: site.url }],
+  creator: site.person,
+  openGraph: { type: "website", siteName: site.name, locale: "en_US", url: "/" },
+  twitter: { card: "summary_large_image" },
+  robots: { index: true, follow: true },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    // globals.css sets scroll-behavior: smooth. Next 16 no longer overrides that
-    // during route transitions unless told to; without data-scroll-behavior, its
-    // scroll-to-top after a client navigation starts a smooth scroll that is
-    // cancelled before it lands, and /work opens wherever the previous page was
-    // scrolled to.
-    <html lang="en" data-scroll-behavior="smooth" className={`${cormorant.variable} ${inter.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${interTight.variable}`}>
       <body>
-        {children}
-        <SiteMotion />
-        {/* Finishes the scroll to a #hash on a fresh load; /pricing redirects to /#pricing. */}
-        <HashScroll />
-        {/* Usage analytics. Production only, only with NEXT_PUBLIC_CLARITY_ID
-            set, never on the portal, and never before the window has loaded. */}
+        <a className="skip" href="#main">Skip to content</a>
+        <Header />
+        {/* ScrollSmoother needs a wrapper and a content element; the markup
+            is the same whether or not smoothing runs. The header sits
+            outside so it stays fixed. */}
+        <div id="smooth-wrapper">
+          <div id="smooth-content">
+            <main id="main" tabIndex={-1}>{children}</main>
+            <Footer />
+          </div>
+        </div>
+        <SmoothScroll />
+        <Reveal />
+        <Cursor />
+        <PageTransition />
+        <JsonLd />
         <ClarityAnalytics />
       </body>
     </html>

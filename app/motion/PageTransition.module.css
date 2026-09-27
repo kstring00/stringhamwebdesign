@@ -1,0 +1,13 @@
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  background: var(--ink);
+  transform: translateY(100%);
+  pointer-events: none;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .veil { display: none; }
+}

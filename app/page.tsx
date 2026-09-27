@@ -1,36 +1,33 @@
 import type { Metadata } from "next";
 
-import Header from "./Header";
-import HeroShowcase from "./HeroShowcase";
-import HowPricingWorks from "./HowPricingWorks";
-import SelectedWork from "./SelectedWork";
-import SiteFooter from "./SiteFooter";
-import ProcessSteps from "./ProcessSteps";
-import Testimonials from "./Testimonials";
-import WhoThisIsFor from "./WhoThisIsFor";
+import ClosingCta from "./home/ClosingCta";
+import Faq from "./home/Faq";
+import FeaturedWork from "./home/FeaturedWork";
+import Hero from "./home/Hero";
+import ProcessStory from "./home/ProcessStory";
+import ServicesPreview from "./home/ServicesPreview";
+import Statement from "./home/Statement";
+import Marquee from "./motion/Marquee";
 
 export const metadata: Metadata = {
-  title: "Kyle Stringham — Custom Web Design & Development, League City TX",
-  description: `Custom websites for small businesses in League City and the Houston area: storage facilities, ABA and counseling practices, course creators, coaches. Every project quoted after a free consultation, as a fixed price in writing, and you own everything.`,
+  title: { absolute: "Custom Web Design in League City, TX | Stringham Web Design" },
+  description: "Custom, beautifully crafted websites for clinics, cafés, and the businesses people love. Built in League City, Texas by Kyle Stringham, and owned outright by you.",
   alternates: { canonical: "/" },
 };
+
+const INDUSTRIES = ["Behavioral health clinics", "Coffee shops", "Coaches", "Storage facilities", "Course creators", "Local shops", "Nonprofits"] as const;
+
 export default function Home() {
   return (
     <>
-      <Header />
-      <HeroShowcase />
-
-      <main>
-        <SelectedWork />
-        <WhoThisIsFor />
-        {/* id="pricing": /pricing redirects here. */}
-        <HowPricingWorks />
-        <ProcessSteps variant="home" />
-        {/* Renders nothing while data/testimonials.ts is empty. */}
-        <Testimonials />
-      </main>
-
-      <SiteFooter />
+      <Hero />
+      <Marquee items={INDUSTRIES} label="Who I build for" />
+      <FeaturedWork />
+      <Statement />
+      <ServicesPreview />
+      <ProcessStory />
+      <Faq />
+      <ClosingCta />
     </>
   );
 }
