@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 
 import { cta } from "../data/nav";
 import Magnetic from "../motion/Magnetic";
-import { gsap, SplitText, prefersReducedMotion } from "../motion/gsap";
+import { gsap, ScrollSmoother, SplitText, prefersReducedMotion } from "../motion/gsap";
 import styles from "./home.module.css";
 
 function Arrow() {
@@ -21,6 +21,17 @@ function Arrow() {
  * The text is readable immediately without JS: the split only happens
  * after fonts are ready, and the hidden state is applied by the script.
  */
+/** ScrollSmoother ignores native anchor jumps, so steer it; otherwise let the
+    browser scroll (smoothly, unless reduced motion turns that off in CSS). */
+function toCaseStudy(e: React.MouseEvent<HTMLAnchorElement>) {
+  const target = document.getElementById("common-ground");
+  const smoother = ScrollSmoother.get();
+  if (!target || !smoother) return;
+  e.preventDefault();
+  smoother.scrollTo(target, true, "top top");
+  history.replaceState(null, "", "#common-ground");
+}
+
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
 
@@ -51,7 +62,7 @@ export default function Hero() {
           <p className={`lede ${styles.sub}`} data-hero>Custom, beautifully crafted websites for clinics, cafés, and the businesses people love. Built by me, owned by you.</p>
           <div className={styles.heroActions} data-hero>
             <Magnetic><a className="btn" href={cta.href}>{cta.label} <Arrow /></a></Magnetic>
-            <Magnetic><a className="btn btn-secondary" href="/work">See the work</a></Magnetic>
+            <Magnetic><a className="btn btn-secondary" href="#common-ground" onClick={toCaseStudy}>See Common Ground</a></Magnetic>
           </div>
         </div>
       </div>

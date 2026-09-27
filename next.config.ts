@@ -19,7 +19,12 @@ const nextConfig: NextConfig = {
       { source: "/start", destination: "/contact", statusCode: 301 },
       { source: "/resources", destination: "/", statusCode: 301 },
       { source: "/resources/:path*", destination: "/", statusCode: 301 },
-      { source: "/work/:slug", destination: "/work", statusCode: 301 },
+      // There is no Work page: Common Ground is the one project, and it lives
+      // on the homepage and the Family Resource Hub page.
+      { source: "/work", destination: "/family-resource-hub", statusCode: 301 },
+      { source: "/work/:path*", destination: "/family-resource-hub", statusCode: 301 },
+      { source: "/portfolio", destination: "/family-resource-hub", statusCode: 301 },
+      { source: "/portfolio/:path*", destination: "/family-resource-hub", statusCode: 301 },
       { source: "/faq", destination: "/", statusCode: 301 },
     ];
   },

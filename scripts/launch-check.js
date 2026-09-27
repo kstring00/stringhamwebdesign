@@ -20,7 +20,7 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
 
 const isInternal = (h) => h && h.startsWith('/') && !h.startsWith('//');
 const norm = (h) => h.split('#')[0].split('?')[0] || '/';
-const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|example\.com|\(000\)|000-0000|\bTODO\b|client portal/i;
+const BANNED = /\$\s?\d|\bstarting at\b|Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|example\.com|\(000\)|000-0000|\bTODO\b|client portal/i;
 
 (async () => {
   let hits = '';
@@ -71,7 +71,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     ok(`${path}: no page errors`, d.errs.length === 0, d.errs.join(' | '));
     ok(`${path}: exactly one h1`, d.h1s.length === 1, JSON.stringify(d.h1s));
     ok(`${path}: unique title`, d.title.length > 10 && !titles.has(d.title), d.title); titles.set(d.title, path);
-    ok(`${path}: title names the service and the city`, /League City|Stringham Web Design/.test(d.title) && /Web Design|Websites|Work|Hub|Contact|Project|Privacy|not found/i.test(d.title), d.title);
+    ok(`${path}: title names the service and the city`, /League City|Stringham Web Design/.test(d.title) && /Web Design|Websites|Hub|Contact|Project|Privacy|not found/i.test(d.title), d.title);
     ok(`${path}: meta description`, d.description.length > 50, `${d.description.length} chars`);
     ok(`${path}: canonical`, d.canonical.length > 0 || path === '/privacy', d.canonical);
     ok(`${path}: social image, twitter card, icons`, /opengraph-image/.test(d.ogImage) && d.twitter === 'summary_large_image' && d.icon && d.apple, JSON.stringify({ og: d.ogImage, tw: d.twitter, icon: d.icon, apple: d.apple }));
@@ -82,7 +82,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     if (path === '/') ok(`${path}: LocalBusiness JSON-LD`, /"@type":"ProfessionalService"/.test(d.jsonld) && /League City/.test(d.jsonld) && /Houston/.test(d.jsonld));
     if (path === '/about') ok(`${path}: Person JSON-LD`, /"@type":"Person"/.test(d.jsonld));
     ok(`${path}: no banned words in rendered text`, !BANNED.test(d.text), (d.text.match(BANNED) || [''])[0]);
-    ok(`${path}: nav is Work · Services · Family Resource Hub · About`, JSON.stringify(d.headerNav) === JSON.stringify(['Work', 'Services', 'Family Resource Hub', 'About']), JSON.stringify(d.headerNav));
+    ok(`${path}: nav is Services · Family Resource Hub · About`, JSON.stringify(d.headerNav) === JSON.stringify(['Services', 'Family Resource Hub', 'About']), JSON.stringify(d.headerNav));
   }
 
   const home = seen.get('/');
@@ -96,7 +96,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
   // ---- redirects, 404, robots, sitemap, assets ----
   {
     const c = await b.newContext(); const p = await c.newPage();
-    for (const [from, to] of [['/portal', '/'], ['/portal/dashboard', '/'], ['/portal/projects/x', '/'], ['/admin', '/'], ['/admin/x', '/'], ['/login', '/'], ['/quote', '/contact'], ['/resources', '/'], ['/pricing', '/#faq']]) {
+    for (const [from, to] of [['/portal', '/'], ['/portal/dashboard', '/'], ['/portal/projects/x', '/'], ['/admin', '/'], ['/admin/x', '/'], ['/login', '/'], ['/quote', '/contact'], ['/resources', '/'], ['/pricing', '/#faq'], ['/work', '/family-resource-hub'], ['/work/x', '/family-resource-hub'], ['/portfolio', '/family-resource-hub']]) {
       const r = await p.request.get(BASE + from, { maxRedirects: 0 });
       const loc = r.headers()['location'] || '';
       ok(`${from} → ${to} (permanent)`, (r.status() === 308 || r.status() === 301) && loc.replace(BASE, '').replace(/^https?:\/\/[^/]+/, '') === to, `${r.status()} ${loc}`);
@@ -110,7 +110,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     const locs = [...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
     const missing = [...seen.keys()].filter((k) => !locs.includes(k)); const extra = locs.filter((l) => !seen.has(l));
     ok('sitemap.xml lists every crawled page and nothing else', missing.length === 0 && extra.length === 0, `missing ${missing.join(' ')} extra ${extra.join(' ')}`);
-    ok('sitemap.xml carries no portal, pricing or resources routes', locs.every((l) => !/portal|pricing|resources|quote/.test(l)));
+    ok('sitemap.xml carries no portal, pricing, resources or work routes', locs.every((l) => !/portal|pricing|resources|quote|\/work|portfolio/.test(l)));
     for (const u of ['/icon.png', '/apple-icon.png', '/opengraph-image.png']) { const r = await p.request.get(BASE + u); ok(`${u} served`, r.status() === 200 && (r.headers()['content-type'] || '').startsWith('image/')); }
     await c.close();
   }

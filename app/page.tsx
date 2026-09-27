@@ -4,7 +4,7 @@ import { BusinessJsonLd } from "./components/JsonLd";
 import { pageMeta } from "./data/meta";
 import ClosingCta from "./home/ClosingCta";
 import Faq from "./home/Faq";
-import FeaturedWork from "./home/FeaturedWork";
+import CaseStudy from "./home/CaseStudy";
 import Hero from "./home/Hero";
 import ProcessStory from "./home/ProcessStory";
 import ServicesPreview from "./home/ServicesPreview";
@@ -20,7 +20,7 @@ export default function Home() {
     <>
       <Hero />
       <Marquee items={INDUSTRIES} label="Who I build for" />
-      <FeaturedWork />
+      <CaseStudy />
       <Statement />
       <ServicesPreview />
       <ProcessStory />

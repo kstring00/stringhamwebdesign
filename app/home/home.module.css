@@ -74,155 +74,252 @@
   max-width: 14ch;
 }
 
-/* ---------- featured work ---------- */
+/* ---------- case study: Common Ground ---------- */
 
-.work {
+.case {
   padding: var(--section) 0;
-  overflow: hidden;
+  scroll-margin-top: 5rem;
 }
 
-.work[data-horizontal] {
-  height: 100vh;
-  /* Clear the fixed header while pinned, then centre what is left. */
-  padding: 6rem 0 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.workHead {
+.caseHead {
+  display: grid;
+  gap: 1.25rem;
   margin-bottom: clamp(2rem, 4vw, 3.5rem);
 }
 
-.workHead h2 {
-  max-width: 16ch;
+.caseHead h2 {
+  max-width: 18ch;
 }
 
-.work[data-horizontal] .workHead {
-  margin-bottom: 1.5rem;
-}
-
-.work[data-horizontal] .workHead h2 {
-  font-size: clamp(2.2rem, 4.2vw, 4.2rem);
-}
-
-/* Vertical stack by default (touch, reduced motion, no JS). */
-.track {
+.caseFacts {
   display: grid;
-  gap: clamp(3rem, 6vw, 5rem);
-  width: min(100% - 2 * var(--gutter), var(--max));
-  margin-inline: auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 4vw, 4rem);
+  margin: 0 0 clamp(3rem, 7vw, 6rem);
+  padding-top: clamp(1.5rem, 3vw, 2.25rem);
+  border-top: 1px solid var(--line);
 }
 
-/* Horizontal track once the script has confirmed a desktop pointer. */
-.work[data-horizontal] .track {
-  display: flex;
-  align-items: center;
-  gap: clamp(3rem, 6vw, 7rem);
-  width: max-content;
-  margin: 0;
-  padding: 0 var(--gutter) 0 var(--gutter);
-  will-change: transform;
-}
-
-.project {
-  display: grid;
-  gap: 1.25rem;
-  color: inherit;
-}
-
-.work[data-horizontal] .project {
-  width: min(52vw, 54rem);
-  flex: none;
-}
-
-.frame {
-  aspect-ratio: 16 / 10;
-  border-radius: 8px;
-  box-shadow: 0 30px 60px -30px rgba(21, 19, 15, 0.35);
-  will-change: transform;
-}
-
-.frame img {
-  object-position: top;
-}
-
-.projectMeta {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-areas: "index name cat" "index line line";
-  column-gap: 1.25rem;
-  row-gap: 0.35rem;
-  align-items: baseline;
-}
-
-.projectIndex {
-  grid-area: index;
+.caseFacts dt {
+  margin-bottom: 0.6rem;
   color: var(--muted);
-  font-size: 0.82rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-}
-
-.projectName {
-  grid-area: name;
-  font-family: var(--font-display);
-  font-size: clamp(1.9rem, 3.4vw, 3.2rem);
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
-
-.projectCat {
-  grid-area: cat;
-  color: var(--ember-deep);
   font-size: 0.82rem;
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
-.projectLine {
-  grid-area: line;
-  max-width: 44ch;
-  color: var(--ink-soft);
-  line-height: 1.5;
-}
-
-.projectNote {
-  display: inline-block;
-  margin-right: 0.6rem;
-  padding: 0.15rem 0.55rem;
-  border: 1px solid var(--line-strong);
-  border-radius: 999px;
-  color: var(--ink);
-  font-size: 0.82rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  vertical-align: 0.1em;
-}
-
-.projectAll {
-  display: inline-flex;
-  align-items: center;
-  gap: 1rem;
-  min-height: 44px;
-  color: var(--ink);
-}
-
-.work[data-horizontal] .projectAll {
-  flex: none;
-  padding-right: var(--gutter);
-}
-
-.projectAllArrow {
+.caseFacts dd {
+  margin: 0;
+  max-width: 34ch;
   font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 4rem);
-  color: var(--ember);
-  transition: transform 300ms var(--ease-out);
+  font-size: clamp(1.35rem, 2.2vw, 1.95rem);
+  letter-spacing: -0.015em;
+  line-height: 1.2;
 }
 
-.projectAll:hover .projectAllArrow {
-  transform: translateX(8px);
+@media (max-width: 48rem) {
+  .caseFacts { grid-template-columns: 1fr; }
+}
+
+/* The walkthrough. Default (touch, reduced motion, no JS): a stack of
+   screens, each with its caption. */
+.walk {
+  position: relative;
+}
+
+.stage {
+  display: none;
+}
+
+.walkSteps {
+  display: grid;
+  gap: clamp(3rem, 7vw, 5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.walkFigure {
+  display: grid;
+  gap: 1.25rem;
+  margin: 0;
+}
+
+.walkShot {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 30px 60px -34px rgba(21, 19, 15, 0.4);
+  aspect-ratio: 16 / 10;
+}
+
+.walkShot img,
+.layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* Phones get the phone captures in a phone-shaped frame. */
+@media (max-width: 47.99rem) {
+  .walkShot {
+    width: min(100%, 22rem);
+    justify-self: center;
+    aspect-ratio: 390 / 844;
+    border-radius: 28px;
+    border: 6px solid var(--ink);
+  }
+}
+
+.walkCaption {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.walkN {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--ember);
+}
+
+.walkText {
+  max-width: 30ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.4vw, 2.1rem);
+  letter-spacing: -0.015em;
+  line-height: 1.18;
+}
+
+/* Desktop with a fine pointer: the frame pins on the left and steps through
+   the screens; the captions scroll by on the right. */
+.case[data-pinned] .walk {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1rem, 2vw, 2rem);
+  align-items: start;
+}
+
+.case[data-pinned] .stage {
+  display: block;
+  grid-column: 1 / span 8;
+  grid-row: 1;
+}
+
+.case[data-pinned] .walkSteps {
+  grid-column: 9 / -1;
+  grid-row: 1;
+  gap: 0;
+}
+
+.case[data-pinned] .walkStep {
+  display: grid;
+  align-content: center;
+  min-height: 85vh;
+  opacity: 0.28;
+  transition: opacity 450ms var(--ease-out);
+}
+
+.case[data-pinned] .walkActive {
+  opacity: 1;
+}
+
+.case[data-pinned] .walkShot {
+  display: none;
+}
+
+.case[data-pinned] .walkCaption {
+  grid-template-columns: 1fr;
+  gap: 0.9rem;
+}
+
+.case[data-pinned] .walkText {
+  font-size: clamp(1.6rem, 2.3vw, 2.3rem);
+}
+
+.device {
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 50px 90px -50px rgba(21, 19, 15, 0.55), 0 12px 30px -18px rgba(21, 19, 15, 0.25);
+  transform-origin: center;
+  will-change: transform;
+}
+
+.deviceBar {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  height: 2.25rem;
+  padding: 0 0.9rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-deep);
+}
+
+.deviceBar i {
+  width: 0.62rem;
+  height: 0.62rem;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+
+.deviceBar span {
+  margin-left: 0.75rem;
+  padding: 0.18rem 0.8rem;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.screen {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  will-change: opacity, transform;
+}
+
+/* Before the script sets the layers, show only the first. */
+.layer + .layer {
+  opacity: 0;
+}
+
+.caseEnd {
+  display: grid;
+  gap: 2rem;
+  margin-top: clamp(3.5rem, 8vw, 6rem);
+  padding-top: clamp(2rem, 4vw, 3rem);
+  border-top: 1px solid var(--line);
+}
+
+.outcome {
+  max-width: 26ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.6vw, 3.4rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+.caseActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.25rem;
+}
+
+@media (max-width: 40rem) {
+  .caseActions > span, .caseActions a { width: 100%; justify-content: center; }
 }
 
 /* ---------- statement ---------- */

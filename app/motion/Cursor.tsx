@@ -6,8 +6,10 @@ import { gsap, isFinePointerDesktop, prefersReducedMotion } from "./gsap";
 import styles from "./Cursor.module.css";
 
 /**
- * A small dot that follows the pointer and grows into a "View" ring over
- * anything marked data-cursor="view". Desktop with a fine pointer only;
+ * A small dot that follows the pointer. It grows into a "View" disc over
+ * anything marked data-cursor="view" (screenshots) and into an open ring
+ * over data-cursor="grow" (buttons, so their label stays readable).
+ * Desktop with a fine pointer only;
  * never with reduced motion. Purely decorative: aria-hidden, no pointer
  * events, and the native cursor stays.
  */
@@ -23,8 +25,8 @@ export default function Cursor() {
     const yTo = gsap.quickTo(el, "y", { duration: 0.25, ease: "power3.out" });
     const move = (e: MouseEvent) => { if (el.hidden) { el.hidden = false; gsap.set(el, { x: e.clientX, y: e.clientY }); } xTo(e.clientX); yTo(e.clientY); };
     const over = (e: MouseEvent) => {
-      const t = (e.target as HTMLElement | null)?.closest?.("[data-cursor='view']");
-      el.dataset.state = t ? "view" : "";
+      const t = (e.target as HTMLElement | null)?.closest?.<HTMLElement>("[data-cursor]");
+      el.dataset.state = t?.dataset.cursor ?? "";
     };
     window.addEventListener("mousemove", move, { passive: true });
     document.addEventListener("mouseover", over, { passive: true });

@@ -28,16 +28,16 @@ Updated 2026-09-27 (launch fixes).
 - Confirm a real contact-form submission arrives at kyle@stringhamwebdesign.com
   on the preview deployment (the sandbox has no `RESEND_API_KEY`, so it was
   tested to the API route only).
-- Items in `ASSETS_NEEDED.md` (Lake City, photo).
+- Items in `ASSETS_NEEDED.md` (photo).
 
 ## Could not be verified from the build sandbox
 
-- Outbound requests to client sites return 403, so the three `/work` links
-  were not fetched and no fresh Playwright captures of the live sites were
-  taken. Open each once on the preview: commongroundautism.org,
-  beethebehaviorbae.com, withlittle.app.
+- The sandbox cannot reach commongroundautism.org (egress blocked), so the
+  case-study screens were captured from the Common Ground source
+  (`kstring00/CG2`, branch `claude/loving-newton-de9zlg`, the unbranded
+  build) run locally. Compare them with the live site once and re-capture if
+  the live site has moved on.
 
 ## Nice to have
 
-- AVIF variants of the work captures (WebP is shipped).
 - A second hub screenshot on `/family-resource-hub` once a clinic is live.

@@ -22,13 +22,14 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
   and nothing depends on JS to be readable.
 - Accessibility failures are disqualifying. He sells to ABA and pediatric
   clinics. Lighthouse accessibility must stay at 95+ (it is 100 today).
-- Only real work on `/work`, with real screenshots of live sites. Never a
-  mockup or an invented project. No invented testimonials.
-- Never mention Texas ABA Centers, ABA Centers of America, a "pilot", or
-  texasabacenterscg.com anywhere on the site. `scripts/launch-check.js` greps
+- Common Ground is the only project on the site (the homepage case study).
+  Screens are real captures. Never a mockup or an invented project. No invented testimonials.
+- Never name the clinic brands or the old demo domain behind Common Ground,
+  and never call anything a "pilot", anywhere on the site. The exact banned
+  strings live in `scripts/launch-check.js`, which greps
   for these and fails the build check if they appear.
-- The `$500–$1,500` range lives only in the homepage FAQ answer. The Family
-  Resource Hub page carries no prices.
+- No prices anywhere on the site. Every project is quoted after a free
+  30-minute call.
 - Don't merge to `main` or deploy to production without the owner's OK.
 
 ## Checks before any deploy
