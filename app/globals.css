@@ -1,27 +1,36 @@
+/* Stringham Web Design — warm editorial.
+   Paper, ink, one ember accent. A characterful display serif set huge, a
+   quiet grotesk for everything else. Everything below is the whole system;
+   component files only arrange it. */
+
 :root {
-  --navy: #182a3a;
-  --navy-deep: #05172f;
-  --slate: #425b6f;
-  --gold: #a08348;
-  --gold-light: #c2a072;
-  /* gold for text on the dark bar; --gold-light is only 3.5:1 there */
-  --gold-on-dark: #e2c58a;
-  --sand: #d6bb80;
-  --smoke: #787c83;
-  --paper: #ffffff;
-  --paper-warm: #faf8f4;
+  --paper: #f4efe6;
+  --paper-deep: #ebe4d6;
+  --ink: #15130f;
+  --ink-soft: #3d3831;
+  --muted: #6b6359;
+  --ember: #d2552d;
+  --ember-deep: #a63f1c;
+  --line: rgba(21, 19, 15, 0.14);
+  --line-strong: rgba(21, 19, 15, 0.3);
 
-  /* added for the mockup's warm ground — navy on it is 12.58:1 */
-  --cream: #f2ede4;
-  --cream-light: #f8f5ef;
+  /* On the ink ground */
+  --paper-on-ink: #f4efe6;
+  --muted-on-ink: rgba(244, 239, 230, 0.66);
+  --line-on-ink: rgba(244, 239, 230, 0.16);
+  --ember-on-ink: #e8734d;
 
-  /* hairlines, derived from --slate so the palette stays closed */
-  --line: rgba(66, 91, 111, 0.22);
-  --line-strong: rgba(66, 91, 111, 0.34);
+  --gutter: clamp(1.25rem, 4vw, 4.5rem);
+  --max: 90rem;
+  --section: clamp(5rem, 11vw, 10rem);
 
-  --gutter: clamp(1.25rem, 5vw, 4rem);
-  --section-y: clamp(3.75rem, 8vw, 6.5rem);
-  --max: 76rem;
+  --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
+  --font-text: var(--font-inter-tight), "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  color-scheme: light;
 }
 
 *,
@@ -43,52 +52,53 @@ html {
 
 body {
   margin: 0;
-  background: var(--cream-light);
-  color: var(--navy);
-  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 17px;
-  line-height: 1.7;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
 }
 
-/* Headings take their colour from the background context they sit in, not from a
-   fixed navy. body sets navy for the cream ground, and every dark band already
-   sets its own cream text colour, so inheriting keeps a heading legible wherever
-   it lands. Setting a colour here instead made every heading dropped into a navy
-   section render navy-on-navy until it was patched by hand. */
-h1,
-h2,
-h3 {
-  font-family: var(--font-cormorant), ui-serif, Georgia, "Times New Roman", serif;
-  font-weight: 300;
-  line-height: 0.95;
-  letter-spacing: -0.01em;
-  margin: 0;
-  color: inherit;
+/* Film grain: one tiny SVG noise tile, fixed, at very low opacity. It is
+   the last thing painted and never intercepts a pointer. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 9999;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
 }
 
-h1 {
-  font-size: clamp(3rem, 7vw, 6rem);
+@media (prefers-reduced-motion: reduce), (max-width: 48rem) {
+  body::after {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
 }
 
-h1 em {
-  font-style: italic;
+::selection {
+  background: var(--ember);
+  color: var(--paper);
 }
 
-h2 {
-  font-size: clamp(2.25rem, 5vw, 3.5rem);
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
 }
 
-h3 {
-  font-size: clamp(1.5rem, 3vw, 1.875rem);
-}
-
-p {
-  margin: 0 0 1.25em;
-}
-
-p:last-child {
-  margin-bottom: 0;
+img {
+  height: auto;
 }
 
 a {
@@ -96,773 +106,285 @@ a {
   text-decoration: none;
 }
 
-/* inline prose links carry the underline; it needs 3:1, so gold not gold-light */
-.link {
-  border-bottom: 1px solid var(--gold);
-  padding-bottom: 2px;
+button {
+  font: inherit;
+  color: inherit;
 }
 
-.link:hover {
-  border-bottom-color: var(--navy);
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
 }
 
 :focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 3px;
-  border-radius: 1px;
+  outline: 2px solid var(--ember);
+  outline-offset: 4px;
+  border-radius: 2px;
 }
 
-img {
-  display: block;
-  max-width: 100%;
-  height: auto;
+/* ---------- editorial primitives ---------- */
+
+.container {
+  width: min(100% - 2 * var(--gutter), var(--max));
+  margin-inline: auto;
 }
 
-/* ---------- shared bits ---------- */
-
-.shell {
-  max-width: var(--max);
-  margin: 0 auto;
-  width: 100%;
-  padding-left: var(--gutter);
-  padding-right: var(--gutter);
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1rem, 2vw, 2rem);
 }
 
-.section {
-  padding-top: var(--section-y);
-  padding-bottom: var(--section-y);
+@media (max-width: 64rem) {
+  .grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
 }
 
-/* anchor targets clear the fixed bar when jumped to */
-.hero,
-.section,
-.split {
-  scroll-margin-top: clamp(5rem, 8vw, 6.5rem);
-}
-
-.section--cream {
-  background: var(--cream);
-}
-
-.section--light {
-  background: var(--cream-light);
-}
-
-.tag {
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--slate);
-  line-height: 1.8;
+/* Big numbered section label: "01 — Work". */
+.label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.75rem;
   margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
-.tag--light {
-  color: var(--paper);
+.label b {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--ink);
 }
 
-.rule {
-  width: 3.25rem;
-  height: 1px;
-  border: 0;
-  margin: 0 0 1.5rem;
-  background: var(--gold);
+.ink .label,
+.ink .label b {
+  color: var(--paper-on-ink);
 }
 
-.rule--tight {
-  margin-bottom: 1rem;
+.ink .label {
+  color: var(--muted-on-ink);
 }
 
-.muted {
-  color: var(--slate);
+/* Display sizes. Fluid, up to about 10vw for the hero. */
+.display-xl {
+  font-size: clamp(3rem, 10vw, 11rem);
+  line-height: 0.92;
 }
 
+.display-l {
+  font-size: clamp(2.6rem, 6.5vw, 6.5rem);
+  line-height: 0.95;
+}
+
+.display-m {
+  font-size: clamp(2rem, 4.2vw, 4.2rem);
+}
+
+.lede {
+  max-width: 36rem;
+  color: var(--ink-soft);
+  font-size: clamp(1.1rem, 1.4vw, 1.35rem);
+  line-height: 1.55;
+}
+
+.ink .lede {
+  color: var(--muted-on-ink);
+}
+
+/* Section backgrounds */
+.ink {
+  background: var(--ink);
+  color: var(--paper-on-ink);
+}
+
+/* Link underlines that draw in on hover. */
+.u {
+  position: relative;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  transition: background-size 320ms var(--ease-out);
+  padding-bottom: 2px;
+}
+
+.u:hover,
+.u:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.85rem;
-  background: var(--navy);
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3.25rem;
+  padding: 0.85rem 1.6rem;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ink);
   color: var(--paper);
-  border: 1px solid var(--navy);
-  padding: 0.95rem 1.65rem;
-  font-size: 0.9375rem;
+  font-size: 0.95rem;
   font-weight: 500;
-  min-height: 48px;
+  letter-spacing: 0.01em;
+  line-height: 1;
   white-space: nowrap;
-}
-
-.btn:hover {
-  background: var(--navy-deep);
-  border-color: var(--navy-deep);
-}
-
-.btn svg {
-  flex: none;
-}
-
-/* ---------- image slots ----------
-   No photographs are committed. Each slot renders a tinted panel until a real
-   file is dropped into /public and named in PHOTOS (app/page.tsx). */
-
-.figure {
-  position: relative;
-  overflow: hidden;
-  background:
-    linear-gradient(150deg, rgba(5, 23, 47, 0.92) 0%, rgba(66, 91, 111, 0.78) 52%, rgba(120, 124, 131, 0.6) 100%),
-    var(--navy-deep);
-}
-
-.figure::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0.5;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 44px 44px;
-}
-
-.figure img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* keeps the white edge marks legible over any photograph */
-.figure::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: linear-gradient(
-    to top,
-    rgba(5, 23, 47, 0.88) 0%,
-    rgba(5, 23, 47, 0.6) 22%,
-    rgba(5, 23, 47, 0.12) 52%,
-    transparent 72%
-  );
-}
-
-.figure__marks {
-  position: absolute;
-  right: clamp(1rem, 3vw, 2rem);
-  bottom: clamp(1rem, 3vw, 2rem);
-  z-index: 2;
-  text-align: left;
-}
-
-.figure__marks .rule {
-  margin-top: 0.9rem;
-  margin-bottom: 0;
-  background: var(--gold-light);
-}
-
-/* ---------- masthead ---------- */
-
-.masthead {
-  position: fixed;
-  top: clamp(0.75rem, 1.6vw, 1.4rem);
-  left: 0;
-  right: 0;
-  z-index: 50;
-  padding: 0 var(--gutter);
-  transition: transform 380ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  transition: background 220ms var(--ease-out), color 220ms var(--ease-out), border-color 220ms var(--ease-out), transform 220ms var(--ease-out);
   will-change: transform;
 }
 
-.masthead.is-hidden {
-  transform: translateY(calc(-100% - clamp(0.75rem, 1.6vw, 1.4rem)));
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .masthead {
-    transition: none;
-  }
-}
-
-.masthead__bar {
-  max-width: var(--max);
-  margin: 0 auto;
-  display: flex;
-  align-items: stretch;
-  justify-content: space-between;
-  gap: clamp(1rem, 3vw, 2.5rem);
-  padding: 0 clamp(0.9rem, 2vw, 1.6rem);
-  min-height: 68px;
-  background: rgba(9, 24, 41, 0.9);
-  border: 1px solid rgba(226, 197, 138, 0.22);
-  box-shadow: 0 18px 44px -26px rgba(5, 23, 47, 0.85);
-}
-
-@supports (backdrop-filter: blur(14px)) {
-  .masthead__bar {
-    background: rgba(9, 24, 41, 0.82);
-    backdrop-filter: blur(14px) saturate(115%);
-  }
-}
-
-.masthead__brand,
-.masthead__end {
-  display: flex;
-  align-items: center;
-  gap: clamp(0.85rem, 2vw, 1.4rem);
-}
-
-.masthead__brand {
-  flex: 0 1 auto;
-  min-width: 0;
-}
-
-.masthead__end {
-  flex: none;
-}
-
-.masthead__divider {
-  width: 1px;
-  align-self: stretch;
-  margin: 1rem 0;
-  background: rgba(226, 197, 138, 0.3);
-}
-
-.masthead__monogram {
-  font-family: var(--font-cormorant), ui-serif, Georgia, serif;
-  font-size: 1.75rem;
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -0.14em;
-  padding-right: 0.14em;
-  color: var(--gold-on-dark);
-}
-
-.masthead__name {
-  font-family: var(--font-cormorant), ui-serif, Georgia, serif;
-  font-size: 1.375rem;
-  font-weight: 300;
-  letter-spacing: 0.005em;
+.btn:hover {
+  background: var(--ember);
+  border-color: var(--ember);
   color: var(--paper);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.masthead__nav {
-  display: none;
-  align-items: center;
-  gap: clamp(1.1rem, 2.6vw, 2.5rem);
+.btn svg {
+  transition: transform 260ms var(--ease-out);
 }
 
-@media (min-width: 62rem) {
-  .masthead__nav {
-    display: flex;
-  }
+.btn:hover svg {
+  transform: translateX(3px);
 }
 
-.masthead__nav a {
-  position: relative;
-  font-family: var(--font-cormorant), ui-serif, Georgia, serif;
-  font-size: 1.25rem;
-  font-weight: 300;
+.btn-secondary {
+  background: transparent;
+  color: var(--ink);
+}
+
+.btn-secondary:hover {
+  background: var(--ink);
+  border-color: var(--ink);
   color: var(--paper);
-  padding: 0.55rem 0.15rem 0.85rem;
-  white-space: nowrap;
 }
 
-.masthead__nav a:hover {
-  color: var(--gold-on-dark);
+.ink .btn {
+  background: var(--paper);
+  border-color: var(--paper);
+  color: var(--ink);
 }
 
-.masthead__nav a.is-active {
-  color: var(--gold-on-dark);
+.ink .btn:hover {
+  background: var(--ember-on-ink);
+  border-color: var(--ember-on-ink);
+  color: var(--ink);
 }
 
-.masthead__dot {
-  position: absolute;
-  left: 50%;
-  bottom: 0.3rem;
-  width: 5px;
-  height: 5px;
-  margin-left: -2.5px;
-  border-radius: 50%;
-  background: var(--gold-on-dark);
-  opacity: 0;
-  transition: opacity 200ms ease;
+.ink .btn-secondary {
+  background: transparent;
+  border-color: var(--paper);
+  color: var(--paper);
 }
 
-.masthead__nav a.is-active .masthead__dot {
-  opacity: 1;
+.ink .btn-secondary:hover {
+  background: var(--paper);
+  color: var(--ink);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .masthead__dot {
-    transition: none;
-  }
+.btn-ember {
+  background: var(--ember);
+  border-color: var(--ember);
+  color: var(--paper);
 }
 
-.masthead__end .masthead__divider {
-  display: none;
+.btn-ember:hover {
+  background: var(--ember-deep);
+  border-color: var(--ember-deep);
 }
 
-@media (min-width: 62rem) {
-  .masthead__end .masthead__divider {
-    display: block;
-  }
-}
-
-.btn--gold {
-  background: linear-gradient(157deg, #f0dba6 0%, #ddbe80 38%, #c2a072 72%, #a5854a 100%);
-  border-color: #a5854a;
-  color: var(--navy-deep);
-  font-family: var(--font-cormorant), ui-serif, Georgia, serif;
-  font-size: 1.25rem;
-  font-weight: 400;
-  padding: 0.55rem 1.35rem;
-  min-height: 44px;
-  align-self: center;
-}
-
-.btn--gold:hover {
-  background: linear-gradient(157deg, #f6e6bd 0%, #e6cd97 38%, #cdae82 72%, #b5955a 100%);
-  border-color: #b5955a;
-}
-
-@media (max-width: 34rem) {
-  .masthead__bar {
-    min-height: 60px;
-    gap: 0.7rem;
-    padding: 0 0.8rem;
-  }
-
-  .masthead__monogram {
-    font-size: 1.4rem;
-  }
-
-  .masthead__name {
-    font-size: 1.125rem;
-  }
-
-  .btn--gold {
-    font-size: 1rem;
-    padding: 0.4rem 0.9rem;
-    gap: 0.55rem;
-  }
-}
-
-/* the bar is dark, so the focus ring needs to read against it */
-.masthead :focus-visible {
-  outline-color: var(--gold-on-dark);
-}
-
-/* ---------- hero ---------- */
-
-.hero {
+/* Image frame with hover zoom */
+.frame {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  min-height: clamp(540px, 84vh, 800px);
-  isolation: isolate;
-  /* clears the fixed bar, which no longer takes up flow space */
-  padding-top: clamp(5.5rem, 9vw, 7rem);
-}
-
-.hero__bg {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
   overflow: hidden;
-  background: #9dbed6;
+  border-radius: 6px;
+  background: var(--paper-deep);
 }
 
-.hero__photo {
-  display: block;
-}
-
-.hero__photo {
+.frame img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  /* the composition's focus sits centre-right; keep it clear of the copy */
-  object-position: 62% 50%;
+  transition: transform 900ms var(--ease-out);
 }
 
-/* keeps navy legible over whatever photograph lands here */
-.hero__scrim {
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .frame:hover img,
+  a:hover .frame img {
+    transform: scale(1.04);
+  }
+}
+
+/* Visually hidden */
+.sr-only {
   position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(
-    100deg,
-    rgba(248, 245, 239, 0.98) 0%,
-    rgba(248, 245, 239, 0.96) 30%,
-    rgba(248, 245, 239, 0.74) 44%,
-    rgba(248, 245, 239, 0.22) 66%,
-    rgba(248, 245, 239, 0) 88%
-  );
-}
-
-/* On a phone the copy fills the hero, so a flat scrim erased the photograph.
-   Hold it opaque behind the text, then release it so the image is actually
-   visible in a band beneath. */
-/* On a phone the viewport is far taller than it is wide, so `cover` maps the
-   whole image height onto the whole hero — the moon and arch end up behind the
-   copy however object-position is shifted. So on mobile the photograph gets its
-   own band at close to its native aspect and the copy sits on plain cream,
-   which also removes the overlay contrast risk entirely. */
-@media (max-width: 63.99rem) {
-  .hero {
-    background: var(--cream-light);
-    padding-bottom: 15rem;
-  }
-
-  .hero__bg {
-    top: auto;
-    height: 15rem;
-  }
-
-  .hero__scrim {
-    display: none;
-  }
-
-  .hero__inner {
-    padding-bottom: clamp(1.5rem, 5vw, 2.5rem);
-  }
-
-  .hero__photo {
-    object-position: 50% 40%;
-  }
-}
-
-.hero__inner {
-  flex: 1;
-  display: grid;
-  align-items: center;
-  gap: 3rem;
-  padding-top: clamp(2rem, 5vw, 3.5rem);
-  padding-bottom: clamp(3rem, 7vw, 5rem);
-}
-
-@media (min-width: 64rem) {
-  .hero__inner {
-    grid-template-columns: minmax(0, 34rem) minmax(0, 1fr);
-  }
-}
-
-.hero__copy > * + * {
-  margin-top: 1.35rem;
-}
-
-.hero__copy .tag {
-  display: inline-block;
-}
-
-.hero__copy h1 {
-  margin-bottom: 1.75rem;
-}
-
-.hero__lede {
-  color: var(--navy);
-  max-width: 30rem;
-}
-
-.hero__seo {
-  color: var(--slate);
-  font-size: 0.9375rem;
-  max-width: 30rem;
-}
-
-.hero__cta {
-  margin-top: 1.9rem;
-}
-
-.hero__foot {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: clamp(2rem, 5vw, 3.25rem);
-}
-
-.hero__foot .rule {
-  margin: 0;
-  flex: none;
-}
-
-.hero__frame {
-  display: none;
-}
-
-@media (min-width: 64rem) {
-  .hero__frame {
-    display: block;
-    justify-self: center;
-    width: min(17rem, 100%);
-    aspect-ratio: 5 / 7;
-    border: 2px solid var(--navy);
-    transform: translate(-16%, -7%);
-  }
-}
-
-.hero__marks {
-  display: none;
-}
-
-/* the right edge of the photograph is dark gold; the marks need their own
-   scrim to stay legible, measured rather than assumed */
-.hero__marks::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: calc(-1 * clamp(1.25rem, 3vw, 2.5rem));
-  width: 21rem;
-  background: linear-gradient(
-    to right,
-    rgba(5, 23, 47, 0) 0%,
-    rgba(5, 23, 47, 0.34) 38%,
-    rgba(5, 23, 47, 0.7) 68%,
-    rgba(5, 23, 47, 0.9) 100%
-  );
-  pointer-events: none;
-}
-
-@media (min-width: 82rem) {
-  .hero__marks {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: clamp(1.25rem, 3vw, 2.5rem);
-    z-index: 2;
-    padding: 7.5rem 0 4rem;
-    pointer-events: none;
-  }
-}
-
-.hero__marks > div {
-  position: relative;
-  z-index: 1;
-}
-
-.hero__marks .mark {
-  color: var(--paper);
-}
-
-.hero__marks .rule {
-  margin: 0.9rem 0 0;
-  width: 2.5rem;
-  background: var(--gold-light);
-}
-
-.mark span {
-  display: block;
-}
-
-/* ---------- pricing ---------- */
-
-.head-split {
-  display: grid;
-  gap: clamp(1.25rem, 3vw, 3rem);
-  margin-bottom: clamp(2.25rem, 5vw, 3.25rem);
-  align-items: end;
-}
-
-@media (min-width: 56rem) {
-  .head-split {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
-  }
-}
-
-.head-split__intro {
-  color: var(--slate);
-  font-size: 0.9375rem;
-  line-height: 1.75;
-}
-
-/* ---------- timeline ---------- */
-
-.split {
-  display: grid;
-  align-items: stretch;
-  gap: 0;
-}
-
-@media (min-width: 60rem) {
-  .split {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
-}
-
-.split__copy {
-  padding: var(--section-y) var(--gutter);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-@media (min-width: 60rem) {
-  .split__copy {
-    padding-left: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
-    padding-right: clamp(2rem, 5vw, 4rem);
-  }
-}
-
-.split__copy h2 {
-  margin-bottom: 1.5rem;
-}
-
-.split__lede {
-  font-size: 1.0625rem;
-  margin-bottom: 1.1rem;
-}
-
-.split__body {
-  color: var(--slate);
-  max-width: 32rem;
-}
-
-.split__figure {
-  min-height: clamp(260px, 42vw, 420px);
-}
-
-/* ---------- what I need ---------- */
-
-.needs-grid {
-  display: grid;
-  gap: clamp(2rem, 4vw, 3.5rem);
-}
-
-@media (min-width: 60rem) {
-  .needs-grid {
-    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
-  }
-}
-
-.needs {
-  margin: 0;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
   padding: 0;
-  list-style: none;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
-.needs li {
-  display: flex;
-  align-items: baseline;
-  gap: clamp(0.85rem, 2vw, 1.5rem);
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.needs li:first-child {
-  border-top: 1px solid var(--line);
-}
-
-.needs__num {
-  flex: none;
-  font-size: 0.75rem;
+/* Skip link */
+.skip {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 10000;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
   font-weight: 500;
-  letter-spacing: 0.14em;
-  color: var(--slate);
+  transform: translateY(-200%);
+  transition: transform 200ms var(--ease-out);
 }
 
-.needs__label {
-  font-weight: 600;
+.skip:focus-visible {
+  transform: none;
+  outline-offset: 2px;
 }
 
-.aside {
-  border-left: 2px solid var(--gold);
-  padding-left: clamp(1.25rem, 2.5vw, 1.75rem);
+/* Scroll-in reveal: opacity/translate only, content is readable with no JS
+   because the hidden state is applied by the script, never by CSS. */
+.reveal-ready [data-reveal] {
+  will-change: transform, opacity;
 }
 
-.aside p {
-  color: var(--slate);
-  font-size: 0.9375rem;
-  max-width: 30ch;
+/* ScrollSmoother wrapper */
+#smooth-wrapper {
+  position: relative;
 }
 
-.aside__media {
-  display: grid;
-  gap: clamp(1rem, 2vw, 1.5rem);
-  align-items: center;
-  margin-top: 1.75rem;
-}
-
-@media (min-width: 26rem) {
-  .aside__media {
-    grid-template-columns: minmax(0, 1fr) minmax(6rem, auto);
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
-}
-
-.aside__figure {
-  aspect-ratio: 4 / 3;
-}
-
-.aside__mark .rule {
-  margin: 0.85rem 0 0;
-  width: 2.25rem;
-}
-
-/* ---------- contact ---------- */
-
-.contact-grid {
-  display: grid;
-  gap: clamp(2rem, 4vw, 3.5rem);
-  align-items: start;
-}
-
-@media (min-width: 56rem) {
-  .contact-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
-  }
-}
-
-.contact__body {
-  color: var(--slate);
-  max-width: 34rem;
-  margin-top: 1.5rem;
-}
-
-.contact__like {
-  margin-top: 1.1rem;
-  color: var(--navy);
-}
-
-.contact__actions {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1.35rem;
-}
-
-.contact__mail {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  min-height: 44px;
-  font-size: 1rem;
-}
-
-.contact__mail svg {
-  flex: none;
-  color: var(--slate);
-}
-
-/* ---------- footer ---------- */
-
-.footer {
-  border-top: 1px solid var(--line);
-  background: var(--cream-light);
-}
-
-.footer__inner {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-top: 1.75rem;
-  padding-bottom: 1.75rem;
-}
-
-.footer__name {
-  font-size: 0.9375rem;
-  font-weight: 600;
 }
