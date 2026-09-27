@@ -9,6 +9,8 @@ export type Project = {
   category: string;
   line: string;
   href: string;
+  /** Small label shown ahead of the line, e.g. to mark Kyle's own product. */
+  note?: string;
   image: { src: string; width: number; height: number; alt: string };
 };
 
@@ -35,6 +37,7 @@ export const projects: Project[] = [
     category: "App",
     line: "A local-first journaling and life-planning app with optional cloud sync, built around faithfulness in small things.",
     href: "https://withlittle.app",
+    note: "My own app.",
     image: { src: "/work/with-little/daily.webp", width: 1600, height: 882, alt: "The With Little daily ledger: planning, habits, must-dos, a thought journal and scripture on one screen" },
   },
 ];

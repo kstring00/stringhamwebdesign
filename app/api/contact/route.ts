@@ -29,16 +29,34 @@ function rateLimited(ip: string) {
  * so answering is a plain reply. With RESEND_API_KEY unset the request still
  * succeeds (the visitor sees the confirmation) and the server logs the
  * message instead, so a missing key never swallows a lead silently.
+ *
+ * The form script posts JSON and gets JSON back. Without JavaScript (or
+ * before it loads) the browser posts the form natively; that gets a 303 back
+ * to /contact with ?sent=1 or ?error=…, so no message is ever dropped and
+ * nothing the visitor typed ends up in a URL.
  */
 export async function POST(request: NextRequest) {
+  const native = !(request.headers.get("content-type") || "").includes("application/json");
+  const reply = (status: number, payload: { ok?: true; sent?: boolean; error?: string }) => {
+    if (!native) return NextResponse.json(payload, { status });
+    const to = new URL("/contact", request.url);
+    if (payload.ok) to.searchParams.set("sent", "1");
+    else to.searchParams.set("error", status === 429 ? "busy" : status === 502 ? "send" : "fields");
+    return NextResponse.redirect(to, 303);
+  };
+
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (rateLimited(ip)) return NextResponse.json({ error: "Too many messages in a row. Please wait a few minutes." }, { status: 429 });
+  if (rateLimited(ip)) return reply(429, { error: "Too many messages in a row. Please wait a few minutes." });
 
   let body: Record<string, unknown>;
-  try { body = (await request.json()) as Record<string, unknown>; } catch { return NextResponse.json({ error: "Invalid request." }, { status: 400 }); }
+  try {
+    body = native ? Object.fromEntries((await request.formData()).entries()) : ((await request.json()) as Record<string, unknown>);
+  } catch {
+    return reply(400, { error: "Invalid request." });
+  }
 
   // Honeypot: bots fill it, people never see it.
-  if (clean(body.website, 50)) return NextResponse.json({ ok: true });
+  if (clean(body.website, 50)) return reply(200, { ok: true });
 
   const name = clean(body.name, 100);
   const email = clean(body.email, 180);
@@ -47,7 +65,7 @@ export async function POST(request: NextRequest) {
   const message = clean(body.message, 2000);
 
   if (name.length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || business.length < 2 || !NEEDS.includes(need) || message.length < 3) {
-    return NextResponse.json({ error: "Please fill in every field." }, { status: 400 });
+    return reply(400, { error: "Please fill in every field." });
   }
 
   const text = [
@@ -69,7 +87,7 @@ export async function POST(request: NextRequest) {
 
   if (!apiKey) {
     console.warn("RESEND_API_KEY is not set; contact message logged instead of sent:\n" + text);
-    return NextResponse.json({ ok: true, sent: false });
+    return reply(200, { ok: true, sent: false });
   }
 
   const res = await fetch("https://api.resend.com/emails", {
@@ -80,8 +98,8 @@ export async function POST(request: NextRequest) {
 
   if (!res.ok) {
     console.error("Contact email failed", res.status, await res.text().catch(() => ""));
-    return NextResponse.json({ error: "I couldn't send that just now. Please email me directly." }, { status: 502 });
+    return reply(502, { error: "I couldn't send that just now. Please email me directly." });
   }
 
-  return NextResponse.json({ ok: true, sent: true });
+  return reply(200, { ok: true, sent: true });
 }

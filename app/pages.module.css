@@ -304,6 +304,64 @@
   line-height: 1.5;
 }
 
+.cardNote {
+  display: inline-block;
+  margin-right: 0.6rem;
+  padding: 0.15rem 0.55rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  vertical-align: 0.1em;
+}
+
+/* A standalone text link sitting next to buttons: full tap height. */
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+/* Linked research citation inside running text */
+.cite {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.cite:hover {
+  color: var(--ember-deep);
+}
+
+/* Q&A list (hub: questions clinics ask) */
+.qa {
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+
+.qaItem {
+  padding: clamp(1.25rem, 2.2vw, 1.75rem) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.qaItem dt {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2vw, 1.8rem);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.qaItem dd {
+  margin: 0;
+  max-width: 52ch;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
 /* About */
 .portrait {
   border-radius: 8px;

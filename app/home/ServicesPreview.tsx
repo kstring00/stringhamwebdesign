@@ -7,7 +7,7 @@ export default function ServicesPreview() {
       <div className="container">
         <div className={styles.sectionHead}>
           <p className="label"><b>02</b> Services</p>
-          <h2 id="services-title" className="display-l">Three ways in.</h2>
+          <h2 id="services-title" className="display-l">Four ways I can help.</h2>
         </div>
         <ul className={styles.serviceList} data-reveal-group>
           {previewServices.map((s, i) => (

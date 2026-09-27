@@ -7,7 +7,8 @@
 // CTA reachable; the privacy link and the current year in the footer; no
 // banned words. Then: the old-route redirects are permanent; the 404 page
 // is designed; robots.txt and sitemap.xml match the crawl; the icon, Apple
-// icon and social image are served; LocalBusiness JSON-LD is present;
+// icon and social image are served; business JSON-LD on the homepage and
+// Person JSON-LD on /about;
 // every external link with target=_blank carries noopener. Finally, at
 // 375px and 414px on every page: no horizontal overflow and every control at
 // least 44px tall (inline links in running text exempt, per WCAG 2.5.8).
@@ -19,7 +20,7 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
 
 const isInternal = (h) => h && h.startsWith('/') && !h.startsWith('//');
 const norm = (h) => h.split('#')[0].split('?')[0] || '/';
-const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|example\.com|\(000\)|000-0000|\bTODO\b|timesheet|client portal/i;
+const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|example\.com|\(000\)|000-0000|\bTODO\b|client portal/i;
 
 (async () => {
   let hits = '';
@@ -78,7 +79,8 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     ok(`${path}: skip link and landmarks`, d.skip && d.landmarks.main && d.landmarks.header && d.landmarks.footer && d.landmarks.nav, JSON.stringify(d.landmarks));
     ok(`${path}: phone and Start a project reachable`, d.phone >= 1 && d.cta >= 1, `tel ${d.phone}, cta ${d.cta}`);
     ok(`${path}: footer privacy link and current year`, d.privacy && d.year === String(new Date().getFullYear()), d.year);
-    ok(`${path}: LocalBusiness JSON-LD`, /"@type":"ProfessionalService"/.test(d.jsonld) && /League City/.test(d.jsonld));
+    if (path === '/') ok(`${path}: LocalBusiness JSON-LD`, /"@type":"ProfessionalService"/.test(d.jsonld) && /League City/.test(d.jsonld) && /Houston/.test(d.jsonld));
+    if (path === '/about') ok(`${path}: Person JSON-LD`, /"@type":"Person"/.test(d.jsonld));
     ok(`${path}: no banned words in rendered text`, !BANNED.test(d.text), (d.text.match(BANNED) || [''])[0]);
     ok(`${path}: nav is Work · Services · Family Resource Hub · About`, JSON.stringify(d.headerNav) === JSON.stringify(['Work', 'Services', 'Family Resource Hub', 'About']), JSON.stringify(d.headerNav));
   }

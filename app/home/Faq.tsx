@@ -1,4 +1,5 @@
 import { faq } from "../data/faq";
+import { site } from "../data/site";
 import styles from "./home.module.css";
 
 export default function Faq() {
@@ -14,7 +15,12 @@ export default function Faq() {
             {faq.map((item) => (
               <div className={styles.faqItem} key={item.q} data-reveal>
                 <dt>{item.q}</dt>
-                <dd>{item.a}</dd>
+                <dd>
+                  {item.a}
+                  {item.book && site.bookingUrl ? (
+                    <span className={styles.faqBook}><a className="btn btn-secondary" href={site.bookingUrl} target="_blank" rel="noopener noreferrer">Book the free call</a></span>
+                  ) : null}
+                </dd>
               </div>
             ))}
           </dl>

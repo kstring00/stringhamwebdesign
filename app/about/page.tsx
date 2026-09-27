@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
+import { PersonJsonLd } from "../components/JsonLd";
+import { pageMeta } from "../data/meta";
 import ClosingCta from "../home/ClosingCta";
 import styles from "../pages.module.css";
 
-export const metadata: Metadata = {
-  title: "About Kyle Stringham, Web Designer in League City, TX",
-  description: "Kyle Stringham runs Stringham Web Design LLC in League City, Texas. A Registered Behavior Technician with a psychology degree, building custom websites you own outright.",
-  alternates: { canonical: "/about" },
-};
+export const metadata: Metadata = pageMeta({ title: "About Kyle Stringham, Web Designer in League City, TX", description: "Kyle Stringham runs Stringham Web Design LLC in League City, Texas. A Registered Behavior Technician with a psychology degree, building custom websites you own outright.", path: "/about" });
 
 export default function AboutPage() {
   return (
@@ -20,7 +19,7 @@ export default function AboutPage() {
         <section className={styles.section} aria-label="Kyle Stringham">
           <div className={styles.two}>
             <div className={`frame ${styles.portrait}`} data-reveal>
-              <img src="/about/portrait.webp" alt="Kyle Stringham, photographed head-on against a plain wall, looking at the camera with a slight smile" width="760" height="950" loading="eager" fetchPriority="high" decoding="async" />
+              <Image src="/about/portrait.webp" alt="Kyle Stringham, photographed head-on against a plain wall, looking at the camera with a slight smile" width={760} height={950} sizes="(max-width: 64rem) 100vw, 45vw" priority />
             </div>
             <div className={styles.prose} data-reveal-group>
               <p data-reveal>I'm Kyle Stringham. I run Stringham Web Design LLC out of League City, Texas. By day I'm a Registered Behavior Technician working with autistic kids and their families, and I have a degree in psychology.</p>
@@ -31,6 +30,7 @@ export default function AboutPage() {
         </section>
       </div>
       <ClosingCta />
+      <PersonJsonLd />
     </>
   );
 }

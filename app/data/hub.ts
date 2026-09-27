@@ -4,7 +4,13 @@ export const hub = {
   sub: "A parent support hub on your clinic's website, under your name and colors, free to every family you serve.",
   problem: {
     title: "The hardest hours happen between sessions.",
-    body: "Research shows high parenting stress weakens the gains of early intervention (Osborne et al., 2008). The hub meets parents in those hours, with one clear next step.",
+    before: "Research shows high parenting stress weakens the gains of early intervention",
+    after: "The hub meets parents in those hours, with one clear next step.",
+    citation: {
+      short: "Osborne et al., 2008",
+      full: "Osborne, McHugh, Saunders & Reed (2008), “Parenting stress reduces the effectiveness of early teaching interventions for autistic spectrum disorders,” Journal of Autism and Developmental Disorders 38(6), 1092–1103.",
+      href: "https://doi.org/10.1007/s10803-007-0497-7",
+    },
   },
   paths: [
     "I need a next step",
@@ -25,6 +31,19 @@ export const hub = {
     { title: "A QR card", body: "You hand families a QR card at the front desk." },
   ],
   trust: "Educational only. Collects no child information.",
+  /**
+   * "Questions clinics ask." Fill in `a` to publish an answer; an empty `a`
+   * renders nothing, and the whole block stays hidden until at least one
+   * answer is filled in. Never put bracketed placeholder text here.
+   */
+  clinicQuestions: [
+    { q: "How does pricing work after the 60-day trial?", a: "" },
+    { q: "What about HIPAA and family data?", a: "The hub is educational only. It collects no child information and no protected health information, and parents never create a login." },
+    { q: "Who keeps the content up to date?", a: "" },
+    { q: "What happens if we stop?", a: "" },
+  ] as { q: string; a: string }[],
+  /** One quote from a parent who has used the hub. Empty `text` renders nothing. */
+  parentQuote: { text: "", attribution: "" },
   offer: "60-day trial available.",
   rbt: "As an RBT, I've watched parents carry the home program alone. I built this for them.",
 } as const;

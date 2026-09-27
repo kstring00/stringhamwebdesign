@@ -29,7 +29,6 @@ export default function Footer() {
           <div className={`${styles.col} ${styles.about}`}>
             <p className={styles.head}>Where</p>
             <p className={styles.line}>{locationLine}</p>
-            <p className={styles.line}>{site.person}, {site.credential}.</p>
           </div>
         </div>
 

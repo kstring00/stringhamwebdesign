@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
 
+import { pageMeta } from "../data/meta";
 import { services } from "../data/services";
 import ClosingCta from "../home/ClosingCta";
 import styles from "../pages.module.css";
 
-export const metadata: Metadata = {
-  title: "Web Design Services in League City, TX",
-  description: "Custom websites, redesigns, care plans, and a Family Resource Hub for ABA and pediatric clinics. Web design and development from League City, Texas, quoted fixed-price in writing.",
-  alternates: { canonical: "/services" },
-};
+export const metadata: Metadata = pageMeta({ title: "Web Design Services in League City, TX", description: "Custom websites, redesigns, care plans, and a Family Resource Hub for ABA and pediatric clinics. Web design and development from League City, Texas, quoted fixed-price in writing.", path: "/services" });
 
 export default function ServicesPage() {
   return (
