@@ -15,7 +15,7 @@ Updated 2026-09-27 with the `revamp-2026` rebuild.
 - Confirm a real contact-form submission arrives at kyle@stringhamwebdesign.com
   on the preview deployment (the sandbox has no `RESEND_API_KEY`, so it was
   tested to the API route only).
-- Items in `ASSETS_NEEDED.md` (Common Ground capture, Lake City, photo).
+- Items in `ASSETS_NEEDED.md` (Lake City, photo).
 
 ## Could not be verified from the build sandbox
 

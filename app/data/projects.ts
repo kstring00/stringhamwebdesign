@@ -19,7 +19,7 @@ export const projects: Project[] = [
     category: "Behavioral health",
     line: "A parent navigation hub for autism families, now offered to clinics as a white-labeled Family Resource Hub.",
     href: "https://www.commongroundautism.org",
-    image: { src: "/work/common-ground/home.webp", width: 1600, height: 2438, alt: "The Common Ground homepage: a parent navigation hub for autism families, opening with the question of what a parent needs today" },
+    image: { src: "/work/common-ground/home.webp", width: 1600, height: 882, alt: "The Common Ground homepage: \"Real autism support for real families,\" with a parent and child doing a puzzle and a Find My Next Step button" },
   },
   {
     slug: "bcba-prep",
