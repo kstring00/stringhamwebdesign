@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 
 import { projects } from "../data/projects";
@@ -46,13 +47,13 @@ export default function FeaturedWork() {
         {projects.map((p, i) => (
           <a className={styles.project} href={p.href} target="_blank" rel="noopener noreferrer" key={p.slug} data-reveal data-cursor="view">
             <div className={`frame ${styles.frame}`} data-frame>
-              <img src={p.image.src} alt={p.image.alt} width={p.image.width} height={p.image.height} loading={i === 0 ? "eager" : "lazy"} decoding="async" />
+              <Image src={p.image.src} alt={p.image.alt} width={p.image.width} height={p.image.height} sizes="(max-width: 64rem) 100vw, 55vw" />
             </div>
             <div className={styles.projectMeta}>
               <span className={styles.projectIndex}>{String(i + 1).padStart(2, "0")}</span>
               <span className={styles.projectName}>{p.name}</span>
               <span className={styles.projectCat}>{p.category}</span>
-              <span className={styles.projectLine}>{p.line}</span>
+              <span className={styles.projectLine}>{p.note ? <span className={styles.projectNote}>{p.note}</span> : null}{p.line}</span>
               <span className="sr-only"> (opens in a new tab)</span>
             </div>
           </a>

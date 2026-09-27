@@ -11,6 +11,11 @@ with Playwright and Lighthouse installed locally, not saved:
   words, the old-route redirects, the 404, robots and sitemap, the icons and
   social image, external-link safety, and at 375px and 414px no overflow,
   44px controls and readable text.
+- `link-check.js` — crawls the sitemap and every internal href on those pages
+  and reports any non-200; also asserts each retired route (`/quote`,
+  `/pricing`, `/resources/*`, `/work/<slug>`, `/faq`, `/portal`, …) answers
+  with a 301 to exactly the right place, and that unknown routes 404. Needs
+  no extra packages.
 - `lighthouse-check.js <path>` — mobile and desktop scores; asserts mobile
   performance ≥ 80 and accessibility ≥ 95.
 - `clarity-check.js` — the analytics tag loads only in production with an id,

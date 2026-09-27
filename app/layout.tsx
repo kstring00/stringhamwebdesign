@@ -5,7 +5,6 @@ import "./globals.css";
 import ClarityAnalytics from "./ClarityAnalytics";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import JsonLd from "./components/JsonLd";
 import Cursor from "./motion/Cursor";
 import PageTransition from "./motion/PageTransition";
 import Reveal from "./motion/Reveal";
@@ -38,7 +37,7 @@ export const metadata: Metadata = {
   applicationName: site.name,
   authors: [{ name: site.person, url: site.url }],
   creator: site.person,
-  openGraph: { type: "website", siteName: site.name, locale: "en_US", url: "/" },
+  openGraph: { type: "website", siteName: site.name, locale: "en_US" },
   twitter: { card: "summary_large_image" },
   robots: { index: true, follow: true },
 };
@@ -62,7 +61,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Reveal />
         <Cursor />
         <PageTransition />
-        <JsonLd />
         <ClarityAnalytics />
       </body>
     </html>

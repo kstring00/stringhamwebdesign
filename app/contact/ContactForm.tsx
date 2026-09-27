@@ -8,10 +8,18 @@ import styles from "./contact.module.css";
 export const NEEDS = ["New website", "Redesign", "Family Resource Hub for my clinic", "Something else"] as const;
 type Need = (typeof NEEDS)[number];
 
-export default function ContactForm({ initialNeed = "" }: { initialNeed?: Need | "" }) {
+/** Messages for a native (no-JS) post that bounced back with ?error=… */
+const NATIVE_ERRORS: Record<string, string> = {
+  fields: "Please fill in every field.",
+  busy: "Too many messages in a row. Please wait a few minutes.",
+  send: "I couldn't send that just now.",
+};
+
+export default function ContactForm({ initialNeed = "", sent = false, errorCode = "" }: { initialNeed?: Need | ""; sent?: boolean; errorCode?: string }) {
   const [need, setNeed] = useState<Need | "">(initialNeed);
-  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
-  const [error, setError] = useState("");
+  const nativeError = NATIVE_ERRORS[errorCode] ?? (errorCode ? "That didn't go through." : "");
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">(sent ? "sent" : nativeError ? "error" : "idle");
+  const [error, setError] = useState(nativeError);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -40,7 +48,7 @@ export default function ContactForm({ initialNeed = "" }: { initialNeed?: Need |
   }
 
   return (
-    <form className={styles.form} onSubmit={onSubmit} noValidate={false}>
+    <form className={styles.form} onSubmit={onSubmit} method="post" action="/api/contact">
       <div className={styles.field}>
         <label htmlFor="name">Name</label>
         <input className={styles.input} id="name" name="name" autoComplete="name" required maxLength={100} />
@@ -67,9 +75,10 @@ export default function ContactForm({ initialNeed = "" }: { initialNeed?: Need |
         <label htmlFor="message">Message</label>
         <textarea className={styles.input} id="message" name="message" required maxLength={2000} rows={6} />
       </div>
+      {/* Honeypot: invisible to people and assistive tech, filled only by bots. */}
       <div className={styles.honeypot} aria-hidden="true">
-        <label htmlFor="website">Website</label>
-        <input id="website" name="website" tabIndex={-1} autoComplete="off" />
+        <label htmlFor="website">Leave this empty</label>
+        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" />
       </div>
       {state === "error" ? <p className={styles.error} role="alert">{error} Nothing was lost; try again or email me directly.</p> : null}
       <div>

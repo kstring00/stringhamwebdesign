@@ -188,6 +188,19 @@
   line-height: 1.5;
 }
 
+.projectNote {
+  display: inline-block;
+  margin-right: 0.6rem;
+  padding: 0.15rem 0.55rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  vertical-align: 0.1em;
+}
+
 .projectAll {
   display: inline-flex;
   align-items: center;
@@ -452,6 +465,11 @@
   max-width: 48ch;
   color: var(--ink-soft);
   line-height: 1.55;
+}
+
+.faqBook {
+  display: block;
+  margin-top: 1.25rem;
 }
 
 @media (max-width: 64rem) {

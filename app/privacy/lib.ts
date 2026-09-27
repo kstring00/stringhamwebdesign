@@ -6,7 +6,7 @@ import { marked } from "marked";
 const FILE = path.join(process.cwd(), "content", "privacy.md");
 
 /** Bump whenever content/privacy.md changes in substance. */
-export const LAST_UPDATED = "2026-09-27";
+export const LAST_UPDATED = "2026-09-26";
 
 export function lastUpdatedLabel() {
   return new Date(`${LAST_UPDATED}T12:00:00Z`).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });

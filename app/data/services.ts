@@ -24,10 +24,10 @@ export const services: Service[] = [
   {
     slug: "care-plans",
     name: "Care plans",
-    line: "Hosting, updates, and small changes.",
-    body: "Hosting, updates, and small changes after launch, quoted separately. Or I teach you to make edits yourself and you never need me again. Either way the site stays yours.",
+    line: "Updates and upkeep after launch.",
+    body: "Updates, small changes and keeping things running after launch, quoted separately. Hosting stays in your name. Or I teach you to make edits yourself.",
   },
 ];
 
-/** The three the homepage previews. */
-export const previewServices = services.filter((s) => ["custom-websites", "redesigns", "family-resource-hub"].includes(s.slug));
+/** The homepage previews all four, so its count matches /services. */
+export const previewServices = services;
