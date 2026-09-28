@@ -7,7 +7,9 @@ import { gsap, prefersReducedMotion } from "./gsap";
 import styles from "./PageTransition.module.css";
 
 /**
- * An ink wipe between routes, under 600ms end to end. Internal link clicks
+ * An ink wipe between routes, under 600ms end to end. A link can set its
+ * own wipe color with data-wipe (the home doors wipe in their world's
+ * color). Internal link clicks
  * are intercepted: the wipe covers the page (260ms), the route changes, and
  * the wipe clears on the new page (300ms). With reduced motion, or for
  * modified clicks, hashes, downloads and external links, nothing intercepts.
@@ -25,7 +27,7 @@ export default function PageTransition() {
     if (!pending.current) return;
     pending.current = false;
     window.scrollTo(0, 0);
-    gsap.to(el, { yPercent: -100, duration: 0.3, ease: "power3.inOut", onComplete: () => { gsap.set(el, { yPercent: 100 }); } });
+    gsap.to(el, { yPercent: -100, duration: 0.3, ease: "power3.inOut", onComplete: () => { gsap.set(el, { yPercent: 100 }); el.style.background = ""; } });
   }, [pathname]);
 
   useEffect(() => {
@@ -43,6 +45,7 @@ export default function PageTransition() {
       if (path === pathname) return;
       e.preventDefault();
       pending.current = true;
+      el.style.background = a.dataset.wipe || "";
       gsap.to(el, { yPercent: 0, duration: 0.26, ease: "power3.in", onComplete: () => router.push(href) });
     };
     document.addEventListener("click", onClick);

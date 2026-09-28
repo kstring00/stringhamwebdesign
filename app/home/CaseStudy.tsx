@@ -77,10 +77,10 @@ export default function CaseStudy() {
   const { screens } = caseStudy;
 
   return (
-    <section className={styles.case} id="common-ground" ref={root} aria-labelledby="case-title">
+    <section className={`${styles.case} world-clinic tinted`} id="common-ground" ref={root} aria-labelledby="case-title">
       <div className="container">
         <div className={styles.caseHead}>
-          <p className="label"><b>01</b> {caseStudy.label}</p>
+          <p className="label"><b>02</b> {caseStudy.label}</p>
           <h2 id="case-title" className="display-l">{caseStudy.title}</h2>
         </div>
 

@@ -1,11 +1,7 @@
-/* ---------- hero ---------- */
-
-.hero {
-  padding: clamp(9rem, 18vw, 14rem) 0 clamp(4rem, 8vw, 7rem);
-}
+/* ---------- shared bits from the old hero ---------- */
 
 .eyebrow {
-  margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
+  margin: 0 0 clamp(1.25rem, 2.5vw, 2rem);
   color: var(--muted);
   font-size: 0.82rem;
   font-weight: 500;
@@ -13,53 +9,11 @@
   text-transform: uppercase;
 }
 
-.h1 {
-  max-width: 12ch;
-  font-weight: 300;
-  font-variation-settings: "opsz" 144, "SOFT" 40;
-}
-
-.h1 em {
-  font-style: italic;
-  color: var(--ember);
-}
-
 /* SplitText line masks */
 .line {
   overflow: hidden;
   padding-bottom: 0.06em;
   margin-bottom: -0.06em;
-}
-
-.heroRow {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 2rem;
-  align-items: end;
-  margin-top: clamp(2.5rem, 5vw, 4rem);
-}
-
-.sub {
-  grid-column: 1 / span 6;
-}
-
-.heroActions {
-  grid-column: 8 / -1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem 1.5rem;
-  justify-self: end;
-}
-
-@media (max-width: 64rem) {
-  .heroRow { grid-template-columns: 1fr; }
-  .sub, .heroActions { grid-column: 1; justify-self: start; }
-}
-
-@media (max-width: 40rem) {
-  .heroActions { width: 100%; }
-  .heroActions > span, .heroActions a { width: 100%; }
-  .heroActions a { justify-content: center; }
 }
 
 /* ---------- section heads ---------- */
@@ -72,6 +26,163 @@
 
 .sectionHead h2 {
   max-width: 14ch;
+}
+
+/* ---------- why these two ---------- */
+
+.why {
+  position: relative;
+  overflow: hidden;
+  padding: var(--section) 0;
+}
+
+.whyRing {
+  top: 12%;
+  right: -5rem;
+  width: clamp(12rem, 22vw, 20rem);
+  transform: rotate(24deg);
+}
+
+.whyGrid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 2rem;
+  align-items: center;
+}
+
+.whyText {
+  grid-column: 1 / span 7;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.whyLead {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 3.4vw, 3.3rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+
+.whyLead em {
+  font-family: var(--font-display-italic);
+  font-style: italic;
+  color: var(--sage);
+}
+
+.whyBody {
+  max-width: 40ch;
+  color: var(--ink-soft);
+  font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+  line-height: 1.55;
+}
+
+.whySign {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.whyMark {
+  color: var(--crema-ink);
+}
+
+.whyPhoto {
+  grid-column: 9 / -1;
+  margin: 0;
+  border-radius: 10px;
+  aspect-ratio: 4 / 5;
+}
+
+@media (max-width: 64rem) {
+  .whyGrid { grid-template-columns: 1fr; }
+  .whyText, .whyPhoto { grid-column: 1; }
+  .whyPhoto { width: min(100%, 22rem); }
+}
+
+/* ---------- coffee slot ---------- */
+
+.coffeeSlot {
+  position: relative;
+  overflow: hidden;
+  padding: var(--section) 0;
+}
+
+.slotRing {
+  bottom: -3rem;
+  left: -4rem;
+  width: clamp(14rem, 24vw, 22rem);
+  transform: rotate(-30deg);
+}
+
+.coffeeGrid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 2rem;
+  align-items: center;
+}
+
+.coffeeText {
+  grid-column: 1 / span 6;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.coffeeTitle {
+  max-width: 14ch;
+  color: var(--espresso);
+}
+
+.coffeeLine {
+  max-width: 34ch;
+  color: var(--espresso);
+  font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+  line-height: 1.55;
+}
+
+.conceptNote {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  max-width: 40ch;
+  color: #5d4a3e;
+  font-size: 0.9rem;
+}
+
+.conceptNote::before {
+  content: "Concept";
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--espresso);
+  border-radius: 999px;
+  color: var(--espresso);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.coffeeDemo {
+  grid-column: 8 / -1;
+  display: grid;
+  justify-items: center;
+}
+
+@media (max-width: 64rem) {
+  .coffeeGrid { grid-template-columns: 1fr; }
+  .coffeeText, .coffeeDemo { grid-column: 1; }
+}
+
+/* Unwritten Casa Matcha copy shows as a dashed box, never as real text. */
+.unwritten {
+  padding: 0.75rem 1rem;
+  border: 2px dashed var(--espresso);
+  border-radius: 8px;
+  color: var(--espresso);
+  font-family: var(--font-text);
+  font-size: 1rem;
 }
 
 /* ---------- case study: Common Ground ---------- */
@@ -185,7 +296,7 @@
   font-family: var(--font-display);
   font-size: 1.6rem;
   line-height: 1;
-  color: var(--ember);
+  color: var(--world-accent, var(--sage));
 }
 
 .walkText {
@@ -322,94 +433,6 @@
   .caseActions > span, .caseActions a { width: 100%; justify-content: center; }
 }
 
-/* ---------- statement ---------- */
-
-.statement {
-  padding: var(--section) 0;
-}
-
-.statementLine {
-  max-width: 22ch;
-  font-weight: 300;
-  font-variation-settings: "opsz" 96;
-  line-height: 1.08;
-}
-
-/* ---------- services preview ---------- */
-
-.services {
-  padding: var(--section) 0;
-}
-
-.serviceList {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--line);
-}
-
-.service {
-  display: grid;
-  grid-template-columns: 4rem minmax(0, 1.2fr) minmax(0, 1fr) 3rem;
-  align-items: center;
-  gap: 1.5rem;
-  padding: clamp(1.4rem, 2.6vw, 2.2rem) 0;
-  border-bottom: 1px solid var(--line);
-  color: inherit;
-  transition: padding-left 320ms var(--ease-out);
-}
-
-.service:hover {
-  padding-left: 0.75rem;
-}
-
-.serviceIndex {
-  color: var(--muted);
-  font-size: 0.82rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-}
-
-.serviceName {
-  font-family: var(--font-display);
-  font-size: clamp(1.6rem, 3vw, 2.8rem);
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
-
-.serviceName em {
-  font-style: italic;
-  color: var(--ember);
-}
-
-.serviceLine {
-  color: var(--ink-soft);
-}
-
-.serviceArrow {
-  justify-self: end;
-  font-family: var(--font-display);
-  font-size: 1.8rem;
-  color: var(--ember);
-  transition: transform 300ms var(--ease-out);
-}
-
-.service:hover .serviceArrow {
-  transform: translateX(6px);
-}
-
-@media (max-width: 48rem) {
-  .service {
-    grid-template-columns: 2.5rem minmax(0, 1fr) 2rem;
-    grid-template-areas: "index name arrow" "index line arrow";
-    row-gap: 0.4rem;
-  }
-  .serviceIndex { grid-area: index; }
-  .serviceName { grid-area: name; }
-  .serviceLine { grid-area: line; }
-  .serviceArrow { grid-area: arrow; }
-}
-
 /* ---------- process: four steps on one rule ---------- */
 
 .process {
@@ -424,7 +447,7 @@
    default; the script rewinds it only when it will animate it. */
 .rail {
   position: absolute;
-  top: 0.45rem;
+  top: 0.95rem;
   left: 0;
   right: 0;
   height: 1px;
@@ -434,7 +457,7 @@
 .railFill {
   position: absolute;
   inset: 0;
-  background: var(--ember);
+  background: linear-gradient(90deg, var(--crema), var(--sage));
   transform-origin: left center;
 }
 
@@ -455,18 +478,59 @@
   padding-top: 2.5rem;
 }
 
-/* A small node on the rule above each step. */
-.stepDot {
+/* The marker on the rule above each step: a cup (odd steps) or four
+   quarters (even steps). Lit is the default; the script unlights them. */
+.stepMark {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 0.9rem;
-  height: 0.9rem;
-  border: 1px solid var(--ember);
+  left: -0.2rem;
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
   border-radius: 50%;
-  background: var(--ember);
-  transition: background 400ms var(--ease-out), border-color 400ms var(--ease-out), transform 400ms var(--ease-out);
+  background: var(--paper);
 }
+
+.markCup,
+.markPieces {
+  width: 1.9rem;
+  height: 1.9rem;
+  overflow: visible;
+}
+
+.markCupLine {
+  fill: none;
+  stroke: var(--espresso);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.markCupFill {
+  fill: var(--crema);
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transition: transform 700ms var(--ease-out);
+}
+
+.markPieces path {
+  transition: transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.q1 { fill: var(--sage); }
+.q2 { fill: var(--sage-soft); }
+.q3 { fill: var(--sky); }
+.q4 { fill: var(--sage-pale); }
+
+.process[data-animate] .step:not(.stepLit) .markCupFill { transform: scaleY(0); }
+.process[data-animate] .step:not(.stepLit) .q1 { transform: translate(-4px, -4px) rotate(-12deg); }
+.process[data-animate] .step:not(.stepLit) .q2 { transform: translate(4px, -4px) rotate(10deg); }
+.process[data-animate] .step:not(.stepLit) .q3 { transform: translate(-4px, 4px) rotate(10deg); }
+.process[data-animate] .step:not(.stepLit) .q4 { transform: translate(4px, 4px) rotate(-12deg); }
+
+.step:nth-child(odd) .stepN { color: var(--crema-ink); }
+.step:nth-child(even) .stepN { color: var(--sage); }
 
 .stepN {
   font-family: var(--font-display);
@@ -475,7 +539,6 @@
   font-variation-settings: "opsz" 144, "SOFT" 40;
   letter-spacing: -0.05em;
   line-height: 0.85;
-  color: var(--ember);
   transition: color 500ms var(--ease-out), transform 600ms var(--ease-out);
 }
 
@@ -491,12 +554,6 @@
 }
 
 /* Animated: unlit steps wait quietly until the line reaches them. */
-.process[data-animate] .step:not(.stepLit) .stepDot {
-  background: var(--paper);
-  border-color: var(--line-strong);
-  transform: scale(0.75);
-}
-
 .process[data-animate] .step:not(.stepLit) .stepN {
   /* Quiet but still 3.3:1 on paper, above the large-text minimum. */
   color: #8a8277;
@@ -509,7 +566,7 @@
   .rail {
     top: 0;
     bottom: 0;
-    left: 0.45rem;
+    left: 0.75rem;
     right: auto;
     width: 1px;
     height: auto;
@@ -528,11 +585,11 @@
     grid-template-columns: auto minmax(0, 1fr);
     column-gap: 1.25rem;
     row-gap: 0.5rem;
-    padding: 0 0 0 2.25rem;
+    padding: 0 0 0 2.9rem;
   }
 
-  .stepDot {
-    top: 0.35rem;
+  .stepMark {
+    top: 0.1rem;
   }
 
   .stepN {
@@ -611,8 +668,10 @@
 }
 
 .closingLine {
-  max-width: 10ch;
   margin-bottom: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(3.4rem, 12.5vw, 15rem);
   font-weight: 300;
   font-variation-settings: "opsz" 144, "SOFT" 60;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
 }

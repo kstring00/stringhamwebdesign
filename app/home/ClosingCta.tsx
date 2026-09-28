@@ -6,7 +6,7 @@ export default function ClosingCta({ line = "Let's build yours." }: { line?: str
   return (
     <section className={`${styles.closing} ink`} aria-labelledby="closing-title">
       <div className="container">
-        <h2 id="closing-title" className={`display-xl ${styles.closingLine}`} data-reveal>{line}</h2>
+        <h2 id="closing-title" className={styles.closingLine} data-reveal>{line}</h2>
         <div data-reveal>
           <Magnetic>
             <a className="btn" href={cta.href}>

@@ -26,7 +26,8 @@ export function BusinessJsonLd() {
           { "@type": "AdministrativeArea", name: "Greater Houston area, TX" },
         ],
         founder: { "@id": `${site.url}/about#kyle` },
-        description: "Custom web design and development for clinics and local businesses, based in League City, Texas.",
+        description: "Websites for independent coffee shops and autism therapy clinics, built in League City, Texas.",
+        knowsAbout: ["Coffee shop websites", "Online ordering", "ABA clinic websites", "Parent support hubs"],
       }}
     />
   );

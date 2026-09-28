@@ -229,7 +229,7 @@
 .quote {
   max-width: 24ch;
   margin: 0;
-  font-family: var(--font-display);
+  font-family: var(--font-display-italic);
   font-size: clamp(1.8rem, 3.4vw, 3.2rem);
   font-style: italic;
   font-weight: 300;

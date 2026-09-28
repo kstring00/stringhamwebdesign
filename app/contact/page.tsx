@@ -28,7 +28,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
           ) : null}
           <p className={local.where}>{locationLine}</p>
         </div>
-        <ContactForm initialNeed={about === "hub" ? "Family Resource Hub for my clinic" : ""} sent={sent === "1"} errorCode={typeof error === "string" ? error : ""} />
+        <ContactForm initialNeed={({ hub: "Family Resource Hub", clinic: "Autism clinic website", coffee: "Coffee shop website" } as const)[about as "hub" | "clinic" | "coffee"] ?? ""} sent={sent === "1"} errorCode={typeof error === "string" ? error : ""} />
       </section>
     </div>
   );

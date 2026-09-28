@@ -1,0 +1,129 @@
+/* Motif styling. Colors come from the world tokens in globals.css; the
+   gap between pieces uses --piece-gap so it matches whatever ground the
+   motif sits on. */
+
+.cup,
+.rosetta,
+.pieces,
+.ring,
+.mark {
+  display: block;
+  overflow: visible;
+}
+
+/* ---------- cup ---------- */
+
+.line {
+  fill: none;
+  stroke: var(--espresso);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.steam path {
+  fill: none;
+  stroke: var(--espresso);
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.45;
+}
+
+.coffee {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+.coffeeBody {
+  fill: var(--espresso);
+}
+
+.coffeeCrema {
+  fill: var(--crema);
+}
+
+/* ---------- rosetta ---------- */
+
+.saucer {
+  fill: none;
+  stroke: var(--espresso);
+  stroke-width: 2;
+}
+
+.latte {
+  fill: var(--espresso);
+}
+
+.art path {
+  fill: none;
+  stroke: var(--milk);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+/* ---------- rings ---------- */
+
+.ring {
+  position: absolute;
+  pointer-events: none;
+}
+
+.ring path {
+  fill: none;
+  stroke: var(--crema);
+  stroke-width: 5;
+  stroke-linecap: round;
+  opacity: 0.16;
+}
+
+.ring .ringThin {
+  stroke-width: 2;
+  opacity: 0.12;
+}
+
+/* ---------- pieces ---------- */
+
+.pieces path {
+  stroke: var(--piece-gap, var(--paper));
+  stroke-width: 5;
+  stroke-linejoin: round;
+}
+
+.piece_a path { fill: var(--sage); }
+.piece_b path { fill: var(--sage-soft); }
+.piece_c path { fill: var(--sky); }
+.piece_d path { fill: var(--sage-pale); }
+
+.pieces text {
+  font-family: var(--font-text);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  fill: var(--ink);
+}
+
+/* Paper text on the deep sage piece: 5.8:1. */
+.piece_a text {
+  fill: var(--paper);
+}
+
+/* ---------- tiny marks (footer) ---------- */
+
+.mark {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.mark path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+
+.markPieces path {
+  fill: currentColor;
+  stroke: var(--ink);
+  stroke-width: 10;
+  opacity: 0.9;
+}

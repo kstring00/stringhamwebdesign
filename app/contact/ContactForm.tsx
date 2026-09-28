@@ -5,7 +5,9 @@ import { useState, type FormEvent } from "react";
 import { site } from "../data/site";
 import styles from "./contact.module.css";
 
-export const NEEDS = ["New website", "Redesign", "Family Resource Hub for my clinic", "Something else"] as const;
+export const NEEDS = ["Coffee shop website", "Autism clinic website", "Family Resource Hub", "Something else"] as const;
+/** Options that get the "no client or patient information" note. */
+const CLINICAL: readonly string[] = ["Autism clinic website", "Family Resource Hub"];
 type Need = (typeof NEEDS)[number];
 
 /** Messages for a native (no-JS) post that bounced back with ?error=… */
@@ -68,7 +70,7 @@ export default function ContactForm({ initialNeed = "", sent = false, errorCode 
           {NEEDS.map((n) => <option key={n} value={n}>{n}</option>)}
         </select>
       </div>
-      {need === "Family Resource Hub for my clinic" ? (
+      {CLINICAL.includes(need) ? (
         <p className={styles.note} role="note">Please don't include any client or patient information.</p>
       ) : null}
       <div className={styles.field}>

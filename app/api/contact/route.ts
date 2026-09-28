@@ -4,7 +4,7 @@ import { site } from "@/app/data/site";
 
 export const dynamic = "force-dynamic";
 
-const NEEDS = ["New website", "Redesign", "Family Resource Hub for my clinic", "Something else"];
+const NEEDS = ["Coffee shop website", "Autism clinic website", "Family Resource Hub", "Something else"];
 const RATE_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT = 5;
 const rateStore = new Map<string, { count: number; resetAt: number }>();

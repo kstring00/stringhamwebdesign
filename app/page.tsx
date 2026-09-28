@@ -2,27 +2,27 @@ import type { Metadata } from "next";
 
 import { BusinessJsonLd } from "./components/JsonLd";
 import { pageMeta } from "./data/meta";
-import ClosingCta from "./home/ClosingCta";
-import Faq from "./home/Faq";
 import CaseStudy from "./home/CaseStudy";
-import Hero from "./home/Hero";
+import ClosingCta from "./home/ClosingCta";
+import CoffeeSlot from "./home/CoffeeSlot";
+import DoorsHero from "./home/DoorsHero";
+import Faq from "./home/Faq";
 import ProcessStory from "./home/ProcessStory";
-import ServicesPreview from "./home/ServicesPreview";
-import Statement from "./home/Statement";
-import Marquee from "./motion/Marquee";
+import WhyBand from "./home/WhyBand";
 
-export const metadata: Metadata = pageMeta({ absolute: "Custom Web Design in League City, TX | Stringham Web Design", description: "Custom, beautifully crafted websites for clinics, cafés, and the businesses people love. Built in League City, Texas by Kyle Stringham, and owned outright by you.", path: "/" });
-
-const INDUSTRIES = ["Behavioral health clinics", "Coffee shops", "Coaches", "Storage facilities", "Course creators", "Local shops", "Nonprofits"] as const;
+export const metadata: Metadata = pageMeta({
+  absolute: "Websites for Coffee Shops & Autism Clinics | Stringham Web Design, League City TX",
+  description: "Custom websites for independent coffee shops and autism therapy clinics, built in League City, Texas by Kyle Stringham. Fixed-price quotes, and you own everything.",
+  path: "/",
+});
 
 export default function Home() {
   return (
     <>
-      <Hero />
-      <Marquee items={INDUSTRIES} label="Who I build for" />
+      <DoorsHero />
+      <WhyBand />
       <CaseStudy />
-      <Statement />
-      <ServicesPreview />
+      <CoffeeSlot />
       <ProcessStory />
       <Faq />
       <ClosingCta />

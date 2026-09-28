@@ -24,4 +24,7 @@ export const site = {
   year: 2026,
 } as const;
 
-export const locationLine = "Based in League City, Texas. Working with businesses everywhere.";
+export const locationLine = "Based in League City, Texas. Working with coffee shops and clinics everywhere.";
+
+/** The studio line: eyebrow, meta and footer. */
+export const studioLine = "Websites for coffee shops and autism clinics · League City, Texas";

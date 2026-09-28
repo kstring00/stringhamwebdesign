@@ -18,9 +18,21 @@ const fraunces = Fraunces({
   subsets: ["latin"],
   axes: ["opsz", "SOFT"],
   weight: "variable",
-  style: ["normal", "italic"],
+  style: ["normal"],
   display: "swap",
   variable: "--font-fraunces",
+});
+
+/* The italic is a separate file used by three short phrases, all below the
+   fold, so it is not preloaded and never competes with the headline. */
+const frauncesItalic = Fraunces({
+  subsets: ["latin"],
+  axes: ["opsz", "SOFT"],
+  weight: "variable",
+  style: ["italic"],
+  display: "swap",
+  preload: false,
+  variable: "--font-fraunces-italic",
 });
 
 const interTight = Inter_Tight({
@@ -44,7 +56,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${interTight.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${frauncesItalic.variable} ${interTight.variable}`}>
       <body>
         <a className="skip" href="#main">Skip to content</a>
         <Header />

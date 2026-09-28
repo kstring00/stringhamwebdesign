@@ -8,7 +8,7 @@ import { site } from "./site";
 export type Screen = { key: string; caption: string; alt: string };
 
 export const caseStudy = {
-  label: "Featured project",
+  label: "Featured project · Autism clinics",
   title: "Common Ground: a parent navigation hub for autism families.",
   problem: "The hardest hours for autism families happen between therapy sessions, when parents are on their own.",
   built: "A hub that asks one question, ‘What do you need today?’, and walks each parent to one clear next step.",

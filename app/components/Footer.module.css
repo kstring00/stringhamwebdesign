@@ -68,3 +68,47 @@
 @media (max-width: 48rem) {
   .grid { grid-template-columns: 1fr; gap: 1.5rem; }
 }
+
+.wordRow {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 2vw, 1.75rem);
+}
+
+.wordRow {
+  margin-bottom: clamp(0.5rem, 1.5vw, 1rem);
+}
+
+/* Room for the two marks beside it. */
+.wordRow .wordmark {
+  margin: 0;
+  font-size: clamp(3.6rem, 16vw, 19rem);
+}
+
+.steam {
+  flex: none;
+  width: clamp(1.4rem, 2.6vw, 2.4rem);
+  height: auto;
+  color: var(--crema);
+  align-self: flex-start;
+  margin-top: 1.5%;
+}
+
+.pieces {
+  flex: none;
+  width: clamp(1.4rem, 2.6vw, 2.4rem);
+  height: auto;
+  color: var(--sage-soft);
+  align-self: flex-end;
+  margin-bottom: 3%;
+}
+
+/* Clear of the wordmark's descender ("g"), which hangs well below its box. */
+.studio {
+  margin: clamp(1.75rem, 5vw, 4.5rem) 0 clamp(2rem, 4vw, 3.5rem);
+  color: var(--muted-on-ink);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}

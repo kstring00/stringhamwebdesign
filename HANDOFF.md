@@ -15,7 +15,14 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
 
 ## Rules from the owner
 
-- Warm editorial design: paper `#F4EFE6`, ink `#15130F`, ember `#D2552D`.
+- Two worlds, one studio: coffee shops and autism clinics. Paper `#F4EFE6`
+  and ink `#17130F` underneath; coffee is espresso `#3A261C`, crema
+  `#C8894B`, steamed milk `#EFE3D3`; clinics are deep sage `#3F6457`, soft
+  sage `#9DBFB1`, sky `#A9CBDA`. Crema, soft sage and sky are decoration
+  only on light grounds (they fail AA as text); use `--crema-ink` and
+  `--sage` for text.
+- Never use the jigsaw puzzle-piece icon for autism. The clinic motif is
+  four soft, rounded pieces of one whole, and must stay abstract.
   Fraunces for display, Inter Tight for text, both self-hosted through
   `next/font`. Tokens in `app/globals.css`. No new colours, fonts or libraries.
 - Motion is GSAP only. Every animation is off under `prefers-reduced-motion`

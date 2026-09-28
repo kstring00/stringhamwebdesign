@@ -1,0 +1,426 @@
+/* The two niche pages (/coffee-shops, /autism-clinics). The page wrapper
+   sets .world-coffee or .world-clinic; everything here reads --world-*. */
+
+.section {
+  position: relative;
+  padding: var(--section) 0;
+}
+
+.sectionHead {
+  display: grid;
+  gap: 1.1rem;
+  max-width: 44rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.sectionHead h2 {
+  color: var(--world-deep);
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(8rem, 15vw, 11rem) 0 clamp(4rem, 8vw, 6.5rem);
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 2rem;
+  align-items: center;
+}
+
+.heroText {
+  grid-column: 1 / span 7;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.h1 {
+  max-width: 13ch;
+  color: var(--world-deep);
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "SOFT" 40;
+}
+
+.lede {
+  color: var(--ink-soft);
+}
+
+.heroArt {
+  grid-column: 8 / -1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+}
+
+.heroCup { width: clamp(7rem, 13vw, 12rem); }
+.heroRosetta { width: clamp(6rem, 10vw, 9.5rem); margin-bottom: 0.6rem; }
+.heroPieces { width: clamp(11rem, 22vw, 20rem); --piece-gap: var(--world-bg); }
+
+.heroRingA { top: 14%; right: 36%; width: clamp(9rem, 14vw, 13rem); transform: rotate(20deg); }
+.heroRingB { bottom: -3rem; left: -3rem; width: clamp(10rem, 18vw, 16rem); transform: rotate(-40deg); }
+
+@media (max-width: 64rem) {
+  .heroGrid { grid-template-columns: 1fr; }
+  .heroText, .heroArt { grid-column: 1; }
+  .heroArt { justify-content: flex-start; }
+}
+
+/* ---------- buttons in the world's color ---------- */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.25rem;
+}
+
+.btnWorld {
+  background: var(--world-deep);
+  border-color: var(--world-deep);
+  color: var(--paper);
+}
+
+.btnWorld:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.btnWorldLine {
+  border-color: var(--world-deep);
+  color: var(--world-deep);
+}
+
+.btnWorldLine:hover {
+  background: var(--world-deep);
+  border-color: var(--world-deep);
+  color: var(--paper);
+}
+
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--world-deep);
+  font-weight: 500;
+}
+
+@media (max-width: 40rem) {
+  .actions > span, .actions > span > a { width: 100%; }
+  .actions > span > a { justify-content: center; }
+}
+
+/* ---------- coffee: what's included, beside the filling cup ---------- */
+
+.included {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 2rem;
+  align-items: start;
+}
+
+.cupStage {
+  grid-column: 1 / span 5;
+  grid-row: 1;
+  display: grid;
+  justify-items: center;
+}
+
+.bigCup {
+  width: min(100%, 22rem);
+}
+
+.list {
+  grid-column: 7 / -1;
+  grid-row: 1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  gap: 1.25rem;
+  padding: clamp(1.75rem, 3.5vw, 2.75rem) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.itemN {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 300;
+  line-height: 0.9;
+  color: var(--world-accent);
+  transition: color 400ms var(--ease-out);
+}
+
+/* Unfilled rows keep a quiet number that still clears 3:1 (large text). */
+section[data-animate] .item:not(.itemOn) .itemN {
+  color: #8a8277;
+}
+
+.itemTitle {
+  margin-bottom: 0.4rem;
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  color: var(--ink);
+}
+
+.itemBody {
+  max-width: 40ch;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+/* Phones: the cup rides in a slim sticky strip above the list (native
+   scroll only; desktop pins it with ScrollTrigger instead). */
+@media (max-width: 63.99rem) {
+  .included { grid-template-columns: 1fr; }
+  .cupStage {
+    grid-column: 1;
+    position: sticky;
+    top: 4.75rem;
+    z-index: 2;
+    padding: 0.5rem 0;
+    background: var(--paper);
+  }
+  .list { grid-column: 1; grid-row: auto; }
+  .bigCup { width: 6.5rem; }
+}
+
+/* ---------- coffee: how ordering works ---------- */
+
+.flow {
+  position: relative;
+}
+
+.flowTrack {
+  position: absolute;
+  top: 2rem;
+  left: 12.5%;
+  right: 12.5%;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--world-deep) 0 8px, transparent 8px 14px);
+  opacity: 0.55;
+}
+
+.flowDot {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: 0.9rem;
+  height: 0.9rem;
+  margin: -0.45rem 0 0 -0.45rem;
+  border-radius: 50%;
+  background: var(--crema);
+  box-shadow: 0 0 0 4px var(--world-bg);
+}
+
+.flowNodes {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.flowNode {
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  text-align: center;
+}
+
+.flowIcon {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border: 1.5px solid var(--world-deep);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--world-deep);
+}
+
+.flowName {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: var(--world-deep);
+}
+
+.flowNote {
+  max-width: 20ch;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.flowPromise {
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.4vw, 3rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: var(--world-deep);
+}
+
+.flowSmall {
+  margin-top: 0.5rem;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+@media (max-width: 47.99rem) {
+  .flowTrack {
+    top: 2rem;
+    bottom: 2rem;
+    left: 2rem;
+    right: auto;
+    width: 2px;
+    height: auto;
+    background: repeating-linear-gradient(180deg, var(--world-deep) 0 8px, transparent 8px 14px);
+  }
+  .flowDot { top: 100%; left: 50%; }
+  .flowNodes { grid-template-columns: 1fr; gap: 2rem; }
+  .flowNode {
+    grid-template-columns: 4rem minmax(0, 1fr);
+    justify-items: start;
+    column-gap: 1.25rem;
+    row-gap: 0.25rem;
+    text-align: left;
+  }
+  .flowIcon { grid-row: 1 / span 2; }
+}
+
+/* ---------- clinic: coming together ---------- */
+
+.assemble {
+  display: grid;
+  align-items: center;
+  min-height: 100svh;
+  overflow: hidden;
+}
+
+.assembleGrid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 2rem;
+  align-items: center;
+}
+
+.assembleText {
+  grid-column: 1 / span 5;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.assembleText h2 {
+  color: var(--world-deep);
+}
+
+.assembleBody {
+  max-width: 34ch;
+  color: var(--ink-soft);
+  font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+  line-height: 1.55;
+}
+
+.sameLine {
+  font-family: var(--font-display-italic);
+  font-size: clamp(1.7rem, 2.8vw, 2.6rem);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--world-deep);
+  opacity: 0;
+  transform: translateY(0.6rem);
+  transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
+}
+
+.sameLineOn {
+  opacity: 1;
+  transform: none;
+}
+
+.assembleFigure {
+  grid-column: 7 / -1;
+  display: grid;
+  justify-items: center;
+  margin: 0;
+}
+
+.bigPieces {
+  width: min(100%, 30rem);
+}
+
+@media (max-width: 64rem) {
+  .assemble { min-height: 0; }
+  .assembleGrid { grid-template-columns: 1fr; }
+  .assembleText, .assembleFigure { grid-column: 1; }
+  .bigPieces { width: min(100%, 22rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sameLine { opacity: 1; transform: none; }
+}
+
+/* ---------- clinic: the two offers ---------- */
+
+.offers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+
+.offer {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  padding-top: 1.75rem;
+  border-top: 2px solid var(--world-deep);
+}
+
+.offerTitle {
+  font-size: clamp(1.8rem, 2.8vw, 2.6rem);
+  color: var(--world-deep);
+}
+
+.offerBody {
+  max-width: 38ch;
+  color: var(--ink-soft);
+  font-size: 1.1rem;
+  line-height: 1.55;
+}
+
+.offerLinks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 48rem) {
+  .offers { grid-template-columns: 1fr; }
+}
+
+.trust {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--world-deep);
+  border-radius: 999px;
+  color: var(--world-deep);
+  font-size: 0.95rem;
+  font-weight: 500;
+}

@@ -1,12 +1,18 @@
 import { cta, nav } from "../data/nav";
-import { locationLine, site } from "../data/site";
+import { locationLine, site, studioLine } from "../data/site";
+import { PiecesMark, SteamMark } from "../motifs/Motifs";
 import styles from "./Footer.module.css";
 
 export default function Footer() {
   return (
     <footer className={`${styles.footer} ink`}>
       <div className="container">
-        <p className={styles.wordmark} aria-hidden="true">Stringham</p>
+        <div className={styles.wordRow} aria-hidden="true">
+          <SteamMark className={styles.steam} />
+          <p className={styles.wordmark}>Stringham</p>
+          <PiecesMark className={styles.pieces} />
+        </div>
+        <p className={styles.studio}>{studioLine}</p>
 
         <div className={styles.grid}>
           <div className={styles.col}>

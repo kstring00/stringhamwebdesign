@@ -23,3 +23,17 @@ export function prefersReducedMotion() {
 export function isFinePointerDesktop() {
   return typeof window !== "undefined" && window.matchMedia("(min-width: 64rem) and (pointer: fine) and (hover: hover)").matches;
 }
+
+/**
+ * Run non-essential motion setup once the browser is idle, so it never
+ * competes with the first paint or hydration. Returns a cancel function.
+ */
+export function whenIdle(run: () => void, timeout = 1200) {
+  const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number; cancelIdleCallback?: (id: number) => void };
+  if (w.requestIdleCallback) {
+    const id = w.requestIdleCallback(run, { timeout });
+    return () => w.cancelIdleCallback?.(id);
+  }
+  const t = window.setTimeout(run, 150);
+  return () => window.clearTimeout(t);
+}

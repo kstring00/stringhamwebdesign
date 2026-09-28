@@ -9,11 +9,13 @@ import { site } from "./site";
  * `absolute` is set.
  */
 // A page that sets its own openGraph replaces the layout's, file-based
-// social image included, so every page names the shared image explicitly.
-const image = { url: "/opengraph-image.png", width: 1200, height: 630, alt: `${site.name}, custom web design in League City, Texas` };
+// social image included, so every page names its image explicitly (the
+// shared one unless a niche page passes its own).
+const DEFAULT_IMAGE = "/opengraph-image.png";
 
-export function pageMeta({ title, absolute, description, path }: { title?: string; absolute?: string; description: string; path: string }): Metadata {
+export function pageMeta({ title, absolute, description, path, image: imageUrl = DEFAULT_IMAGE }: { title?: string; absolute?: string; description: string; path: string; image?: string }): Metadata {
   const full = absolute ?? `${title} | ${site.name}`;
+  const image = { url: imageUrl, width: 1200, height: 630, alt: full };
   return {
     title: absolute ? { absolute } : title,
     description,

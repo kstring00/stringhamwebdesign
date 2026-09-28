@@ -6,7 +6,7 @@ import { pageMeta } from "../data/meta";
 import ClosingCta from "../home/ClosingCta";
 import styles from "../pages.module.css";
 
-export const metadata: Metadata = pageMeta({ title: "About Kyle Stringham, Web Designer in League City, TX", description: "Kyle Stringham runs Stringham Web Design LLC in League City, Texas. A Registered Behavior Technician with a psychology degree, building custom websites you own outright.", path: "/about" });
+export const metadata: Metadata = pageMeta({ title: "About Kyle Stringham, Web Designer in League City, TX", description: "Kyle Stringham runs Stringham Web Design LLC in League City, Texas: a former Starbucks barista and a Registered Behavior Technician, building websites for coffee shops and autism clinics that you own outright.", path: "/about" });
 
 export default function AboutPage() {
   return (
@@ -22,9 +22,9 @@ export default function AboutPage() {
               <Image src="/about/portrait.webp" alt="Kyle Stringham, photographed head-on against a plain wall, looking at the camera with a slight smile" width={760} height={950} sizes="(max-width: 64rem) 100vw, 45vw" priority />
             </div>
             <div className={styles.prose} data-reveal-group>
-              <p data-reveal>I'm Kyle Stringham. I run Stringham Web Design LLC out of League City, Texas. By day I'm a Registered Behavior Technician working with autistic kids and their families, and I have a degree in psychology.</p>
-              <p data-reveal>That work taught me to pay attention to people, and it's how I build websites. I believe in an equal exchange: fair prices, honest timelines, and work you own outright.</p>
-              <p data-reveal>My faith shapes how I work, and I want everything I build to serve people well.</p>
+              <p data-reveal>I'm Kyle Stringham. I run Stringham Web Design LLC out of League City, Texas. I've worked behind a Starbucks counter, and today I work with autistic kids and their families as a Registered Behavior Technician. I have a degree in psychology.</p>
+              <p data-reveal>Those two worlds taught me the same lesson: people come back to places that make them feel known. I build websites that do that.</p>
+              <p data-reveal>I believe in an equal exchange: fair prices, honest timelines, and work you own outright. My faith shapes how I work, and I want everything I build to serve people well.</p>
             </div>
           </div>
         </section>
