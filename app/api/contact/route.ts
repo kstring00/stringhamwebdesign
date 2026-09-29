@@ -4,7 +4,8 @@ import { site } from "@/app/data/site";
 
 export const dynamic = "force-dynamic";
 
-const NEEDS = ["Coffee shop website", "Autism clinic website", "Family Resource Hub", "Something else"];
+const STAGES = ["Just an idea", "Ready to launch", "Already running"];
+const NEEDS = ["Website", "Online ordering or booking", "Payments", "Getting found on Google", "Email or text list", "Family Resource Hub for a clinic", "Not sure yet"];
 const RATE_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT = 5;
 const rateStore = new Map<string, { count: number; resetAt: number }>();
@@ -50,7 +51,12 @@ export async function POST(request: NextRequest) {
 
   let body: Record<string, unknown>;
   try {
-    body = native ? Object.fromEntries((await request.formData()).entries()) : ((await request.json()) as Record<string, unknown>);
+    if (native) {
+      const fd = await request.formData();
+      body = { ...Object.fromEntries(fd.entries()), needs: fd.getAll("needs") };
+    } else {
+      body = (await request.json()) as Record<string, unknown>;
+    }
   } catch {
     return reply(400, { error: "Invalid request." });
   }
@@ -60,11 +66,12 @@ export async function POST(request: NextRequest) {
 
   const name = clean(body.name, 100);
   const email = clean(body.email, 180);
-  const business = clean(body.business, 120);
-  const need = clean(body.need, 60);
+  const stage = clean(body.stage, 40);
+  const rawNeeds = Array.isArray(body.needs) ? body.needs : typeof body.needs === "string" ? [body.needs] : [];
+  const needs = rawNeeds.map((n) => clean(n, 60)).filter((n) => NEEDS.includes(n));
   const message = clean(body.message, 2000);
 
-  if (name.length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || business.length < 2 || !NEEDS.includes(need) || message.length < 3) {
+  if (name.length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !STAGES.includes(stage) || needs.length === 0 || message.length < 3) {
     return reply(400, { error: "Please fill in every field." });
   }
 
@@ -73,8 +80,8 @@ export async function POST(request: NextRequest) {
     ``,
     `Name: ${name}`,
     `Email: ${email}`,
-    `Business: ${business}`,
-    `Needs: ${need}`,
+    `Where they're at: ${stage}`,
+    `Needs: ${needs.join(", ")}`,
     ``,
     message,
     ``,
@@ -93,7 +100,7 @@ export async function POST(request: NextRequest) {
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from, to: [to], subject: `${need} — ${business} (${name})`, text, reply_to: email }),
+    body: JSON.stringify({ from, to: [to], subject: `${stage} · ${needs.join(", ")} — ${name}`, text, reply_to: email }),
   });
 
   if (!res.ok) {

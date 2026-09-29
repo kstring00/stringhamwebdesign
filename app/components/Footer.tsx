@@ -1,26 +1,24 @@
 import { cta, nav } from "../data/nav";
 import { locationLine, site, studioLine } from "../data/site";
-import { PiecesMark, SteamMark } from "../motifs/Motifs";
 import styles from "./Footer.module.css";
+import Wordmark from "./Wordmark";
 
 export default function Footer() {
   return (
     <footer className={`${styles.footer} ink`}>
       <div className="container">
-        <div className={styles.wordRow} aria-hidden="true">
-          <SteamMark className={styles.steam} />
-          <p className={styles.wordmark}>Stringham</p>
-          <PiecesMark className={styles.pieces} />
-        </div>
+        <Wordmark />
         <p className={styles.studio}>{studioLine}</p>
 
         <div className={styles.grid}>
           <div className={styles.col}>
             <p className={styles.head}>Pages</p>
             <ul>
+              <li><a className="u" href="/">Home</a></li>
               {nav.map((item) => (
                 <li key={item.href}><a className="u" href={item.href}>{item.label}</a></li>
               ))}
+              <li><a className="u" href="/family-resource-hub">Family Resource Hub</a></li>
               <li><a className="u" href={cta.href}>{cta.label}</a></li>
             </ul>
           </div>

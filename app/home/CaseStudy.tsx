@@ -77,10 +77,10 @@ export default function CaseStudy() {
   const { screens } = caseStudy;
 
   return (
-    <section className={`${styles.case} world-clinic tinted`} id="common-ground" ref={root} aria-labelledby="case-title">
+    <section className={styles.case} id="common-ground" ref={root} aria-labelledby="case-title">
       <div className="container">
         <div className={styles.caseHead}>
-          <p className="label"><b>02</b> {caseStudy.label}</p>
+          <p className="label"><b>04</b> {caseStudy.label}</p>
           <h2 id="case-title" className="display-l">{caseStudy.title}</h2>
         </div>
 
@@ -129,7 +129,7 @@ export default function CaseStudy() {
         </div>
 
         <div className={styles.caseEnd} data-reveal>
-          <p className={styles.outcome}>{caseStudy.outcome}</p>
+          <p className={styles.outcome}>{caseStudy.outcome.replace(" Family Resource Hub.", "")} <a className={styles.outcomeLink} href="/family-resource-hub">Family Resource Hub</a>.</p>
           <div className={styles.caseActions}>
             <Magnetic>
               <a className="btn btn-ember" href={caseStudy.demoUrl} target="_blank" rel="noopener noreferrer" data-cursor="grow">
@@ -137,7 +137,7 @@ export default function CaseStudy() {
               </a>
             </Magnetic>
             <Magnetic>
-              <a className="btn btn-secondary" href="/family-resource-hub" data-cursor="grow">For clinics</a>
+              <a className="btn btn-secondary" href="/family-resource-hub" data-cursor="grow">The Family Resource Hub</a>
             </Magnetic>
           </div>
         </div>

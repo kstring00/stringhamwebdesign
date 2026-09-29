@@ -8,7 +8,7 @@ export default function Faq() {
       <div className="container">
         <div className={styles.faqGrid}>
           <div className={styles.sectionHead}>
-            <p className="label"><b>05</b> Questions</p>
+            <p className="label"><b>07</b> Questions</p>
             <h2 id="faq-title" className="display-l">Straight answers.</h2>
           </div>
           <dl className={styles.faqList} data-reveal-group>

@@ -130,7 +130,9 @@
 @media (max-width: 64rem) {
   .nav { display: none; }
   .burger { display: block; }
-  .cta { display: none; }
+  /* The primary action stays on every page, phones included. */
+  .cta { padding: 0.55rem 0.95rem; font-size: 0.85rem; }
+  .cta svg { display: none; }
 
   .sheet {
     display: block;
@@ -180,4 +182,10 @@
     min-height: 44px;
     color: var(--ink-soft);
   }
+}
+
+@media (max-width: 40rem) {
+  .brandSub { display: none; }
+  .phone { display: none; }
+  .actions { gap: 0.5rem; }
 }

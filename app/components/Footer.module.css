@@ -3,17 +3,29 @@
   overflow: hidden;
 }
 
-/* The wordmark spans the full width: sized to the viewport, clipped by the
-   footer so the descender can run off the bottom edge on wide screens. */
+/* The wordmark spans the full width: SVG text sized to the container so the
+   pencil outline and the fill line up exactly. */
 .wordmark {
-  margin: 0 0 clamp(2rem, 4vw, 3.5rem);
-  font-family: var(--font-display);
-  font-size: clamp(4.5rem, 19.5vw, 22rem);
-  font-weight: 300;
-  letter-spacing: -0.045em;
-  line-height: 0.82;
-  color: var(--paper-on-ink);
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  overflow: visible;
   user-select: none;
+}
+
+.wordText {
+  font-family: var(--font-display);
+  font-size: 230px;
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "SOFT" 40;
+  letter-spacing: -0.045em;
+  fill: var(--paper-on-ink);
+  stroke: var(--paper-on-ink);
+  stroke-width: 1.2;
+  stroke-opacity: 0;
+  stroke-linejoin: round;
+  paint-order: stroke fill;
 }
 
 .grid {
@@ -69,43 +81,10 @@
   .grid { grid-template-columns: 1fr; gap: 1.5rem; }
 }
 
-.wordRow {
-  display: flex;
-  align-items: center;
-  gap: clamp(0.75rem, 2vw, 1.75rem);
-}
 
-.wordRow {
-  margin-bottom: clamp(0.5rem, 1.5vw, 1rem);
-}
-
-/* Room for the two marks beside it. */
-.wordRow .wordmark {
-  margin: 0;
-  font-size: clamp(3.6rem, 16vw, 19rem);
-}
-
-.steam {
-  flex: none;
-  width: clamp(1.4rem, 2.6vw, 2.4rem);
-  height: auto;
-  color: var(--crema);
-  align-self: flex-start;
-  margin-top: 1.5%;
-}
-
-.pieces {
-  flex: none;
-  width: clamp(1.4rem, 2.6vw, 2.4rem);
-  height: auto;
-  color: var(--sage-soft);
-  align-self: flex-end;
-  margin-bottom: 3%;
-}
-
-/* Clear of the wordmark's descender ("g"), which hangs well below its box. */
+/* Clear of the wordmark's descender ("g"), which hangs below its box. */
 .studio {
-  margin: clamp(1.75rem, 5vw, 4.5rem) 0 clamp(2rem, 4vw, 3.5rem);
+  margin: clamp(1.5rem, 4vw, 3.5rem) 0 clamp(2rem, 4vw, 3.5rem);
   color: var(--muted-on-ink);
   font-size: 0.82rem;
   font-weight: 500;

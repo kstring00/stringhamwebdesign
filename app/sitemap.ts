@@ -6,8 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const at = (path: string, priority: number, changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]) => ({ url: `${site.url}${path}`, lastModified: new Date(), changeFrequency, priority });
   return [
     at("/", 1, "monthly"),
-    at("/coffee-shops", 0.9, "monthly"),
-    at("/autism-clinics", 0.9, "monthly"),
+    at("/services", 0.9, "monthly"),
     at("/family-resource-hub", 0.9, "monthly"),
     at("/about", 0.6, "yearly"),
     at("/contact", 0.8, "yearly"),

@@ -4,37 +4,17 @@ import { useEffect, useRef } from "react";
 
 import { steps } from "../data/process";
 import { gsap, isFinePointerDesktop, prefersReducedMotion } from "../motion/gsap";
+import { roughLine } from "../motifs/sketch";
+import sk from "../motifs/sketch.module.css";
 import styles from "./home.module.css";
 
-/** Step marker, coffee world: a small cup that fills when its step lights. */
-function CupMarker() {
-  return (
-    <svg className={styles.markCup} viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-      <path className={styles.markCupFill} d="M7 12h16l-1.6 13.2A2.4 2.4 0 0 1 19 27.4h-8a2.4 2.4 0 0 1-2.4-2.2z" />
-      <path className={styles.markCupLine} d="M7 12h16l-1.6 13.2A2.4 2.4 0 0 1 19 27.4h-8a2.4 2.4 0 0 1-2.4-2.2zM23 15c4.4 0 4.4 7 0 7" />
-    </svg>
-  );
-}
-
-/** Step marker, clinic world: four soft quarters that click together. */
-function PiecesMarker() {
-  return (
-    <svg className={styles.markPieces} viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-      <path className={styles.q1} d="M15 4.1A12 12 0 0 0 4.1 15H15z" />
-      <path className={styles.q2} d="M17 4.1V15h10.9A12 12 0 0 0 17 4.1z" />
-      <path className={styles.q3} d="M4.1 17A12 12 0 0 0 15 27.9V17z" />
-      <path className={styles.q4} d="M17 27.9A12 12 0 0 0 27.9 17H17z" />
-    </svg>
-  );
-}
-
 /**
- * How it works. Four steps on one rule, a short sticky scroll story on
- * desktop: the section pins briefly while an ember line draws along the
- * rule, and each step's marker comes alive as the line reaches it. The
- * markers alternate worlds: a cup filling, then pieces clicking together.
- * Phones get the same line down the left edge, without pinning. With
- * reduced motion (or no JS) everything is drawn, filled and together.
+ * How it works. Four steps on one rule, told as a short sticky scroll story
+ * on desktop: the section pins briefly while a solid ink line draws over
+ * the pencil one, and each step's marker turns from a sketched ring into a
+ * solid ember dot as the line reaches it. Phones get the same line down the
+ * left edge, without pinning. With reduced motion (or no JS) the line is
+ * solid and every step is lit.
  */
 export default function ProcessStory() {
   const root = useRef<HTMLElement>(null);
@@ -70,15 +50,25 @@ export default function ProcessStory() {
     <section className={styles.process} ref={root} aria-labelledby="process-title">
       <div className="container" data-pin>
         <div className={styles.sectionHead}>
-          <p className="label"><b>04</b> How it works</p>
+          <p className="label"><b>06</b> How it works</p>
           <h2 id="process-title" className="display-l">Four steps. No surprises.</h2>
         </div>
         <div className={styles.flow}>
-          <div className={styles.rail} aria-hidden="true"><span className={styles.railFill} data-fill /></div>
+          {/* The pencil rule, and the solid line that draws over it. */}
+          <div className={styles.rail} aria-hidden="true">
+            <svg className={styles.railPencil} viewBox="0 0 1000 4" preserveAspectRatio="none" focusable="false"><path className={sk.pencil} d={roughLine(0, 2, 1000, 2, 21, 0.8)} /></svg>
+            <svg className={styles.railPencilV} viewBox="0 0 4 1000" preserveAspectRatio="none" focusable="false"><path className={sk.pencil} d={roughLine(2, 0, 2, 1000, 22, 0.8)} /></svg>
+            <span className={styles.railFill} data-fill />
+          </div>
           <ol className={styles.steps} data-steps>
-            {steps.map((s, i) => (
+            {steps.map((s) => (
               <li className={styles.step} key={s.n} data-step>
-                <span className={styles.stepMark}>{i % 2 === 0 ? <CupMarker /> : <PiecesMarker />}</span>
+                <span className={styles.stepMark} aria-hidden="true">
+                  <svg viewBox="0 0 32 32" focusable="false">
+                    <path className={`${sk.pencil} ${styles.markRing}`} d="M16 5.5c5.6-.4 10.3 4.4 10.4 10.2.2 5.9-4.6 10.9-10.4 10.8C10 26.4 5.4 21.6 5.6 15.7 5.8 10 10.3 5.9 16.6 5.5" />
+                    <circle className={styles.markDot} cx="16" cy="16" r="6.5" />
+                  </svg>
+                </span>
                 <span className={styles.stepN} aria-hidden="true">{s.n}</span>
                 <h3 className={styles.stepTitle}>{s.title}</h3>
                 <p className={styles.stepBody}>{s.body}</p>

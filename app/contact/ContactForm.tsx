@@ -5,9 +5,10 @@ import { useState, type FormEvent } from "react";
 import { site } from "../data/site";
 import styles from "./contact.module.css";
 
-export const NEEDS = ["Coffee shop website", "Autism clinic website", "Family Resource Hub", "Something else"] as const;
-/** Options that get the "no client or patient information" note. */
-const CLINICAL: readonly string[] = ["Autism clinic website", "Family Resource Hub"];
+export const STAGES = ["Just an idea", "Ready to launch", "Already running"] as const;
+export const NEEDS = ["Website", "Online ordering or booking", "Payments", "Getting found on Google", "Email or text list", "Family Resource Hub for a clinic", "Not sure yet"] as const;
+/** The option that gets the "no client or patient information" note. */
+const CLINICAL = "Family Resource Hub for a clinic";
 type Need = (typeof NEEDS)[number];
 
 /** Messages for a native (no-JS) post that bounced back with ?error=… */
@@ -17,16 +18,19 @@ const NATIVE_ERRORS: Record<string, string> = {
   send: "I couldn't send that just now.",
 };
 
-export default function ContactForm({ initialNeed = "", sent = false, errorCode = "" }: { initialNeed?: Need | ""; sent?: boolean; errorCode?: string }) {
-  const [need, setNeed] = useState<Need | "">(initialNeed);
+export default function ContactForm({ initialNeeds = [], sent = false, errorCode = "" }: { initialNeeds?: Need[]; sent?: boolean; errorCode?: string }) {
+  const [needs, setNeeds] = useState<Need[]>(initialNeeds);
   const nativeError = NATIVE_ERRORS[errorCode] ?? (errorCode ? "That didn't go through." : "");
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">(sent ? "sent" : nativeError ? "error" : "idle");
   const [error, setError] = useState(nativeError);
 
+  const toggle = (n: Need, on: boolean) => setNeeds((cur) => (on ? [...cur.filter((x) => x !== n), n] : cur.filter((x) => x !== n)));
+
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries());
+    const fd = new FormData(form);
+    const data = { ...Object.fromEntries(fd.entries()), needs: fd.getAll("needs") };
     setState("sending");
     setError("");
     try {
@@ -44,7 +48,7 @@ export default function ContactForm({ initialNeed = "", sent = false, errorCode 
     return (
       <div className={styles.sent} role="status">
         <h2>Got it.</h2>
-        <p>I'll reply within one business day with a link to book the call. If you'd rather not wait, <a className="u" href={site.phoneHref}>call {site.phone}</a>.</p>
+        <p>I&rsquo;ll reply within one business day with a link to book the call. If you&rsquo;d rather not wait, <a className="u" href={site.phoneHref}>call {site.phone}</a>.</p>
       </div>
     );
   }
@@ -59,20 +63,34 @@ export default function ContactForm({ initialNeed = "", sent = false, errorCode 
         <label htmlFor="email">Email</label>
         <input className={styles.input} id="email" name="email" type="email" autoComplete="email" required maxLength={180} />
       </div>
-      <div className={styles.field}>
-        <label htmlFor="business">Business name</label>
-        <input className={styles.input} id="business" name="business" autoComplete="organization" required maxLength={120} />
-      </div>
-      <div className={styles.field}>
-        <label htmlFor="need">What do you need?</label>
-        <select className={styles.input} id="need" name="need" required value={need} onChange={(e) => setNeed(e.target.value as Need)}>
-          <option value="" disabled>Choose one</option>
-          {NEEDS.map((n) => <option key={n} value={n}>{n}</option>)}
-        </select>
-      </div>
-      {CLINICAL.includes(need) ? (
-        <p className={styles.note} role="note">Please don't include any client or patient information.</p>
+
+      <fieldset className={styles.fieldset}>
+        <legend>Where are you at?</legend>
+        <div className={styles.chips}>
+          {STAGES.map((s) => (
+            <label className={styles.chip} key={s}>
+              <input type="radio" name="stage" value={s} required />
+              <span>{s}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset className={styles.fieldset}>
+        <legend>What do you need? <small>Pick any</small></legend>
+        <div className={styles.chips}>
+          {NEEDS.map((n) => (
+            <label className={styles.chip} key={n}>
+              <input type="checkbox" name="needs" value={n} checked={needs.includes(n)} onChange={(e) => toggle(n, e.target.checked)} />
+              <span>{n}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      {needs.includes(CLINICAL) ? (
+        <p className={styles.note} role="note">Please don&rsquo;t include any client or patient information.</p>
       ) : null}
+
       <div className={styles.field}>
         <label htmlFor="message">Message</label>
         <textarea className={styles.input} id="message" name="message" required maxLength={2000} rows={6} />
@@ -84,11 +102,11 @@ export default function ContactForm({ initialNeed = "", sent = false, errorCode 
       </div>
       {state === "error" ? <p className={styles.error} role="alert">{error} Nothing was lost; try again or email me directly.</p> : null}
       <div>
-        <button className="btn" type="submit" disabled={state === "sending"}>
+        <button className="btn" type="submit" disabled={state === "sending"} data-cursor="grow">
           {state === "sending" ? "Sending…" : "Send it"}
         </button>
       </div>
-      <p style={{ color: "var(--muted)", fontSize: "0.85rem" }}>By sending this you agree to the <a className="u" href="/privacy">privacy policy</a>.</p>
+      <p className={styles.fine}>By sending this you agree to the <a className="u" href="/privacy">privacy policy</a>.</p>
     </form>
   );
 }

@@ -28,159 +28,129 @@
   max-width: 14ch;
 }
 
-/* ---------- why these two ---------- */
+/* ---------- everything you need ---------- */
 
-.why {
-  position: relative;
-  overflow: hidden;
+.every {
   padding: var(--section) 0;
 }
 
-.whyRing {
-  top: 12%;
-  right: -5rem;
-  width: clamp(12rem, 22vw, 20rem);
-  transform: rotate(24deg);
-}
-
-.whyGrid {
+.everyHead {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 2rem;
-  align-items: center;
+  gap: 1.25rem 2rem;
+  align-items: end;
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
 }
 
-.whyText {
-  grid-column: 1 / span 7;
-  display: grid;
-  gap: 1.5rem;
-}
+.everyHead > p { grid-column: 1 / -1; }
+.everyHead h2 { grid-column: 1 / span 8; max-width: 12ch; }
 
-.whyLead {
-  font-family: var(--font-display);
-  font-size: clamp(1.9rem, 3.4vw, 3.3rem);
-  font-weight: 300;
-  letter-spacing: -0.02em;
-  line-height: 1.12;
-}
-
-.whyLead em {
-  font-family: var(--font-display-italic);
-  font-style: italic;
-  color: var(--sage);
-}
-
-.whyBody {
-  max-width: 40ch;
-  color: var(--ink-soft);
-  font-size: clamp(1.1rem, 1.4vw, 1.3rem);
-  line-height: 1.55;
-}
-
-.whySign {
+.everyLink {
+  grid-column: 10 / -1;
+  justify-self: end;
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  color: var(--ink-soft);
-  font-size: 0.95rem;
+  min-height: 44px;
+  font-weight: 500;
 }
 
-.whyMark {
-  color: var(--crema-ink);
-}
-
-.whyPhoto {
-  grid-column: 9 / -1;
+.everyList {
   margin: 0;
-  border-radius: 10px;
-  aspect-ratio: 4 / 5;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
 }
 
-@media (max-width: 64rem) {
-  .whyGrid { grid-template-columns: 1fr; }
-  .whyText, .whyPhoto { grid-column: 1; }
-  .whyPhoto { width: min(100%, 22rem); }
-}
-
-/* ---------- coffee slot ---------- */
-
-.coffeeSlot {
-  position: relative;
-  overflow: hidden;
-  padding: var(--section) 0;
-}
-
-.slotRing {
-  bottom: -3rem;
-  left: -4rem;
-  width: clamp(14rem, 24vw, 22rem);
-  transform: rotate(-30deg);
-}
-
-.coffeeGrid {
+.everyItem {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 2rem;
-  align-items: center;
+  column-gap: clamp(1rem, 2vw, 2rem);
+  align-items: baseline;
+  padding: clamp(1.6rem, 3vw, 2.6rem) 0;
+  border-bottom: 1px solid var(--line);
 }
 
-.coffeeText {
-  grid-column: 1 / span 6;
-  display: grid;
-  gap: 1.25rem;
+.everyN {
+  grid-column: 1 / span 1;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2vw, 1.9rem);
+  font-weight: 300;
+  line-height: 1;
+  color: var(--ember);
 }
 
-.coffeeTitle {
-  max-width: 14ch;
-  color: var(--espresso);
+.everyTitle {
+  grid-column: 2 / span 5;
+  font-size: clamp(1.7rem, 3vw, 3rem);
+  letter-spacing: -0.025em;
+  line-height: 1.02;
 }
 
-.coffeeLine {
-  max-width: 34ch;
-  color: var(--espresso);
-  font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+.everyTitle a {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  transition: background-size 400ms var(--ease-out);
+}
+
+.everyItem:hover .everyTitle a,
+.everyTitle a:focus-visible {
+  background-size: 100% 1px;
+}
+
+.everyBody {
+  grid-column: 8 / -1;
+  max-width: 40ch;
+  color: var(--ink-soft);
+  font-size: clamp(1.02rem, 1.2vw, 1.15rem);
   line-height: 1.55;
 }
 
-.conceptNote {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 0.75rem;
-  max-width: 40ch;
-  color: #5d4a3e;
-  font-size: 0.9rem;
-}
-
-.conceptNote::before {
-  content: "Concept";
-  padding: 0.15rem 0.6rem;
-  border: 1px solid var(--espresso);
-  border-radius: 999px;
-  color: var(--espresso);
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.coffeeDemo {
-  grid-column: 8 / -1;
-  display: grid;
-  justify-items: center;
-}
-
 @media (max-width: 64rem) {
-  .coffeeGrid { grid-template-columns: 1fr; }
-  .coffeeText, .coffeeDemo { grid-column: 1; }
+  .everyHead h2 { grid-column: 1 / -1; }
+  .everyLink { grid-column: 1 / -1; justify-self: start; }
+  .everyItem { grid-template-columns: 3rem minmax(0, 1fr); row-gap: 0.6rem; }
+  .everyN { grid-column: 1; }
+  .everyTitle { grid-column: 2; }
+  .everyBody { grid-column: 2; }
 }
+
+/* ---------- statement ---------- */
+
+.statement {
+  padding: clamp(5rem, 12vw, 11rem) 0;
+}
+
+.statementLine {
+  max-width: 18ch;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5.6vw, 5.8rem);
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "SOFT" 40;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+}
+
+.statementRest {
+  color: var(--muted-on-ink);
+}
+
+/* ---------- optional second project ---------- */
+
+.second {
+  padding: var(--section) 0;
+  border-top: 1px solid var(--line);
+}
+
+.second > div { display: grid; gap: 1.25rem; }
 
 /* Unwritten Casa Matcha copy shows as a dashed box, never as real text. */
 .unwritten {
   padding: 0.75rem 1rem;
-  border: 2px dashed var(--espresso);
+  border: 2px dashed var(--ember-deep);
   border-radius: 8px;
-  color: var(--espresso);
+  color: var(--ember-deep);
   font-family: var(--font-text);
   font-size: 1rem;
 }
@@ -296,7 +266,7 @@
   font-family: var(--font-display);
   font-size: 1.6rem;
   line-height: 1;
-  color: var(--world-accent, var(--sage));
+  color: var(--ember);
 }
 
 .walkText {
@@ -423,6 +393,16 @@
   line-height: 1.08;
 }
 
+.outcomeLink {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  background-position: 0 92%;
+  transition: color 300ms var(--ease-out);
+}
+
+.outcomeLink:hover { color: var(--ember-deep); }
+
 .caseActions {
   display: flex;
   flex-wrap: wrap;
@@ -443,21 +423,34 @@
   position: relative;
 }
 
-/* The rule, and the ember line that draws along it. Drawn in full by
-   default; the script rewinds it only when it will animate it. */
+/* The rule: a pencil line, with the solid ink line that draws over it.
+   Drawn in full by default; the script rewinds it only when it will animate. */
 .rail {
   position: absolute;
   top: 0.95rem;
   left: 0;
   right: 0;
-  height: 1px;
-  background: var(--line-strong);
+  height: 3px;
 }
+
+.railPencil,
+.railPencilV {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.railPencilV { display: none; }
 
 .railFill {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, var(--crema), var(--sage));
+  top: 1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--ink);
   transform-origin: left center;
 }
 
@@ -478,61 +471,36 @@
   padding-top: 2.5rem;
 }
 
-/* The marker on the rule above each step: a cup (odd steps) or four
-   quarters (even steps). Lit is the default; the script unlights them. */
+/* The marker on the rule above each step: a pencil ring that turns into a
+   solid ember dot when its step lights. Lit is the default. */
 .stepMark {
   position: absolute;
-  top: 0;
-  left: -0.2rem;
-  display: grid;
-  place-items: center;
-  width: 1.9rem;
-  height: 1.9rem;
-  border-radius: 50%;
+  top: -0.35rem;
+  left: -0.45rem;
+  width: 2.2rem;
+  height: 2.2rem;
   background: var(--paper);
+  border-radius: 50%;
 }
 
-.markCup,
-.markPieces {
-  width: 1.9rem;
-  height: 1.9rem;
-  overflow: visible;
-}
+.stepMark svg { width: 100%; height: 100%; overflow: visible; }
 
-.markCupLine {
-  fill: none;
-  stroke: var(--espresso);
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.markCupFill {
-  fill: var(--crema);
+.markDot {
+  fill: var(--ember);
   transform-box: fill-box;
-  transform-origin: 50% 100%;
-  transition: transform 700ms var(--ease-out);
+  transform-origin: center;
+  transition: transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 300ms var(--ease-out);
 }
 
-.markPieces path {
-  transition: transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+.markRing {
+  transition: opacity 400ms var(--ease-out);
 }
 
-.q1 { fill: var(--sage); }
-.q2 { fill: var(--sage-soft); }
-.q3 { fill: var(--sky); }
-.q4 { fill: var(--sage-pale); }
-
-.process[data-animate] .step:not(.stepLit) .markCupFill { transform: scaleY(0); }
-.process[data-animate] .step:not(.stepLit) .q1 { transform: translate(-4px, -4px) rotate(-12deg); }
-.process[data-animate] .step:not(.stepLit) .q2 { transform: translate(4px, -4px) rotate(10deg); }
-.process[data-animate] .step:not(.stepLit) .q3 { transform: translate(-4px, 4px) rotate(10deg); }
-.process[data-animate] .step:not(.stepLit) .q4 { transform: translate(4px, 4px) rotate(-12deg); }
-
-.step:nth-child(odd) .stepN { color: var(--crema-ink); }
-.step:nth-child(even) .stepN { color: var(--sage); }
+.process[data-animate] .step:not(.stepLit) .markDot { transform: scale(0); opacity: 0; }
+.process[data-animate] .step.stepLit .markRing { opacity: 0.35; }
 
 .stepN {
+  color: var(--ink);
   font-family: var(--font-display);
   font-size: clamp(3.5rem, 6.5vw, 6.5rem);
   font-weight: 300;
@@ -568,11 +536,20 @@
     bottom: 0;
     left: 0.75rem;
     right: auto;
-    width: 1px;
+    width: 3px;
     height: auto;
   }
 
+  .railPencil { display: none; }
+  .railPencilV { display: block; }
+
   .railFill {
+    top: 0;
+    bottom: 0;
+    left: 1px;
+    right: auto;
+    width: 1px;
+    height: auto;
     transform-origin: center top;
   }
 
@@ -589,7 +566,8 @@
   }
 
   .stepMark {
-    top: 0.1rem;
+    top: 0;
+    left: -0.35rem;
   }
 
   .stepN {
@@ -665,6 +643,22 @@
 
 .closing {
   padding: var(--section) 0;
+}
+
+.closingWords {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.08em;
+}
+
+.underline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.02em;
+  width: 100%;
+  height: 0.16em;
+  overflow: visible;
 }
 
 .closingLine {

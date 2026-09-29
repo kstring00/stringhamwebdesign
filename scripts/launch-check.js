@@ -83,11 +83,11 @@ const BANNED = /\$\s?\d|\bstarting at\b|Texas ABA|ABA Centers|texasabacenterscg|
     if (path === '/') ok(`${path}: LocalBusiness JSON-LD`, /"@type":"ProfessionalService"/.test(d.jsonld) && /League City/.test(d.jsonld) && /Houston/.test(d.jsonld));
     if (path === '/about') ok(`${path}: Person JSON-LD`, /"@type":"Person"/.test(d.jsonld));
     ok(`${path}: no banned words in rendered text`, !BANNED.test(d.text), (d.text.match(BANNED) || [''])[0]);
-    ok(`${path}: nav is Coffee Shops · Autism Clinics · About`, JSON.stringify(d.headerNav) === JSON.stringify(['Coffee Shops', 'Autism Clinics', 'About']), JSON.stringify(d.headerNav));
+    ok(`${path}: nav is Services · About`, JSON.stringify(d.headerNav) === JSON.stringify(['Services', 'About']), JSON.stringify(d.headerNav));
   }
 
   const home = seen.get('/');
-  ok('home says what, for whom, where above the fold', /Websites\s+for\s+the\s+places\s+people\s+come\s+back\s+to/.test(home.text) && /coffee shops/i.test(home.text) && /autism/i.test(home.text) && /League City, Texas/i.test(home.text));
+  ok('home says what, for whom, where above the fold', /Turn\s+your[\s\S]{0,40}?into\s+something\s+real/.test(home.text) && /online ordering, booking, payments/i.test(home.text) && /League City, Texas/i.test(home.text));
   ok('home has exactly one dominant CTA in the hero', (home.text.match(/Start a project/g) || []).length >= 1);
 
   for (const [href, uses] of externals) {
@@ -97,22 +97,22 @@ const BANNED = /\$\s?\d|\bstarting at\b|Texas ABA|ABA Centers|texasabacenterscg|
   // ---- redirects, 404, robots, sitemap, assets ----
   {
     const c = await b.newContext(); const p = await c.newPage();
-    for (const [from, to] of [['/portal', '/'], ['/portal/dashboard', '/'], ['/portal/projects/x', '/'], ['/admin', '/'], ['/admin/x', '/'], ['/login', '/'], ['/quote', '/contact'], ['/resources', '/'], ['/pricing', '/#faq'], ['/work', '/'], ['/work/x', '/'], ['/portfolio', '/'], ['/services', '/']]) {
+    for (const [from, to] of [['/portal', '/'], ['/portal/dashboard', '/'], ['/portal/projects/x', '/'], ['/admin', '/'], ['/admin/x', '/'], ['/login', '/'], ['/quote', '/contact'], ['/resources', '/'], ['/pricing', '/#faq'], ['/work', '/'], ['/work/x', '/'], ['/portfolio', '/'], ['/services/anything', '/services'], ['/coffee-shops', '/services'], ['/coffee-shops/x', '/services'], ['/autism-clinics', '/family-resource-hub'], ['/faq', '/#faq']]) {
       const r = await p.request.get(BASE + from, { maxRedirects: 0 });
       const loc = r.headers()['location'] || '';
       ok(`${from} → ${to} (permanent)`, (r.status() === 308 || r.status() === 301) && loc.replace(BASE, '').replace(/^https?:\/\/[^/]+/, '') === to, `${r.status()} ${loc}`);
     }
     const nf = await p.goto(BASE + '/this-page-wandered-off', { waitUntil: 'networkidle' });
     const nfd = await p.evaluate(() => ({ h1: [...document.querySelectorAll('h1')].map((h) => h.textContent.trim()), home: Boolean(document.querySelector('main a[href="/"]')), header: Boolean(document.querySelector('header')), robots: document.querySelector('meta[name="robots"]')?.getAttribute('content') || '' }));
-    ok('404: status, headline, link home, noindex', nf.status() === 404 && nfd.h1[0] === 'This page wandered off.' && nfd.home && nfd.header && /noindex/.test(nfd.robots), JSON.stringify({ status: nf.status(), ...nfd }));
+    ok('404: status, headline, link home, noindex', nf.status() === 404 && nfd.h1[0] === 'This page is still a sketch.' && nfd.home && nfd.header && /noindex/.test(nfd.robots), JSON.stringify({ status: nf.status(), ...nfd }));
     const robots = await (await p.request.get(BASE + '/robots.txt')).text();
     ok('robots.txt allows the site, blocks the API, names the sitemap', /Allow:\s*\//.test(robots) && /Disallow:\s*\/api\//.test(robots) && /Sitemap:/.test(robots));
     const sm = await (await p.request.get(BASE + '/sitemap.xml')).text();
     const locs = [...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
     const missing = [...seen.keys()].filter((k) => !locs.includes(k)); const extra = locs.filter((l) => !seen.has(l));
     ok('sitemap.xml lists every crawled page and nothing else', missing.length === 0 && extra.length === 0, `missing ${missing.join(' ')} extra ${extra.join(' ')}`);
-    ok('sitemap.xml carries no portal, pricing, resources or work routes', locs.every((l) => !/portal|pricing|resources|quote|\/work|portfolio|\/services/.test(l)));
-    for (const u of ['/icon.png', '/apple-icon.png', '/opengraph-image.png', '/og/coffee-shops.png', '/og/autism-clinics.png']) { const r = await p.request.get(BASE + u); ok(`${u} served`, r.status() === 200 && (r.headers()['content-type'] || '').startsWith('image/')); }
+    ok('sitemap.xml carries no portal, pricing, resources or work routes', locs.every((l) => !/portal|pricing|resources|quote|\/work|portfolio|coffee-shops|autism-clinics/.test(l)));
+    for (const u of ['/icon.png', '/apple-icon.png', '/opengraph-image.png']) { const r = await p.request.get(BASE + u); ok(`${u} served`, r.status() === 200 && (r.headers()['content-type'] || '').startsWith('image/')); }
     await c.close();
   }
 
@@ -129,7 +129,7 @@ const BANNED = /\$\s?\d|\bstarting at\b|Texas ABA|ABA Centers|texasabacenterscg|
           const cs = getComputedStyle(el); if (cs.display === 'none' || cs.visibility === 'hidden' || el.closest('[hidden]') || el.closest('[aria-hidden="true"]')) return false;
           if (inline(el)) return false; const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0;
         }).map((el) => ({ h: Math.round(el.offsetHeight || el.getBoundingClientRect().height), t: (el.getAttribute('aria-label') || el.textContent || el.name || el.tagName).replace(/\s+/g, ' ').trim().slice(0, 30) })).filter((x) => x.h < 44);
-        const fs = Math.min(...[...document.querySelectorAll('p, li, dd, a, label')].filter((e) => e.textContent.trim()).map((e) => parseFloat(getComputedStyle(e).fontSize)));
+        const fs = Math.min(...[...document.querySelectorAll('p, li, dd, a, label')].filter((e) => e.textContent.trim() && !e.closest('[aria-hidden="true"]')).map((e) => parseFloat(getComputedStyle(e).fontSize)));
         return { overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth, small, minFont: fs };
       });
       ok(`${path} @${width}: no horizontal overflow`, m.overflow === 0, `${m.overflow}px`);

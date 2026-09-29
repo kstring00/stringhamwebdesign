@@ -3,16 +3,16 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
-import { SplitText } from "gsap/SplitText";
 
 /**
- * One registration for the whole site. GSAP and its three plugins
- * (ScrollTrigger, ScrollSmoother and SplitText are free as of GSAP 3.13)
- * are only ever imported from here, on the client.
+ * One registration for the whole site. GSAP and its two plugins
+ * (ScrollTrigger and ScrollSmoother are free as of GSAP 3.13) are only ever
+ * imported from here, on the client. The hero's word masks are plain spans,
+ * so SplitText is not loaded.
  */
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
-export { gsap, ScrollTrigger, ScrollSmoother, SplitText };
+export { gsap, ScrollTrigger, ScrollSmoother };
 
 /** True when the visitor asked for less motion. Every effect checks this. */
 export function prefersReducedMotion() {

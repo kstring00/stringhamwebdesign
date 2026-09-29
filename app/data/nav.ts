@@ -1,9 +1,8 @@
 export type NavItem = { label: string; href: string };
 
-/** The two worlds and About, in order. The header and the footer both read this. */
+/** Services and About, in order. The header and the footer both read this. */
 export const nav: NavItem[] = [
-  { label: "Coffee Shops", href: "/coffee-shops" },
-  { label: "Autism Clinics", href: "/autism-clinics" },
+  { label: "Services", href: "/services" },
   { label: "About", href: "/about" },
 ];
 

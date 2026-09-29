@@ -15,16 +15,21 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
 
 ## Rules from the owner
 
-- Two worlds, one studio: coffee shops and autism clinics. Paper `#F4EFE6`
-  and ink `#17130F` underneath; coffee is espresso `#3A261C`, crema
-  `#C8894B`, steamed milk `#EFE3D3`; clinics are deep sage `#3F6457`, soft
-  sage `#9DBFB1`, sky `#A9CBDA`. Crema, soft sage and sky are decoration
-  only on light grounds (they fail AA as text); use `--crema-ink` and
-  `--sage` for text.
-- Never use the jigsaw puzzle-piece icon for autism. The clinic motif is
-  four soft, rounded pieces of one whole, and must stay abstract.
-  Fraunces for display, Inter Tight for text, both self-hosted through
-  `next/font`. Tokens in `app/globals.css`. No new colours, fonts or libraries.
+- The positioning (V4): turning any idea into something real, with
+  everything it needs. Studio line "Stringham Web Design · League City,
+  Texas". Nav is Services · About plus Start a project, on every page
+  including phones.
+- One palette: paper `#F4EFE6`, ink `#17130F`, ember `#D2552D` used
+  sparingly (`--ember-deep` for small text), deep ink sections. Fraunces for
+  display, Inter Tight for text, both self-hosted through `next/font`.
+  Tokens in `app/globals.css`. No new colours, fonts or libraries.
+- The motif is "sketch to real": thin pencil strokes (ink at low opacity)
+  that become finished design. Used in the hero, the Idea → Reality
+  section, the process rule, the closing underline and the footer wordmark,
+  and nowhere louder. The fictional site in the signature section is
+  Halfmoon Coffee; never put a real business in there.
+- The Family Resource Hub page stays as it is: a specialty product for ABA
+  and pediatric clinics.
 - Motion is GSAP only. Every animation is off under `prefers-reduced-motion`
   and nothing depends on JS to be readable.
 - Accessibility failures are disqualifying. He sells to ABA and pediatric

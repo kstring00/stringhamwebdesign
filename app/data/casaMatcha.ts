@@ -11,7 +11,7 @@
  * and alt text here. Never mock them up.
  */
 export const casaMatcha = {
-  label: "Featured project · Coffee shops",
+  label: "Second project",
   title: "TODO: Casa Matcha headline",
   problem: "TODO: the problem, in one line",
   built: "TODO: what I built, in one line",

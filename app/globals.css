@@ -20,18 +20,9 @@
   --line-on-ink: rgba(244, 239, 230, 0.16);
   --ember-on-ink: #e8734d;
 
-  /* Coffee world */
-  --espresso: #3a261c;
-  --crema: #c8894b;          /* decoration only on light grounds (2.6:1) */
-  --crema-ink: #8a5a2e;      /* crema for text on light grounds (5.1:1) */
-  --milk: #efe3d3;
-
-  /* Clinic world */
-  --sage: #3f6457;           /* text-safe on paper and mist (5.6:1+) */
-  --sage-soft: #9dbfb1;      /* decoration only */
-  --sky: #a9cbda;            /* decoration only */
-  --mist: #e6efea;
-  --sage-pale: #c9ddd4;
+  /* Pencil: the sketch-to-real motif's stroke. */
+  --pencil: rgba(23, 19, 15, 0.42);
+  --pencil-soft: rgba(23, 19, 15, 0.2);
 
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
   --max: 90rem;
@@ -221,32 +212,6 @@ p {
 
 .ink .lede {
   color: var(--muted-on-ink);
-}
-
-/* The two worlds. A page or section opts in with .world-coffee or
-   .world-clinic; --world-* then drive tints, accents and motif gaps. */
-.world-coffee {
-  --world-bg: var(--milk);
-  --world-deep: var(--espresso);
-  --world-accent: var(--crema-ink);
-  --world-decor: var(--crema);
-}
-
-.world-clinic {
-  --world-bg: var(--mist);
-  --world-deep: var(--sage);
-  --world-accent: var(--sage);
-  --world-decor: var(--sage-soft);
-}
-
-/* A tinted section takes its world's ground, whether the world class sits
-   on the section itself or on a page wrapper around it. */
-.world-coffee.tinted,
-.world-clinic.tinted,
-.world-coffee .tinted,
-.world-clinic .tinted {
-  background: var(--world-bg);
-  --piece-gap: var(--world-bg);
 }
 
 /* Section backgrounds */
