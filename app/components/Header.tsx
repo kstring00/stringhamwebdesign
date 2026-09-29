@@ -55,7 +55,7 @@ export default function Header() {
         </nav>
 
         <div className={styles.actions}>
-          <a className={styles.phone} href={site.phoneHref} aria-label={`Call ${site.phone}`}>
+          <a className={styles.phone} href={site.phoneHref} aria-label={`Call Kyle at ${site.phone}`}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6.2 6.2l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
           </a>
           <Magnetic strength={0.25}>
@@ -80,7 +80,8 @@ export default function Header() {
         </nav>
         <div className={styles.sheetFoot}>
           <a className="btn" href={cta.href}>{cta.label} <Arrow /></a>
-          <a className={styles.sheetPhone} href={site.phoneHref}>{site.phone}</a>
+          {site.bookingUrl ? <a className={styles.sheetPhone} href={site.bookingUrl} target="_blank" rel="noopener noreferrer">Book a free 30-minute call</a> : null}
+          <a className={styles.sheetPhone} href={site.phoneHref} aria-label={`Call Kyle at ${site.phone}`}>{site.phone}</a>
           <a className={styles.sheetPhone} href={`mailto:${site.email}`}>{site.email}</a>
         </div>
       </div>

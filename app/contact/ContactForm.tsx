@@ -5,18 +5,32 @@ import { useState, type FormEvent } from "react";
 import { site } from "../data/site";
 import styles from "./contact.module.css";
 
-export const NEEDS = ["New website", "Redesign", "Family Resource Hub for my clinic", "Something else"] as const;
+export const STAGES = ["Just an idea", "Ready to launch", "Already running"] as const;
+export const NEEDS = ["Website", "Online ordering or booking", "Payments", "Getting found on Google", "Email or text list", "Family Resource Hub for a clinic", "Not sure yet"] as const;
+/** The option that gets the "no client or patient information" note. */
+const CLINICAL = "Family Resource Hub for a clinic";
 type Need = (typeof NEEDS)[number];
 
-export default function ContactForm({ initialNeed = "" }: { initialNeed?: Need | "" }) {
-  const [need, setNeed] = useState<Need | "">(initialNeed);
-  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
-  const [error, setError] = useState("");
+/** Messages for a native (no-JS) post that bounced back with ?error=… */
+const NATIVE_ERRORS: Record<string, string> = {
+  fields: "Please fill in every field.",
+  busy: "Too many messages in a row. Please wait a few minutes.",
+  send: "I couldn't send that just now.",
+};
+
+export default function ContactForm({ initialNeeds = [], sent = false, errorCode = "" }: { initialNeeds?: Need[]; sent?: boolean; errorCode?: string }) {
+  const [needs, setNeeds] = useState<Need[]>(initialNeeds);
+  const nativeError = NATIVE_ERRORS[errorCode] ?? (errorCode ? "That didn't go through." : "");
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">(sent ? "sent" : nativeError ? "error" : "idle");
+  const [error, setError] = useState(nativeError);
+
+  const toggle = (n: Need, on: boolean) => setNeeds((cur) => (on ? [...cur.filter((x) => x !== n), n] : cur.filter((x) => x !== n)));
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries());
+    const fd = new FormData(form);
+    const data = { ...Object.fromEntries(fd.entries()), needs: fd.getAll("needs") };
     setState("sending");
     setError("");
     try {
@@ -34,13 +48,13 @@ export default function ContactForm({ initialNeed = "" }: { initialNeed?: Need |
     return (
       <div className={styles.sent} role="status">
         <h2>Got it.</h2>
-        <p>I'll reply within one business day with a link to book the call. If you'd rather not wait, <a className="u" href={site.phoneHref}>call {site.phone}</a>.</p>
+        <p>I&rsquo;ll reply within one business day with a link to book the call. If you&rsquo;d rather not wait, <a className="u" href={site.phoneHref}>call {site.phone}</a>.</p>
       </div>
     );
   }
 
   return (
-    <form className={styles.form} onSubmit={onSubmit} noValidate={false}>
+    <form className={styles.form} onSubmit={onSubmit} method="post" action="/api/contact">
       <div className={styles.field}>
         <label htmlFor="name">Name</label>
         <input className={styles.input} id="name" name="name" autoComplete="name" required maxLength={100} />
@@ -49,35 +63,50 @@ export default function ContactForm({ initialNeed = "" }: { initialNeed?: Need |
         <label htmlFor="email">Email</label>
         <input className={styles.input} id="email" name="email" type="email" autoComplete="email" required maxLength={180} />
       </div>
-      <div className={styles.field}>
-        <label htmlFor="business">Business name</label>
-        <input className={styles.input} id="business" name="business" autoComplete="organization" required maxLength={120} />
-      </div>
-      <div className={styles.field}>
-        <label htmlFor="need">What do you need?</label>
-        <select className={styles.input} id="need" name="need" required value={need} onChange={(e) => setNeed(e.target.value as Need)}>
-          <option value="" disabled>Choose one</option>
-          {NEEDS.map((n) => <option key={n} value={n}>{n}</option>)}
-        </select>
-      </div>
-      {need === "Family Resource Hub for my clinic" ? (
-        <p className={styles.note} role="note">Please don't include any client or patient information.</p>
+
+      <fieldset className={styles.fieldset}>
+        <legend>Where are you at?</legend>
+        <div className={styles.chips}>
+          {STAGES.map((s) => (
+            <label className={styles.chip} key={s}>
+              <input type="radio" name="stage" value={s} required />
+              <span>{s}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset className={styles.fieldset}>
+        <legend>What do you need? <small>Pick any</small></legend>
+        <div className={styles.chips}>
+          {NEEDS.map((n) => (
+            <label className={styles.chip} key={n}>
+              <input type="checkbox" name="needs" value={n} checked={needs.includes(n)} onChange={(e) => toggle(n, e.target.checked)} />
+              <span>{n}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      {needs.includes(CLINICAL) ? (
+        <p className={styles.note} role="note">Please don&rsquo;t include any client or patient information.</p>
       ) : null}
+
       <div className={styles.field}>
         <label htmlFor="message">Message</label>
         <textarea className={styles.input} id="message" name="message" required maxLength={2000} rows={6} />
       </div>
+      {/* Honeypot: invisible to people and assistive tech, filled only by bots. */}
       <div className={styles.honeypot} aria-hidden="true">
-        <label htmlFor="website">Website</label>
-        <input id="website" name="website" tabIndex={-1} autoComplete="off" />
+        <label htmlFor="website">Leave this empty</label>
+        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" />
       </div>
       {state === "error" ? <p className={styles.error} role="alert">{error} Nothing was lost; try again or email me directly.</p> : null}
       <div>
-        <button className="btn" type="submit" disabled={state === "sending"}>
+        <button className="btn" type="submit" disabled={state === "sending"} data-cursor="grow">
           {state === "sending" ? "Sending…" : "Send it"}
         </button>
       </div>
-      <p style={{ color: "var(--muted)", fontSize: "0.85rem" }}>By sending this you agree to the <a className="u" href="/privacy">privacy policy</a>.</p>
+      <p className={styles.fine}>By sending this you agree to the <a className="u" href="/privacy">privacy policy</a>.</p>
     </form>
   );
 }

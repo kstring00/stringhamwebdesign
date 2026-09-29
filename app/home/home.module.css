@@ -1,11 +1,7 @@
-/* ---------- hero ---------- */
-
-.hero {
-  padding: clamp(9rem, 18vw, 14rem) 0 clamp(4rem, 8vw, 7rem);
-}
+/* ---------- shared bits from the old hero ---------- */
 
 .eyebrow {
-  margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
+  margin: 0 0 clamp(1.25rem, 2.5vw, 2rem);
   color: var(--muted);
   font-size: 0.82rem;
   font-weight: 500;
@@ -13,53 +9,11 @@
   text-transform: uppercase;
 }
 
-.h1 {
-  max-width: 12ch;
-  font-weight: 300;
-  font-variation-settings: "opsz" 144, "SOFT" 40;
-}
-
-.h1 em {
-  font-style: italic;
-  color: var(--ember);
-}
-
 /* SplitText line masks */
 .line {
   overflow: hidden;
   padding-bottom: 0.06em;
   margin-bottom: -0.06em;
-}
-
-.heroRow {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 2rem;
-  align-items: end;
-  margin-top: clamp(2.5rem, 5vw, 4rem);
-}
-
-.sub {
-  grid-column: 1 / span 6;
-}
-
-.heroActions {
-  grid-column: 8 / -1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem 1.5rem;
-  justify-self: end;
-}
-
-@media (max-width: 64rem) {
-  .heroRow { grid-template-columns: 1fr; }
-  .sub, .heroActions { grid-column: 1; justify-self: start; }
-}
-
-@media (max-width: 40rem) {
-  .heroActions { width: 100%; }
-  .heroActions > span, .heroActions a { width: 100%; }
-  .heroActions a { justify-content: center; }
 }
 
 /* ---------- section heads ---------- */
@@ -74,337 +28,557 @@
   max-width: 14ch;
 }
 
-/* ---------- featured work ---------- */
+/* ---------- everything you need ---------- */
 
-.work {
+.every {
   padding: var(--section) 0;
-  overflow: hidden;
 }
 
-.work[data-horizontal] {
-  height: 100vh;
-  /* Clear the fixed header while pinned, then centre what is left. */
-  padding: 6rem 0 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.everyHead {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1.25rem 2rem;
+  align-items: end;
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
 }
 
-.workHead {
+.everyHead > p { grid-column: 1 / -1; }
+.everyHead h2 { grid-column: 1 / span 8; max-width: 12ch; }
+
+.everyLink {
+  grid-column: 10 / -1;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 500;
+}
+
+.everyList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.everyItem {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1rem, 2vw, 2rem);
+  align-items: baseline;
+  padding: clamp(1.6rem, 3vw, 2.6rem) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.everyN {
+  grid-column: 1 / span 1;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2vw, 1.9rem);
+  font-weight: 300;
+  line-height: 1;
+  color: var(--ember);
+}
+
+.everyTitle {
+  grid-column: 2 / span 5;
+  font-size: clamp(1.7rem, 3vw, 3rem);
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+}
+
+.everyTitle a {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  transition: background-size 400ms var(--ease-out);
+}
+
+.everyItem:hover .everyTitle a,
+.everyTitle a:focus-visible {
+  background-size: 100% 1px;
+}
+
+.everyBody {
+  grid-column: 8 / -1;
+  max-width: 40ch;
+  color: var(--ink-soft);
+  font-size: clamp(1.02rem, 1.2vw, 1.15rem);
+  line-height: 1.55;
+}
+
+@media (max-width: 64rem) {
+  .everyHead h2 { grid-column: 1 / -1; }
+  .everyLink { grid-column: 1 / -1; justify-self: start; }
+  .everyItem { grid-template-columns: 3rem minmax(0, 1fr); row-gap: 0.6rem; }
+  .everyN { grid-column: 1; }
+  .everyTitle { grid-column: 2; }
+  .everyBody { grid-column: 2; }
+}
+
+/* ---------- statement ---------- */
+
+.statement {
+  padding: clamp(5rem, 12vw, 11rem) 0;
+}
+
+.statementLine {
+  max-width: 18ch;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5.6vw, 5.8rem);
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "SOFT" 40;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+}
+
+.statementRest {
+  color: var(--muted-on-ink);
+}
+
+/* ---------- optional second project ---------- */
+
+.second {
+  padding: var(--section) 0;
+  border-top: 1px solid var(--line);
+}
+
+.second > div { display: grid; gap: 1.25rem; }
+
+/* Unwritten Casa Matcha copy shows as a dashed box, never as real text. */
+.unwritten {
+  padding: 0.75rem 1rem;
+  border: 2px dashed var(--ember-deep);
+  border-radius: 8px;
+  color: var(--ember-deep);
+  font-family: var(--font-text);
+  font-size: 1rem;
+}
+
+/* ---------- case study: Common Ground ---------- */
+
+.case {
+  padding: var(--section) 0;
+  scroll-margin-top: 5rem;
+}
+
+.caseHead {
+  display: grid;
+  gap: 1.25rem;
   margin-bottom: clamp(2rem, 4vw, 3.5rem);
 }
 
-.workHead h2 {
-  max-width: 16ch;
+.caseHead h2 {
+  max-width: 18ch;
 }
 
-.work[data-horizontal] .workHead {
-  margin-bottom: 1.5rem;
-}
-
-.work[data-horizontal] .workHead h2 {
-  font-size: clamp(2.2rem, 4.2vw, 4.2rem);
-}
-
-/* Vertical stack by default (touch, reduced motion, no JS). */
-.track {
+.caseFacts {
   display: grid;
-  gap: clamp(3rem, 6vw, 5rem);
-  width: min(100% - 2 * var(--gutter), var(--max));
-  margin-inline: auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 4vw, 4rem);
+  margin: 0 0 clamp(3rem, 7vw, 6rem);
+  padding-top: clamp(1.5rem, 3vw, 2.25rem);
+  border-top: 1px solid var(--line);
 }
 
-/* Horizontal track once the script has confirmed a desktop pointer. */
-.work[data-horizontal] .track {
-  display: flex;
-  align-items: center;
-  gap: clamp(3rem, 6vw, 7rem);
-  width: max-content;
-  margin: 0;
-  padding: 0 var(--gutter) 0 var(--gutter);
-  will-change: transform;
-}
-
-.project {
-  display: grid;
-  gap: 1.25rem;
-  color: inherit;
-}
-
-.work[data-horizontal] .project {
-  width: min(52vw, 54rem);
-  flex: none;
-}
-
-.frame {
-  aspect-ratio: 16 / 10;
-  border-radius: 8px;
-  box-shadow: 0 30px 60px -30px rgba(21, 19, 15, 0.35);
-  will-change: transform;
-}
-
-.frame img {
-  object-position: top;
-}
-
-.projectMeta {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-areas: "index name cat" "index line line";
-  column-gap: 1.25rem;
-  row-gap: 0.35rem;
-  align-items: baseline;
-}
-
-.projectIndex {
-  grid-area: index;
+.caseFacts dt {
+  margin-bottom: 0.6rem;
   color: var(--muted);
-  font-size: 0.82rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-}
-
-.projectName {
-  grid-area: name;
-  font-family: var(--font-display);
-  font-size: clamp(1.9rem, 3.4vw, 3.2rem);
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
-
-.projectCat {
-  grid-area: cat;
-  color: var(--ember-deep);
   font-size: 0.82rem;
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
-.projectLine {
-  grid-area: line;
-  max-width: 44ch;
-  color: var(--ink-soft);
-  line-height: 1.5;
-}
-
-.projectAll {
-  display: inline-flex;
-  align-items: center;
-  gap: 1rem;
-  min-height: 44px;
-  color: var(--ink);
-}
-
-.work[data-horizontal] .projectAll {
-  flex: none;
-  padding-right: var(--gutter);
-}
-
-.projectAllArrow {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 4rem);
-  color: var(--ember);
-  transition: transform 300ms var(--ease-out);
-}
-
-.projectAll:hover .projectAllArrow {
-  transform: translateX(8px);
-}
-
-/* ---------- statement ---------- */
-
-.statement {
-  padding: var(--section) 0;
-}
-
-.statementLine {
-  max-width: 22ch;
-  font-weight: 300;
-  font-variation-settings: "opsz" 96;
-  line-height: 1.08;
-}
-
-/* ---------- services preview ---------- */
-
-.services {
-  padding: var(--section) 0;
-}
-
-.serviceList {
+.caseFacts dd {
   margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--line);
-}
-
-.service {
-  display: grid;
-  grid-template-columns: 4rem minmax(0, 1.2fr) minmax(0, 1fr) 3rem;
-  align-items: center;
-  gap: 1.5rem;
-  padding: clamp(1.4rem, 2.6vw, 2.2rem) 0;
-  border-bottom: 1px solid var(--line);
-  color: inherit;
-  transition: padding-left 320ms var(--ease-out);
-}
-
-.service:hover {
-  padding-left: 0.75rem;
-}
-
-.serviceIndex {
-  color: var(--muted);
-  font-size: 0.82rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-}
-
-.serviceName {
+  max-width: 34ch;
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 3vw, 2.8rem);
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
-
-.serviceName em {
-  font-style: italic;
-  color: var(--ember);
-}
-
-.serviceLine {
-  color: var(--ink-soft);
-}
-
-.serviceArrow {
-  justify-self: end;
-  font-family: var(--font-display);
-  font-size: 1.8rem;
-  color: var(--ember);
-  transition: transform 300ms var(--ease-out);
-}
-
-.service:hover .serviceArrow {
-  transform: translateX(6px);
+  font-size: clamp(1.35rem, 2.2vw, 1.95rem);
+  letter-spacing: -0.015em;
+  line-height: 1.2;
 }
 
 @media (max-width: 48rem) {
-  .service {
-    grid-template-columns: 2.5rem minmax(0, 1fr) 2rem;
-    grid-template-areas: "index name arrow" "index line arrow";
-    row-gap: 0.4rem;
-  }
-  .serviceIndex { grid-area: index; }
-  .serviceName { grid-area: name; }
-  .serviceLine { grid-area: line; }
-  .serviceArrow { grid-area: arrow; }
+  .caseFacts { grid-template-columns: 1fr; }
 }
 
-/* ---------- process story ---------- */
+/* The walkthrough. Default (touch, reduced motion, no JS): a stack of
+   screens, each with its caption. */
+.walk {
+  position: relative;
+}
+
+.stage {
+  display: none;
+}
+
+.walkSteps {
+  display: grid;
+  gap: clamp(3rem, 7vw, 5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.walkFigure {
+  display: grid;
+  gap: 1.25rem;
+  margin: 0;
+}
+
+.walkShot {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 30px 60px -34px rgba(21, 19, 15, 0.4);
+  aspect-ratio: 16 / 10;
+}
+
+.walkShot img,
+.layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* Phones get the phone captures in a phone-shaped frame. */
+@media (max-width: 47.99rem) {
+  .walkShot {
+    width: min(100%, 22rem);
+    justify-self: center;
+    aspect-ratio: 390 / 844;
+    border-radius: 28px;
+    border: 6px solid var(--ink);
+  }
+}
+
+.walkCaption {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.walkN {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--ember);
+}
+
+.walkText {
+  max-width: 30ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.4vw, 2.1rem);
+  letter-spacing: -0.015em;
+  line-height: 1.18;
+}
+
+/* Desktop with a fine pointer: the frame pins on the left and steps through
+   the screens; the captions scroll by on the right. */
+.case[data-pinned] .walk {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1rem, 2vw, 2rem);
+  align-items: start;
+}
+
+.case[data-pinned] .stage {
+  display: block;
+  grid-column: 1 / span 8;
+  grid-row: 1;
+}
+
+.case[data-pinned] .walkSteps {
+  grid-column: 9 / -1;
+  grid-row: 1;
+  gap: 0;
+}
+
+.case[data-pinned] .walkStep {
+  display: grid;
+  align-content: center;
+  min-height: 85vh;
+  opacity: 0.28;
+  transition: opacity 450ms var(--ease-out);
+}
+
+.case[data-pinned] .walkActive {
+  opacity: 1;
+}
+
+.case[data-pinned] .walkShot {
+  display: none;
+}
+
+.case[data-pinned] .walkCaption {
+  grid-template-columns: 1fr;
+  gap: 0.9rem;
+}
+
+.case[data-pinned] .walkText {
+  font-size: clamp(1.6rem, 2.3vw, 2.3rem);
+}
+
+.device {
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 50px 90px -50px rgba(21, 19, 15, 0.55), 0 12px 30px -18px rgba(21, 19, 15, 0.25);
+  transform-origin: center;
+  will-change: transform;
+}
+
+.deviceBar {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  height: 2.25rem;
+  padding: 0 0.9rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-deep);
+}
+
+.deviceBar i {
+  width: 0.62rem;
+  height: 0.62rem;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+
+.deviceBar span {
+  margin-left: 0.75rem;
+  padding: 0.18rem 0.8rem;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.screen {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  will-change: opacity, transform;
+}
+
+/* Before the script sets the layers, show only the first. */
+.layer + .layer {
+  opacity: 0;
+}
+
+.caseEnd {
+  display: grid;
+  gap: 2rem;
+  margin-top: clamp(3.5rem, 8vw, 6rem);
+  padding-top: clamp(2rem, 4vw, 3rem);
+  border-top: 1px solid var(--line);
+}
+
+.outcome {
+  max-width: 26ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.6vw, 3.4rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+.outcomeLink {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  background-position: 0 92%;
+  transition: color 300ms var(--ease-out);
+}
+
+.outcomeLink:hover { color: var(--ember-deep); }
+
+.caseActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.25rem;
+}
+
+@media (max-width: 40rem) {
+  .caseActions > span, .caseActions a { width: 100%; justify-content: center; }
+}
+
+/* ---------- process: four steps on one rule ---------- */
 
 .process {
   padding: var(--section) 0;
 }
 
-.story {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 2rem;
+.flow {
+  position: relative;
 }
 
-.storyPin {
-  display: none;
+/* The rule: a pencil line, with the solid ink line that draws over it.
+   Drawn in full by default; the script rewinds it only when it will animate. */
+.rail {
+  position: absolute;
+  top: 0.95rem;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+
+.railPencil,
+.railPencilV {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.railPencilV { display: none; }
+
+.railFill {
+  position: absolute;
+  top: 1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--ink);
+  transform-origin: left center;
 }
 
 .steps {
-  grid-column: 1 / -1;
   display: grid;
-  gap: clamp(2.5rem, 5vw, 4rem);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: clamp(1.5rem, 3vw, 3rem);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .step {
+  position: relative;
   display: grid;
-  grid-template-columns: 3.5rem minmax(0, 1fr);
-  column-gap: 1.25rem;
-  row-gap: 0.75rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--line);
+  align-content: start;
+  gap: 0.9rem;
+  padding-top: 2.5rem;
 }
 
+/* The marker on the rule above each step: a pencil ring that turns into a
+   solid ember dot when its step lights. Lit is the default. */
+.stepMark {
+  position: absolute;
+  top: -0.35rem;
+  left: -0.45rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  background: var(--paper);
+  border-radius: 50%;
+}
+
+.stepMark svg { width: 100%; height: 100%; overflow: visible; }
+
+.markDot {
+  fill: var(--ember);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 300ms var(--ease-out);
+}
+
+.markRing {
+  transition: opacity 400ms var(--ease-out);
+}
+
+.process[data-animate] .step:not(.stepLit) .markDot { transform: scale(0); opacity: 0; }
+.process[data-animate] .step.stepLit .markRing { opacity: 0.35; }
+
 .stepN {
-  grid-row: 1 / span 2;
+  color: var(--ink);
   font-family: var(--font-display);
-  font-size: 2rem;
-  line-height: 1;
-  color: var(--ember);
+  font-size: clamp(3.5rem, 6.5vw, 6.5rem);
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "SOFT" 40;
+  letter-spacing: -0.05em;
+  line-height: 0.85;
+  transition: color 500ms var(--ease-out), transform 600ms var(--ease-out);
 }
 
 .stepTitle {
-  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  font-size: clamp(1.4rem, 1.9vw, 1.8rem);
+  line-height: 1.1;
 }
 
 .stepBody {
-  max-width: 40ch;
+  max-width: 30ch;
   color: var(--ink-soft);
   line-height: 1.55;
 }
 
-/* Desktop with a pointer: the number pins on the left, the steps scroll by. */
-.process[data-story] .story {
-  align-items: start;
+/* Animated: unlit steps wait quietly until the line reaches them. */
+.process[data-animate] .step:not(.stepLit) .stepN {
+  /* Quiet but still 3.3:1 on paper, above the large-text minimum. */
+  color: #8a8277;
+  transform: translateY(0.4rem);
 }
 
-.process[data-story] .storyPin {
-  display: block;
-  grid-column: 1 / span 5;
-  position: sticky;
-  top: 25vh;
-  height: 50vh;
-}
 
-.storyNumber {
-  display: block;
-  font-family: var(--font-display);
-  font-size: clamp(10rem, 22vw, 22rem);
-  font-weight: 300;
-  letter-spacing: -0.06em;
-  line-height: 0.8;
-  color: var(--ember);
-  will-change: transform, opacity;
-}
+/* Phones and tablets: the rule runs down the left edge. */
+@media (max-width: 63.99rem) {
+  .rail {
+    top: 0;
+    bottom: 0;
+    left: 0.75rem;
+    right: auto;
+    width: 3px;
+    height: auto;
+  }
 
-.process[data-story] .steps {
-  grid-column: 7 / -1;
-  gap: 0;
-}
+  .railPencil { display: none; }
+  .railPencilV { display: block; }
 
-.process[data-story] .step {
-  min-height: 60vh;
-  padding: 20vh 0 0;
-  border-top: 0;
-  opacity: 0.32;
-  transition: opacity 400ms var(--ease-out);
-}
+  .railFill {
+    top: 0;
+    bottom: 0;
+    left: 1px;
+    right: auto;
+    width: 1px;
+    height: auto;
+    transform-origin: center top;
+  }
 
-.process[data-story] .step:first-child {
-  padding-top: 0;
-  min-height: 45vh;
-}
+  .steps {
+    grid-template-columns: 1fr;
+    row-gap: clamp(2.25rem, 6vw, 3rem);
+  }
 
-.process[data-story] .stepActive {
-  opacity: 1;
-}
+  .step {
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 1.25rem;
+    row-gap: 0.5rem;
+    padding: 0 0 0 2.9rem;
+  }
 
-.process[data-story] .stepN {
-  display: none;
-}
+  .stepMark {
+    top: 0;
+    left: -0.35rem;
+  }
 
-.process[data-story] .step {
-  grid-template-columns: minmax(0, 1fr);
-  align-content: start;
+  .stepN {
+    grid-row: 1 / span 2;
+    font-size: clamp(2.8rem, 11vw, 3.6rem);
+  }
+
+  .stepTitle,
+  .stepBody {
+    grid-column: 2;
+  }
 }
 
 /* ---------- faq ---------- */
@@ -454,6 +628,11 @@
   line-height: 1.55;
 }
 
+.faqBook {
+  display: block;
+  margin-top: 1.25rem;
+}
+
 @media (max-width: 64rem) {
   .faqGrid { grid-template-columns: 1fr; }
   .faqGrid .sectionHead { grid-column: 1; position: static; margin-bottom: 2rem; }
@@ -466,9 +645,27 @@
   padding: var(--section) 0;
 }
 
+.closingWords {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.08em;
+}
+
+.underline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.02em;
+  width: 100%;
+  height: 0.16em;
+  overflow: visible;
+}
+
 .closingLine {
-  max-width: 10ch;
   margin-bottom: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(3.4rem, 12.5vw, 15rem);
   font-weight: 300;
   font-variation-settings: "opsz" 144, "SOFT" 60;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
 }

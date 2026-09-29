@@ -1,20 +1,24 @@
 import { cta, nav } from "../data/nav";
-import { locationLine, site } from "../data/site";
+import { locationLine, site, studioLine } from "../data/site";
 import styles from "./Footer.module.css";
+import Wordmark from "./Wordmark";
 
 export default function Footer() {
   return (
     <footer className={`${styles.footer} ink`}>
       <div className="container">
-        <p className={styles.wordmark} aria-hidden="true">Stringham</p>
+        <Wordmark />
+        <p className={styles.studio}>{studioLine}</p>
 
         <div className={styles.grid}>
           <div className={styles.col}>
             <p className={styles.head}>Pages</p>
             <ul>
+              <li><a className="u" href="/">Home</a></li>
               {nav.map((item) => (
                 <li key={item.href}><a className="u" href={item.href}>{item.label}</a></li>
               ))}
+              <li><a className="u" href="/family-resource-hub">Family Resource Hub</a></li>
               <li><a className="u" href={cta.href}>{cta.label}</a></li>
             </ul>
           </div>
@@ -29,7 +33,6 @@ export default function Footer() {
           <div className={`${styles.col} ${styles.about}`}>
             <p className={styles.head}>Where</p>
             <p className={styles.line}>{locationLine}</p>
-            <p className={styles.line}>{site.person}, {site.credential}.</p>
           </div>
         </div>
 

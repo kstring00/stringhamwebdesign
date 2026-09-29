@@ -4,8 +4,8 @@ export default function Statement() {
   return (
     <section className={`${styles.statement} ink`} aria-label="A statement">
       <div className="container">
-        <p className={`display-m ${styles.statementLine}`} data-reveal>
-          No templates. No agency handoffs. Just a site built around how your business actually works.
+        <p className={styles.statementLine} data-reveal>
+          You bring the idea. <span className={styles.statementRest}>I handle the rest, and you own all of it.</span>
         </p>
       </div>
     </section>

@@ -1,0 +1,139 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(8.5rem, 17vh, 12rem) 0 clamp(4rem, 8vw, 6rem);
+  min-height: 88svh;
+  display: grid;
+  align-content: center;
+}
+
+.guides {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.inner {
+  position: relative;
+  display: grid;
+  gap: clamp(1.4rem, 2.6vw, 2.2rem);
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.frameBox {
+  position: relative;
+  padding: clamp(1rem, 2.4vw, 2.2rem) clamp(0.9rem, 2.4vw, 2.4rem);
+  margin: 0 calc(-1 * clamp(0.9rem, 2.4vw, 2.4rem));
+  width: fit-content;
+  max-width: calc(100% + 2 * clamp(0.9rem, 2.4vw, 2.4rem));
+}
+
+.rough,
+.clean {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* The clean frame: one ink hairline and four ember handles, like a design
+   tool's selection. Shown by default; the script fades it in after the sketch. */
+.clean {
+  border: 1px solid var(--ink);
+}
+
+.clean i {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--ember);
+  outline: 2px solid var(--paper);
+}
+
+.clean i:nth-child(1) { top: -4px; left: -4px; }
+.clean i:nth-child(2) { top: -4px; right: -4px; }
+.clean i:nth-child(3) { bottom: -4px; right: -4px; }
+.clean i:nth-child(4) { bottom: -4px; left: -4px; }
+
+.title {
+  position: relative;
+  max-width: 11ch;
+  font-size: clamp(3.1rem, 9.4vw, 10.2rem);
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "SOFT" 40;
+  letter-spacing: -0.035em;
+  line-height: 0.94;
+}
+
+/* Word masks. */
+.w {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0.04em 0.02em 0.1em;
+  margin: -0.04em -0.02em -0.1em;
+}
+
+.wi {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* The rotating word: a mask whose width the script animates. */
+.rot {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  color: var(--ember);
+  white-space: nowrap;
+}
+
+.rotWord {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  will-change: transform;
+}
+
+.rotFirst {
+  position: relative;
+  display: inline-block;
+  visibility: visible;
+}
+
+.sub {
+  max-width: 34rem;
+  color: var(--ink-soft);
+  font-size: clamp(1.05rem, 1.3vw, 1.3rem);
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.25rem;
+}
+
+@media (max-width: 40rem) {
+  .hero { min-height: 0; }
+  .actions > span, .actions > span > a { width: 100%; }
+  .actions > span > a { justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rough { display: none; }
+}

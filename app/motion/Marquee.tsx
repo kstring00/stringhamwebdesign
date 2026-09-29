@@ -15,8 +15,7 @@ export default function Marquee({ items, label }: { items: readonly string[]; la
   useEffect(() => {
     const el = track.current;
     if (!el || prefersReducedMotion()) return;
-    el.parentElement?.setAttribute("data-moving", "");
-    const tween = gsap.to(el, { xPercent: -50, duration: 42, ease: "none", repeat: -1 });
+    const tween = gsap.to(el, { xPercent: -50, duration: 46, ease: "none", repeat: -1 });
     const wrap = el.parentElement!;
     const pause = () => tween.pause();
     const play = () => tween.play();
@@ -30,7 +29,7 @@ export default function Marquee({ items, label }: { items: readonly string[]; la
   const row = (hidden: boolean) => (
     <ul className={styles.row} aria-hidden={hidden || undefined}>
       {items.map((item) => (
-        <li key={item}><span>{item}</span><i aria-hidden="true">·</i></li>
+        <li key={item}><span>{item}</span><i aria-hidden="true" /></li>
       ))}
     </ul>
   );

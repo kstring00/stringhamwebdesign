@@ -1,10 +1,8 @@
 export type NavItem = { label: string; href: string };
 
-/** The four pages, in order. The header and the footer both read this. */
+/** Services and About, in order. The header and the footer both read this. */
 export const nav: NavItem[] = [
-  { label: "Work", href: "/work" },
   { label: "Services", href: "/services" },
-  { label: "Family Resource Hub", href: "/family-resource-hub" },
   { label: "About", href: "/about" },
 ];
 

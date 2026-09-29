@@ -5,7 +5,6 @@ import "./globals.css";
 import ClarityAnalytics from "./ClarityAnalytics";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import JsonLd from "./components/JsonLd";
 import Cursor from "./motion/Cursor";
 import PageTransition from "./motion/PageTransition";
 import Reveal from "./motion/Reveal";
@@ -19,9 +18,21 @@ const fraunces = Fraunces({
   subsets: ["latin"],
   axes: ["opsz", "SOFT"],
   weight: "variable",
-  style: ["normal", "italic"],
+  style: ["normal"],
   display: "swap",
   variable: "--font-fraunces",
+});
+
+/* The italic is a separate file used by three short phrases, all below the
+   fold, so it is not preloaded and never competes with the headline. */
+const frauncesItalic = Fraunces({
+  subsets: ["latin"],
+  axes: ["opsz", "SOFT"],
+  weight: "variable",
+  style: ["italic"],
+  display: "swap",
+  preload: false,
+  variable: "--font-fraunces-italic",
 });
 
 const interTight = Inter_Tight({
@@ -38,14 +49,14 @@ export const metadata: Metadata = {
   applicationName: site.name,
   authors: [{ name: site.person, url: site.url }],
   creator: site.person,
-  openGraph: { type: "website", siteName: site.name, locale: "en_US", url: "/" },
+  openGraph: { type: "website", siteName: site.name, locale: "en_US" },
   twitter: { card: "summary_large_image" },
   robots: { index: true, follow: true },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${interTight.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${frauncesItalic.variable} ${interTight.variable}`}>
       <body>
         <a className="skip" href="#main">Skip to content</a>
         <Header />
@@ -62,7 +73,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Reveal />
         <Cursor />
         <PageTransition />
-        <JsonLd />
         <ClarityAnalytics />
       </body>
     </html>

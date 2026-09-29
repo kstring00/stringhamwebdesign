@@ -1,8 +1,21 @@
 # Open work
 
-Updated 2026-09-27 with the `revamp-2026` rebuild.
+Updated 2026-09-28 (V4).
 
 ## Needs the owner
+
+- `NEXT_PUBLIC_BOOKING_URL` on Vercel (Production and Preview): the booking
+  link for the free 30-minute call. Until it's set, no booking buttons render
+  and every "book a call" path goes to /contact.
+- Family Resource Hub answers in `app/data/hub.ts` → `clinicQuestions`:
+  pricing after the 60-day trial, who keeps content up to date, and what
+  happens if a clinic stops. Each renders only once its answer is filled in.
+- A parent quote for the hub page (`hub.parentQuote`); renders only when set.
+- At least one client testimonial. The site has none, by design, until one
+  is supplied word for word.
+- Confirm in Vercel → Domains that `stringhamwebdesign.com` redirects to
+  `www.stringhamwebdesign.com` with a 301/308, and that http goes to https
+  (Vercel does the latter automatically).
 
 - Shut down the services the removed portal used (the code is gone; the
   accounts are not): the Supabase project (auth, database, storage), the Stripe
@@ -15,16 +28,16 @@ Updated 2026-09-27 with the `revamp-2026` rebuild.
 - Confirm a real contact-form submission arrives at kyle@stringhamwebdesign.com
   on the preview deployment (the sandbox has no `RESEND_API_KEY`, so it was
   tested to the API route only).
-- Items in `ASSETS_NEEDED.md` (Lake City, photo).
+- Items in `ASSETS_NEEDED.md` (photo).
 
 ## Could not be verified from the build sandbox
 
-- Outbound requests to client sites return 403, so the three `/work` links
-  were not fetched and no fresh Playwright captures of the live sites were
-  taken. Open each once on the preview: commongroundautism.org,
-  beethebehaviorbae.com, withlittle.app.
+- The sandbox cannot reach commongroundautism.org (egress blocked), so the
+  case-study screens were captured from the Common Ground source
+  (`kstring00/CG2`, branch `claude/loving-newton-de9zlg`, the unbranded
+  build) run locally. Compare them with the live site once and re-capture if
+  the live site has moved on.
 
 ## Nice to have
 
-- AVIF variants of the work captures (WebP is shipped).
 - A second hub screenshot on `/family-resource-hub` once a clinic is live.
