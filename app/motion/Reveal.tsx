@@ -3,13 +3,16 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-import { gsap, ScrollTrigger, prefersReducedMotion } from "./gsap";
+import { gsap, prefersReducedMotion } from "./gsap";
 
 /**
  * A small, quiet rise for anything marked data-reveal (grouped and staggered
  * under a data-reveal-group parent). Everything is in the page at rest; the
- * script only adds a short fade as a block scrolls into view, and anything
- * already on screen plays at once. Off under reduced motion and without JS.
+ * script only adds a short fade as a block comes into view, and anything
+ * already on screen plays at once. An IntersectionObserver does the
+ * watching (it fires on layout, not just on scroll events) and a short
+ * safety timer shows anything still hidden, so nothing can stay invisible.
+ * Off under reduced motion and without JS.
  */
 export default function Reveal() {
   const pathname = usePathname();
@@ -17,15 +20,27 @@ export default function Reveal() {
   useEffect(() => {
     if (prefersReducedMotion()) return;
     const ctx = gsap.context(() => {
-      const rise = (els: HTMLElement[] | NodeListOf<HTMLElement>, trigger: Element) => {
-        gsap.from(els, { autoAlpha: 0, y: 12, duration: 0.55, ease: "power2.out", stagger: 0.06, scrollTrigger: { trigger, start: "top 94%", once: true } });
+      const pending = new Map<Element, HTMLElement[]>();
+      const play = (trigger: Element) => {
+        const els = pending.get(trigger);
+        if (!els) return;
+        pending.delete(trigger);
+        gsap.to(els, { autoAlpha: 1, y: 0, duration: 0.55, ease: "power2.out", stagger: 0.06, overwrite: true });
+      };
+      const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { play(e.target); io.unobserve(e.target); } }), { rootMargin: "0px 0px -6% 0px" });
+      const watch = (els: HTMLElement[], trigger: Element) => {
+        gsap.set(els, { autoAlpha: 0, y: 12 });
+        pending.set(trigger, els);
+        io.observe(trigger);
       };
       document.querySelectorAll<HTMLElement>("[data-reveal-group]").forEach((group) => {
-        const items = group.querySelectorAll<HTMLElement>("[data-reveal]");
-        if (items.length) rise(items, group);
+        const items = Array.from(group.querySelectorAll<HTMLElement>("[data-reveal]"));
+        if (items.length) watch(items, group);
       });
-      document.querySelectorAll<HTMLElement>("[data-reveal]:not([data-reveal-group] [data-reveal])").forEach((el) => rise([el], el));
-      document.fonts?.ready.then(() => ScrollTrigger.refresh());
+      document.querySelectorAll<HTMLElement>("[data-reveal]:not([data-reveal-group] [data-reveal])").forEach((el) => watch([el], el));
+      // Nothing waits forever: whatever has not come into view by now is shown.
+      const safety = window.setTimeout(() => [...pending.keys()].forEach(play), 4000);
+      return () => { io.disconnect(); window.clearTimeout(safety); };
     });
     return () => ctx.revert();
   }, [pathname]);
