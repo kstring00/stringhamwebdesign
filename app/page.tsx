@@ -1,33 +1,39 @@
 import type { Metadata } from "next";
 
+import { BusinessJsonLd } from "./components/JsonLd";
+import { pageMeta } from "./data/meta";
+import { audiences } from "./data/services";
+import CasaMatchaSlot from "./home/CasaMatchaSlot";
+import CaseStudy from "./home/CaseStudy";
 import ClosingCta from "./home/ClosingCta";
+import Everything from "./home/Everything";
 import Faq from "./home/Faq";
-import FeaturedWork from "./home/FeaturedWork";
 import Hero from "./home/Hero";
+import IdeaToReality from "./home/IdeaToReality";
 import ProcessStory from "./home/ProcessStory";
-import ServicesPreview from "./home/ServicesPreview";
 import Statement from "./home/Statement";
 import Marquee from "./motion/Marquee";
 
-export const metadata: Metadata = {
-  title: { absolute: "Custom Web Design in League City, TX | Stringham Web Design" },
-  description: "Custom, beautifully crafted websites for clinics, cafés, and the businesses people love. Built in League City, Texas by Kyle Stringham, and owned outright by you.",
-  alternates: { canonical: "/" },
-};
-
-const INDUSTRIES = ["Behavioral health clinics", "Coffee shops", "Coaches", "Storage facilities", "Course creators", "Local shops", "Nonprofits"] as const;
+export const metadata: Metadata = pageMeta({
+  absolute: "Turn Your Idea Into a Real Business | Stringham Web Design, League City TX",
+  description: "Websites, online ordering, booking, payments, and everything else you need to launch and grow, built in League City, Texas by Kyle Stringham. Fixed price in writing, and you own all of it.",
+  path: "/",
+});
 
 export default function Home() {
   return (
     <>
       <Hero />
-      <Marquee items={INDUSTRIES} label="Who I build for" />
-      <FeaturedWork />
+      <Marquee items={audiences} label="Who I work with" />
+      <IdeaToReality />
+      <Everything />
       <Statement />
-      <ServicesPreview />
+      <CaseStudy />
+      <CasaMatchaSlot />
       <ProcessStory />
       <Faq />
       <ClosingCta />
+      <BusinessJsonLd />
     </>
   );
 }

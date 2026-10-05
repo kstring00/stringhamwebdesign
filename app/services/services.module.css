@@ -1,0 +1,156 @@
+/* A small index under the head: six anchors in one line on wide screens. */
+.jump {
+  padding: 1.25rem 0 0;
+}
+
+.jump ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.jump a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  min-height: 44px;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.jump b {
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: var(--ember);
+}
+
+/* Each service: text on one side, the drawing on the other, alternating. */
+.service {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1rem, 2vw, 2rem);
+  row-gap: 2rem;
+  align-items: center;
+  padding: clamp(4rem, 9vw, 8rem) 0;
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: 6rem;
+}
+
+.text {
+  grid-column: 1 / span 6;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.art {
+  grid-column: 8 / -1;
+  margin: 0;
+  padding: clamp(1rem, 3vw, 2.5rem);
+}
+
+.flip .text { grid-column: 7 / -1; grid-row: 1; }
+.flip .art { grid-column: 1 / span 5; grid-row: 1; }
+
+.serviceTitle {
+  max-width: 12ch;
+}
+
+.short {
+  max-width: 34ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 1.8vw, 1.7rem);
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+.long {
+  max-width: 44ch;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* Specialties: two columns on one rule. */
+.specialties {
+  padding: var(--section) 0 0;
+}
+
+.specGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 5vw, 5rem);
+}
+
+.spec {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ink);
+}
+
+.spec h3 {
+  font-size: clamp(1.8rem, 2.8vw, 2.6rem);
+}
+
+.spec > p {
+  color: var(--ink-soft);
+  font-size: 1.08rem;
+}
+
+.spec ul {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.spec li {
+  position: relative;
+  max-width: 42ch;
+  padding-left: 1.5rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.spec li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.75em;
+  width: 0.75rem;
+  height: 1px;
+  background: var(--ember);
+}
+
+.spec li a {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.next {
+  display: grid;
+  gap: 1.75rem;
+  padding: var(--section) 0;
+}
+
+.nextLine {
+  max-width: 26ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.4vw, 3.2rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+@media (max-width: 64rem) {
+  .service { grid-template-columns: 1fr; row-gap: 1.5rem; padding: clamp(3rem, 8vw, 5rem) 0; }
+  .text, .art, .flip .text, .flip .art { grid-column: 1; grid-row: auto; }
+  .art { width: min(100%, 22rem); padding: 0.5rem 0; }
+  .specGrid { grid-template-columns: 1fr; }
+}

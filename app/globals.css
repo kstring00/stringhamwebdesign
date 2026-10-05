@@ -6,7 +6,7 @@
 :root {
   --paper: #f4efe6;
   --paper-deep: #ebe4d6;
-  --ink: #15130f;
+  --ink: #17130f;
   --ink-soft: #3d3831;
   --muted: #6b6359;
   --ember: #d2552d;
@@ -20,11 +20,16 @@
   --line-on-ink: rgba(244, 239, 230, 0.16);
   --ember-on-ink: #e8734d;
 
+  /* Pencil: the sketch-to-real motif's stroke. */
+  --pencil: rgba(23, 19, 15, 0.42);
+  --pencil-soft: rgba(23, 19, 15, 0.2);
+
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
   --max: 90rem;
   --section: clamp(5rem, 11vw, 10rem);
 
   --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
+  --font-display-italic: var(--font-fraunces-italic), var(--font-fraunces), "Iowan Old Style", Georgia, serif;
   --font-text: var(--font-inter-tight), "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);

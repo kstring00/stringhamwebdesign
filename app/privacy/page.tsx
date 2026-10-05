@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 
+import { pageMeta } from "../data/meta";
 import styles from "../pages.module.css";
 import local from "./privacy.module.css";
 import { LAST_UPDATED, getPrivacyDoc, lastUpdatedLabel } from "./lib";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description: "What Stringham Web Design collects through this site, why, who else handles it, and how to have it deleted. Plain English.",
-  alternates: { canonical: "/privacy" },
+  ...pageMeta({ absolute: "Privacy Policy | Stringham Web Design, League City, TX", description: "What Stringham Web Design, a web design studio in League City, Texas, collects through this site, why, who else handles it, and how to have it deleted.", path: "/privacy" }),
   robots: { index: true, follow: true },
 };
 

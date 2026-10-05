@@ -15,20 +15,33 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
 
 ## Rules from the owner
 
-- Warm editorial design: paper `#F4EFE6`, ink `#15130F`, ember `#D2552D`.
-  Fraunces for display, Inter Tight for text, both self-hosted through
-  `next/font`. Tokens in `app/globals.css`. No new colours, fonts or libraries.
+- The positioning (V4): turning any idea into something real, with
+  everything it needs. Studio line "Stringham Web Design · League City,
+  Texas". Nav is Services · About plus Start a project, on every page
+  including phones.
+- One palette: paper `#F4EFE6`, ink `#17130F`, ember `#D2552D` used
+  sparingly (`--ember-deep` for small text), deep ink sections. Fraunces for
+  display, Inter Tight for text, both self-hosted through `next/font`.
+  Tokens in `app/globals.css`. No new colours, fonts or libraries.
+- The motif is "sketch to real": thin pencil strokes (ink at low opacity)
+  that become finished design. Used in the hero, the Idea → Reality
+  section, the process rule, the closing underline and the footer wordmark,
+  and nowhere louder. The fictional site in the signature section is
+  Halfmoon Coffee; never put a real business in there.
+- The Family Resource Hub page stays as it is: a specialty product for ABA
+  and pediatric clinics.
 - Motion is GSAP only. Every animation is off under `prefers-reduced-motion`
   and nothing depends on JS to be readable.
 - Accessibility failures are disqualifying. He sells to ABA and pediatric
   clinics. Lighthouse accessibility must stay at 95+ (it is 100 today).
-- Only real work on `/work`, with real screenshots of live sites. Never a
-  mockup or an invented project. No invented testimonials.
-- Never mention Texas ABA Centers, ABA Centers of America, a "pilot", or
-  texasabacenterscg.com anywhere on the site. `scripts/launch-check.js` greps
+- Common Ground is the only project on the site (the homepage case study).
+  Screens are real captures. Never a mockup or an invented project. No invented testimonials.
+- Never name the clinic brands or the old demo domain behind Common Ground,
+  and never call anything a "pilot", anywhere on the site. The exact banned
+  strings live in `scripts/launch-check.js`, which greps
   for these and fails the build check if they appear.
-- The `$500–$1,500` range lives only in the homepage FAQ answer. The Family
-  Resource Hub page carries no prices.
+- No prices anywhere on the site. Every project is quoted after a free
+  30-minute call.
 - Don't merge to `main` or deploy to production without the owner's OK.
 
 ## Checks before any deploy

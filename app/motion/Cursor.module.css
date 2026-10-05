@@ -36,3 +36,12 @@
 .cursor[data-state="view"] span {
   opacity: 1;
 }
+
+.cursor[data-state="grow"] {
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  background: transparent;
+  border: 1.5px solid var(--ember);
+  mix-blend-mode: normal;
+}
