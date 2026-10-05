@@ -18,7 +18,7 @@ export default function Header() {
       <div className={styles.bar}>
         <a className={styles.brand} href="/">
           <span className={styles.wordmark}>Stringham</span>
-          <span className={styles.brandSub}>Web Design LLC</span>
+          <span className={styles.brandSub}>Web Design</span>
         </a>
         <nav className={styles.nav} aria-label="Primary">
           <a className={`btn ${styles.cta}`} href={cta.href} data-track="cta" data-location="header">{cta.label}</a>
