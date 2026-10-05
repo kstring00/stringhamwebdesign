@@ -24,31 +24,11 @@ export function BusinessJsonLd() {
         areaServed: [
           { "@type": "City", name: "League City, TX" },
           { "@type": "AdministrativeArea", name: "Greater Houston area, TX" },
+          { "@type": "State", name: "Texas" },
         ],
-        founder: { "@id": `${site.url}/about#kyle` },
-        description: "Websites, online ordering, booking, and payments for new and growing businesses, built in League City, Texas.",
-        knowsAbout: ["Web design", "Online ordering", "Booking and payments", "Google Business Profile", "Family Resource Hub for clinics"],
-      }}
-    />
-  );
-}
-
-/** Person schema for Kyle. /about only. */
-export function PersonJsonLd() {
-  return (
-    <Script
-      data={{
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "@id": `${site.url}/about#kyle`,
-        name: site.person,
-        url: `${site.url}/about`,
-        email: site.email,
-        telephone: site.phoneE164,
-        jobTitle: "Web designer and developer",
-        hasCredential: { "@type": "EducationalOccupationalCredential", name: site.credential },
-        worksFor: { "@type": "ProfessionalService", "@id": `${site.url}/#business`, name: site.legalName },
-        address,
+        founder: { "@type": "Person", name: site.person },
+        description: "Google listing fixes and simple websites for small local businesses: self storage, RV parks, fishing guides, horse boarding and marinas. League City, Texas.",
+        knowsAbout: ["Google Business Profile", "Local business directories", "Small business websites"],
       }}
     />
   );

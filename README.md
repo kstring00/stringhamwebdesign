@@ -21,41 +21,30 @@ locally (the contact form logs instead of emailing without `RESEND_API_KEY`).
 
 ## Pages
 
-`/` `/services` `/family-resource-hub` `/about` `/contact` `/privacy` plus a
-designed 404. `/portal*`, `/admin*`, `/login`, `/pricing`, `/quote`, `/resources`, `/faq`,
-`/work*`, `/portfolio*`, `/coffee-shops*` and `/autism-clinics*` redirect
-permanently (301) (see `next.config.ts`).
+`/` (everything: hero, findings, how it works, prices, who it's for, questions,
+the free check form), `/terms`, `/privacy`, a designed 404, and
+`/family-resource-hub`, which is live but deliberately unlinked. Every retired
+route (`/services`, `/about`, `/contact`, `/portal*`, `/admin*`, `/login`,
+`/pricing`, `/quote`, `/resources`, `/faq`, `/work*`, `/portfolio*`,
+`/coffee-shops*`, `/autism-clinics*`) answers with a 301 to the right section
+of the home page (see `next.config.ts`).
 
 ## Where things live
 
-- `app/data/` — every string that is content: site identity, nav, projects,
-  services, process, FAQ, hub copy. Edit copy here, not in components.
-- `app/globals.css` — the whole design system (tokens, type scale, grid,
-  buttons, grain). Component files only arrange it.
-- `app/motion/` — GSAP: smooth scroll (desktop, fine pointer only), reveals,
-  magnetic buttons, cursor, marquee, page transition. Everything is disabled
-  under `prefers-reduced-motion`, and every page reads fine without JS.
-- `app/home/` — the homepage sections. `app/<route>/page.tsx` for the rest.
-- `app/api/contact/route.ts` — the contact form backend (Resend).
-- `app/motifs/` — the "sketch to real" motif: `sketch.ts` (seeded pencil
-  geometry: rough lines, rectangles, circles, hatching, arrows),
-  `Illustrations.tsx` (the six service drawings, pencil → finished on
-  scroll) and the shared stroke styles. `app/motion/draw.ts` makes any
-  `[data-stroke]` SVG path draw itself. Everything is complete without JS.
-- `app/home/IdeaToReality.tsx` — the pinned signature section: one browser
-  frame, four scroll-driven stages (sketch, plan, build, launch). The site
-  inside it (Halfmoon Coffee) is fictional.
-- `app/data/flags.ts` — `SHOW_CASA_MATCHA` (default false). Off renders
-  nothing; on shows the Casa Matcha case study, whose copy and screens live
-  in `app/data/casaMatcha.ts` and are still to be written.
-- `public/common-ground/` — real captures of Common Ground (home, the six
-  paths, "I feel overwhelmed") at 1440 and 390 wide, AVIF + WebP. The
-  homepage case study (`app/home/CaseStudy.tsx`) is the only project on the
-  site. Never mockups.
-- `content/privacy.md` — the privacy policy, rendered at `/privacy`.
-- `scripts/` — launch, Lighthouse and Clarity checks. See `scripts/README.md`.
-
-## Analytics
-
-Microsoft Clarity loads in production only, after page load, when
-`NEXT_PUBLIC_CLARITY_ID` is set. The privacy policy covers it.
+- `app/data/offer.ts` — every word on the home page: prices, the verified
+  findings, the three steps, the plan cards, the niches, the questions.
+  Prices here must match `content/service-terms.md`; change them together.
+- `app/data/site.ts` — identity, phone, email, location.
+- `content/service-terms.md` and `content/privacy.md` — rendered word for
+  word at `/terms` and `/privacy`.
+- `app/globals.css` — the whole design system (green accent `#2F5D46`,
+  tinted neutrals, type, buttons, grain). Component files only arrange it.
+- `app/home/FreeCheckForm.tsx` + `app/api/free-check/route.ts` — the form and
+  its backend (Resend; honeypot; rate limit; utm/referrer captured as hidden
+  fields and written into the email).
+- `app/lib/track.ts` + `app/motion/Tracking.tsx` — Clarity custom events:
+  `free_check_submit`, `cta_click` (with `cta_location`), `email_click`,
+  `terms_view`.
+- `app/motion/Reveal.tsx` — the only animation: a short rise on
+  `data-reveal` blocks. Off under reduced motion; nothing depends on it.
+- `scripts/` — the launch, link and Lighthouse checks (see `scripts/README.md`).

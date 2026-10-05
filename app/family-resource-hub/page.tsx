@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { pageMeta } from "../data/meta";
 import { hub } from "../data/hub";
 import { site } from "../data/site";
-import Magnetic from "../motion/Magnetic";
 import styles from "../pages.module.css";
 
 export const metadata: Metadata = pageMeta({ absolute: "Family Resource Hub for ABA Clinics | Stringham Web Design", description: "A parent support hub on your clinic's website, under your name and colors, free to every family you serve. Built by an RBT in League City, Texas for ABA and pediatric therapy clinics.", path: "/family-resource-hub" });
@@ -136,14 +135,14 @@ export default function HubPage() {
 
         <section className={styles.section} aria-label="Next steps" style={{ paddingTop: 0 }}>
           <div className={styles.actions} data-reveal>
-            <Magnetic><a className="btn btn-ember" href={site.demoUrl} target="_blank" rel="noopener noreferrer">See a live demo <Arrow /></a></Magnetic>
+            <a className="btn" href={site.demoUrl} target="_blank" rel="noopener noreferrer">See a live demo <Arrow /></a>
             {site.bookingUrl ? (
               <>
-                <Magnetic><a className="btn btn-secondary" href={site.bookingUrl} target="_blank" rel="noopener noreferrer">Book a free call</a></Magnetic>
-                <a className={`u ${styles.textLink}`} href="/contact?about=hub">Or send a message</a>
+                <a className="btn btn-secondary" href={site.bookingUrl} target="_blank" rel="noopener noreferrer">Book a free call</a>
+                <a className={`u ${styles.textLink}`} href="/#free-check">Or send a message</a>
               </>
             ) : (
-              <Magnetic><a className="btn btn-secondary" href="/contact?about=hub">Book a free call</a></Magnetic>
+              <a className="btn btn-secondary" href="/#free-check">Book a free call</a>
             )}
           </div>
         </section>

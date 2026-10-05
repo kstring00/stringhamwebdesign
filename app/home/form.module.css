@@ -1,0 +1,116 @@
+.form {
+  display: grid;
+  gap: 1.1rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.1rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.field label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.field label small {
+  margin-left: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.input {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  transition: border-color 200ms var(--ease-out), background 200ms var(--ease-out);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--green);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(47, 93, 70, 0.18);
+}
+
+textarea.input {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.error {
+  color: #9b2c1f;
+  font-size: 0.95rem;
+}
+
+.submitRow {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+}
+
+.submitRow button {
+  width: 100%;
+  min-height: 3.5rem;
+  font-size: 1.05rem;
+}
+
+.fine {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.sent {
+  display: grid;
+  gap: 0.75rem;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border: 1px solid var(--green);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.sent h3 {
+  font-size: 1.8rem;
+}
+
+.sent p {
+  color: var(--ink-soft);
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.sentSmall {
+  font-size: 0.95rem;
+}
+
+@media (max-width: 40rem) {
+  .row { grid-template-columns: 1fr; }
+}
