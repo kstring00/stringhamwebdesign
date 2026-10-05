@@ -39,7 +39,7 @@ export default function Reveal() {
       });
       document.querySelectorAll<HTMLElement>("[data-reveal]:not([data-reveal-group] [data-reveal])").forEach((el) => watch([el], el));
       // Nothing waits forever: whatever has not come into view by now is shown.
-      const safety = window.setTimeout(() => [...pending.keys()].forEach(play), 4000);
+      const safety = window.setTimeout(() => [...pending.keys()].forEach(play), 2500);
       return () => { io.disconnect(); window.clearTimeout(safety); };
     });
     return () => ctx.revert();
