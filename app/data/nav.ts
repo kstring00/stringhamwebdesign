@@ -1,10 +1,10 @@
-export type NavItem = { label: string; href: string };
+/** The one action on the site. It scrolls to the free check form. */
+export const cta = { label: "Get a free check", href: "/#free-check" } as const;
 
-/** Services and About, in order. The header and the footer both read this. */
-export const nav: NavItem[] = [
-  { label: "Services", href: "/services" },
-  { label: "About", href: "/about" },
-];
-
-/** The one dominant action, on every page. */
-export const cta = { label: "Start a project", href: "/contact" } as const;
+/** Footer links. There is no top navigation: the header is the logo and the button. */
+export const footerLinks = [
+  { label: "Prices", href: "/#prices" },
+  { label: "Questions", href: "/#questions" },
+  { label: "Service Terms", href: "/terms" },
+  { label: "Privacy", href: "/privacy" },
+] as const;

@@ -2,37 +2,162 @@ import type { Metadata } from "next";
 
 import { BusinessJsonLd } from "./components/JsonLd";
 import { pageMeta } from "./data/meta";
-import { audiences } from "./data/services";
-import CasaMatchaSlot from "./home/CasaMatchaSlot";
-import CaseStudy from "./home/CaseStudy";
-import ClosingCta from "./home/ClosingCta";
-import Everything from "./home/Everything";
-import Faq from "./home/Faq";
-import Hero from "./home/Hero";
-import IdeaToReality from "./home/IdeaToReality";
-import ProcessStory from "./home/ProcessStory";
-import Statement from "./home/Statement";
-import Marquee from "./motion/Marquee";
+import { cta } from "./data/nav";
+import { findings, niches, noGuarantee, plans, questions, steps } from "./data/offer";
+import { site } from "./data/site";
+import FreeCheckForm from "./home/FreeCheckForm";
+import styles from "./home/home.module.css";
 
 export const metadata: Metadata = pageMeta({
-  absolute: "Turn Your Idea Into a Real Business | Stringham Web Design, League City TX",
-  description: "Websites, online ordering, booking, payments, and everything else you need to launch and grow, built in League City, Texas by Kyle Stringham. Fixed price in writing, and you own all of it.",
+  absolute: "Google listing fixes and websites for local businesses | Stringham Web Design",
+  description: "I fix your Google listing and directory info so people searching for storage, RV sites, fishing trips or horse boarding near you find the right number, hours and prices. Start with a free check. League City, Texas.",
   path: "/",
 });
 
-export default function Home() {
+export default async function Home({ searchParams }: { searchParams: Promise<{ sent?: string; error?: string }> }) {
+  const { sent, error } = await searchParams;
   return (
     <>
-      <Hero />
-      <Marquee items={audiences} label="Who I work with" />
-      <IdeaToReality />
-      <Everything />
-      <Statement />
-      <CaseStudy />
-      <CasaMatchaSlot />
-      <ProcessStory />
-      <Faq />
-      <ClosingCta />
+      {/* 1. Hero */}
+      <section className={styles.hero} aria-labelledby="hero-title">
+        <div className={`container ${styles.heroInner}`}>
+          <h1 id="hero-title" className={styles.h1}>Be easy to find when customers are looking for you.</h1>
+          <p className={styles.sub}>I fix your Google listing and directory info so people searching for storage, RV sites, fishing trips or horse boarding near you find the right number, hours and prices. Start with a free check.</p>
+          <div className={styles.actions}>
+            <a className="btn" href={cta.href} data-track="cta" data-location="hero">{cta.label}</a>
+            <a className={`u ${styles.textLink}`} href="#prices">See prices</a>
+          </div>
+          <p className={styles.trust}>
+            <span className={styles.trustName}>Kyle Stringham</span> · {site.legalName} · {site.city}, {site.regionLong}
+          </p>
+        </div>
+      </section>
+
+      {/* 2. What a free check finds */}
+      <section className={styles.section} id="findings" aria-labelledby="findings-title">
+        <div className="container">
+          <div className={styles.head}>
+            <h2 id="findings-title" className={styles.h2}>Things I found this month on real local listings.</h2>
+            <p className={styles.lede}>Real findings from free checks, with the names left out. Most owners had no idea.</p>
+          </div>
+          <ul className={styles.findings} data-reveal-group>
+            {findings.map((f) => (
+              <li className={styles.finding} key={f.title} data-reveal>
+                <h3>{f.title}</h3>
+                <p>{f.body}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* 3. How it works */}
+      <section className={`${styles.section} ${styles.alt}`} id="how" aria-labelledby="how-title">
+        <div className="container">
+          <div className={styles.head}>
+            <h2 id="how-title" className={styles.h2}>How it works</h2>
+            <p className={styles.lede}>Your part is three things: add me as a manager, send a few photos, approve the changes. I do the rest.</p>
+          </div>
+          <ol className={styles.steps} data-reveal-group>
+            {steps.map((s) => (
+              <li className={styles.step} key={s.n} data-reveal>
+                <span className={styles.stepN} aria-hidden="true">{s.n}</span>
+                <h3>{s.title}</h3>
+                <p>{s.body}</p>
+                {s.yours ? <p className={styles.yours}>{s.yours}</p> : null}
+              </li>
+            ))}
+          </ol>
+          <p className={styles.keep}>Keep SpareFoot, Facebook or your booking app. Nothing gets taken away.</p>
+        </div>
+      </section>
+
+      {/* 4. Prices */}
+      <section className={styles.section} id="prices" aria-labelledby="prices-title">
+        <div className="container">
+          <div className={styles.head}>
+            <h2 id="prices-title" className={styles.h2}>Prices</h2>
+            <p className={styles.lede}>Three fixed prices. What&rsquo;s included and what isn&rsquo;t, in writing.</p>
+          </div>
+          <div className={styles.plans} data-reveal-group>
+            {plans.map((p) => (
+              <article className={styles.plan} key={p.key} data-reveal aria-labelledby={`plan-${p.key}`}>
+                <h3 id={`plan-${p.key}`} className={styles.planName}>{p.name}</h3>
+                <p className={styles.price}><b>{p.price}</b> <span>{p.cadence}</span></p>
+                <p className={styles.planLead}>{p.lead}</p>
+                <p className={styles.listHead}>What&rsquo;s included</p>
+                <ul className={styles.list}>{p.included.map((i) => <li key={i}>{i}</li>)}</ul>
+                <p className={styles.listHead}>Not included</p>
+                <ul className={`${styles.list} ${styles.listNo}`}>{p.notIncluded.map((i) => <li key={i}>{i}</li>)}</ul>
+                <ul className={styles.notes}>{p.notes.map((n) => <li key={n}>{n}</li>)}</ul>
+                <a className={`u ${styles.planTerms}`} href={`/terms${p.terms}`}>Terms for the {p.name}</a>
+              </article>
+            ))}
+          </div>
+          <div className={styles.pricesFoot}>
+            <p>{noGuarantee}</p>
+            <p>Full details in the <a className="u" href="/terms">Service Terms</a>.</p>
+            <a className="btn" href={cta.href} data-track="cta" data-location="prices">{cta.label}</a>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Who it's for + about Kyle */}
+      <section className={`${styles.section} ${styles.alt}`} id="about" aria-labelledby="about-title">
+        <div className={`container ${styles.about}`}>
+          <div>
+            <h2 id="about-title" className={styles.h2}>Who it&rsquo;s for</h2>
+            <p className={styles.lede}>Owner-run local businesses that get customers through Google, phone calls and directories.</p>
+            <ul className={styles.niches}>
+              {niches.map((n) => <li key={n}>{n}</li>)}
+            </ul>
+            <p className={styles.body}>Run something else local? If customers find you through Google and the phone, the same work applies. Ask for the free check and I&rsquo;ll tell you straight whether it fits.</p>
+          </div>
+          <div className={styles.kyle}>
+            {/* Photo slot: a real photo of Kyle goes here when he sends it. Nothing is shown until then. */}
+            <h3>About Kyle</h3>
+            <p className={styles.body}>I&rsquo;m Kyle Stringham. I run {site.legalName} out of {site.city}, {site.regionLong}. I grew up around my dad&rsquo;s self-storage facility, so I know what a wrong phone number or a dead website link costs a small business, and how little time an owner has to chase it.</p>
+            <p className={styles.body}>I do the work myself, send you proof of every change, and never ask for your passwords.</p>
+            <p className={styles.contactLine}>
+              <a className="u" href={`mailto:${site.email}`} data-track="email">{site.email}</a><br />
+              <a className="u" href={site.phoneHref} aria-label={`Call or text Kyle at ${site.phone}`}>Call or text {site.phone}</a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Questions */}
+      <section className={styles.section} id="questions" aria-labelledby="q-title">
+        <div className="container">
+          <div className={styles.head}>
+            <h2 id="q-title" className={styles.h2}>Questions owners ask</h2>
+          </div>
+          <dl className={styles.qa}>
+            {questions.map((item) => (
+              <div className={styles.qaItem} key={item.q}>
+                <dt>{item.q}</dt>
+                <dd>
+                  {item.a}
+                  {"link" in item && item.link ? <> <a className={`u ${styles.qaLink}`} href={item.link.href} {...(item.link.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>{item.link.label}{item.link.href.startsWith("http") ? <span className="sr-only"> (opens in a new tab)</span> : null}</a></> : null}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      {/* 7. Free check form */}
+      <section className={`${styles.section} ${styles.formSection}`} id="free-check" aria-labelledby="form-title">
+        <div className={`container ${styles.formGrid}`}>
+          <div className={styles.formSide}>
+            <h2 id="form-title" className={styles.h2}>Get a free check</h2>
+            <p className={styles.lede}><b>What happens next:</b> I look up your business the way your customers do and text or email you what I find within 24 hours. Free, no obligation.</p>
+            <p className={styles.body}>Rather talk? <a className="u" href={site.phoneHref} aria-label={`Call or text Kyle at ${site.phone}`}>Call or text {site.phone}</a> or email <a className="u" href={`mailto:${site.email}`} data-track="email">{site.email}</a>.</p>
+          </div>
+          <FreeCheckForm sent={sent === "1"} errorCode={typeof error === "string" ? error : ""} />
+        </div>
+      </section>
+
       <BusinessJsonLd />
     </>
   );

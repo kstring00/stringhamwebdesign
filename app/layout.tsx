@@ -5,15 +5,13 @@ import "./globals.css";
 import ClarityAnalytics from "./ClarityAnalytics";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import Cursor from "./motion/Cursor";
-import PageTransition from "./motion/PageTransition";
 import Reveal from "./motion/Reveal";
-import SmoothScroll from "./motion/SmoothScroll";
+import Tracking from "./motion/Tracking";
 import { site } from "./data/site";
 
 /* Both faces are self-hosted: next/font downloads them at build and serves
-   them from this origin, subset to latin, preloaded, with no request to
-   Google from a visitor's browser. */
+   them from this origin, subset to latin, with no request to Google from a
+   visitor's browser. */
 const fraunces = Fraunces({
   subsets: ["latin"],
   axes: ["opsz", "SOFT"],
@@ -21,18 +19,6 @@ const fraunces = Fraunces({
   style: ["normal"],
   display: "swap",
   variable: "--font-fraunces",
-});
-
-/* The italic is a separate file used by three short phrases, all below the
-   fold, so it is not preloaded and never competes with the headline. */
-const frauncesItalic = Fraunces({
-  subsets: ["latin"],
-  axes: ["opsz", "SOFT"],
-  weight: "variable",
-  style: ["italic"],
-  display: "swap",
-  preload: false,
-  variable: "--font-fraunces-italic",
 });
 
 const interTight = Inter_Tight({
@@ -44,8 +30,8 @@ const interTight = Inter_Tight({
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: `Custom Web Design in League City, TX | ${site.name}`, template: `%s | ${site.name}` },
-  description: "Custom, beautifully crafted websites for clinics, cafés, and the businesses people love. Built in League City, Texas by Kyle Stringham. Owned outright by you.",
+  title: { default: `Google listing fixes and websites for local businesses | ${site.name}`, template: `%s | ${site.name}` },
+  description: "I fix your Google listing and directory info so customers find the right number, hours and prices. Start with a free check. Stringham Web Design LLC, League City, Texas.",
   applicationName: site.name,
   authors: [{ name: site.person, url: site.url }],
   creator: site.person,
@@ -56,23 +42,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${frauncesItalic.variable} ${interTight.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${interTight.variable}`}>
       <body>
         <a className="skip" href="#main">Skip to content</a>
         <Header />
-        {/* ScrollSmoother needs a wrapper and a content element; the markup
-            is the same whether or not smoothing runs. The header sits
-            outside so it stays fixed. */}
-        <div id="smooth-wrapper">
-          <div id="smooth-content">
-            <main id="main" tabIndex={-1}>{children}</main>
-            <Footer />
-          </div>
-        </div>
-        <SmoothScroll />
+        <main id="main" tabIndex={-1}>{children}</main>
+        <Footer />
         <Reveal />
-        <Cursor />
-        <PageTransition />
+        <Tracking />
         <ClarityAnalytics />
       </body>
     </html>

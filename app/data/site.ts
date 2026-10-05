@@ -8,7 +8,6 @@ export const site = {
   name: "Stringham Web Design",
   legalName: "Stringham Web Design LLC",
   person: "Kyle Stringham",
-  credential: "Registered Behavior Technician (RBT)",
   city: "League City",
   region: "TX",
   regionLong: "Texas",
@@ -24,7 +23,7 @@ export const site = {
   year: 2026,
 } as const;
 
-export const locationLine = "Based in League City, Texas. Working with people anywhere, remotely.";
+export const locationLine = "League City, Texas. Working with owners across Texas and beyond.";
 
 /** The studio line: eyebrow, meta and footer. */
-export const studioLine = "Stringham Web Design · League City, Texas";
+export const studioLine = "Stringham Web Design LLC · League City, Texas";

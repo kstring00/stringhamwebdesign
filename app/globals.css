@@ -1,32 +1,34 @@
-/* Stringham Web Design — warm editorial.
-   Paper, ink, one ember accent. A characterful display serif set huge, a
-   quiet grotesk for everything else. Everything below is the whole system;
-   component files only arrange it. */
+/* Stringham Web Design — quiet and clear.
+   Off-white paper tinted faintly green, near-black ink, one forest-green
+   accent. A restrained display serif for headings, a clean grotesk for
+   everything else. Everything below is the whole system; component files
+   only arrange it. */
 
 :root {
-  --paper: #f4efe6;
-  --paper-deep: #ebe4d6;
-  --ink: #17130f;
-  --ink-soft: #3d3831;
-  --muted: #6b6359;
-  --ember: #d2552d;
-  --ember-deep: #a63f1c;
-  --line: rgba(21, 19, 15, 0.14);
-  --line-strong: rgba(21, 19, 15, 0.3);
+  --paper: #f7f8f5;
+  --paper-deep: #eef1ec;
+  --ink: #161a17;
+  --ink-soft: #3b423d;
+  --muted: #646b66;
+  --green: #2f5d46;
+  --green-deep: #244a37;
+  --green-soft: #e3ebe5;
+  --line: rgba(22, 26, 23, 0.13);
+  --line-strong: rgba(22, 26, 23, 0.3);
 
-  /* On the ink ground */
-  --paper-on-ink: #f4efe6;
-  --muted-on-ink: rgba(244, 239, 230, 0.66);
-  --line-on-ink: rgba(244, 239, 230, 0.16);
-  --ember-on-ink: #e8734d;
+  /* On the green ground */
+  --paper-on-ink: #f7f8f5;
+  --muted-on-ink: rgba(247, 248, 245, 0.72);
+  --line-on-ink: rgba(247, 248, 245, 0.18);
 
-  /* Pencil: the sketch-to-real motif's stroke. */
-  --pencil: rgba(23, 19, 15, 0.42);
-  --pencil-soft: rgba(23, 19, 15, 0.2);
+  /* Aliases kept for the hub and legal pages, which predate the accent change. */
+  --ember: var(--green);
+  --ember-deep: var(--green-deep);
+  --ember-on-ink: #9fc7ae;
 
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
   --max: 90rem;
-  --section: clamp(5rem, 11vw, 10rem);
+  --section: clamp(4rem, 8vw, 7rem);
 
   --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
   --font-display-italic: var(--font-fraunces-italic), var(--font-fraunces), "Iowan Old Style", Georgia, serif;
@@ -77,7 +79,7 @@ body::after {
   width: 200%;
   height: 200%;
   pointer-events: none;
-  opacity: 0.045;
+  opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 240px 240px;
 }
@@ -91,7 +93,7 @@ body::after {
 }
 
 ::selection {
-  background: var(--ember);
+  background: var(--green);
   color: var(--paper);
 }
 
@@ -133,7 +135,7 @@ p {
 }
 
 :focus-visible {
-  outline: 2px solid var(--ember);
+  outline: 2px solid var(--green);
   outline-offset: 4px;
   border-radius: 2px;
 }
@@ -157,7 +159,7 @@ p {
   }
 }
 
-/* Big numbered section label: "01 — Work". */
+/* Small section label. */
 .label {
   display: inline-flex;
   align-items: baseline;
@@ -214,9 +216,9 @@ p {
   color: var(--muted-on-ink);
 }
 
-/* Section backgrounds */
+/* Section backgrounds: the one dark ground is the green. */
 .ink {
-  background: var(--ink);
+  background: var(--green);
   color: var(--paper-on-ink);
 }
 
@@ -244,23 +246,22 @@ p {
   gap: 0.6rem;
   min-height: 3.25rem;
   padding: 0.85rem 1.6rem;
-  border: 1px solid var(--ink);
-  border-radius: 999px;
-  background: var(--ink);
+  border: 1px solid var(--green);
+  border-radius: 8px;
+  background: var(--green);
   color: var(--paper);
-  font-size: 0.95rem;
-  font-weight: 500;
-  letter-spacing: 0.01em;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.005em;
   line-height: 1;
   white-space: nowrap;
   cursor: pointer;
-  transition: background 220ms var(--ease-out), color 220ms var(--ease-out), border-color 220ms var(--ease-out), transform 220ms var(--ease-out);
-  will-change: transform;
+  transition: background 220ms var(--ease-out), color 220ms var(--ease-out), border-color 220ms var(--ease-out);
 }
 
 .btn:hover {
-  background: var(--ember);
-  border-color: var(--ember);
+  background: var(--green-deep);
+  border-color: var(--green-deep);
   color: var(--paper);
 }
 
@@ -274,13 +275,14 @@ p {
 
 .btn-secondary {
   background: transparent;
+  border-color: var(--line-strong);
   color: var(--ink);
 }
 
 .btn-secondary:hover {
-  background: var(--ink);
+  background: var(--paper-deep);
   border-color: var(--ink);
-  color: var(--paper);
+  color: var(--ink);
 }
 
 .ink .btn {
@@ -290,9 +292,9 @@ p {
 }
 
 .ink .btn:hover {
-  background: var(--ember-on-ink);
-  border-color: var(--ember-on-ink);
-  color: var(--ink);
+  background: #fff;
+  border-color: #fff;
+  color: var(--green-deep);
 }
 
 .ink .btn-secondary {
@@ -304,17 +306,6 @@ p {
 .ink .btn-secondary:hover {
   background: var(--paper);
   color: var(--ink);
-}
-
-.btn-ember {
-  background: var(--ember);
-  border-color: var(--ember);
-  color: var(--paper);
-}
-
-.btn-ember:hover {
-  background: var(--ember-deep);
-  border-color: var(--ember-deep);
 }
 
 /* Image frame with hover zoom */
@@ -377,11 +368,6 @@ p {
    because the hidden state is applied by the script, never by CSS. */
 .reveal-ready [data-reveal] {
   will-change: transform, opacity;
-}
-
-/* ScrollSmoother wrapper */
-#smooth-wrapper {
-  position: relative;
 }
 
 @media (prefers-reduced-motion: reduce) {
