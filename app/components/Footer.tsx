@@ -27,6 +27,7 @@ export default function Footer() {
             <ul>
               <li><a className="u" href={`mailto:${site.email}`}>{site.email}</a></li>
               <li><a className="u" href={site.phoneHref}>{site.phone}</a></li>
+              <li><a className="u" href="/terms">Service Terms</a></li>
               <li><a className="u" href="/privacy">Privacy Policy</a></li>
             </ul>
           </div>

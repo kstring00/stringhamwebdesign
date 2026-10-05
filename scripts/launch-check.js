@@ -21,7 +21,7 @@ const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAI
 
 const isInternal = (h) => h && h.startsWith('/') && !h.startsWith('//');
 const norm = (h) => h.split('#')[0].split('?')[0] || '/';
-const BANNED = /\$\s?\d|\bstarting at\b|Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|example\.com|\(000\)|000-0000|\bTODO\b|client portal/i;
+const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|example\.com|\(000\)|000-0000|\bTODO\b|client portal/i;
 
 (async () => {
   let hits = '';

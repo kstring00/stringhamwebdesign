@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     at("/family-resource-hub", 0.9, "monthly"),
     at("/about", 0.6, "yearly"),
     at("/contact", 0.8, "yearly"),
+    at("/terms", 0.3, "yearly"),
     at("/privacy", 0.2, "yearly"),
   ];
 }
