@@ -28,7 +28,7 @@
 
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
   --max: 90rem;
-  --section: clamp(4rem, 8vw, 7rem);
+  --section: clamp(3rem, 6vw, 5rem);
 
   --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
   --font-display-italic: var(--font-fraunces-italic), var(--font-fraunces), "Iowan Old Style", Georgia, serif;

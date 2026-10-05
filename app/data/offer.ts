@@ -7,10 +7,10 @@ export const PRICES = { listingFix: 300, website: 1500, monthly: 125 } as const;
 
 /** The verified, anonymized findings from Kyle's own free checks. */
 export const findings = [
-  { title: "Three different phone numbers", body: "Across Google, Yelp and a directory, three numbers for the same business. Only one of them rang." },
-  { title: "A website link to a dead page", body: "The Google listing's website button opened a page that no longer exists." },
-  { title: "Prices from three years ago", body: "The prices on Google were three years old, and customers were calling to argue about them." },
-  { title: "Someone else owns your .com", body: "A matching .com domain registered to a different business, in a different state." },
+  "Three different phone numbers across Google, Yelp and a directory.",
+  "The Google listing's website button opened a dead page.",
+  "Prices on Google were three years old.",
+  "A matching .com owned by a different business in another state.",
 ] as const;
 
 export const steps = [
@@ -18,19 +18,17 @@ export const steps = [
     n: "1",
     title: "Free check",
     body: "I look you up the way your customers do and send you what I find. Yours to keep, whatever you decide.",
-    yours: "",
   },
   {
     n: "2",
     title: "Listing Fix",
-    body: `I fix it within 7 days and send before-and-after screenshots of every change.`,
+    body: "I fix it within 7 days and send before-and-after screenshots of every change.",
     yours: "Your part: add me as a manager on your Google listing, send a few photos, approve the changes.",
   },
   {
     n: "3",
     title: "Keep it right (optional)",
     body: "Monthly upkeep so it stays accurate, and a short report of calls and requests.",
-    yours: "",
   },
 ] as const;
 
@@ -40,39 +38,32 @@ export const plans = [
     name: "Listing Fix",
     price: `$${PRICES.listingFix}`,
     cadence: "one-time",
-    lead: "Everything wrong with how your business shows up, fixed within 7 days.",
+    tag: "Most start here",
+    lead: "How your business shows up, fixed within 7 days.",
     included: [
-      "Your Google listing corrected: name, categories, hours, phone, website link, description, services, photos",
-      "Up to 10 major directories corrected (Apple Maps, Bing, Facebook, Yelp and your industry's main ones)",
-      "A Google review link and QR code to hand to customers",
+      "Google listing corrected: name, hours, phone, website link, photos",
+      "Up to 10 directories corrected (Apple Maps, Bing, Facebook, Yelp…)",
+      "A Google review link and QR code",
       "Before-and-after screenshots of every change",
     ],
-    notIncluded: ["Paid ads", "Writing or posting reviews", "Changes a directory refuses to make (I'll tell you what happened)"],
-    notes: [
-      "You add me as a manager on your Google listing; you stay the owner. I never ask for your password.",
-      "Full refund if you ask before work starts.",
-      `The $${PRICES.listingFix} counts toward a website within 60 days.`,
-    ],
+    notIncluded: "paid ads, writing reviews, changes a directory refuses to make.",
+    notes: ["You add me as a manager; you stay the owner. Never your password.", "Full refund if you ask before work starts."],
     terms: "#1-listing-fix-300-one-time",
   },
   {
     key: "site",
     name: "Website",
     price: `$${PRICES.website.toLocaleString("en-US")}`,
-    cadence: "one-time",
-    lead: "A simple site customers can use from a phone, on your own domain.",
+    cadence: `or $${(PRICES.website - PRICES.listingFix).toLocaleString("en-US")} after your Listing Fix (within 60 days)`,
+    lead: "A simple site customers can use from a phone, on your domain.",
     included: [
-      "Design and build, with the pages and features in your written quote",
+      "Design and build, per your written quote",
       "A contact or request form",
-      "Launch on your domain and basic search setup",
+      "Launch on your domain, basic search setup",
       "Two rounds of changes",
     ],
-    notIncluded: ["Photography", "Paid ads", "Pages or features not in your quote (quoted separately)"],
-    notes: [
-      `The $${PRICES.listingFix} Listing Fix is credited.`,
-      "You approve the finished site before paying the balance.",
-      "Once it's paid, you own it. Your domain and accounts stay in your name.",
-    ],
+    notIncluded: "photography, paid ads, pages not in your quote.",
+    notes: ["You approve the finished site before paying the balance.", "Once it's paid, you own it. Domain and accounts stay in your name."],
     terms: "#2-website-1500-unless-your-written-quote-says-otherwise",
   },
   {
@@ -82,14 +73,12 @@ export const plans = [
     cadence: "per month",
     lead: "I keep it right so you don't have to think about it.",
     included: [
-      "Google listing and directories kept accurate",
-      "Replies to new Google reviews within 3 business days, in a tone you approve",
-      "Up to 4 Google posts a month",
-      "Website hosting and upkeep, if I built or host your site",
-      "Up to 30 minutes of content edits (prices, hours, photos, text)",
-      "A one-page monthly report",
+      "Listing and directories kept accurate",
+      "Review replies within 3 business days, up to 4 Google posts",
+      "Hosting and upkeep, if I built or host your site",
+      "30 minutes of edits and a one-page report each month",
     ],
-    notIncluded: ["New pages or redesigns", "Photography", "Paid ads"],
+    notIncluded: "new pages, redesigns, photography, paid ads.",
     notes: ["Month to month. Cancel anytime by email."],
     terms: "#3-monthly-plan-125month",
   },

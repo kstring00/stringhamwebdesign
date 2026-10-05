@@ -6,6 +6,7 @@ import { cta } from "./data/nav";
 import { findings, niches, noGuarantee, plans, questions, steps } from "./data/offer";
 import { site } from "./data/site";
 import FreeCheckForm from "./home/FreeCheckForm";
+import Included from "./home/Included";
 import styles from "./home/home.module.css";
 
 export const metadata: Metadata = pageMeta({
@@ -20,13 +21,32 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
     <>
       {/* 1. Hero */}
       <section className={styles.hero} aria-labelledby="hero-title">
-        <div className={`container ${styles.heroInner}`}>
-          <h1 id="hero-title" className={styles.h1}>Be easy to find when customers are looking for you.</h1>
-          <p className={styles.sub}>I fix your Google listing and directory info so people searching for storage, RV sites, fishing trips or horse boarding near you find the right number, hours and prices. Start with a free check.</p>
-          <div className={styles.actions}>
-            <a className="btn" href={cta.href} data-track="cta" data-location="hero">{cta.label}</a>
-            <a className={`u ${styles.textLink}`} href="#prices">See prices</a>
+        <div className={`container ${styles.heroGrid}`}>
+          <div className={styles.heroText}>
+            <h1 id="hero-title" className={styles.h1}>Be easy to find when customers are looking for you.</h1>
+            <p className={styles.sub}>I fix your Google listing and directory info so people searching for storage, RV sites, fishing trips or horse boarding near you find the right number, hours and prices. Start with a free check.</p>
+            <div className={styles.actions}>
+              <a className="btn" href={cta.href} data-track="cta" data-location="hero">{cta.label}</a>
+              <a className={`u ${styles.textLink}`} href="#prices">See prices</a>
+            </div>
           </div>
+          <aside className={styles.example} aria-label="Example of a free check">
+            <p className={styles.exampleTag}><span>Example free check</span> <span className={styles.exampleName}>Example RV Park</span></p>
+            <ul className={styles.exampleRows}>
+              {[
+                ["Google phone", "Correct", true],
+                ["Yelp phone", "Different number", false],
+                ["Hours", "Out of date", false],
+                ["Website link", "Dead page", false],
+              ].map(([k, v, ok]) => (
+                <li key={k as string} className={ok ? styles.exOk : styles.exBad}>
+                  <span>{k as string}</span>
+                  <b><i aria-hidden="true">{ok ? "✓" : "✗"}</i><span className="sr-only">{ok ? "OK: " : "Problem: "}</span>{v as string}</b>
+                </li>
+              ))}
+            </ul>
+            <p className={styles.exampleFoot}>Fixed within 7 days, with screenshots.</p>
+          </aside>
           <p className={styles.trust}>
             <span className={styles.trustName}>Kyle Stringham</span> · {site.legalName} · {site.city}, {site.regionLong}
           </p>
@@ -37,15 +57,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
       <section className={styles.section} id="findings" aria-labelledby="findings-title">
         <div className="container">
           <div className={styles.head}>
-            <h2 id="findings-title" className={styles.h2}>Things I found this month on real local listings.</h2>
-            <p className={styles.lede}>Real findings from free checks, with the names left out. Most owners had no idea.</p>
+            <h2 id="findings-title" className={styles.h2}>What I find on real local listings.</h2>
+            <p className={styles.lede}>From my own research on local businesses, names left out.</p>
           </div>
           <ul className={styles.findings} data-reveal-group>
             {findings.map((f) => (
-              <li className={styles.finding} key={f.title} data-reveal>
-                <h3>{f.title}</h3>
-                <p>{f.body}</p>
-              </li>
+              <li className={styles.finding} key={f} data-reveal>{f}</li>
             ))}
           </ul>
         </div>
@@ -56,7 +73,6 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
         <div className="container">
           <div className={styles.head}>
             <h2 id="how-title" className={styles.h2}>How it works</h2>
-            <p className={styles.lede}>Your part is three things: add me as a manager, send a few photos, approve the changes. I do the rest.</p>
           </div>
           <ol className={styles.steps} data-reveal-group>
             {steps.map((s) => (
@@ -64,7 +80,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
                 <span className={styles.stepN} aria-hidden="true">{s.n}</span>
                 <h3>{s.title}</h3>
                 <p>{s.body}</p>
-                {s.yours ? <p className={styles.yours}>{s.yours}</p> : null}
+                {"yours" in s ? <p className={styles.yours}>{s.yours}</p> : null}
               </li>
             ))}
           </ol>
@@ -80,15 +96,18 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
             <p className={styles.lede}>Three fixed prices. What&rsquo;s included and what isn&rsquo;t, in writing.</p>
           </div>
           <div className={styles.plans} data-reveal-group>
-            {plans.map((p) => (
+            {plans.map((p, i) => (
               <article className={styles.plan} key={p.key} data-reveal aria-labelledby={`plan-${p.key}`}>
+                {"tag" in p ? <p className={styles.planTag}>{p.tag}</p> : null}
                 <h3 id={`plan-${p.key}`} className={styles.planName}>{p.name}</h3>
                 <p className={styles.price}><b>{p.price}</b> <span>{p.cadence}</span></p>
                 <p className={styles.planLead}>{p.lead}</p>
-                <p className={styles.listHead}>What&rsquo;s included</p>
-                <ul className={styles.list}>{p.included.map((i) => <li key={i}>{i}</li>)}</ul>
-                <p className={styles.listHead}>Not included</p>
-                <ul className={`${styles.list} ${styles.listNo}`}>{p.notIncluded.map((i) => <li key={i}>{i}</li>)}</ul>
+                <div className={styles.included}>
+                  <Included open={i === 0}>
+                    <ul className={styles.list}>{p.included.map((item) => <li key={item}>{item}</li>)}</ul>
+                  </Included>
+                </div>
+                <p className={styles.notIncluded}><b>Not included:</b> {p.notIncluded}</p>
                 <ul className={styles.notes}>{p.notes.map((n) => <li key={n}>{n}</li>)}</ul>
                 <a className={`u ${styles.planTerms}`} href={`/terms${p.terms}`}>Terms for the {p.name}</a>
               </article>
@@ -105,7 +124,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
       {/* 5. Who it's for + about Kyle */}
       <section className={`${styles.section} ${styles.alt}`} id="about" aria-labelledby="about-title">
         <div className={`container ${styles.about}`}>
-          <div>
+          <div className={styles.aboutCol}>
             <h2 id="about-title" className={styles.h2}>Who it&rsquo;s for</h2>
             <p className={styles.lede}>Owner-run local businesses that get customers through Google, phone calls and directories.</p>
             <ul className={styles.niches}>
@@ -113,9 +132,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
             </ul>
             <p className={styles.body}>Run something else local? If customers find you through Google and the phone, the same work applies. Ask for the free check and I&rsquo;ll tell you straight whether it fits.</p>
           </div>
-          <div className={styles.kyle}>
+          <div className={`${styles.aboutCol} ${styles.kyle}`}>
             {/* Photo slot: a real photo of Kyle goes here when he sends it. Nothing is shown until then. */}
-            <h3>About Kyle</h3>
+            <h2 className={styles.h2}>About Kyle</h2>
             <p className={styles.body}>I&rsquo;m Kyle Stringham. I run {site.legalName} out of {site.city}, {site.regionLong}. I grew up around my dad&rsquo;s self-storage facility, so I know what a wrong phone number or a dead website link costs a small business, and how little time an owner has to chase it.</p>
             <p className={styles.body}>I do the work myself, send you proof of every change, and never ask for your passwords.</p>
             <p className={styles.contactLine}>
@@ -128,21 +147,22 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
 
       {/* 6. Questions */}
       <section className={styles.section} id="questions" aria-labelledby="q-title">
-        <div className="container">
-          <div className={styles.head}>
+        <div className={`container ${styles.qaGrid}`}>
+          <div className={styles.qaSide}>
             <h2 id="q-title" className={styles.h2}>Questions owners ask</h2>
+            <p className={styles.body}>Still wondering? <a className="u" href={site.phoneHref} aria-label={`Call or text Kyle at ${site.phone}`}>Call or text {site.phone}</a>.</p>
           </div>
-          <dl className={styles.qa}>
-            {questions.map((item) => (
-              <div className={styles.qaItem} key={item.q}>
-                <dt>{item.q}</dt>
-                <dd>
+          <div className={styles.qa}>
+            {questions.map((item, i) => (
+              <details className={styles.qaItem} key={item.q} open={i === 0}>
+                <summary>{item.q}</summary>
+                <p>
                   {item.a}
                   {"link" in item && item.link ? <> <a className={`u ${styles.qaLink}`} href={item.link.href} {...(item.link.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>{item.link.label}{item.link.href.startsWith("http") ? <span className="sr-only"> (opens in a new tab)</span> : null}</a></> : null}
-                </dd>
-              </div>
+                </p>
+              </details>
             ))}
-          </dl>
+          </div>
         </div>
       </section>
 
