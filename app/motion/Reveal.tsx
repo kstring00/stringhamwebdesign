@@ -6,12 +6,13 @@ import { usePathname } from "next/navigation";
 import { gsap, prefersReducedMotion } from "./gsap";
 
 /**
- * A small, quiet rise for anything marked data-reveal (grouped and staggered
+ * A small, quiet settle (a short upward move, never a fade, so text is
+ * always at full contrast) for anything marked data-reveal (grouped and staggered
  * under a data-reveal-group parent). Everything is in the page at rest; the
- * script only adds a short fade as a block comes into view, and anything
- * already on screen plays at once. An IntersectionObserver does the
+ * script only adds a short settle as a block scrolls into view; anything
+ * already on screen at load is left alone. An IntersectionObserver does the
  * watching (it fires on layout, not just on scroll events) and a short
- * safety timer shows anything still hidden, so nothing can stay invisible.
+ * safety timer settles anything still waiting.
  * Off under reduced motion and without JS.
  */
 export default function Reveal() {
@@ -25,11 +26,13 @@ export default function Reveal() {
         const els = pending.get(trigger);
         if (!els) return;
         pending.delete(trigger);
-        gsap.to(els, { autoAlpha: 1, y: 0, duration: 0.55, ease: "power2.out", stagger: 0.06, overwrite: true });
+        gsap.to(els, { y: 0, duration: 0.6, ease: "power2.out", stagger: 0.06, overwrite: true });
       };
       const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { play(e.target); io.unobserve(e.target); } }), { rootMargin: "0px 0px -6% 0px" });
       const watch = (els: HTMLElement[], trigger: Element) => {
-        gsap.set(els, { autoAlpha: 0, y: 12 });
+        // Anything already on screen at load stays exactly as it is: no fade.
+        if (trigger.getBoundingClientRect().top < window.innerHeight) return;
+        gsap.set(els, { y: 14 });
         pending.set(trigger, els);
         io.observe(trigger);
       };

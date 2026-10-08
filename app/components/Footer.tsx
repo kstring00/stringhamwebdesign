@@ -15,7 +15,7 @@ export default function Footer() {
             <p className={styles.head}>Contact</p>
             <ul>
               <li><a className="u" href={`mailto:${site.email}`} data-track="email">{site.email}</a></li>
-              <li><a className="u" href={site.phoneHref} aria-label={`Call or text Kyle at ${site.phone}`}>Call or text {site.phone}</a></li>
+              <li><a className="u" href={site.phoneHref}>Call or text {site.phone}</a></li>
             </ul>
           </div>
           <div className={styles.col}>

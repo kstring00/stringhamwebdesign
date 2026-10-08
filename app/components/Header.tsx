@@ -1,8 +1,9 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { usePathname } from "next/navigation";
 
-import { cta } from "../data/nav";
+import { cta, partnerCta, partnersLink } from "../data/nav";
 import styles from "./Header.module.css";
 
 function subscribeScroll(cb: () => void) {
@@ -10,9 +11,15 @@ function subscribeScroll(cb: () => void) {
   return () => window.removeEventListener("scroll", cb);
 }
 
-/** The logo and one button. Nothing else to decide. */
+/**
+ * The logo, one quiet link for partners, and one button. On /partners the
+ * button becomes the partnership action and the link points back to the
+ * business owners' page.
+ */
 export default function Header() {
   const scrolled = useSyncExternalStore(subscribeScroll, () => window.scrollY > 24, () => false);
+  const onPartners = usePathname() === "/partners";
+  const action = onPartners ? partnerCta : cta;
   return (
     <header className={styles.header} data-scrolled={scrolled || undefined}>
       <div className={styles.bar}>
@@ -21,7 +28,10 @@ export default function Header() {
           <span className={styles.brandSub}>Web Design</span>
         </a>
         <nav className={styles.nav} aria-label="Primary">
-          <a className={`btn ${styles.cta}`} href={cta.href} data-track="cta" data-location="header">{cta.label}</a>
+          {onPartners
+            ? <a className={`u ${styles.link}`} href="/">For business owners</a>
+            : <a className={`u ${styles.link}`} href={partnersLink.href}>{partnersLink.label}</a>}
+          <a className={`btn ${styles.cta}`} href={action.href} data-track="cta" data-location="header">{action.label}</a>
         </nav>
       </div>
     </header>

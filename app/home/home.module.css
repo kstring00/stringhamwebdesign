@@ -586,3 +586,39 @@
 @media (max-width: 40rem) {
   .actions > a[class~="btn"] { width: 100%; justify-content: center; }
 }
+
+/* ---------- partner band ---------- */
+
+.partnerBand {
+  padding: clamp(1.75rem, 4vw, 2.75rem) 0;
+  border-top: 1px solid var(--line);
+}
+
+.partnerBandInner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+}
+
+.partnerEyebrow {
+  margin-bottom: 0.35rem;
+  color: var(--green-deep);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.partnerTitle {
+  max-width: 34ch;
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+@media (max-width: 40rem) {
+  .partnerBandInner > a { width: 100%; }
+}
