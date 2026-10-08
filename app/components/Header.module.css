@@ -43,7 +43,20 @@
   color: var(--muted);
 }
 
-.nav { display: flex; }
+.nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 2vw, 1.75rem);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
 
 .cta {
   min-height: 2.75rem;
@@ -53,4 +66,9 @@
 
 @media (max-width: 40rem) {
   .brandSub { display: none; }
+}
+
+/* Phones: logo and button only; partners are linked from the page and footer. */
+@media (max-width: 30rem) {
+  .link { display: none; }
 }

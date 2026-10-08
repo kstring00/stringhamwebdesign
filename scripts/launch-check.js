@@ -83,7 +83,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     if (path === '/') ok(`${path}: LocalBusiness JSON-LD`, /"@type":"ProfessionalService"/.test(d.jsonld) && /League City/.test(d.jsonld) && /Houston/.test(d.jsonld));
     if (path === '/about') ok(`${path}: Person JSON-LD`, /"@type":"Person"/.test(d.jsonld));
     ok(`${path}: no banned words in rendered text`, !BANNED.test(d.text), (d.text.match(BANNED) || [''])[0]);
-    ok(`${path}: header is the logo and one button`, JSON.stringify(d.headerNav) === JSON.stringify(['Get a free check']), JSON.stringify(d.headerNav));
+    ok(`${path}: header is the logo, one link and one button`, JSON.stringify(d.headerNav) === JSON.stringify(path === '/partners' ? ['For business owners', 'Explore a partnership'] : ['For partners', 'Get a free check']), JSON.stringify(d.headerNav));
   }
 
   const home = seen.get('/');

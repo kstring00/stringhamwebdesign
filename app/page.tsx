@@ -139,9 +139,20 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
             <p className={styles.body}>I do the work myself, send you proof of every change, and never ask for your passwords.</p>
             <p className={styles.contactLine}>
               <a className="u" href={`mailto:${site.email}`} data-track="email">{site.email}</a><br />
-              <a className="u" href={site.phoneHref} aria-label={`Call or text Kyle at ${site.phone}`}>Call or text {site.phone}</a>
+              <a className="u" href={site.phoneHref}>Call or text {site.phone}</a>
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Partner entry point: one quiet band, the page stays for business owners. */}
+      <section className={styles.partnerBand} aria-labelledby="partner-band-title">
+        <div className={`container ${styles.partnerBandInner}`}>
+          <div>
+            <p className={styles.partnerEyebrow}>For creative &amp; agency partners</p>
+            <h2 id="partner-band-title" className={styles.partnerTitle}>Photographer, designer or agency with clients who need a website?</h2>
+          </div>
+          <a className="btn btn-secondary" href="/partners">See how we&rsquo;d work together</a>
         </div>
       </section>
 
@@ -150,7 +161,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
         <div className={`container ${styles.qaGrid}`}>
           <div className={styles.qaSide}>
             <h2 id="q-title" className={styles.h2}>Questions owners ask</h2>
-            <p className={styles.body}>Still wondering? <a className="u" href={site.phoneHref} aria-label={`Call or text Kyle at ${site.phone}`}>Call or text {site.phone}</a>.</p>
+            <p className={styles.body}>Still wondering? <a className="u" href={site.phoneHref}>Call or text {site.phone}</a>.</p>
           </div>
           <div className={styles.qa}>
             {questions.map((item, i) => (
@@ -172,7 +183,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
           <div className={styles.formSide}>
             <h2 id="form-title" className={styles.h2}>Get a free check</h2>
             <p className={styles.lede}><b>What happens next:</b> I look up your business the way your customers do and text or email you what I find within 24 hours. Free, no obligation.</p>
-            <p className={styles.body}>Rather talk? <a className="u" href={site.phoneHref} aria-label={`Call or text Kyle at ${site.phone}`}>Call or text {site.phone}</a> or email <a className="u" href={`mailto:${site.email}`} data-track="email">{site.email}</a>.</p>
+            <p className={styles.body}>Rather talk? <a className="u" href={site.phoneHref}>Call or text {site.phone}</a> or email <a className="u" href={`mailto:${site.email}`} data-track="email">{site.email}</a>.</p>
           </div>
           <FreeCheckForm sent={sent === "1"} errorCode={typeof error === "string" ? error : ""} />
         </div>

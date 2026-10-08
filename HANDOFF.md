@@ -33,6 +33,18 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
   a real one. Don't mention his dad's facility by name.
 - Location is "League City, Texas", never just "Texas". Phone is shown as
   "Call or text 413-454-3509".
+- /partners recruits referral and white-label partners without turning the
+  home page into a partner site: one quiet header link, one home band, one
+  footer link. The stage of the business is stated plainly on /partners
+  ("a new studio… I haven't delivered a paid client website yet"); keep it
+  true and update it when it stops being true.
+- No referral reward amount, partner price or commission appears on the site
+  until Kyle approves written terms. This repo is public: proposed figures
+  don't go in code, commits or PRs either.
+- Selected work: never imply a concept or spec build was a paid engagement,
+  and never claim results. A project for a business Kyle doesn't own is
+  shown on production only after he confirms its label and the owner's OK
+  (`confirmed` in `app/data/work.ts`).
 - The client portal is gone (branch `archive/portal-site`). No "Client login"
   anywhere. `/family-resource-hub` stays live and unlinked.
 - Accessibility failures are disqualifying: Lighthouse accessibility 95+.

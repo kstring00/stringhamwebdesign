@@ -177,7 +177,7 @@
   border-top: 1px solid var(--line);
 }
 
-.ink .point {
+:global(.ink) .point {
   border-top-color: var(--line-on-ink);
 }
 
@@ -190,7 +190,7 @@
   color: var(--ember);
 }
 
-.ink .pointN {
+:global(.ink) .pointN {
   color: var(--ember-on-ink);
 }
 
@@ -204,7 +204,7 @@
   line-height: 1.55;
 }
 
-.ink .point p {
+:global(.ink) .point p {
   color: var(--muted-on-ink);
 }
 
