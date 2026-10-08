@@ -4,7 +4,7 @@ import Founder from "../components/Founder";
 import { pageMeta } from "../data/meta";
 import { comparison, partnerQuestions, partnerSteps, paths, reasons } from "../data/partners";
 import { site } from "../data/site";
-import { showDraftWork, visibleWork } from "../data/work";
+import { kindLabel, partnerWork, showDraftWork, type Work, type WorkKind } from "../data/work";
 import PartnerForm from "./PartnerForm";
 import styles from "./partners.module.css";
 
@@ -15,14 +15,58 @@ export const metadata: Metadata = pageMeta({
   image: "/og/partners.png",
 });
 
-function Shot({ k, alt }: { k: string; alt: { desktop: string; mobile: string } }) {
+/** Real captures, served as AVIF with a WebP fallback. */
+function Capture({ k, view, alt, width, height }: { k: string; view: "desktop" | "mobile"; alt: string; width: number; height: number }) {
   return (
     <picture>
-      <source media="(max-width: 40rem)" type="image/avif" srcSet={`/showcase/${k}-mobile.avif`} />
-      <source media="(max-width: 40rem)" type="image/webp" srcSet={`/showcase/${k}-mobile.webp`} />
-      <source type="image/avif" srcSet={`/showcase/${k}-desktop.avif`} />
-      <img src={`/showcase/${k}-desktop.webp`} alt={alt.desktop} width={1440} height={900} loading="lazy" decoding="async" />
+      <source type="image/avif" srcSet={`/showcase/${k}-${view}.avif`} />
+      <img src={`/showcase/${k}-${view}.webp`} alt={alt} width={width} height={height} loading="lazy" decoding="async" />
     </picture>
+  );
+}
+
+const kindClass: Record<WorkKind, string> = {
+  live: styles.kindLive,
+  "in-progress": styles.kindProgress,
+  concept: styles.kindConcept,
+};
+
+/** The labels in use on this build, explained above the list when there's more than one. */
+const legendKinds = (Object.keys(kindLabel) as WorkKind[]).filter((k) => partnerWork.some((w) => w.kind === k));
+
+function Project({ w, index, featured }: { w: Work; index: number; featured: boolean }) {
+  return (
+    <li className={`${styles.project} ${featured ? styles.featured : ""}`}>
+      <div className={styles.media}>
+        <div className={`frame ${styles.desk}`}>
+          <span className={styles.bar} aria-hidden="true"><i /><i /><i /></span>
+          <Capture k={w.key} view="desktop" alt={w.alt.desktop} width={1440} height={900} />
+        </div>
+        <div className={styles.phone}>
+          <Capture k={w.key} view="mobile" alt={w.alt.mobile} width={390} height={700} />
+        </div>
+      </div>
+      <div className={styles.projectText}>
+        <p className={styles.status}>
+          <span className={`${styles.kind} ${kindClass[w.kind]}`}>{kindLabel[w.kind].label}</span>
+          <span className={styles.stage}>{w.stage}</span>
+          {!w.confirmed && showDraftWork ? <span className={styles.draft}>Draft: needs Kyle&rsquo;s OK to publish</span> : null}
+        </p>
+        <h3><span className={styles.index} aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>{w.name}</h3>
+        <p className={styles.what}>{w.what}</p>
+        <p className={styles.builtLabel}>What I built</p>
+        <ul className={styles.built}>
+          {w.built.map((b) => <li key={b}>{b}</li>)}
+        </ul>
+        {w.liveUrl ? (
+          <a className={`u ${styles.visit}`} href={w.liveUrl} target="_blank" rel="noopener noreferrer">Visit the live site<span aria-hidden="true"> &#8599;</span><span className="sr-only"> (opens in a new tab)</span></a>
+        ) : w.previewUrl ? (
+          <a className={`u ${styles.visit}`} href={w.previewUrl} target="_blank" rel="noopener noreferrer">View the preview<span aria-hidden="true"> &#8599;</span><span className="sr-only"> (opens in a new tab)</span></a>
+        ) : (
+          <p className={styles.private}>Not public yet. These screens are from the working build.</p>
+        )}
+      </div>
+    </li>
   );
 }
 
@@ -102,28 +146,19 @@ export default async function PartnersPage({ searchParams }: { searchParams: Pro
             <h2 id="work-title" className={styles.h2}>Selected work</h2>
             <p className={styles.lede}>Stringham Web Design is a new studio, and I haven&rsquo;t delivered a paid client website yet. Here&rsquo;s what I have built, each labeled for exactly what it is.</p>
           </div>
-          <ul className={styles.work}>
-            {visibleWork.map((w) => (
-              <li className={styles.project} key={w.key}>
-                <div className={`frame ${styles.shot}`}>
-                  <span className={styles.bar} aria-hidden="true"><i /><i /><i /></span>
-                  <Shot k={w.key} alt={w.alt} />
+          {legendKinds.length > 1 ? (
+            <dl className={styles.legend} aria-label="What each label means">
+              {legendKinds.map((k) => (
+                <div key={k}>
+                  <dt><span className={`${styles.kind} ${kindClass[k]}`}>{kindLabel[k].label}</span></dt>
+                  <dd>{kindLabel[k].means}</dd>
                 </div>
-                <div className={styles.projectText}>
-                  <p className={styles.status}>
-                    <span className={w.status === "Own product · live" ? styles.statusLive : ""}>{w.status}</span>
-                    {!w.confirmed && showDraftWork ? <span className={styles.draft}>Draft: needs Kyle&rsquo;s OK to publish</span> : null}
-                  </p>
-                  <h3>{w.name}</h3>
-                  <p>{w.what}</p>
-                  <p className={styles.did}><b>What I did:</b> {w.did}</p>
-                  {w.liveUrl ? (
-                    <a className={`u ${styles.visit}`} href={w.liveUrl} target="_blank" rel="noopener noreferrer">Visit the live site<span className="sr-only"> (opens in a new tab)</span></a>
-                  ) : null}
-                </div>
-              </li>
-            ))}
-          </ul>
+              ))}
+            </dl>
+          ) : null}
+          <ol className={styles.work}>
+            {partnerWork.map((w, i) => <Project key={w.key} w={w} index={i} featured={i === 0} />)}
+          </ol>
         </div>
       </section>
 

@@ -50,8 +50,9 @@ of the home page (see `next.config.ts`).
 - `app/data/partners.ts` — every word on /partners. Compensation is described,
   never priced, until the owner approves written terms.
 - `app/data/work.ts` — selected work, each project labeled for exactly what it
-  is. `confirmed: false` projects show only on preview deployments (marked
-  as drafts), never on production. Captures live in `public/showcase/`
+  is: `kind` is live, in-progress or concept. `onPartners` picks the projects
+  on /partners. `confirmed: false` projects show only on preview deployments
+  (marked as drafts), never on production. Captures live in `public/showcase/`
   (not `/work`, which redirects).
 - `app/components/Founder.tsx` — who Kyle is. Initials until an approved
   photo is supplied; never a generated portrait.
