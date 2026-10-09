@@ -85,7 +85,7 @@ export const work: Work[] = [
       mobile: "Dubai & Dips home page in development, on a phone",
     },
     onPartners: true,
-    confirmed: false,
+    confirmed: true,
   },
   {
     key: "vary-board",
