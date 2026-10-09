@@ -29,6 +29,7 @@ const kindClass: Record<WorkKind, string> = {
   live: styles.kindLive,
   "in-progress": styles.kindProgress,
   concept: styles.kindConcept,
+  archived: styles.kindArchived,
 };
 
 /** The labels in use on this build, explained above the list when there's more than one. */
