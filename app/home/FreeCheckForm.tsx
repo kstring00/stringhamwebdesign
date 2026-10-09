@@ -123,10 +123,14 @@ export default function FreeCheckForm({ sent = false, errorCode = "" }: { sent?:
       {/* Where the visitor came from. Filled by the script; harmless when empty. */}
       {SOURCE_KEYS.map((k) => <input key={k} type="hidden" name={k} defaultValue="" />)}
       <input type="hidden" name="referrer" defaultValue="" />
-      {/* Honeypot: invisible to people and assistive tech, filled only by bots. */}
-      <div className={styles.honeypot} aria-hidden="true">
+      {/* Honeypot. `inert` keeps it out of focus, clicks and the accessibility
+          tree in every browser; aria-hidden covers older ones; the CSS keeps it
+          off screen. Password managers are told to leave it alone, so a real
+          person never fills it by accident. The API drops any submission where
+          `website` has a value. */}
+      <div className={styles.honeypot} aria-hidden="true" inert>
         <label htmlFor="fc-website">Leave this empty</label>
-        <input id="fc-website" name="website" type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+        <input id="fc-website" name="website" type="text" tabIndex={-1} autoComplete="off" data-1p-ignore="" data-lpignore="true" data-bwignore="true" data-form-type="other" />
       </div>
 
       {state === "error" ? <p className={styles.error} role="alert">{error} Nothing was lost; try again, or text {site.phone}.</p> : null}

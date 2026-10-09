@@ -95,10 +95,14 @@ export default function PartnerForm({ sent = false, errorCode = "" }: { sent?: b
         <label htmlFor="pi-message">Anything you&rsquo;d like me to know <small>optional</small></label>
         <textarea className={styles.input} id="pi-message" name="message" rows={4} maxLength={1500} />
       </div>
-      {/* Honeypot: invisible to people and assistive tech, filled only by bots. */}
-      <div className={styles.honeypot} aria-hidden="true">
+      {/* Honeypot. `inert` keeps it out of focus, clicks and the accessibility
+          tree in every browser; aria-hidden covers older ones; the CSS keeps it
+          off screen. Password managers are told to leave it alone, so a real
+          person never fills it by accident. The API drops any submission where
+          `website` has a value. */}
+      <div className={styles.honeypot} aria-hidden="true" inert>
         <label htmlFor="pi-website">Leave this empty</label>
-        <input id="pi-website" name="website" type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+        <input id="pi-website" name="website" type="text" tabIndex={-1} autoComplete="off" data-1p-ignore="" data-lpignore="true" data-bwignore="true" data-form-type="other" />
       </div>
       {state === "error" ? <p className={styles.error} role="alert">{error} Nothing was lost; try again, or email {site.email}.</p> : null}
       <div className={styles.submitRow}>

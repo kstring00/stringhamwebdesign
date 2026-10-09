@@ -35,11 +35,12 @@
   line-height: 1;
 }
 
+/* Mixed case on purpose: copied, read aloud or seen, the logo says
+   "Stringham Web Design". */
 .brandSub {
-  font-size: 0.82rem;
+  font-size: 0.86rem;
   font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
   color: var(--muted);
 }
 
@@ -64,8 +65,11 @@
   font-size: 0.95rem;
 }
 
+/* Phones: the logo still reads "Stringham Web Design", on two short lines. */
 @media (max-width: 40rem) {
-  .brandSub { display: none; }
+  .brand { flex-direction: column; align-items: flex-start; justify-content: center; gap: 0.15rem; }
+  .wordmark { font-size: 1.3rem; }
+  .brandSub { font-size: 0.74rem; }
 }
 
 /* Phones: logo and button only; partners are linked from the page and footer. */
