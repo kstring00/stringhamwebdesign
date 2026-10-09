@@ -13,6 +13,7 @@ export const metadata: Metadata = pageMeta({
   description: "Kyle Stringham builds websites for the clients of photographers, brand designers, marketing agencies and consultants in League City and Greater Houston: as a referral partner or white-label behind your brand.",
   path: "/partners",
   image: "/og/partners.png",
+  imageAlt: "Your clients need websites. I can build them. Kyle Stringham, Stringham Web Design LLC, League City, Texas.",
 });
 
 /** Real captures, served as AVIF with a WebP fallback. */
