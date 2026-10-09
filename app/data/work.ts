@@ -101,7 +101,7 @@ export const work: Work[] = [
       desktop: "The Vary Board home page in development: “One wall. Six ways to move better,” with a hexagon diagram of six exercises",
       mobile: "The Vary Board home page in development, on a phone",
     },
-    onPartners: true,
+    onPartners: false,
     confirmed: false,
   },
   {
