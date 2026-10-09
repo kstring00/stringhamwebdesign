@@ -84,6 +84,7 @@ export const work: Work[] = [
       desktop: "Dubai & Dips home page in development: a chocolate bar hero with “Made here, every morning” and an order-ahead button",
       mobile: "Dubai & Dips home page in development, on a phone",
     },
+    previewUrl: "https://dubaianddips2.vercel.app/",
     onPartners: true,
     confirmed: true,
   },
