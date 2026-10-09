@@ -23,12 +23,13 @@
  * Screens are real captures of each project's own code, run locally, at
  * 1440 and 390 wide, under public/showcase/<key>-desktop|mobile.(avif|webp).
  */
-export type WorkKind = "live" | "in-progress" | "concept";
+export type WorkKind = "live" | "in-progress" | "concept" | "archived";
 
 export const kindLabel: Record<WorkKind, { label: string; means: string }> = {
   live: { label: "Live product", means: "Public and in use." },
   "in-progress": { label: "Work in progress", means: "Built with the business owner. Not launched yet." },
   concept: { label: "Concept", means: "Built on spec. Never commissioned." },
+  archived: { label: "Archived", means: "Earlier design work, no longer in active development." },
 };
 
 export type Work = {
@@ -71,8 +72,8 @@ export const work: Work[] = [
   {
     key: "dubai-and-dips",
     name: "Dubai & Dips",
-    kind: "in-progress",
-    stage: "In development with the owner",
+    kind: "archived",
+    stage: "Previous design work · not a launched site",
     what: "A website for a Clear Lake dessert shop, designed around ordering ahead.",
     built: [
       "An order-ahead flow for pickup, delivery and group orders, wired to hand off to the shop’s ordering system. It runs as a demo until that account is connected.",
