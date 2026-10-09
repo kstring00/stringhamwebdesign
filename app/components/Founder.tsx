@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 import { site } from "../data/site";
 import styles from "./Founder.module.css";
 
@@ -7,10 +11,18 @@ import styles from "./Founder.module.css";
  * supplies an approved photo (never a generated one).
  */
 export default function Founder({ headingId = "founder-title", label = "Who you'd work with" }: { headingId?: string; label?: string }) {
+  const [photoFailed, setPhotoFailed] = useState(false);
   return (
     <div className={styles.founder}>
-      <div className={styles.portrait} aria-hidden="true">
-        <span>KS</span>
+      <div className={styles.portrait}>
+        {!photoFailed ? (
+          // The portrait file must be placed in public/kyle-founder.jpg before publishing.
+          // Keep an accessible initials fallback until it has been uploaded.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src="/kyle-founder.jpg" alt="Kyle Stringham, founder of Stringham Web Design" onError={() => setPhotoFailed(true)} />
+        ) : (
+          <span aria-label="Kyle Stringham">KS</span>
+        )}
       </div>
       <div className={styles.text}>
         <p className={styles.label}>{label}</p>

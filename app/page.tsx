@@ -10,8 +10,8 @@ import Included from "./home/Included";
 import styles from "./home/home.module.css";
 
 export const metadata: Metadata = pageMeta({
-  absolute: "Google listing fixes and websites for local businesses | Stringham Web Design",
-  description: "I fix your Google listing and directory info so people searching for storage, RV sites, fishing trips or horse boarding near you find the right number, hours and prices. Start with a free check. League City, Texas.",
+  absolute: "Custom websites for local businesses | Stringham Web Design",
+  description: "Custom websites for independent businesses, starting at $1,800. No required Google Ads spending. Website development and Google listing services in League City, Texas.",
   path: "/",
 });
 
@@ -23,10 +23,10 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
       <section className={styles.hero} aria-labelledby="hero-title">
         <div className={`container ${styles.heroGrid}`}>
           <div className={styles.heroText}>
-            <h1 id="hero-title" className={styles.h1}>Be easy to find when customers are looking for you.</h1>
-            <p className={styles.sub}>I fix your Google listing and directory info so people searching for storage, RV sites, fishing trips or horse boarding near you find the right number, hours and prices. Start with a free check.</p>
+            <h1 id="hero-title" className={styles.h1}>A better website for the business you’re building.</h1>
+            <p className={styles.sub}>I design and build custom websites for independent businesses. Projects start at $1,800, with a fixed quote before work begins. No required Google Ads spending. Need help with your Google listing too? I can do that.</p>
             <div className={styles.actions}>
-              <a className="btn" href={cta.href} data-track="cta" data-location="hero">{cta.label}</a>
+              <a className="btn" href="/websites#website-quote" data-track="cta" data-location="hero">Request a website quote</a>
               <a className={`u ${styles.textLink}`} href="#prices">See prices</a>
             </div>
           </div>
@@ -93,7 +93,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
         <div className="container">
           <div className={styles.head}>
             <h2 id="prices-title" className={styles.h2}>Prices</h2>
-            <p className={styles.lede}>Three fixed prices. What&rsquo;s included and what isn&rsquo;t, in writing.</p>
+            <p className={styles.lede}>Clear starting prices and a fixed quote for your website scope. No mandatory advertising contracts.</p>
           </div>
           <div className={styles.plans} data-reveal-group>
             {plans.map((p, i) => (
@@ -116,7 +116,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
           <div className={styles.pricesFoot}>
             <p>{noGuarantee}</p>
             <p>Full details in the <a className="u" href="/terms">Service Terms</a>.</p>
-            <a className="btn" href={cta.href} data-track="cta" data-location="prices">{cta.label}</a>
+            <a className="btn" href="/websites#website-quote" data-track="cta" data-location="prices">Request a website quote</a>
           </div>
         </div>
       </section>

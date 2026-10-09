@@ -1,7 +1,7 @@
 # Service Terms
 
 **Stringham Web Design LLC** · Texas · kyle@stringhamwebdesign.com
-Effective October 5, 2026
+Effective October 8, 2026
 
 These terms apply when you buy a Listing Fix, a website, or a Monthly Plan from Stringham Web Design LLC ("we," "us"). By paying, you ("you," the business owner) agree to them. If anything here is unclear, email us before you pay.
 
@@ -19,11 +19,12 @@ These terms apply when you buy a Listing Fix, a website, or a Monthly Plan from 
 
 **Not included:** paid ads, writing or posting reviews, creating new profiles for locations that don't exist, or changes a directory refuses to make. When a directory refuses or ignores a change request, we'll tell you what happened.
 
-## 2. Website ($1,500, unless your written quote says otherwise)
+## 2. Website (projects start at $1,800; final price in your written quote)
 
 - The pages, features and timeline are listed in your written quote.
 - Includes design, building, a contact or request form, launch on your domain, basic search setup, and two rounds of changes.
-- **Payment:** any Listing Fix credit is applied first. The remaining balance is due when you approve the finished site, before it goes live on your domain.
+- **Pricing:** new website projects start at $1,800. Your written quote specifies the full price and scope before any payment. Previously accepted written quotes retain their agreed pricing and terms.
+- **Payment:** any eligible Listing Fix credit is applied first. Any start payment or deposit must be stated in the written quote. The remaining balance is due when you approve the finished site, before it goes live on your domain.
 - **Ownership:** once the website is paid in full, you own it and its content. Your domain and accounts stay in your name.
 - We may show your website in our portfolio unless you ask us not to.
 

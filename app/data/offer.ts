@@ -3,7 +3,7 @@
  * must match content/service-terms.md; change them together.
  */
 
-export const PRICES = { listingFix: 300, website: 1500, monthly: 125 } as const;
+export const PRICES = { listingFix: 300, website: 1800, monthly: 125 } as const;
 
 /** The verified, anonymized findings from Kyle's own free checks. */
 export const findings = [
@@ -54,8 +54,8 @@ export const plans = [
     key: "site",
     name: "Website",
     price: `$${PRICES.website.toLocaleString("en-US")}`,
-    cadence: `or $${(PRICES.website - PRICES.listingFix).toLocaleString("en-US")} after your Listing Fix (within 60 days)`,
-    lead: "A simple site customers can use from a phone, on your domain.",
+    cadence: "starting price · fixed quote before work",
+    lead: "A custom website built around what your customers need to do.",
     included: [
       "Design and build, per your written quote",
       "A contact or request form",
@@ -64,7 +64,7 @@ export const plans = [
     ],
     notIncluded: "photography, paid ads, pages not in your quote.",
     notes: ["You approve the finished site before paying the balance.", "Once it's paid, you own it. Domain and accounts stay in your name."],
-    terms: "#2-website-1500-unless-your-written-quote-says-otherwise",
+    terms: "#2-website-projects-start-at-1800",
   },
   {
     key: "plan",
@@ -96,7 +96,7 @@ export const questions = [
   },
   {
     q: "What does it cost? Any hidden fees?",
-    a: `Three fixed prices: $${PRICES.listingFix} for the Listing Fix, $${PRICES.website.toLocaleString("en-US")} for a website, $${PRICES.monthly} a month for the plan. What's included and what isn't is listed above and in the Service Terms. Nothing else.`,
+    a: `Clear prices: $${PRICES.listingFix} for the Listing Fix, $${PRICES.website.toLocaleString("en-US")} starting price for a website (fixed written quote for your scope), $${PRICES.monthly} a month for the plan. What's included and what isn't is listed above and in the Service Terms. Nothing else.`,
     link: { label: "Service Terms", href: "/terms" },
   },
   {
