@@ -11,6 +11,7 @@ import styles from "./Founder.module.css";
  * supplies an approved photo (never a generated one).
  */
 export default function Founder({ headingId = "founder-title", label = "Who you'd work with" }: { headingId?: string; label?: string }) {
+  const [photoFailed, setPhotoFailed] = useState(false);
   return (
     <div className={styles.founder}>
       <div className={styles.portrait}>
