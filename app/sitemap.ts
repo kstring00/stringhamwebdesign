@@ -7,6 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     at("/", 1, "monthly"),
     at("/partners", 0.8, "monthly"),
+    at("/websites", 0.9, "monthly"),
     at("/family-resource-hub", 0.9, "monthly"),
     at("/terms", 0.3, "yearly"),
     at("/privacy", 0.2, "yearly"),
