@@ -30,8 +30,8 @@ const interTight = Inter_Tight({
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: `Google listing fixes and websites for local businesses | ${site.name}`, template: `%s | ${site.name}` },
-  description: "I fix your Google listing and directory info so customers find the right number, hours and prices. Start with a free check. Stringham Web Design LLC, League City, Texas.",
+  title: { default: `Custom websites for independent businesses | ${site.name}`, template: `%s | ${site.name}` },
+  description: "Custom websites for independent businesses starting at $1,800, with fixed written quotes and no required Google Ads spending. League City, Texas.",
   applicationName: site.name,
   authors: [{ name: site.person, url: site.url }],
   creator: site.person,

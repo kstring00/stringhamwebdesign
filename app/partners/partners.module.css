@@ -353,6 +353,7 @@
 .kindProgress { background: #fff; border-color: var(--green); color: var(--green-deep); }
 .kindProgress::before { background: linear-gradient(90deg, currentColor 50%, transparent 50%); }
 .kindConcept { border-style: dashed; color: var(--ink-soft); }
+.kindArchived { background: var(--paper-deep); border-color: var(--line-strong); color: var(--ink-soft); }
 
 .draft {
   padding: 0.25rem 0.65rem;

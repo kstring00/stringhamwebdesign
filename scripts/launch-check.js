@@ -51,7 +51,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
         robots: meta('robots'), h1s: qa('h1').map((h) => h.textContent.replace(/\s+/g, ' ').trim()),
         imgsNoAlt: qa('img').filter((i) => !i.hasAttribute('alt')).map((i) => i.getAttribute('src')),
         skip: Boolean(q('a.skip[href="#main"]')), landmarks: { main: Boolean(q('main#main')), header: Boolean(q('header')), footer: Boolean(q('footer')), nav: Boolean(q('nav[aria-label]')) },
-        phone: qa('a[href^="tel:"]').length, cta: qa('a[href="/#free-check"]').length, privacy: Boolean(q('footer a[href="/privacy"]')),
+        phone: qa('a[href^="tel:"]').length, cta: qa('a[href="/websites#website-quote"], a[href="/#free-check"]').length, privacy: Boolean(q('footer a[href="/privacy"]')),
         year: [...qa('footer')].pop()?.textContent.match(/©\s*(\d{4})/)?.[1] || '', jsonld: qa('script[type="application/ld+json"]').map((s) => s.textContent).join(' '),
         text: document.body.innerText, headerNav: qa('header nav[aria-label="Primary"] a').map((a) => a.textContent.trim()),
         links: qa('a[href]').map((a) => ({ href: a.getAttribute('href'), target: a.getAttribute('target'), rel: a.getAttribute('rel') || '' })),
@@ -78,17 +78,17 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     ok(`${path}: social image, twitter card, icons`, /opengraph-image|\/og\/[a-z-]+\.png/.test(d.ogImage) && d.twitter === 'summary_large_image' && d.icon && d.apple, JSON.stringify({ og: d.ogImage, tw: d.twitter, icon: d.icon, apple: d.apple }));
     ok(`${path}: alt on every image`, d.imgsNoAlt.length === 0, d.imgsNoAlt.join(' '));
     ok(`${path}: skip link and landmarks`, d.skip && d.landmarks.main && d.landmarks.header && d.landmarks.footer && d.landmarks.nav, JSON.stringify(d.landmarks));
-    ok(`${path}: phone and Get a free check reachable`, d.phone >= 1 && d.cta >= 1, `tel ${d.phone}, cta ${d.cta}`);
+    ok(`${path}: phone and primary CTA reachable`, d.phone >= 1 && d.cta >= 1, `tel ${d.phone}, cta ${d.cta}`);
     ok(`${path}: footer privacy link and current year`, d.privacy && d.year === String(new Date().getFullYear()), d.year);
     if (path === '/') ok(`${path}: LocalBusiness JSON-LD`, /"@type":"ProfessionalService"/.test(d.jsonld) && /League City/.test(d.jsonld) && /Houston/.test(d.jsonld));
     if (path === '/about') ok(`${path}: Person JSON-LD`, /"@type":"Person"/.test(d.jsonld));
     ok(`${path}: no banned words in rendered text`, !BANNED.test(d.text), (d.text.match(BANNED) || [''])[0]);
-    ok(`${path}: header is the logo, one link and one button`, JSON.stringify(d.headerNav) === JSON.stringify(path === '/partners' ? ['For business owners', 'Explore a partnership'] : ['For partners', 'Get a free check']), JSON.stringify(d.headerNav));
+    ok(`${path}: header is the logo, one link and one button`, JSON.stringify(d.headerNav) === JSON.stringify(path === '/partners' ? ['For business owners', 'Explore a partnership'] : ['For partners', 'Request a website quote']), JSON.stringify(d.headerNav));
   }
 
   const home = seen.get('/');
-  ok('home says what, for whom, where above the fold', /Be easy to find when customers are looking for you/.test(home.text) && /Google listing/i.test(home.text) && /storage, RV sites, fishing trips or horse boarding/i.test(home.text) && /League City, Texas/i.test(home.text));
-  ok('home has the one CTA', (home.text.match(/Get a free check/g) || []).length >= 2);
+  ok('home says what, for whom, where above the fold', /A better website for the business you/.test(home.text) && /Google listing/i.test(home.text) && /\$1,800/.test(home.text) && /League City, Texas/i.test(home.text));
+  ok('home has the one CTA', (home.text.match(/Request a website quote/g) || []).length >= 1);
 
   for (const [href, uses] of externals) {
     ok(`external ${href}: opens safely`, uses.every((u) => u.target !== '_blank' || /noopener/.test(u.rel)), JSON.stringify(uses.filter((u) => u.target === '_blank' && !/noopener/.test(u.rel)).map((u) => u.page)));

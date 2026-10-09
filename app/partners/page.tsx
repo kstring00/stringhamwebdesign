@@ -4,7 +4,7 @@ import Founder from "../components/Founder";
 import { pageMeta } from "../data/meta";
 import { comparison, partnerQuestions, partnerSteps, paths, reasons } from "../data/partners";
 import { site } from "../data/site";
-import { kindLabel, partnerWork, showDraftWork, type Work, type WorkKind } from "../data/work";
+import { kindLabel, partnerWork, type Work, type WorkKind } from "../data/work";
 import PartnerForm from "./PartnerForm";
 import styles from "./partners.module.css";
 
@@ -30,6 +30,7 @@ const kindClass: Record<WorkKind, string> = {
   live: styles.kindLive,
   "in-progress": styles.kindProgress,
   concept: styles.kindConcept,
+  archived: styles.kindArchived,
 };
 
 /** The labels in use on this build, explained above the list when there's more than one. */
@@ -51,7 +52,6 @@ function Project({ w, index, featured }: { w: Work; index: number; featured: boo
         <p className={styles.status}>
           <span className={`${styles.kind} ${kindClass[w.kind]}`}>{kindLabel[w.kind].label}</span>
           <span className={styles.stage}>{w.stage}</span>
-          {!w.confirmed && showDraftWork ? <span className={styles.draft}>Draft: needs Kyle&rsquo;s OK to publish</span> : null}
         </p>
         <h3><span className={styles.index} aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>{w.name}</h3>
         <p className={styles.what}>{w.what}</p>
