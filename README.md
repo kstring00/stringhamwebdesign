@@ -22,9 +22,11 @@ locally (the contact form logs instead of emailing without `RESEND_API_KEY`).
 ## Pages
 
 `/` (everything: hero, findings, how it works, prices, who it's for, questions,
-the free check form), `/partners` (for photographers, designers, agencies and
-consultants: two partnership paths, selected work, the founder, the partner
-inquiry form), `/terms`, `/privacy`, a designed 404, and
+the free check form), `/websites` (for owners who want a website: price,
+work, how it works, the founder, the referral offer, the website quote
+form), `/partners` (for photographers, designers, agencies and consultants:
+two partnership paths, the published referral terms, selected work, the
+founder, the partner inquiry form), `/terms`, `/privacy`, a designed 404, and
 `/family-resource-hub`, which is live but deliberately unlinked. Every retired
 route (`/services`, `/about`, `/contact`, `/portal*`, `/admin*`, `/login`,
 `/pricing`, `/quote`, `/resources`, `/faq`, `/work*`, `/portfolio*`,
@@ -47,17 +49,23 @@ of the home page (see `next.config.ts`).
 - `app/partners/` + `app/api/partner-inquiry/route.ts` — the partner page and
   its inquiry form. Both forms share `app/lib/inbox.ts` (cleaning, rate limit,
   one email via Resend, logged instead when the key is unset).
-- `app/data/partners.ts` — every word on /partners. Compensation is described,
-  never priced, until the owner approves written terms.
+- `app/data/partners.ts` — every word on /partners.
+- `app/data/referral.ts` — the referral reward (rate, worked example, rules).
+  /partners, /websites and the home page read it; the Service Terms repeat
+  it in words.
 - `app/data/work.ts` — selected work, each project labeled for exactly what it
-  is: `kind` is live, in-progress or concept. `onPartners` picks the projects
+  is: `kind` is live, in-progress, concept or archived. `onPartners` picks the projects
   on /partners. `confirmed: false` projects show only on preview deployments
   (marked as drafts), never on production. Captures live in `public/showcase/`
   (not `/work`, which redirects).
-- `app/components/Founder.tsx` — who Kyle is. Initials until an approved
-  photo is supplied; never a generated portrait.
+- `app/components/Founder.tsx` — who Kyle is, with his own photo
+  (`public/kyle-founder.webp`, JPEG fallback); never a generated portrait.
+- `app/terms/lib.ts` — renders the Service Terms and gives each section a
+  stable id from its name (`/terms#website`, `/terms#refunds`), so links
+  survive price and numbering changes.
 - `app/lib/track.ts` + `app/motion/Tracking.tsx` — Clarity custom events:
-  `free_check_submit`, `partner_inquiry_submit`, `cta_click` (with
+  `free_check_submit`, `website_quote_submit`, `partner_inquiry_submit`,
+  `call_tap`, `text_tap`, `work_sample_click`, `cta_click` (with
   `cta_location`), `email_click`, `terms_view`.
 - `app/motion/Reveal.tsx` — the only animation: a short upward settle on
   `data-reveal` blocks below the fold. Never a fade, so text is always at

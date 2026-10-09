@@ -76,13 +76,13 @@ export const work: Work[] = [
     stage: "Previous design work · not a launched site",
     what: "A website for a Clear Lake dessert shop, designed around ordering ahead.",
     built: [
-      "An order-ahead flow for pickup, delivery and group orders, wired to hand off to the shop’s ordering system. It runs as a demo until that account is connected.",
+      "An order-ahead flow for pickup, delivery and group orders, built to hand off to the shop’s ordering system. In the demo, ordering is simulated.",
       "An open, closing-soon or closed status worked out in the shop’s own time zone, shown in the header, menu and footer.",
       "An animated flight-route map that doubles as the site’s navigation. It loads only when needed and holds still for visitors who prefer reduced motion.",
     ],
     alt: {
-      desktop: "Dubai & Dips home page in development: a chocolate bar hero with “Made here, every morning” and an order-ahead button",
-      mobile: "Dubai & Dips home page in development, on a phone",
+      desktop: "Dubai & Dips home page design: a chocolate bar hero with “Made here, every morning” and an order-ahead button",
+      mobile: "Dubai & Dips home page design, on a phone",
     },
     previewUrl: "https://dubaianddips2.vercel.app/",
     onPartners: true,

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Founder from "../components/Founder";
 import { pageMeta } from "../data/meta";
 import { comparison, partnerQuestions, partnerSteps, paths, reasons } from "../data/partners";
+import { referral } from "../data/referral";
 import { site } from "../data/site";
 import { kindLabel, partnerWork, type Work, type WorkKind } from "../data/work";
 import PartnerForm from "./PartnerForm";
@@ -60,9 +61,9 @@ function Project({ w, index, featured }: { w: Work; index: number; featured: boo
           {w.built.map((b) => <li key={b}>{b}</li>)}
         </ul>
         {w.liveUrl ? (
-          <a className={`u ${styles.visit}`} href={w.liveUrl} target="_blank" rel="noopener noreferrer">Visit the live site<span aria-hidden="true"> &#8599;</span><span className="sr-only"> (opens in a new tab)</span></a>
+          <a className={`u ${styles.visit}`} href={w.liveUrl} target="_blank" rel="noopener noreferrer" data-track="work_sample_click" data-location={w.key}>Visit the live site<span aria-hidden="true"> &#8599;</span><span className="sr-only"> (opens in a new tab)</span></a>
         ) : w.previewUrl ? (
-          <a className={`u ${styles.visit}`} href={w.previewUrl} target="_blank" rel="noopener noreferrer">View the preview<span aria-hidden="true"> &#8599;</span><span className="sr-only"> (opens in a new tab)</span></a>
+          <a className={`u ${styles.visit}`} href={w.previewUrl} target="_blank" rel="noopener noreferrer" data-track="work_sample_click" data-location={w.key}>{w.kind === "archived" ? "View the archived demo" : "View the preview"}<span aria-hidden="true"> &#8599;</span><span className="sr-only"> (opens in a new tab)</span></a>
         ) : (
           <p className={styles.private}>Not public yet. These screens are from the working build.</p>
         )}
@@ -119,7 +120,21 @@ export default async function PartnersPage({ searchParams }: { searchParams: Pro
               </tbody>
             </table>
           </div>
-          <p className={styles.note}>Referral reward amounts and partner pricing are set in a short written agreement before your first project. They&rsquo;re not published here yet.</p>
+          <p className={styles.note}>White-label pricing is agreed per project, in writing, before work starts.</p>
+
+          {/* Referral terms: published, and the same for anyone who refers. */}
+          <div className={styles.referral} id="referrals">
+            <div className={styles.referralLead}>
+              <p className={styles.referralRate} aria-hidden="true">{referral.percent}</p>
+              <h3 id="referrals-title" className={styles.referralTitle}>Referral terms: {referral.percent} of the website total</h3>
+              <p className={styles.referralExample}>
+                <span>Example</span> Your client&rsquo;s website quote is {referral.example.price}. Once they&rsquo;ve paid in full, I pay you <b>{referral.example.reward}</b>.
+              </p>
+            </div>
+            <ul className={styles.ticks}>
+              {referral.rules.map((r) => <li key={r}>{r}</li>)}
+            </ul>
+          </div>
         </div>
       </section>
 

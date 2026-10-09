@@ -29,8 +29,8 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
 - Honesty: no invented reviews, numbers, clients, results, logos or
   guarantees. The four findings on the home page are real and anonymized;
   don't add more without Kyle. No testimonials until he supplies one word
-  for word. No stock or AI photos; the photo slot stays empty until he sends
-  a real one. Don't mention his dad's facility by name.
+  for word. No stock or AI photos; the only photo of Kyle is his own
+  (`public/kyle-founder.*`). Don't mention his dad's facility by name.
 - Location is "League City, Texas", never just "Texas". Phone is shown as
   "Call or text 413-454-3509".
 - /partners recruits referral and white-label partners without turning the
@@ -38,9 +38,10 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
   footer link. The stage of the business is stated plainly on /partners
   ("a new studio… I haven't delivered a paid client website yet"); keep it
   true and update it when it stops being true.
-- No referral reward amount, partner price or commission appears on the site
-  until Kyle approves written terms. This repo is public: proposed figures
-  don't go in code, commits or PRs either.
+- The referral reward is published: 20% of the website's total price, paid
+  once the client has paid in full, open to anyone who refers. It lives in
+  `app/data/referral.ts` and in the Service Terms ("Referrals" under
+  Website); change both together. White-label pricing stays off the site.
 - Selected work: never imply a concept or spec build was a paid engagement,
   and never claim results. A project for a business Kyle doesn't own is
   shown on production only after he confirms its label and the owner's OK

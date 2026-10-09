@@ -4,6 +4,7 @@ import { BusinessJsonLd } from "./components/JsonLd";
 import { pageMeta } from "./data/meta";
 import { cta } from "./data/nav";
 import { findings, niches, noGuarantee, plans, questions, steps } from "./data/offer";
+import { referral } from "./data/referral";
 import { site } from "./data/site";
 import FreeCheckForm from "./home/FreeCheckForm";
 import Included from "./home/Included";
@@ -133,8 +134,13 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
             <p className={styles.body}>Run something else local? If customers find you through Google and the phone, the same work applies. Ask for the free check and I&rsquo;ll tell you straight whether it fits.</p>
           </div>
           <div className={`${styles.aboutCol} ${styles.kyle}`}>
-            {/* Photo slot: a real photo of Kyle goes here when he sends it. Nothing is shown until then. */}
-            <h2 className={styles.h2}>About Kyle</h2>
+            <div className={styles.kyleHead}>
+              <picture>
+                <source type="image/webp" srcSet="/kyle-founder-sm.webp" />
+                <img className={styles.kylePhoto} src="/kyle-founder.jpg" alt="" width={80} height={100} loading="lazy" decoding="async" />
+              </picture>
+              <h2 className={styles.h2}>About Kyle</h2>
+            </div>
             <p className={styles.body}>I&rsquo;m Kyle Stringham. I run {site.legalName} out of {site.city}, {site.regionLong}. I grew up around my dad&rsquo;s self-storage facility, so I know what a wrong phone number or a dead website link costs a small business, and how little time an owner has to chase it.</p>
             <p className={styles.body}>I do the work myself, send you proof of every change, and never ask for your passwords.</p>
             <p className={styles.contactLine}>
@@ -145,14 +151,18 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
         </div>
       </section>
 
-      {/* Partner entry point: one quiet band, the page stays for business owners. */}
+      {/* Referrals and partners: one quiet band, the page stays for business owners. */}
       <section className={styles.partnerBand} aria-labelledby="partner-band-title">
         <div className={`container ${styles.partnerBandInner}`}>
+          <p className={styles.referralRate} aria-hidden="true">{referral.percent}</p>
           <div>
-            <p className={styles.partnerEyebrow}>For creative &amp; agency partners</p>
-            <h2 id="partner-band-title" className={styles.partnerTitle}>Photographer, designer or agency with clients who need a website?</h2>
+            <p className={styles.partnerEyebrow}>Referrals &amp; partners</p>
+            <h2 id="partner-band-title" className={styles.partnerTitle}>Know a business that needs a website? I pay {referral.percent} of the website total when they hire me.</h2>
           </div>
-          <a className="btn btn-secondary" href="/partners">See how we&rsquo;d work together</a>
+          <div className={styles.partnerBandActions}>
+            <a className="btn btn-secondary" href="/partners#referrals">How referrals work</a>
+            <a className={`u ${styles.textLink}`} href="/partners">For agencies and creatives</a>
+          </div>
         </div>
       </section>
 

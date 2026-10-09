@@ -1,42 +1,178 @@
 import type { Metadata } from "next";
+
+import Founder from "../components/Founder";
 import { pageMeta } from "../data/meta";
-import { PRICES } from "../data/offer";
+import { PRICES, plans } from "../data/offer";
+import { referral } from "../data/referral";
 import { site } from "../data/site";
+import { kindLabel, partnerWork } from "../data/work";
+import home from "../home/home.module.css";
+import Included from "../home/Included";
+import styles from "./websites.module.css";
 import WebsiteQuoteForm from "./WebsiteQuoteForm";
-import styles from "../home/home.module.css";
 
 export const metadata: Metadata = pageMeta({
   absolute: "Custom Business Websites From $1,800 | Stringham Web Design",
-  description: "Custom websites for independent businesses. Transparent starting price, fixed written quotes, no required Google Ads spending, and optional month-to-month support.",
+  description: "Custom websites for independent businesses in League City and Greater Houston. Starting at $1,800 with a fixed written quote, no required ad spending, and you own the site.",
   path: "/websites",
 });
-export default async function Websites({searchParams}:{searchParams:Promise<{sent?:string;error?:string}>}) {
-  const {sent,error}=await searchParams;
-  return <>
-    <section className={styles.hero}><div className="container">
-      <div className={styles.heroText}>
-        <p className={styles.trust}>Custom websites · League City, Texas</p>
-        <h1 className={styles.h1}>A website that makes it easier for customers to choose you.</h1>
-        <p className={styles.sub}>I design and build websites for independent businesses. No required Google Ads spending, no bundled advertising commitment, and no mystery pricing. You get a clear written quote before we start.</p>
-        <div className={styles.actions}><a className="btn" href="#website-quote">Request a website quote</a><a className="u" href="/partners#work">See selected work</a></div>
-      </div>
-    </div></section>
-    <section className={styles.section}><div className="container"><div className={styles.head}>
-      <h2 className={styles.h2}>Straightforward pricing, clear scope.</h2>
-      <p className={styles.lede}>Websites start at ${PRICES.website.toLocaleString("en-US")}. Your final price depends on pages, features, and integrations, all listed in your fixed written quote. Existing accepted quotes are honored.</p>
-    </div><div className={styles.plans}>
-      <article className={styles.plan}><h3 className={styles.planName}>Website design and development</h3><p className={styles.price}><b>${PRICES.website.toLocaleString("en-US")}</b><span>starting at</span></p><p className={styles.planLead}>A mobile-friendly website built around your customer's next step.</p><p>Scope can include a request form, responsive design, agreed pages, and launch support.</p></article>
-      <article className={styles.plan}><h3 className={styles.planName}>Optional monthly care</h3><p className={styles.price}><b>$125</b><span>per month</span></p><p>Hosting and upkeep when applicable, agreed content edits and reporting. Month to month.</p></article>
-    </div><p className={styles.body}>No required paid advertising. You keep control of your domain and accounts. The project agreement defines your deliverables, payment terms and ownership. <a className="u" href="/terms">Read the service terms</a>.</p></div></section>
-    <section className={`${styles.section} ${styles.alt}`}><div className="container"><div className={styles.head}><h2 className={styles.h2}>How we'll work together</h2></div>
-      <ol className={styles.steps}>
-        <li className={styles.step}><span className={styles.stepN}>1</span><h3>Tell me what you need</h3><p>We discuss your business, audience and what customers should be able to do.</p></li>
-        <li className={styles.step}><span className={styles.stepN}>2</span><h3>Agree on the scope</h3><p>You'll get a written fixed quote covering pages, features, timeline and payment milestones.</p></li>
-        <li className={styles.step}><span className={styles.stepN}>3</span><h3>Build, review, launch</h3><p>I build the agreed website, you review it, and we launch after approval and payment.</p></li>
-      </ol></div></section>
-    <section id="website-quote" className={`${styles.section} ${styles.formSection}`}><div className={`container ${styles.formGrid}`}>
-      <div className={styles.formSide}><h2 className={styles.h2}>Tell me about your website.</h2><p className={styles.lede}>No pressure and no obligation. Share the basics and I'll get back to you to explore whether we're a good fit.</p><p className={styles.body}>Prefer email? <a className="u" href={`mailto:${site.email}`}>{site.email}</a></p></div>
-      <WebsiteQuoteForm sent={sent==="1"} errorCode={error||""}/>
-    </div></section>
-  </>;
+
+const starting = `$${PRICES.website.toLocaleString("en-US")}`;
+
+/** The points an owner checks first, said once, near the top. */
+const points = [
+  "Design, build and launch on your domain",
+  "No required ad spending, no contract",
+  "You approve it before paying the balance",
+  "Paid in full, it’s yours: domain and accounts too",
+];
+
+/** The two cards that matter on this page: the build and the upkeep. */
+const sitePlans = plans.filter((p) => p.key === "site" || p.key === "plan");
+
+const steps = [
+  { n: "1", title: "Tell me what you need", body: "Send the form, text or email. We talk about your business, your customers and what they should be able to do on the site." },
+  { n: "2", title: "Get a fixed quote", body: "You get the pages, features, timeline, price and any deposit in writing. Nothing starts until you agree." },
+  { n: "3", title: "Review, approve, launch", body: "I build it and you review it. You pay the balance once you approve, and it goes live on your domain." },
+];
+
+export default async function Websites({ searchParams }: { searchParams: Promise<{ sent?: string; error?: string }> }) {
+  const { sent, error } = await searchParams;
+  return (
+    <>
+      {/* 1. Hero: what, for whom, where, the price, one action. */}
+      <section className={home.hero} aria-labelledby="websites-title">
+        <div className={`container ${styles.heroGrid}`}>
+          <div className={styles.heroText}>
+            <p className={styles.eyebrow}>Custom websites · {site.city}, {site.regionLong}</p>
+            <h1 id="websites-title" className={home.h1}>A website that makes it easier for customers to choose you.</h1>
+            <p className={home.sub}>I design and build websites for owner-run businesses, built around the one thing your customers need to do: call, book, order or ask. One person, start to finish, and you deal with me directly.</p>
+            <div className={home.actions}>
+              <a className="btn" href="#website-quote" data-track="cta" data-location="websites-hero">Request a website quote</a>
+              <a className={`u ${home.textLink}`} href="#work">See the work</a>
+            </div>
+          </div>
+          <aside className={styles.offer} aria-label="What you get">
+            <p className={styles.offerTag}>Websites start at</p>
+            <p className={styles.offerPrice}>{starting}</p>
+            <p className={styles.offerSub}>Fixed in a written quote before any work starts.</p>
+            <ul className={styles.points}>
+              {points.map((p) => <li key={p}>{p}</li>)}
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      {/* 2. Work: "has he done this before?" answered with honest labels. */}
+      <section className={home.section} id="work" aria-labelledby="work-title">
+        <div className="container">
+          <div className={home.head}>
+            <h2 id="work-title" className={home.h2}>What I&rsquo;ve built</h2>
+            <p className={home.lede}>Stringham Web Design is a new studio. Here&rsquo;s my work so far, each one labeled for exactly what it is.</p>
+          </div>
+          <ul className={styles.work}>
+            {partnerWork.map((w) => {
+              const href = w.liveUrl ?? w.previewUrl;
+              return (
+                <li key={w.key} className={styles.card}>
+                  <div className={`frame ${styles.cardShot}`}>
+                    <picture>
+                      <source type="image/avif" srcSet={`/showcase/${w.key}-desktop.avif`} />
+                      <img src={`/showcase/${w.key}-desktop.webp`} alt={w.alt.desktop} width={1440} height={900} loading="lazy" decoding="async" />
+                    </picture>
+                  </div>
+                  <p className={styles.status}><span className={`${styles.pill} ${w.kind === "live" ? styles.pillLive : ""}`}>{kindLabel[w.kind].label}</span> {w.stage}</p>
+                  <h3>{w.name}</h3>
+                  <p>{w.what}</p>
+                  {href ? (
+                    <a className={`u ${styles.visit}`} href={href} target="_blank" rel="noopener noreferrer" data-track="work_sample_click" data-location={w.key}>
+                      {w.liveUrl ? "Visit the live site" : w.kind === "archived" ? "View the archived demo" : "View the preview"}<span aria-hidden="true"> &#8599;</span><span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                  ) : null}
+                </li>
+              );
+            })}
+          </ul>
+          <p className={styles.more}>What I built on each one, in detail: <a className={`u ${home.textLink}`} href="/partners#work">see the full write-ups</a></p>
+        </div>
+      </section>
+
+      {/* 3. Price: what it costs, what's included, ownership beside the price. */}
+      <section className={`${home.section} ${home.alt}`} id="prices" aria-labelledby="prices-title">
+        <div className="container">
+          <div className={home.head}>
+            <h2 id="prices-title" className={home.h2}>What it costs</h2>
+            <p className={home.lede}>Websites start at {starting}. The final price depends on the pages and features you need, and it&rsquo;s fixed in your written quote before any work starts.</p>
+          </div>
+          <div className={styles.plans}>
+            {sitePlans.map((p, i) => (
+              <article className={home.plan} key={p.key} aria-labelledby={`wp-${p.key}`}>
+                <h3 id={`wp-${p.key}`} className={home.planName}>{p.key === "plan" ? "Monthly Plan (optional)" : p.name}</h3>
+                <p className={home.price}><b>{p.price}</b> <span>{p.cadence}</span></p>
+                <p className={home.planLead}>{p.lead}</p>
+                <div className={home.included}>
+                  <Included open={i === 0}>
+                    <ul className={home.list}>{p.included.map((item) => <li key={item}>{item}</li>)}</ul>
+                  </Included>
+                </div>
+                <p className={home.notIncluded}><b>Not included:</b> {p.notIncluded}</p>
+                <ul className={home.notes}>{p.notes.map((n) => <li key={n}>{n}</li>)}</ul>
+                <a className={`u ${home.planTerms}`} href={`/terms${p.terms}`}>Terms for the {p.name}</a>
+              </article>
+            ))}
+          </div>
+          <p className={styles.noAds}><b>No ad spend. No contract.</b> Any deposit is written in your quote, and the Monthly Plan is month to month. Full details in the <a className="u" href="/terms">Service Terms</a>.</p>
+        </div>
+      </section>
+
+      {/* 4. How it works */}
+      <section className={home.section} id="how" aria-labelledby="how-title">
+        <div className="container">
+          <div className={home.head}>
+            <h2 id="how-title" className={home.h2}>How it works</h2>
+          </div>
+          <ol className={home.steps}>
+            {steps.map((s) => (
+              <li className={home.step} key={s.n}>
+                <span className={home.stepN} aria-hidden="true">{s.n}</span>
+                <h3>{s.title}</h3>
+                <p>{s.body}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* 5. Who you'd work with */}
+      <section className={`${home.section} ${home.alt}`} id="founder" aria-labelledby="founder-title">
+        <div className="container">
+          <Founder />
+        </div>
+      </section>
+
+      {/* 6. Referral offer */}
+      <section className={styles.referral} aria-labelledby="refer-title">
+        <div className={`container ${styles.referralInner}`}>
+          <p className={styles.referralRate} aria-hidden="true">{referral.percent}</p>
+          <div>
+            <h2 id="refer-title" className={styles.referralTitle}>Know another business that needs a website?</h2>
+            <p className={styles.referralBody}>Send them my way. When they hire me and pay in full, I pay you {referral.percent} of their website&rsquo;s total price. On a {referral.example.price} site, that&rsquo;s {referral.example.reward}.</p>
+          </div>
+          <a className="btn btn-secondary" href="/partners#referrals">How referrals work</a>
+        </div>
+      </section>
+
+      {/* 7. The form */}
+      <section className={`${home.section} ${home.formSection}`} id="website-quote" aria-labelledby="form-title">
+        <div className={`container ${home.formGrid}`}>
+          <div className={home.formSide}>
+            <h2 id="form-title" className={home.h2}>Tell me about your website.</h2>
+            <p className={home.lede}><b>What happens next:</b> I read it and text or email you within 24 hours. If it&rsquo;s a fit, we talk, then you get a fixed written quote. No obligation.</p>
+            <p className={home.body}>Rather talk? <a className="u" href={site.phoneHref}>Call or text {site.phone}</a> or email <a className="u" href={`mailto:${site.email}`} data-track="email">{site.email}</a>.</p>
+          </div>
+          <WebsiteQuoteForm sent={sent === "1"} errorCode={typeof error === "string" ? error : ""} />
+        </div>
+      </section>
+    </>
+  );
 }

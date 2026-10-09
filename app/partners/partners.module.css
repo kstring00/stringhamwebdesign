@@ -168,6 +168,55 @@
   font-size: 0.95rem;
 }
 
+/* Referral terms: the rate large, the rules beside it. */
+.referral {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(1.25rem, 4vw, 3.5rem);
+  align-items: start;
+  margin-top: clamp(2rem, 4vw, 3rem);
+  padding: clamp(1.4rem, 3vw, 2.25rem);
+  border-radius: 14px;
+  background: var(--green-soft);
+  scroll-margin-top: 5rem;
+}
+
+.referralLead { display: grid; gap: 0.6rem; }
+
+.referralRate {
+  color: var(--green-deep);
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 8vw, 5.5rem);
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+}
+
+.referralTitle {
+  color: var(--ink);
+  font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+.referralExample {
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.referralExample span {
+  display: block;
+  margin-bottom: 0.15rem;
+  color: var(--green-deep);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.referralExample b { color: var(--ink); }
+
+.referral .ticks li { color: var(--ink); }
+
 /* ---------- reasons ---------- */
 
 .reasons {
@@ -499,6 +548,7 @@
 
 @media (max-width: 64rem) {
   .paths { grid-template-columns: 1fr; }
+  .referral { grid-template-columns: 1fr; }
   .reasons { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .work { grid-template-columns: 1fr; }
   .featured { grid-template-columns: 1fr; }
