@@ -74,6 +74,7 @@
 }
 
 .rotTrack span { height: 1.3em; line-height: 1.3em; white-space: nowrap; }
+.rotTrack span::before { content: attr(data-w); }
 
 @keyframes roll {
   0%, 20% { transform: translateY(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }

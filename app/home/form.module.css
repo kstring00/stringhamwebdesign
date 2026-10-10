@@ -180,3 +180,10 @@ textarea.input {
 }
 
 .input::placeholder { color: var(--muted); opacity: 0.8; }
+
+/* Required marker: shown, and the input's own `required` tells screen readers. */
+.req { color: #9b2c1f; font-weight: 600; }
+
+/* Phone or email, either one: a group with one legend and one rule. */
+.either { display: grid; gap: 0.6rem; margin: 0; padding: 0; border: 0; min-width: 0; }
+.either legend { padding: 0; margin-bottom: 0.35rem; font-weight: 600; font-size: 0.95rem; }

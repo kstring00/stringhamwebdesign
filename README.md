@@ -36,8 +36,11 @@ of the home page (see `next.config.ts`).
 ## Where things live
 
 - `app/data/offer.ts` — every word on the home page: prices, the verified
-  findings, the website steps and questions (shared with /websites), the
-  listing steps and questions, the plan cards.
+  findings, the listing and website steps, "what I need from you", the
+  timeline and edits lines, the plan cards, and the questions for home and
+  /websites (each page asks only what its sections don't already answer).
+  The home page's main action is the free Google check; /websites' is the
+  website quote; the header's button follows the page (`app/data/nav.ts`).
   Prices here must match `content/service-terms.md`; change them together.
 - `app/data/site.ts` — identity, phone, email, location.
 - `content/service-terms.md` and `content/privacy.md` — rendered word for
@@ -56,7 +59,9 @@ of the home page (see `next.config.ts`).
   it in words.
 - `app/data/work.ts` — selected work, each project labeled for exactly what it
   is: `kind` is live, in-progress, concept or archived. `onPartners` picks the projects
-  on /partners. `confirmed: false` projects show only on preview deployments
+  on /partners, `onHome` the live work in the home page's Work section (never
+  padded). `type`, `builtFor` and `testimonial` (written permission only)
+  fill the home card. `confirmed: false` projects show only on preview deployments
   (marked as drafts), never on production. Captures live in `public/showcase/`
   (not `/work`, which redirects).
 - `app/components/Founder.tsx` — who Kyle is, with his own photo
@@ -79,8 +84,12 @@ of the home page (see `next.config.ts`).
   button waits until any `data-hero-cta` button has scrolled out of view, so
   the first screen has one action. Page-to-page view transitions are in
   `globals.css`.
-- `app/home/Lifeless.tsx` — home section 2: a lifeless example site that
-  comes alive on scroll; one CSS variable (`--p`) drives it.
+- `app/home/Lifeless.tsx` — the home page's problem section: a lifeless
+  example site that comes alive on scroll; one CSS variable (`--p`) drives
+  it. Kinetic words are one text node (letters `aria-hidden`, the heading
+  carries an `aria-label`), so page text and screen readers read them once.
+- `docs/user-test-webster-remodeler.md` — the 5-minute test to run with a
+  local owner.
 - `app/home/BuildField.tsx` (+ `buildFieldShaders.ts`, `BuildFieldMount.tsx`)
   — the dot field on the home and partners heroes (colour from the page's
   accent): WebGL2 (one draw call) with a Canvas 2D

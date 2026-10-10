@@ -50,8 +50,8 @@ export default function FreeCheckForm({ sent = false, errorCode = "" }: { sent?:
   if (state === "sent") {
     return (
       <div className={styles.sent} role="status">
-        <h3>Thanks{who.name ? `, ${who.name}` : ""}.</h3>
-        <p>I&rsquo;ll look up {who.business || "your business"} and get back to you within 24 hours. &mdash; Kyle</p>
+        <h3>Got it{who.name ? `, ${who.name}` : ""}. I&rsquo;ll text or email you within 24 hours.</h3>
+        <p>I&rsquo;ll look up {who.business || "your business"} the way your customers do and send you what I find. No obligation. &mdash; Kyle</p>
         <p className={styles.sentSmall}>Need me sooner? <a className="u" href={site.phoneHref}>Call or text {site.phone}</a>.</p>
       </div>
     );
@@ -59,35 +59,30 @@ export default function FreeCheckForm({ sent = false, errorCode = "" }: { sent?:
 
   return (
     <form className={styles.form} id="free-check-form" onSubmit={onSubmit} method="post" action="/api/free-check">
+      <p className={styles.fine}><span className={styles.req} aria-hidden="true">*</span> Required</p>
       <div className={styles.row}>
         <div className={styles.field}>
-          <label htmlFor="fc-name">Your name</label>
+          <label htmlFor="fc-name">Your name <span className={styles.req} aria-hidden="true">*</span></label>
           <input className={styles.input} id="fc-name" name="name" autoComplete="name" required maxLength={100} />
         </div>
         <div className={styles.field}>
-          <label htmlFor="fc-business">Business name</label>
+          <label htmlFor="fc-business">Business name <span className={styles.req} aria-hidden="true">*</span></label>
           <input className={styles.input} id="fc-business" name="business" autoComplete="organization" required maxLength={120} />
         </div>
       </div>
       <div className={styles.row}>
         <div className={styles.field}>
-          <label htmlFor="fc-town">Town</label>
+          <label htmlFor="fc-town">Town <span className={styles.req} aria-hidden="true">*</span></label>
           <input className={styles.input} id="fc-town" name="town" autoComplete="address-level2" required maxLength={80} />
         </div>
         <div className={styles.field}>
-          <label htmlFor="fc-phone">Best phone number</label>
+          <label htmlFor="fc-phone">Best phone number <span className={styles.req} aria-hidden="true">*</span></label>
           <input className={styles.input} id="fc-phone" name="phone" type="tel" autoComplete="tel" inputMode="tel" required maxLength={30} />
         </div>
       </div>
-      <div className={styles.row}>
-        <div className={styles.field}>
-          <label htmlFor="fc-email">Email <small>optional</small></label>
-          <input className={styles.input} id="fc-email" name="email" type="email" autoComplete="email" maxLength={180} />
-        </div>
-        <div className={styles.field}>
-          <label htmlFor="fc-type">Type of business <small>optional</small></label>
-          <input className={styles.input} id="fc-type" name="type" maxLength={40} autoComplete="off" />
-        </div>
+      <div className={styles.field}>
+        <label htmlFor="fc-email">Email <small>optional</small></label>
+        <input className={styles.input} id="fc-email" name="email" type="email" autoComplete="email" maxLength={180} />
       </div>
       <div className={styles.field}>
         <label htmlFor="fc-notes">Anything going on with your listing or website? <small>optional</small></label>

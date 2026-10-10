@@ -8,6 +8,10 @@
  *   in-progress built with the business owner, not launched
  *   concept     built on spec, never commissioned
  *
+ * `onHome`: shown in the home page's Work section. Only live work Kyle has
+ * confirmed goes there; Dubai & Dips stays off it until its order flow and
+ * hours are fixed.
+ *
  * `onPartners`: shown in the /partners portfolio. Projects set to false keep
  * their data and screenshots here so they can come back later.
  *
@@ -40,11 +44,18 @@ export type Work = {
   stage: string;
   /** One plain line on what it is. */
   what: string;
+  /** What kind of business or project it is, in a few words. */
+  type?: string;
+  /** The one action the site was built around. */
+  builtFor?: string;
+  /** A testimonial, only with the person's written permission. Never invented. */
+  testimonial?: { quote: string; name: string; business: string };
   /** What was actually designed and built. Features, never outcomes or metrics. */
   built: string[];
   liveUrl?: string;
   previewUrl?: string;
   alt: { desktop: string; mobile: string };
+  onHome?: boolean;
   onPartners: boolean;
   confirmed: boolean;
 };
@@ -61,11 +72,14 @@ export const work: Work[] = [
       "Local providers, parent tools and plain-English guides. No sign-up, and no child information collected.",
       "A white-label version clinics can run under their own name and colors.",
     ],
+    type: "Support hub for autism families · my own product",
+    builtFor: "Help a parent find one clear next step today.",
     liveUrl: "https://www.commongroundautism.org",
     alt: {
       desktop: "Common Ground home page: “Real autism support for real families,” with a Find My Next Step button",
       mobile: "Common Ground home page on a phone",
     },
+    onHome: true,
     onPartners: true,
     confirmed: true,
   },
@@ -141,3 +155,6 @@ export const showDraftWork = process.env.VERCEL_ENV === "preview" || process.env
 
 /** The /partners portfolio: on the partner list, and confirmed unless this is a preview. */
 export const partnerWork = work.filter((w) => w.onPartners && (w.confirmed || showDraftWork));
+
+/** The home page's Work section: live, confirmed work only. Never padded. */
+export const homeWork = work.filter((w) => w.onHome && w.confirmed);

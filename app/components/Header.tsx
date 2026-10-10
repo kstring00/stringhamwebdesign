@@ -3,7 +3,7 @@
 import { useEffect, useRef, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
 
-import { cta, partnerCta } from "../data/nav";
+import { cta, partnerCta, quoteCta } from "../data/nav";
 import styles from "./Header.module.css";
 
 function subscribeScroll(cb: () => void) {
@@ -43,7 +43,9 @@ export default function Header() {
   const scrolled = useSyncExternalStore(subscribeScroll, () => window.scrollY > 24, () => false);
   const pathname = usePathname();
   const view = pathname.startsWith("/partners") ? "partners" : "business";
-  const action = view === "partners" ? partnerCta : cta;
+  // The header's button is the page's main action: the quote on /websites,
+  // a partnership on /partners, the free Google check everywhere else.
+  const action = view === "partners" ? partnerCta : pathname.startsWith("/websites") ? quoteCta : cta;
   const header = useRef<HTMLElement>(null);
   const bar = useRef<HTMLDivElement>(null);
 
@@ -129,7 +131,7 @@ export default function Header() {
       <div ref={bar} className={styles.bar}>
         <span className={styles.glass} aria-hidden="true" />
         <a className={styles.brand} href="/">
-          <span className={styles.wordmark}>Stringham</span>
+          <span className={styles.wordmark}>Stringham</span>{" "}
           <span className={styles.brandSub}>Web Design</span>
         </a>
         <nav className={styles.switch} aria-label="Primary">

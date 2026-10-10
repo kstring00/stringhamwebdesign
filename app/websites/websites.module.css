@@ -230,3 +230,7 @@
   .referralInner { grid-template-columns: 1fr; }
   .referralInner > a { width: 100%; }
 }
+
+/* The light step under the hero buttons: the free check, or a call. */
+.lightStep { color: var(--ink-soft); font-size: 0.98rem; }
+.lightStep a { color: var(--ink); font-weight: 600; }

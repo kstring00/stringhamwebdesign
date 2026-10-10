@@ -53,10 +53,10 @@
 /* Kinetic words. "lifeless." slumps (GSAP, on arrival); "Beautiful,"
    rises letter by letter with the same --p that brings the site to life. */
 .droop, .bloom { white-space: nowrap; }
-.droop [aria-hidden] > span,
-.bloom [aria-hidden] > span { display: inline-block; transform-origin: 50% 100%; }
+.droop > span > span,
+.bloom > span > span { display: inline-block; transform-origin: 50% 100%; }
 
-.bloom [aria-hidden] > span {
+.bloom > span > span {
   --kb: clamp(0, calc((var(--p) - 0.3 - var(--i) * 0.035) / 0.22), 1);
   color: color-mix(in oklab, #7f8580 calc((1 - var(--kb)) * 100%), var(--ink));
   font-weight: calc(300 + 100 * var(--kb));
@@ -408,45 +408,6 @@
 .legendAfter { opacity: clamp(0, calc((var(--p) - 0.52) / 0.12), 1); }
 .legendAfter li::before { background: var(--green); }
 
-/* ---------- the listing strip ---------- */
-
-.listing {
-  display: grid;
-  gap: 0.75rem;
-  margin-top: clamp(2.5rem, 6vw, 4.5rem);
-  padding-top: clamp(1.75rem, 4vw, 2.5rem);
-  border-top: 1px solid var(--line);
-}
-
-.listingTitle { font-size: clamp(1.35rem, 2.2vw, 1.75rem); font-weight: 400; letter-spacing: -0.015em; }
-.listingLede { color: var(--muted); }
-
-.findings {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.6rem 2rem;
-  margin: 0.4rem 0 0.2rem;
-  padding: 0;
-  list-style: none;
-}
-
-.findings li {
-  position: relative;
-  padding-left: 1.6rem;
-  color: var(--ink);
-  line-height: 1.45;
-}
-
-.findings li::before {
-  content: "×";
-  position: absolute;
-  left: 0;
-  top: -0.05rem;
-  color: #9b2c1f;
-  font-size: 1.15rem;
-  font-weight: 700;
-}
-
 /* ---------- smaller screens ---------- */
 
 @media (max-width: 64rem) {
@@ -458,11 +419,11 @@
 }
 
 @media (max-width: 40rem) {
-  .legend, .findings { grid-template-columns: 1fr; }
+  .legend { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .pin::after { animation: none; }
   /* "Beautiful," is simply there, finished. */
-  .bloom [aria-hidden] > span { color: inherit; font-weight: inherit; transform: none; }
+  .bloom > span > span { color: inherit; font-weight: inherit; transform: none; }
 }

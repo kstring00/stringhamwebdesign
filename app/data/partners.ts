@@ -22,12 +22,9 @@ export const paths = [
     label: "Path A",
     name: "Referral partner",
     lead: "You know a business owner who needs a website. You introduce us; I take it from there.",
-    points: [
-      "I handle discovery, scoping, the contract and delivery.",
-      "Your client works with me directly. You can stay copied in.",
-      `You earn ${referral.percent} of the website's total price once your client has paid in full.`,
-      "Your client is told about the reward. It never changes their price.",
-    ],
+    // The table below says who talks to the client, who contracts and how
+    // money works; these are only what it doesn't.
+    points: ["I handle discovery, scoping, the contract and delivery."],
   },
   {
     key: "agency",
@@ -35,8 +32,6 @@ export const paths = [
     name: "Agency development partner",
     lead: "You keep the client. I build the website behind the scenes, under your name if you want.",
     points: [
-      "You stay the client's main point of contact.",
-      "Pricing, deliverables and responsibilities are agreed per project, in writing.",
       "I don't contact your client or show the work without your permission.",
       "Everything is handed to you, or to your client, at the end.",
     ],

@@ -9,7 +9,7 @@ import { SOURCE_KEYS, useSourceFields } from "../lib/useSourceFields";
 
 /** Messages for a native (no-JS) post that bounced back with ?error=… */
 const NATIVE_ERRORS: Record<string, string> = {
-  fields: "Please fill in your name, business, town, and a phone number or email.",
+  fields: "Please fill in your name, business, and a phone number or email.",
   busy: "Too many requests in a row. Please wait a few minutes.",
   send: "I couldn't send that just now.",
 };
@@ -29,7 +29,15 @@ export default function WebsiteQuoteForm({ sent = false, errorCode = "" }: { sen
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(e.currentTarget).entries()) as Record<string, string>;
+    const form = e.currentTarget;
+    const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+    // Phone or email: at least one, so there's a way to reply.
+    if (!data.phone?.trim() && !data.email?.trim()) {
+      setState("error");
+      setError("Please add a phone number or an email, so I can reply.");
+      form.querySelector<HTMLInputElement>("#wq-phone")?.focus();
+      return;
+    }
     setState("sending");
     setError("");
     try {
@@ -48,8 +56,8 @@ export default function WebsiteQuoteForm({ sent = false, errorCode = "" }: { sen
   if (state === "sent") {
     return (
       <div className={styles.sent} role="status">
-        <h3>Thanks{who ? `, ${who}` : ""}.</h3>
-        <p>I&rsquo;ll read this and text or email you within 24 hours. If it&rsquo;s a fit, the next step is a short conversation, then a fixed written quote. &mdash; Kyle</p>
+        <h3>Got it{who ? `, ${who}` : ""}. I&rsquo;ll text or email you within 24 hours.</h3>
+        <p>If it&rsquo;s a fit, the next step is a short conversation, then a fixed written quote. No obligation. &mdash; Kyle</p>
         <p className={styles.sentSmall}>Need me sooner? <a className="u" href={site.phoneHref}>Call or text {site.phone}</a>.</p>
       </div>
     );
@@ -57,37 +65,35 @@ export default function WebsiteQuoteForm({ sent = false, errorCode = "" }: { sen
 
   return (
     <form className={styles.form} id="website-quote-form" onSubmit={onSubmit} method="post" action="/api/website-quote">
+      <p className={styles.fine}><span className={styles.req} aria-hidden="true">*</span> Required</p>
       <div className={styles.row}>
         <div className={styles.field}>
-          <label htmlFor="wq-name">Your name</label>
+          <label htmlFor="wq-name">Your name <span className={styles.req} aria-hidden="true">*</span></label>
           <input className={styles.input} id="wq-name" name="name" autoComplete="name" required maxLength={100} />
         </div>
         <div className={styles.field}>
-          <label htmlFor="wq-business">Business name</label>
+          <label htmlFor="wq-business">Business name <span className={styles.req} aria-hidden="true">*</span></label>
           <input className={styles.input} id="wq-business" name="business" autoComplete="organization" required maxLength={120} />
         </div>
       </div>
-      <div className={styles.row}>
-        <div className={styles.field}>
-          <label htmlFor="wq-town">Town</label>
-          <input className={styles.input} id="wq-town" name="town" autoComplete="address-level2" required maxLength={80} />
+      <fieldset className={styles.either} aria-describedby="wq-contact-note">
+        <legend>How should I reach you? <span className={styles.req} aria-hidden="true">*</span></legend>
+        <p className={styles.fine} id="wq-contact-note">A phone number or an email: at least one is required. I&rsquo;ll reply the way you prefer.</p>
+        <div className={styles.row}>
+          <div className={styles.field}>
+            <label htmlFor="wq-phone">Phone</label>
+            <input className={styles.input} id="wq-phone" name="phone" type="tel" autoComplete="tel" inputMode="tel" maxLength={30} />
+          </div>
+          <div className={styles.field}>
+            <label htmlFor="wq-email">Email</label>
+            <input className={styles.input} id="wq-email" name="email" type="email" autoComplete="email" maxLength={180} />
+          </div>
         </div>
-        <div className={styles.field}>
-          <label htmlFor="wq-phone">Best phone number</label>
-          <input className={styles.input} id="wq-phone" name="phone" type="tel" autoComplete="tel" inputMode="tel" maxLength={30} aria-describedby="wq-contact-note" />
-        </div>
+      </fieldset>
+      <div className={styles.field}>
+        <label htmlFor="wq-current">Current website <small>optional</small></label>
+        <input className={styles.input} id="wq-current" name="current_site" inputMode="url" maxLength={200} />
       </div>
-      <div className={styles.row}>
-        <div className={styles.field}>
-          <label htmlFor="wq-email">Email</label>
-          <input className={styles.input} id="wq-email" name="email" type="email" autoComplete="email" maxLength={180} aria-describedby="wq-contact-note" />
-        </div>
-        <div className={styles.field}>
-          <label htmlFor="wq-current">Current website <small>optional</small></label>
-          <input className={styles.input} id="wq-current" name="current_site" inputMode="url" maxLength={200} />
-        </div>
-      </div>
-      <p className={styles.fine} id="wq-contact-note">A phone number or an email is enough. I&rsquo;ll reply the way you prefer.</p>
       <div className={styles.field}>
         <label htmlFor="wq-goals">What should the site help your customers do? <small>optional</small></label>
         <textarea className={styles.input} id="wq-goals" name="goals" rows={4} maxLength={1000} />

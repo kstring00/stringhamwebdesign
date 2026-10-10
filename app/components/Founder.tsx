@@ -2,8 +2,8 @@ import { site } from "../data/site";
 import styles from "./Founder.module.css";
 
 /**
- * Who Kyle is, plainly. Every line here is something Kyle has stated
- * himself; nothing is added. The portrait is Kyle's own photo
+ * Who Kyle is, plainly, and what it means for the client. Every fact here is
+ * something Kyle has stated himself; nothing is added. The portrait is Kyle's own photo
  * (public/kyle-founder.webp, with a JPEG fallback), cropped to 4:5.
  */
 export default function Founder({ headingId = "founder-title", label = "Who you'd work with" }: { headingId?: string; label?: string }) {
@@ -19,8 +19,9 @@ export default function Founder({ headingId = "founder-title", label = "Who you'
         <p className={styles.label}>{label}</p>
         <h2 id={headingId} className={styles.name}>Kyle Stringham</h2>
         <p className={styles.role}>Founder, {site.legalName} · {site.city}, {site.regionLong}</p>
-        <p>My background is in psychology and client-facing work. I have a degree in psychology, I&rsquo;ve worked a busy coffee counter, and I work with autistic kids and their families as a Registered Behavior Technician. All of it taught me to listen first and explain things plainly.</p>
-        <p>I plan, design, build and launch websites myself, using modern AI-assisted development tools. I direct the work, review and test what the tools produce, and I&rsquo;m accountable for every line that ships.</p>
+        <p>I have a degree in psychology, and I study why customers choose one business over another. That shapes every page I build: what people need to see, in what order, before they call.</p>
+        <p>Years of customer-facing work, and my work as a Registered Behavior Technician with autistic kids and their families, mean patient, clear communication. You&rsquo;ll always know what&rsquo;s happening and what comes next.</p>
+        <p>I use AI-assisted tools so you get custom work faster. I review, test and stand behind every line that ships.</p>
         <p>What I care about: clear communication, honest scope, and owners keeping control of their own domain and accounts.</p>
         <p className={styles.links}>
           <a className="u" href={`mailto:${site.email}`} data-track="email">{site.email}</a>

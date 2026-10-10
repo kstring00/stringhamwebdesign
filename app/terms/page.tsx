@@ -6,7 +6,7 @@ import local from "../privacy/privacy.module.css";
 import { getTermsDoc } from "./lib";
 
 export const metadata: Metadata = {
-  ...pageMeta({ absolute: "Service Terms | Stringham Web Design LLC", description: "The terms for a Listing Fix, a website, or a Monthly Plan from Stringham Web Design LLC, League City, Texas: what's included, timelines, your part, refunds, and what we can't promise.", path: "/terms" }),
+  ...pageMeta({ absolute: "Service Terms | Stringham Web Design, League City, TX", description: "The terms for a Listing Fix, a website, or a Monthly Plan from Stringham Web Design LLC, League City, Texas: what's included, timelines, your part, refunds, and what we can't promise.", path: "/terms" }),
   robots: { index: true, follow: true },
 };
 

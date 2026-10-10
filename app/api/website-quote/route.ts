@@ -57,8 +57,8 @@ export async function POST(request: NextRequest) {
   };
 
   const hasPhone = phone.replace(/\D/g, "").length >= 7;
-  if (name.length < 2 || business.length < 2 || town.length < 2 || (email && !isEmail(email)) || (!hasPhone && !email)) {
-    return reply(400, { error: "Please fill in your name, business, town, and a phone number or email." });
+  if (name.length < 2 || business.length < 2 || (email && !isEmail(email)) || (!hasPhone && !email)) {
+    return reply(400, { error: "Please fill in your name, business, and a phone number or email." });
   }
 
   const sourceLine = Object.entries(source).filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`).join(", ") || "direct (no tags, no referrer)";
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     ``,
     `Name: ${name}`,
     `Business: ${business}`,
-    `Town: ${town}`,
+    `Town: ${town || "(not given)"}`,
     `Phone: ${phone || "(not given)"}`,
     `Email: ${email || "(not given)"}`,
     `Current website: ${current || "(not given)"}`,
@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
     `Received: ${new Date().toISOString()}`,
   ].join("\n");
 
-  const subject = `Website quote: ${business}, ${town} (${name})${referredBy ? ` · referred by ${referredBy}` : ""}`;
+  const subject = `Website quote: ${business}${town ? `, ${town}` : ""} (${name})${referredBy ? ` · referred by ${referredBy}` : ""}`;
   const result = await deliver({ subject, text, replyTo: email || undefined, label: "website quote request" });
   if (!result.ok) return reply(502, { error: "I couldn't send that just now. Please text or email me directly." });
   return reply(200, { ok: true, sent: result.sent });

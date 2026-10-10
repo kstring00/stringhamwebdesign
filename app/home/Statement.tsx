@@ -61,7 +61,8 @@ export default function Statement() {
         <p className={s.sub}>
           That&rsquo;s why every page I build is designed around one action:{" "}
           <span className={s.rot} aria-hidden="true">
-            <span className={s.rotTrack}>{[...ACTIONS, ACTIONS[0]].map((a, k) => <span key={k}>{a}.</span>)}</span>
+            {/* Drawn by CSS (content: attr(data-w)), so the rolling copies stay out of the page text. */}
+            <span className={s.rotTrack}>{[...ACTIONS, ACTIONS[0]].map((a, k) => <span key={k} data-w={`${a}.`} />)}</span>
           </span>
           <span className={s.rotStatic}>{ACTIONS.slice(0, -1).join(", ")} or {ACTIONS.at(-1)}.</span>
         </p>

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 
-import { findings } from "../data/offer";
 import { gsap, prefersReducedMotion } from "../motion/gsap";
 import s from "./lifeless.module.css";
 
@@ -33,12 +32,16 @@ const after = [
  * shows the finished state; under reduced motion it switches between the
  * two states at the midpoint, without animating.
  */
-/** A word as separate letters for the kinetic type; read as one word by screen readers. */
+/**
+ * A word as separate letters for the kinetic type. The letters are the only
+ * copy of the word in the page text (so search engines read it once); the
+ * heading around it carries an aria-label, so screen readers read the whole
+ * sentence once instead of letter by letter.
+ */
 function Letters({ word, className }: { word: string; className: string }) {
   return (
-    <span className={className}>
-      <span className="sr-only">{word}</span>
-      <span aria-hidden="true">{[...word].map((c, i) => <span key={i} style={{ "--i": i } as React.CSSProperties}>{c}</span>)}</span>
+    <span className={className} aria-hidden="true">
+      <span>{[...word].map((c, i) => <span key={i} style={{ "--i": i } as React.CSSProperties}>{c}</span>)}</span>
     </span>
   );
 }
@@ -77,7 +80,7 @@ export default function Lifeless() {
     const h2 = droopRef.current;
     let droop: gsap.core.Tween | null = null;
     if (h2 && !reduced) {
-      const letters = h2.querySelectorAll<HTMLElement>(`.${s.droop} [aria-hidden] > span`);
+      const letters = h2.querySelectorAll<HTMLElement>(`.${s.droop} > span > span`);
       const em = parseFloat(getComputedStyle(h2).fontSize);
       droop = gsap.to(letters, {
         y: (i) => SLUMP[i % SLUMP.length] * em,
@@ -98,7 +101,7 @@ export default function Lifeless() {
       <div className={`container ${s.scene}`} ref={scene}>
         <div className={s.problem}>
           <p className={s.eyebrow}>The problem</p>
-          <h2 id="why-title" className={s.h2} ref={droopRef}>Most small-business websites are <Letters word="lifeless." className={s.droop} /></h2>
+          <h2 id="why-title" className={s.h2} ref={droopRef} aria-label="Most small-business websites are lifeless.">Most small-business websites are <Letters word="lifeless." className={s.droop} /></h2>
           <p className={s.lede}>They look fine and do nothing. There&rsquo;s no clear next step, the phone number is buried at the bottom, and the page says what the business is but never why to choose it. Visitors look, shrug and leave.</p>
           <p className={s.point}>A website has one job: get people over the hump, from looking to calling, booking or buying.</p>
         </div>
@@ -149,20 +152,10 @@ export default function Lifeless() {
 
         <div className={s.turn} ref={turn}>
           <p className={s.eyebrow}>How I build</p>
-          <h3 className={s.h2}><Letters word="Beautiful," className={s.bloom} /> and built around your goals.</h3>
+          <h3 className={s.h2} aria-label="Beautiful, and built around your goals."><Letters word="Beautiful," className={s.bloom} /> and built around your goals.</h3>
           <p className={s.lede}>My sites are designed to look the part, but every choice answers to what your business needs: calls, bookings, orders or requests. The design is there to move people, not to decorate.</p>
-          <a className={`u ${s.link}`} href="/websites#website-quote" data-track="cta" data-location="why">Request a website quote <span aria-hidden="true">&rarr;</span></a>
+          <a className={`u ${s.link}`} href="#prices" data-location="why">What a website costs <span aria-hidden="true">&rarr;</span></a>
         </div>
-      </div>
-
-      {/* The listing side of the story: real findings, kept short. */}
-      <div className={`container ${s.listing}`}>
-        <h3 className={s.listingTitle}>And on Google, it&rsquo;s often worse.</h3>
-        <p className={s.listingLede}>What I&rsquo;ve found on real local listings, names left out.</p>
-        <ul className={s.findings}>
-          {findings.map((f) => <li key={f}>{f}</li>)}
-        </ul>
-        <a className={`u ${s.link}`} href="#free-check" data-track="cta" data-location="why-listing">Get a free check of yours <span aria-hidden="true">&rarr;</span></a>
       </div>
     </section>
   );
