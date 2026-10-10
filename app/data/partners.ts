@@ -1,7 +1,9 @@
+import { referral } from "./referral";
+
 /**
- * Everything /partners says. Compensation is described, never priced: the
- * referral reward amount and partner pricing are not published until Kyle
- * approves written terms. Keep it that way here.
+ * Everything /partners says. The referral reward is published (see
+ * referral.ts). White-label pricing is agreed per project and stays off the
+ * page.
  */
 
 export const partnerCategories = [
@@ -23,8 +25,8 @@ export const paths = [
     points: [
       "I handle discovery, scoping, the contract and delivery.",
       "Your client works with me directly. You can stay copied in.",
-      "Eligible partners can earn a fixed referral reward on a qualifying project once it's paid in full.",
-      "If you receive a reward, your client should know. I'll mention it too.",
+      `You earn ${referral.percent} of the website's total price once your client has paid in full.`,
+      "Your client is told about the reward. It never changes their price.",
     ],
   },
   {
@@ -46,7 +48,7 @@ export const comparison = [
   { row: "Who talks to the client", a: "I do, with you copied if you like", b: "You do; I join calls only if you ask" },
   { row: "Who contracts with the client", a: "Stringham Web Design LLC", b: "You" },
   { row: "Whose name is on the work", a: "Mine, with your introduction", b: "Yours, if you prefer" },
-  { row: "How money works", a: "A fixed referral reward on a qualifying, fully paid project", b: "A project price we agree before work starts" },
+  { row: "How money works", a: `I pay you ${referral.percent} of the website total once it's paid in full`, b: "You pay me a project price we agree before work starts" },
 ] as const;
 
 export const reasons = [
@@ -59,7 +61,7 @@ export const reasons = [
 ] as const;
 
 export const partnerSteps = [
-  { n: "1", title: "Meet", body: "A short call. What you do, who your clients are, how you like to work." },
+  { n: "1", title: "Meet", body: "Reply by email or book a short call, whichever you prefer. What you do, who your clients are, how you like to work." },
   { n: "2", title: "Determine fit", body: "If we're not a good match, I'll say so. No hard feelings." },
   { n: "3", title: "Agree on how we work", body: "Referral or white-label, who does what, and how money works, in writing." },
   { n: "4", title: "Introduce a project", body: "You send an introduction, or brief me on your client's project." },
@@ -80,9 +82,9 @@ export const partnerQuestions = [
   { q: "Can an agency use Stringham behind the scenes?", a: "Yes. The work can go out under your name, I won't contact your client or show the project without your permission, and I'll sign a confidentiality agreement if you need one." },
   {
     q: "How is compensation handled?",
-    a: "For referrals: a fixed reward for a qualifying project, paid after the client has paid in full. The exact terms go in a short written agreement before your first referral. For white-label: you pay me a project price we agree before work starts. Any referral reward should be disclosed to the client.",
+    a: `For referrals: ${referral.percent} of the website's total price, paid once the client has paid for the website in full. On a ${referral.example.price} website, that's ${referral.example.reward}. Monthly Plan fees don't count toward it, and the client is told about the reward. For white-label: you pay me a project price we agree before work starts.`,
   },
-  { q: "Do I have to pay anything to participate?", a: "No. There's no fee to become a partner." },
+  { q: "Do I have to pay anything to participate?", a: "No. There's no fee to become a partner, and you don't need to be one to refer a business." },
   {
     q: "Who owns the completed website?",
     a: "On a referral, the client owns the site, its content, the domain and their accounts once it's paid in full. On white-label work, ownership follows your agreement with your client, and I hand everything over to whoever it belongs to.",

@@ -1,0 +1,232 @@
+/* /websites. Shared type, sections, price cards, steps and the form come
+   from home.module.css; this file holds only what the page adds. */
+
+/* ---------- hero ---------- */
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+
+.heroText {
+  display: grid;
+  gap: 1.3rem;
+}
+
+.eyebrow {
+  color: var(--green-deep);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* The price and the promises, in a card beside the headline. */
+.offer {
+  display: grid;
+  gap: 0.35rem;
+  padding: clamp(1.4rem, 3vw, 2rem);
+  border: 1px solid var(--green);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 0 0 1px var(--green), 0 30px 60px -44px rgba(22, 26, 23, 0.55);
+}
+
+.offerTag {
+  color: var(--green-deep);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.offerPrice {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 4.25rem);
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.offerSub {
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+
+.points {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0.9rem 0 0;
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+
+.points li {
+  position: relative;
+  padding-left: 1.4rem;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 0.65rem;
+  height: 0.32rem;
+  border-left: 2px solid var(--green);
+  border-bottom: 2px solid var(--green);
+  transform: rotate(-45deg);
+}
+
+/* ---------- work ---------- */
+
+.work {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3.5vw, 3rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.card h3 {
+  color: var(--ink);
+  font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+  letter-spacing: -0.02em;
+}
+
+.cardShot {
+  margin-bottom: 0.4rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 24px 50px -38px rgba(22, 26, 23, 0.45);
+}
+
+.cardShot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top;
+}
+
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.6rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.pill {
+  padding: 0.22rem 0.65rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--paper-deep);
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.pillLive { border-color: var(--green); background: var(--green); color: var(--paper); }
+
+.visit {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--green-deep);
+  font-weight: 600;
+}
+
+.more {
+  margin-top: clamp(1.25rem, 3vw, 2rem);
+  color: var(--ink-soft);
+}
+
+/* ---------- prices ---------- */
+
+.plans {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  max-width: 56rem;
+}
+
+.noAds {
+  max-width: 44rem;
+  margin-top: 1.25rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.noAds b { color: var(--ink); }
+
+/* ---------- referral band ---------- */
+
+.referral {
+  padding: clamp(2rem, 5vw, 3.25rem) 0;
+  border-top: 1px solid var(--line);
+  background: var(--green-soft);
+}
+
+.referralInner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1rem clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+}
+
+.referralRate {
+  color: var(--green-deep);
+  font-family: var(--font-display);
+  font-size: clamp(3.25rem, 7vw, 5rem);
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+}
+
+.referralTitle {
+  font-size: clamp(1.35rem, 2.3vw, 1.8rem);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+.referralBody {
+  max-width: 38rem;
+  margin-top: 0.4rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 64rem) {
+  .heroGrid { grid-template-columns: 1fr; }
+  .offer { max-width: 30rem; }
+  .plans { grid-template-columns: 1fr; }
+  .referralInner { grid-template-columns: auto minmax(0, 1fr); }
+  .referralInner > a { grid-column: 1 / -1; justify-self: start; }
+}
+
+@media (max-width: 40rem) {
+  .work { grid-template-columns: 1fr; }
+  .referralInner { grid-template-columns: 1fr; }
+  .referralInner > a { width: 100%; }
+}

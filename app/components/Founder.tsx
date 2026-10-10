@@ -1,28 +1,19 @@
-"use client";
-
-import { useState } from "react";
-
 import { site } from "../data/site";
 import styles from "./Founder.module.css";
 
 /**
  * Who Kyle is, plainly. Every line here is something Kyle has stated
- * himself; nothing is added. The portrait slot shows his initials until he
- * supplies an approved photo (never a generated one).
+ * himself; nothing is added. The portrait is Kyle's own photo
+ * (public/kyle-founder.webp, with a JPEG fallback), cropped to 4:5.
  */
 export default function Founder({ headingId = "founder-title", label = "Who you'd work with" }: { headingId?: string; label?: string }) {
-  const [photoFailed, setPhotoFailed] = useState(false);
   return (
     <div className={styles.founder}>
       <div className={styles.portrait}>
-        {!photoFailed ? (
-          // The portrait file must be placed in public/kyle-founder.jpg before publishing.
-          // Keep an accessible initials fallback until it has been uploaded.
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src="/kyle-founder.jpg" alt="Kyle Stringham, founder of Stringham Web Design" onError={() => setPhotoFailed(true)} />
-        ) : (
-          <span aria-label="Kyle Stringham">KS</span>
-        )}
+        <picture>
+          <source type="image/webp" srcSet="/kyle-founder.webp" />
+          <img src="/kyle-founder.jpg" alt="Kyle Stringham" width={496} height={618} loading="lazy" decoding="async" />
+        </picture>
       </div>
       <div className={styles.text}>
         <p className={styles.label}>{label}</p>

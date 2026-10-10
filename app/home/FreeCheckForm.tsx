@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 
 import { businessTypes } from "../data/offer";
 import { site } from "../data/site";
 import { track } from "../lib/track";
+import { SOURCE_KEYS, useSourceFields } from "../lib/useSourceFields";
 import styles from "./form.module.css";
 
 /** Messages for a native (no-JS) post that bounced back with ?error=… */
@@ -13,8 +14,6 @@ const NATIVE_ERRORS: Record<string, string> = {
   busy: "Too many requests in a row. Please wait a few minutes.",
   send: "I couldn't send that just now.",
 };
-
-const SOURCE_KEYS = ["utm_source", "utm_medium", "utm_campaign"] as const;
 
 /**
  * The free check form. Posts JSON with JavaScript, or natively to the same
@@ -27,25 +26,8 @@ export default function FreeCheckForm({ sent = false, errorCode = "" }: { sent?:
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">(sent ? "sent" : nativeError ? "error" : "idle");
   const [error, setError] = useState(nativeError);
   const [who, setWho] = useState<{ name: string; business: string }>({ name: "", business: "" });
-  const source = useRef<Record<string, string>>({});
 
-  // Remember the source for the whole visit, so a visitor who lands with
-  // utm tags and reads for a while still gets attributed.
-  useEffect(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const saved = JSON.parse(sessionStorage.getItem("swd-source") || "{}") as Record<string, string>;
-      const next: Record<string, string> = { ...saved };
-      for (const k of SOURCE_KEYS) { const v = params.get(k); if (v) next[k] = v.slice(0, 120); }
-      if (!next.referrer && document.referrer && !document.referrer.startsWith(window.location.origin)) next.referrer = document.referrer.slice(0, 300);
-      sessionStorage.setItem("swd-source", JSON.stringify(next));
-      source.current = next;
-      const form = document.getElementById("free-check-form") as HTMLFormElement | null;
-      if (form) for (const [k, v] of Object.entries(next)) { const input = form.elements.namedItem(k) as HTMLInputElement | null; if (input) input.value = v; }
-    } catch {
-      // Storage can be unavailable; the form still works without a source.
-    }
-  }, []);
+  useSourceFields("free-check-form");
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();

@@ -90,6 +90,13 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
   ok('home says what, for whom, where above the fold', /A better website for the business you/.test(home.text) && /Google listing/i.test(home.text) && /\$1,800/.test(home.text) && /League City, Texas/i.test(home.text));
   ok('home has the one CTA', (home.text.match(/Request a website quote/g) || []).length >= 1);
 
+  // The referral reward is published in the same words everywhere it appears.
+  const partners = seen.get('/partners');
+  const websites = seen.get('/websites');
+  ok('/partners publishes the referral terms', partners && /Referral terms: 20% of the website total/.test(partners.text) && /paid in full/.test(partners.text));
+  ok('/websites mentions the referral reward', websites && /20%/.test(websites.text));
+  ok('no leftover "not published" referral wording', ![home, partners, websites].some((d) => d && /not published here yet|fixed referral reward/i.test(d.text)));
+
   for (const [href, uses] of externals) {
     ok(`external ${href}: opens safely`, uses.every((u) => u.target !== '_blank' || /noopener/.test(u.rel)), JSON.stringify(uses.filter((u) => u.target === '_blank' && !/noopener/.test(u.rel)).map((u) => u.page)));
   }

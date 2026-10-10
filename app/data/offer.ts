@@ -48,7 +48,7 @@ export const plans = [
     ],
     notIncluded: "paid ads, writing reviews, changes a directory refuses to make.",
     notes: ["You add me as a manager; you stay the owner. Never your password.", "Full refund if you ask before work starts."],
-    terms: "#1-listing-fix-300-one-time",
+    terms: "#listing-fix",
   },
   {
     key: "site",
@@ -64,7 +64,7 @@ export const plans = [
     ],
     notIncluded: "photography, paid ads, pages not in your quote.",
     notes: ["You approve the finished site before paying the balance.", "Once it's paid, you own it. Domain and accounts stay in your name."],
-    terms: "#2-website-projects-start-at-1800",
+    terms: "#website",
   },
   {
     key: "plan",
@@ -80,7 +80,7 @@ export const plans = [
     ],
     notIncluded: "new pages, redesigns, photography, paid ads.",
     notes: ["Month to month. Cancel anytime by email."],
-    terms: "#3-monthly-plan-125month",
+    terms: "#monthly-plan",
   },
 ] as const;
 
@@ -102,7 +102,7 @@ export const questions = [
   {
     q: "Will this get me more customers? Is it guaranteed?",
     a: "I can't promise that, and nobody honest can: Google controls rankings. What I do promise is every fix done within 7 days with before-and-after screenshots, and on the plan, a monthly report of calls and requests.",
-    link: { label: "What I can't promise (Terms, section 6)", href: "/terms#6-what-we-cant-promise" },
+    link: { label: "What I can't promise (Terms, section 6)", href: "/terms#what-we-cant-promise" },
   },
   {
     q: "I already use SpareFoot, Facebook or a booking app.",
@@ -119,7 +119,7 @@ export const questions = [
   {
     q: "Can I cancel? What if I change my mind?",
     a: "The Listing Fix is fully refundable if you ask before work starts. The Monthly Plan is month to month; cancel anytime by email.",
-    link: { label: "Refunds (Terms, section 5)", href: "/terms#5-refunds" },
+    link: { label: "Refunds (Terms, section 5)", href: "/terms#refunds" },
   },
   {
     q: "What happens after I send the form?",

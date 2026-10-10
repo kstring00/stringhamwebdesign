@@ -1,7 +1,7 @@
 # Service Terms
 
 **Stringham Web Design LLC** · Texas · kyle@stringhamwebdesign.com
-Effective October 8, 2026
+Effective October 9, 2026
 
 These terms apply when you buy a Listing Fix, a website, or a Monthly Plan from Stringham Web Design LLC ("we," "us"). By paying, you ("you," the business owner) agree to them. If anything here is unclear, email us before you pay.
 
@@ -27,6 +27,7 @@ These terms apply when you buy a Listing Fix, a website, or a Monthly Plan from 
 - **Payment:** any eligible Listing Fix credit is applied first. Any start payment or deposit must be stated in the written quote. The remaining balance is due when you approve the finished site, before it goes live on your domain.
 - **Ownership:** once the website is paid in full, you own it and its content. Your domain and accounts stay in your name.
 - We may show your website in our portfolio unless you ask us not to.
+- **Referrals:** if someone referred you to us, we pay them 20% of your website's total price once it's paid in full. We pay it ourselves; it never changes your price.
 
 ## 3. Monthly Plan ($125/month)
 
