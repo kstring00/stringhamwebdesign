@@ -34,7 +34,7 @@ Write down the time and what they said or did at each moment.
 | Hesitations | Any pause longer than about 3 seconds, a frown, or "hmm". Note where on the page it happened. |
 | Back and forth | Scrolling up again usually means something didn't answer a question. Note what they went back to. |
 | The work | Do they look at Common Ground? Do they tap "Visit the live site"? |
-| The price | Do they find the $300 Listing Fix? Do they read "you stay the owner, never your password"? |
+| The price | Do they find the $150 Listing Fix? Do they read "you stay the owner, never your password"? |
 | Trust | Anything they say about the photo, the phone number, League City, or "is this a real person?" |
 | The form | Do they start it? Which field do they stop at? Do they say what they expect to happen after sending? |
 | Giving up | If they'd leave, where and why, in their words. |

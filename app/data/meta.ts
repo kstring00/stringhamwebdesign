@@ -13,7 +13,7 @@ import { site } from "./site";
 // shared one unless a niche page passes its own).
 const DEFAULT_IMAGE = {
   url: "/opengraph-image.png",
-  alt: "Stringham Web Design logo. Websites and Google listings that bring League City businesses more calls. Free Google check, websites from $1,800, no ad spend required.",
+  alt: "Stringham Web Design logo. Websites and Google listings that bring League City businesses more calls. Free Google check, websites from $2,000, no ad spend required.",
 };
 
 export function pageMeta({ title, absolute, description, path, image, imageAlt }: { title?: string; absolute?: string; description: string; path: string; image?: string; imageAlt?: string }): Metadata {

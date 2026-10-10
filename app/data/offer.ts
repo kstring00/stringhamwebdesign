@@ -3,7 +3,7 @@
  * must match content/service-terms.md; change them together.
  */
 
-export const PRICES = { listingFix: 300, website: 1800, monthly: 125 } as const;
+export const PRICES = { listingFix: 150, website: 2000, monthly: 125 } as const;
 
 /** The verified, anonymized findings from Kyle's own free checks. */
 export const findings = [

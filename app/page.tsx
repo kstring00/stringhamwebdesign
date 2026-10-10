@@ -18,7 +18,7 @@ import styles from "./home/home.module.css";
 
 export const metadata: Metadata = pageMeta({
   absolute: "Websites & Google Listings in League City, TX | Stringham Web Design",
-  description: "A free Google listing check, a $300 Listing Fix and custom websites from $1,800 for owner-run businesses in League City, Webster, Friendswood and Greater Houston. No ad spend required.",
+  description: "A free Google listing check, a $150 Listing Fix and custom websites from $2,000 for owner-run businesses in League City, Webster, Friendswood and Greater Houston. No ad spend required.",
   path: "/",
 });
 

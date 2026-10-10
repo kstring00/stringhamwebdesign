@@ -1,11 +1,11 @@
 # Service Terms
 
 **Stringham Web Design LLC** · Texas · kyle@stringhamwebdesign.com
-Effective October 9, 2026
+Effective October 10, 2026
 
 These terms apply when you buy a Listing Fix, a website, or a Monthly Plan from Stringham Web Design LLC ("we," "us"). By paying, you ("you," the business owner) agree to them. If anything here is unclear, email us before you pay.
 
-## 1. Listing Fix ($300, one-time)
+## 1. Listing Fix ($150, one-time)
 
 **What we do**
 - Review and correct your Google Business Profile: business name, categories, hours, phone, website link, description, services or products, and the photos you provide.
@@ -15,15 +15,15 @@ These terms apply when you buy a Listing Fix, a website, or a Monthly Plan from 
 
 **Timeline:** finished within 7 days of receiving manager access to your Google listing and the information we need from you.
 
-**Credit toward a website:** if you buy a website from us within 60 days, the full $300 counts toward the website price.
+**Credit toward a website:** if you buy a website from us within 60 days, the full $150 counts toward the website price.
 
 **Not included:** paid ads, writing or posting reviews, creating new profiles for locations that don't exist, or changes a directory refuses to make. When a directory refuses or ignores a change request, we'll tell you what happened.
 
-## 2. Website (projects start at $1,800; final price in your written quote)
+## 2. Website (projects start at $2,000; final price in your written quote)
 
 - The pages, features and timeline are listed in your written quote.
 - Includes design, building, a contact or request form, launch on your domain, basic search setup, and two rounds of changes.
-- **Pricing:** new website projects start at $1,800. Your written quote specifies the full price and scope before any payment. Previously accepted written quotes retain their agreed pricing and terms.
+- **Pricing:** new website projects start at $2,000. Your written quote specifies the full price and scope before any payment. Previously accepted written quotes retain their agreed pricing and terms.
 - **Payment:** any eligible Listing Fix credit is applied first. Any start payment or deposit must be stated in the written quote. The remaining balance is due when you approve the finished site, before it goes live on your domain.
 - **Ownership:** once the website is paid in full, you own it and its content. Your domain and accounts stay in your name.
 - We may show your website in our portfolio unless you ask us not to.

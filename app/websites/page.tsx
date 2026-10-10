@@ -14,7 +14,7 @@ import WebsiteQuoteForm from "./WebsiteQuoteForm";
 
 export const metadata: Metadata = pageMeta({
   absolute: "Web Design in League City, TX | Stringham Web Design",
-  description: "Custom websites for owner-run businesses in League City, Webster, Clear Lake and Greater Houston. From $1,800 with a fixed written quote, no ad spend required, and you own the site.",
+  description: "Custom websites for owner-run businesses in League City, Webster, Clear Lake and Greater Houston. From $2,000 with a fixed written quote, no ad spend required, and you own the site.",
   path: "/websites",
 });
 
