@@ -34,8 +34,7 @@ const kindClass: Record<WorkKind, string> = {
   live: styles.kindLive,
   "in-progress": styles.kindProgress,
   concept: styles.kindConcept,
-  archived: styles.kindArchived,
-};
+  archived: styles.kindArchived, demo: styles.kindDemo ?? "" };
 
 /** The labels in use on this build, explained above the list when there's more than one. */
 const legendKinds = (Object.keys(kindLabel) as WorkKind[]).filter((k) => partnerWork.some((w) => w.kind === k));
@@ -263,7 +262,7 @@ export default async function PartnersPage({ searchParams }: { searchParams: Pro
           <div className={styles.formSide}>
             <h2 id="pf-title" className={styles.h2}>Explore a partnership</h2>
             <p className={styles.lede}><b>What happens next:</b> I&rsquo;ll reply within two business days to set up a short call. No cost and no commitment.</p>
-            <p className={styles.body}>Need a website for your own business? <a className="u" href="/websites#website-quote">Request a website quote</a> instead.</p>
+            <p className={styles.body}>Need a website for your own business? <a className="u" href="/#quote">Get a quote + free demo</a> instead.</p>
           </div>
           <PartnerForm sent={sent === "1"} errorCode={typeof error === "string" ? error : ""} />
         </div>

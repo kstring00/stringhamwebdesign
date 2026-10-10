@@ -3,7 +3,7 @@
 **Stringham Web Design LLC** · Texas · kyle@stringhamwebdesign.com
 Effective October 10, 2026
 
-These terms apply when you buy a Listing Fix, a website, or a Monthly Plan from Stringham Web Design LLC ("we," "us"). By paying, you ("you," the business owner) agree to them. If anything here is unclear, email us before you pay.
+These terms apply when you buy a Listing Fix, a website, or Website Care from Stringham Web Design LLC ("we," "us"). By paying, you ("you," the business owner) agree to them. If anything here is unclear, email us before you pay.
 
 ## 1. Listing Fix ($150, one-time)
 
@@ -22,6 +22,7 @@ These terms apply when you buy a Listing Fix, a website, or a Monthly Plan from 
 ## 2. Website (projects start at $2,000; final price in your written quote)
 
 - The pages, features and timeline are listed in your written quote.
+- **Free demo:** every website quote comes with a demo of your homepage, designed for your business at no charge, so you can see it before you pay anything. The demo is ours until a quote is accepted; it isn't a finished site and isn't published.
 - Includes design, building, a contact or request form, launch on your domain, basic search setup, and two rounds of changes.
 - **Pricing:** new website projects start at $2,000. Your written quote specifies the full price and scope before any payment. Previously accepted written quotes retain their agreed pricing and terms.
 - **Payment:** any eligible Listing Fix credit is applied first. Any start payment or deposit must be stated in the written quote. The remaining balance is due when you approve the finished site, before it goes live on your domain.
@@ -29,19 +30,22 @@ These terms apply when you buy a Listing Fix, a website, or a Monthly Plan from 
 - We may show your website in our portfolio unless you ask us not to.
 - **Referrals:** if someone referred you to us, we pay them 20% of your website's total price once it's paid in full. We pay it ourselves; it never changes your price.
 
-## 3. Monthly Plan ($125/month)
+## 3. Website Care ($125/month)
 
 **Included each month**
+- Website hosting and upkeep: kept fast, secure and online.
+- Your domain: we handle renewals and keep it registered in your name.
+- Up to 30 minutes of content edits (prices, hours, photos, text).
 - Keeping your Google listing and directories accurate.
 - Replying to new Google reviews within 3 business days, in a tone you approve.
 - Up to 4 Google posts.
-- Website hosting and upkeep, if we built or host your site.
-- Up to 30 minutes of content edits (prices, hours, photos, text).
-- A one-page monthly report.
+- A one-page monthly report of calls and requests.
 
 **Not included:** new pages, redesigns, photography or paid ads. We'll quote any of these separately before doing the work.
 
 **Month to month:** cancel anytime by email. Cancellation takes effect at the end of the current paid month. Payments for months already started aren't refunded.
+
+**If you leave:** your domain stays yours, and we hand over your site files and any accounts we manage for you within 14 days of your last paid month.
 
 ## 4. Your part
 
@@ -53,7 +57,7 @@ These terms apply when you buy a Listing Fix, a website, or a Monthly Plan from 
 
 - **Listing Fix:** full refund if you ask before we start work. Once work has started, it's non-refundable.
 - **Website:** payments are non-refundable once design work has started. If we can't deliver what your quote describes, we'll make it right or refund what you paid for the unfinished work.
-- **Monthly Plan:** see section 3.
+- **Website Care:** see section 3.
 
 ## 6. What we can't promise
 

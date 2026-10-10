@@ -40,7 +40,7 @@ export default function FreeCheckForm({ sent = false, errorCode = "" }: { sent?:
       if (!res.ok || !json.ok) throw new Error(json.error || "That didn't go through.");
       setWho({ name: data.name.trim(), business: data.business.trim() });
       setState("sent");
-      track("free_check_submit", { business_type: data.type || "unspecified", source: data.utm_source || (data.referrer ? "referral" : "direct") });
+      track("google_check_submit", { business_type: data.type || "unspecified", source: data.utm_source || (data.referrer ? "referral" : "direct") });
     } catch (err) {
       setState("error");
       setError(err instanceof Error ? err.message : "That didn't go through.");

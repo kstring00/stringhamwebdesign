@@ -428,6 +428,7 @@
 }
 
 .kindLive { background: var(--brand); border-color: var(--brand); color: var(--paper); }
+.kindDemo { background: var(--brand-soft); border-color: var(--brand-soft); color: var(--brand-deep); }
 .kindLive::before { background: currentColor; }
 .kindProgress { background: #fff; border-color: var(--brand); color: var(--brand-deep); }
 .kindProgress::before { background: linear-gradient(90deg, currentColor 50%, transparent 50%); }

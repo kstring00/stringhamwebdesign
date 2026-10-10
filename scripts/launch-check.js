@@ -51,9 +51,9 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
         robots: meta('robots'), h1s: qa('h1').map((h) => h.textContent.replace(/\s+/g, ' ').trim()),
         imgsNoAlt: qa('img').filter((i) => !i.hasAttribute('alt')).map((i) => i.getAttribute('src')),
         skip: Boolean(q('a.skip[href="#main"]')), landmarks: { main: Boolean(q('main#main')), header: Boolean(q('header')), footer: Boolean(q('footer')), nav: Boolean(q('nav[aria-label]')) },
-        phone: qa('a[href^="tel:"]').length, cta: qa('a[href="/websites#website-quote"], a[href="/#free-check"]').length, privacy: Boolean(q('footer a[href="/privacy"]')),
+        phone: qa('a[href^="tel:"]').length, cta: qa('a[href="/#quote"], a[href="#quote"], a[href="/partners#partner-form"], a[href="#partner-form"], a[href="#free-check"]').length, privacy: Boolean(q('footer a[href="/privacy"]')),
         year: [...qa('footer')].pop()?.textContent.match(/©\s*(\d{4})/)?.[1] || '', jsonld: qa('script[type="application/ld+json"]').map((s) => s.textContent).join(' '),
-        text: document.body.innerText, headerNav: qa('header nav[aria-label="Primary"] a').map((a) => a.textContent.trim()), headerActive: (q('header nav[aria-label="Primary"] a[data-active]') || {}).textContent?.trim() || '', headerCta: (q('header a[data-location="header"]')?.getAttribute('aria-label') || q('header a[data-location="header"]')?.textContent?.trim() || ''),
+        text: document.body.innerText, headerNav: qa('header nav[aria-label="Primary"] a').map((a) => a.textContent.trim()), mobileBar: qa('nav[aria-label="Quick actions"] a').map((a) => a.getAttribute('href') || ''), headerCta: (q('header a[data-location="header"]')?.getAttribute('aria-label') || q('header a[data-location="header"]')?.textContent?.trim() || ''),
         links: qa('a[href]').map((a) => ({ href: a.getAttribute('href'), target: a.getAttribute('target'), rel: a.getAttribute('rel') || '' })),
       };
     });
@@ -84,19 +84,19 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     if (path === '/about') ok(`${path}: Person JSON-LD`, /"@type":"Person"/.test(d.jsonld));
     ok(`${path}: no banned words in rendered text`, !BANNED.test(d.text), (d.text.match(BANNED) || [''])[0]);
     const partnerView = path === '/partners';
-    ok(`${path}: header is the logo, the view switch and one button`, JSON.stringify(d.headerNav) === JSON.stringify(['For businesses', 'For partners']) && d.headerActive === (partnerView ? 'For partners' : 'For businesses') && d.headerCta === (partnerView ? 'Explore a partnership' : path.startsWith('/websites') ? 'Request a website quote' : 'Get a free Google check'), JSON.stringify({ nav: d.headerNav, active: d.headerActive, cta: d.headerCta }));
+    ok(`${path}: header is the logo, four links, the phone and one button`, JSON.stringify(d.headerNav) === JSON.stringify(['Work', 'Pricing', 'About', 'FAQ']) && d.headerCta === (partnerView ? 'Explore a partnership' : 'Get a quote + free demo'), JSON.stringify({ nav: d.headerNav, cta: d.headerCta }));
+    ok(`${path}: the mobile bar has call, text and the one action`, d.mobileBar.length === 3 && d.mobileBar[0].startsWith('tel:') && d.mobileBar[1].startsWith('sms:') && (partnerView ? d.mobileBar[2] === '/partners#partner-form' : d.mobileBar[2] === '/#quote'), JSON.stringify(d.mobileBar));
   }
 
   const home = seen.get('/');
-  ok('home says what, for whom, where above the fold', /Websites and Google listings that bring League City businesses more calls/.test(home.text) && /owner-run businesses/i.test(home.text) && /Get a free Google check/.test(home.text));
-  ok('home has the one CTA', (home.text.match(/Get a free Google check/g) || []).length >= 1);
+  ok('home says what, for whom, where above the fold', /Websites that get\s+League City businesses\s+more calls\./.test(home.text) && /owner-run businesses/i.test(home.text) && /Custom websites · League City, Texas/i.test(home.text));
+  ok('home has the one CTA', (home.text.match(/Get a quote \+ free demo/g) || []).length >= 1);
 
   // The referral reward is published in the same words everywhere it appears.
   const partners = seen.get('/partners');
-  const websites = seen.get('/websites');
   ok('/partners publishes the referral terms', partners && /Referral terms: 20% of the website total/.test(partners.text) && /paid in full/.test(partners.text));
-  ok('/websites mentions the referral reward', websites && /20%/.test(websites.text));
-  ok('no leftover "not published" referral wording', ![home, partners, websites].some((d) => d && /not published here yet|fixed referral reward/i.test(d.text)));
+  ok('home mentions the referral reward', /20%/.test(home.text));
+  ok('no leftover "not published" referral wording', ![home, partners, seen.get('/work'), seen.get('/google-check')].some((d) => d && /not published here yet|fixed referral reward/i.test(d.text)));
 
   for (const [href, uses] of externals) {
     ok(`external ${href}: opens safely`, uses.every((u) => u.target !== '_blank' || /noopener/.test(u.rel)), JSON.stringify(uses.filter((u) => u.target === '_blank' && !/noopener/.test(u.rel)).map((u) => u.page)));
@@ -105,7 +105,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
   // ---- redirects, 404, robots, sitemap, assets ----
   {
     const c = await b.newContext(); const p = await c.newPage();
-    for (const [from, to] of [['/portal', '/'], ['/portal/dashboard', '/'], ['/portal/projects/x', '/'], ['/admin', '/'], ['/admin/x', '/'], ['/login', '/'], ['/quote', '/#free-check'], ['/resources', '/'], ['/pricing', '/#prices'], ['/work', '/'], ['/work/x', '/'], ['/portfolio', '/'], ['/services', '/#prices'], ['/services/anything', '/#prices'], ['/about', '/#about'], ['/contact', '/#free-check'], ['/coffee-shops', '/'], ['/autism-clinics', '/family-resource-hub'], ['/faq', '/#questions']]) {
+    for (const [from, to] of [['/portal', '/'], ['/portal/dashboard', '/'], ['/portal/projects/x', '/'], ['/admin', '/'], ['/admin/x', '/'], ['/login', '/'], ['/quote', '/#quote'], ['/resources', '/'], ['/pricing', '/#pricing'], ['/websites', '/work'], ['/websites/x', '/work'], ['/portfolio', '/work'], ['/services', '/#pricing'], ['/services/anything', '/#pricing'], ['/about', '/#about'], ['/contact', '/#quote'], ['/free-check', '/google-check'], ['/work/x', '/work'], ['/coffee-shops', '/'], ['/autism-clinics', '/family-resource-hub'], ['/faq', '/#faq']]) {
       const r = await p.request.get(BASE + from, { maxRedirects: 0 });
       const loc = r.headers()['location'] || '';
       ok(`${from} → ${to} (permanent)`, (r.status() === 308 || r.status() === 301) && loc.replace(BASE, '').replace(/^https?:\/\/[^/]+/, '') === to, `${r.status()} ${loc}`);
@@ -119,7 +119,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     const locs = [...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
     const missing = [...seen.keys()].filter((k) => !locs.includes(k)); const extra = locs.filter((l) => !seen.has(l));
     ok('sitemap.xml lists every crawled page and nothing else (the hub is listed but deliberately unlinked)', missing.length === 0 && extra.every((l) => l === '/family-resource-hub'), `missing ${missing.join(' ')} extra ${extra.join(' ')}`);
-    ok('sitemap.xml carries no portal, pricing, resources or work routes', locs.every((l) => !/portal|pricing|resources|quote|\/work|portfolio|coffee-shops|autism-clinics|\/services|\/about|\/contact/.test(l)));
+    ok('sitemap.xml carries no portal, pricing, resources or retired routes', locs.every((l) => !/portal|pricing|resources|quote|\/websites|portfolio|coffee-shops|autism-clinics|\/services|\/about|\/contact/.test(l)));
     for (const u of ['/icon.png', '/apple-icon.png', '/opengraph-image.png']) { const r = await p.request.get(BASE + u); ok(`${u} served`, r.status() === 200 && (r.headers()['content-type'] || '').startsWith('image/')); }
     await c.close();
   }

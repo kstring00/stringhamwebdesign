@@ -12,14 +12,14 @@ export const dynamic = "force-dynamic";
  * silently.
  *
  * The form script posts JSON and gets JSON back. Without JavaScript the
- * browser posts natively; that gets a 303 back to /?sent=1#free-check or
- * /?error=…#free-check, so nothing the visitor typed ends up in a URL.
+ * browser posts natively; that gets a 303 back to /google-check?sent=1#free-check
+ * or /google-check?error=…#free-check, so nothing the visitor typed ends up in a URL.
  */
 export async function POST(request: NextRequest) {
   const native = !(request.headers.get("content-type") || "").includes("application/json");
   const reply = (status: number, payload: { ok?: true; sent?: boolean; error?: string }) => {
     if (!native) return NextResponse.json(payload, { status });
-    const to = new URL("/", request.url);
+    const to = new URL("/google-check", request.url);
     if (payload.ok) to.searchParams.set("sent", "1");
     else to.searchParams.set("error", status === 429 ? "busy" : status === 502 ? "send" : "fields");
     to.hash = "free-check";
@@ -43,7 +43,6 @@ export async function POST(request: NextRequest) {
   const town = clean(body.town, 80);
   const phone = clean(body.phone, 30);
   const email = clean(body.email, 180);
-  const type = clean(body.type, 40);
   const notes = clean(body.notes, 1000);
   const heard = clean(body.heard, 160);
   const source = {
@@ -66,7 +65,6 @@ export async function POST(request: NextRequest) {
     `Town: ${town}`,
     `Phone: ${phone}`,
     `Email: ${email || "(not given)"}`,
-    `Type: ${type || "(not given)"}`,
     `Heard about me: ${heard || "(not given)"}`,
     ``,
     `What's going on:`,

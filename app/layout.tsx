@@ -5,6 +5,8 @@ import "./globals.css";
 import ClarityAnalytics from "./ClarityAnalytics";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import MobileBar from "./components/MobileBar";
+import Magnetic from "./motion/Magnetic";
 import Reveal from "./motion/Reveal";
 import Tracking from "./motion/Tracking";
 import { site } from "./data/site";
@@ -30,8 +32,8 @@ const interTight = Inter_Tight({
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: `Custom websites for independent businesses | ${site.name}`, template: `%s | ${site.name}` },
-  description: "Custom websites for independent businesses starting at $2,000, with fixed written quotes and no required Google Ads spending. League City, Texas.",
+  title: { default: `Web Design in League City, TX | ${site.name}`, template: `%s | ${site.name}` },
+  description: "Custom websites for owner-run businesses in League City, Texas, from $2,000 with a fixed written quote and a free demo of your homepage. No ad spend, no contract.",
   applicationName: site.name,
   authors: [{ name: site.person, url: site.url }],
   creator: site.person,
@@ -48,7 +50,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main id="main" tabIndex={-1}>{children}</main>
         <Footer />
+        <MobileBar />
         <Reveal />
+        <Magnetic />
         <Tracking />
         <ClarityAnalytics />
       </body>

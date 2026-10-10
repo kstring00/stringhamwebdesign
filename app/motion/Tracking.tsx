@@ -7,10 +7,11 @@ import { track } from "../lib/track";
 
 /**
  * Sends the site's custom events to Clarity: cta_click (with the button's
- * data-location), email_click on any mailto link, call_tap on any tel: link,
- * text_tap on any sms: link, work_sample_click on a project link (its
- * data-location names the project), and terms_view when the terms page
- * opens. The forms send their own *_submit events.
+ * data-location), demo_link_click on a project's demo link (data-project
+ * names it), call_tap on any tel: link, text_tap on any sms: link,
+ * email_click on any mailto link, and terms_view when the terms page opens.
+ * The forms send quote_submit, google_check_submit and partner_submit; the
+ * work carousel sends carousel_interaction.
  */
 export default function Tracking() {
   const pathname = usePathname();
@@ -26,7 +27,7 @@ export default function Tracking() {
       const href = a.getAttribute("href") || "";
       const page = window.location.pathname;
       if (a.dataset.track === "cta") track("cta_click", { cta_location: a.dataset.location || "unknown", page });
-      else if (a.dataset.track === "work_sample_click") track("work_sample_click", { project: a.dataset.location || "unknown", page });
+      else if (a.dataset.track === "demo") track("demo_link_click", { project: a.dataset.project || "unknown", page });
       else if (a.dataset.track === "email" || href.startsWith("mailto:")) track("email_click", { page });
       else if (href.startsWith("tel:")) track("call_tap", { page });
       else if (href.startsWith("sms:")) track("text_tap", { page });

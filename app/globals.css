@@ -7,9 +7,9 @@
    whole system; component files only arrange it. */
 
 :root {
-  --paper: #f6f8fb;
-  --paper-deep: #edf1f7;
-  --ink: #0b1d39;
+  --paper: #f4f6fa;
+  --paper-deep: #e9eef6;
+  --ink: #0b1b3d;
   --ink-soft: #34425a;
   --muted: #5b6880;
   /* The brand, from the logo. --brand is 5.7:1 on white; --brand-deep is
@@ -27,8 +27,8 @@
   --violet: #5a46f0;
   --violet-deep: #4331c9;
   --violet-soft: #ecebfe;
-  --line: rgba(10, 30, 60, 0.13);
-  --line-strong: rgba(10, 30, 60, 0.3);
+  --line: #dce3ee;
+  --line-strong: rgba(11, 27, 61, 0.3);
 
   /* On the navy ground */
   --paper-on-ink: #f6f8fb;
@@ -41,8 +41,9 @@
   --ember-on-ink: #9cc8ff;
 
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
-  --max: 90rem;
-  --section: clamp(3rem, 6vw, 5rem);
+  --max: 75rem;
+  /* One section rhythm, everywhere. */
+  --section: clamp(4.5rem, 8vw, 7rem);
 
   --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
   --font-display-italic: var(--font-fraunces-italic), var(--font-fraunces), "Iowan Old Style", Georgia, serif;
@@ -73,6 +74,8 @@ html {
 
 body {
   margin: 0;
+  /* Room for the phone's bottom action bar. */
+  padding-bottom: 0;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-text);
@@ -138,7 +141,7 @@ h3,
 h4 {
   margin: 0;
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 0.98;
   text-wrap: balance;
@@ -413,4 +416,9 @@ p {
 ::view-transition-group(site-cta) {
   animation-duration: 450ms;
   animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Phones and tablets: room under the page for the bottom action bar. */
+@media (max-width: 56rem) {
+  body { padding-bottom: calc(4.75rem + env(safe-area-inset-bottom)); }
 }
