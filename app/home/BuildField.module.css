@@ -1,0 +1,22 @@
+/* The Build Field sits behind the hero content, inside the hero's own
+   stacking context (the hero is isolated), and never takes a click. */
+.field {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Starts invisible; shown once the first frame is drawn. */
+.canvas {
+  display: block;
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
+
+.canvas[data-ready] { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas { transition: none; }
+}
