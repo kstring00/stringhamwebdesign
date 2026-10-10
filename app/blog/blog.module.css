@@ -1,0 +1,45 @@
+.hero { padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(2rem, 4vw, 3rem); }
+.hero > div { display: grid; gap: 1.25rem; max-width: 46rem; }
+
+.h1 {
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+}
+
+.list { display: grid; gap: 1.25rem; max-width: 48rem; margin: 0; padding: 0; list-style: none; }
+
+.card {
+  display: grid;
+  gap: 0.75rem;
+  padding: clamp(1.4rem, 3vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+  transition: transform 350ms var(--ease-out), box-shadow 350ms var(--ease-out), border-color 350ms var(--ease-out);
+}
+
+.card:hover { transform: translateY(-3px); border-color: var(--line-strong); box-shadow: 0 28px 56px -32px rgba(11, 27, 61, 0.4); }
+.card:focus-visible { outline: 2px solid var(--brand); outline-offset: 4px; }
+
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.6rem; color: var(--muted); font-size: 0.92rem; }
+
+.category {
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  color: var(--brand-deep);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.cardTitle { font-size: clamp(1.6rem, 2.8vw, 2.2rem); letter-spacing: -0.02em; line-height: 1.1; }
+.cardDesc { color: var(--ink-soft); line-height: 1.55; }
+.readMore { color: var(--brand-deep); font-weight: 600; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+  .card:hover { transform: none; }
+}
