@@ -3,7 +3,8 @@
 import { useEffect, useRef, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
 
-import { cta, partnerCta } from "../data/nav";
+import { cta, partnerCta, quoteCta } from "../data/nav";
+import Logo from "./Logo";
 import styles from "./Header.module.css";
 
 function subscribeScroll(cb: () => void) {
@@ -22,7 +23,7 @@ const VIEW_KEY = "swd-view";
 /**
  * A liquid-glass capsule (logo and the one action) and a two-way switch,
  * For businesses / For partners, so a visitor always knows which side of
- * the site they're on. Each view has its own accent (green for businesses,
+ * the site they're on. Each view has its own accent (the logo blue for businesses,
  * violet for partners) on the switch, the rim of the glass and the button.
  *
  * The switch's glass indicator slides between the views. Browsers with
@@ -43,7 +44,9 @@ export default function Header() {
   const scrolled = useSyncExternalStore(subscribeScroll, () => window.scrollY > 24, () => false);
   const pathname = usePathname();
   const view = pathname.startsWith("/partners") ? "partners" : "business";
-  const action = view === "partners" ? partnerCta : cta;
+  // The header's button is the page's main action: the quote on /websites,
+  // a partnership on /partners, the free Google check everywhere else.
+  const action = view === "partners" ? partnerCta : pathname.startsWith("/websites") ? quoteCta : cta;
   const header = useRef<HTMLElement>(null);
   const bar = useRef<HTMLDivElement>(null);
 
@@ -129,8 +132,7 @@ export default function Header() {
       <div ref={bar} className={styles.bar}>
         <span className={styles.glass} aria-hidden="true" />
         <a className={styles.brand} href="/">
-          <span className={styles.wordmark}>Stringham</span>
-          <span className={styles.brandSub}>Web Design</span>
+          <Logo className={styles.logo} eager />
         </a>
         <nav className={styles.switch} aria-label="Primary">
           <span className={styles.indicator} aria-hidden="true"><span className={styles.blob} /></span>
@@ -141,8 +143,9 @@ export default function Header() {
             </a>
           ))}
         </nav>
-        <a className={`btn ${styles.cta}`} href={action.href} data-track="cta" data-location="header">
-          {action.label}
+        <a className={`btn ${styles.cta}`} href={action.href} data-track="cta" data-location="header" aria-label={action.label}>
+          <span className={styles.ctaLong}>{action.label}</span>
+          <span className={styles.ctaShort} data-short={action.short} aria-hidden="true" />
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
         </a>
       </div>

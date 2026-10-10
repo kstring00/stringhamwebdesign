@@ -53,7 +53,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
         skip: Boolean(q('a.skip[href="#main"]')), landmarks: { main: Boolean(q('main#main')), header: Boolean(q('header')), footer: Boolean(q('footer')), nav: Boolean(q('nav[aria-label]')) },
         phone: qa('a[href^="tel:"]').length, cta: qa('a[href="/websites#website-quote"], a[href="/#free-check"]').length, privacy: Boolean(q('footer a[href="/privacy"]')),
         year: [...qa('footer')].pop()?.textContent.match(/©\s*(\d{4})/)?.[1] || '', jsonld: qa('script[type="application/ld+json"]').map((s) => s.textContent).join(' '),
-        text: document.body.innerText, headerNav: qa('header nav[aria-label="Primary"] a').map((a) => a.textContent.trim()), headerActive: (q('header nav[aria-label="Primary"] a[data-active]') || {}).textContent?.trim() || '', headerCta: (q('header a[data-location="header"]') || {}).textContent?.trim() || '',
+        text: document.body.innerText, headerNav: qa('header nav[aria-label="Primary"] a').map((a) => a.textContent.trim()), headerActive: (q('header nav[aria-label="Primary"] a[data-active]') || {}).textContent?.trim() || '', headerCta: (q('header a[data-location="header"]')?.getAttribute('aria-label') || q('header a[data-location="header"]')?.textContent?.trim() || ''),
         links: qa('a[href]').map((a) => ({ href: a.getAttribute('href'), target: a.getAttribute('target'), rel: a.getAttribute('rel') || '' })),
       };
     });
@@ -84,12 +84,12 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     if (path === '/about') ok(`${path}: Person JSON-LD`, /"@type":"Person"/.test(d.jsonld));
     ok(`${path}: no banned words in rendered text`, !BANNED.test(d.text), (d.text.match(BANNED) || [''])[0]);
     const partnerView = path === '/partners';
-    ok(`${path}: header is the logo, the view switch and one button`, JSON.stringify(d.headerNav) === JSON.stringify(['For businesses', 'For partners']) && d.headerActive === (partnerView ? 'For partners' : 'For businesses') && d.headerCta === (partnerView ? 'Explore a partnership' : 'Request a website quote'), JSON.stringify({ nav: d.headerNav, active: d.headerActive, cta: d.headerCta }));
+    ok(`${path}: header is the logo, the view switch and one button`, JSON.stringify(d.headerNav) === JSON.stringify(['For businesses', 'For partners']) && d.headerActive === (partnerView ? 'For partners' : 'For businesses') && d.headerCta === (partnerView ? 'Explore a partnership' : path.startsWith('/websites') ? 'Request a website quote' : 'Get a free Google check'), JSON.stringify({ nav: d.headerNav, active: d.headerActive, cta: d.headerCta }));
   }
 
   const home = seen.get('/');
-  ok('home says what, for whom, where above the fold', /A better website for the business you/.test(home.text) && /Google listing/i.test(home.text) && /\$1,800/.test(home.text) && /League City, Texas/i.test(home.text));
-  ok('home has the one CTA', (home.text.match(/Request a website quote/g) || []).length >= 1);
+  ok('home says what, for whom, where above the fold', /Websites and Google listings that bring League City businesses more calls/.test(home.text) && /owner-run businesses/i.test(home.text) && /Get a free Google check/.test(home.text));
+  ok('home has the one CTA', (home.text.match(/Get a free Google check/g) || []).length >= 1);
 
   // The referral reward is published in the same words everywhere it appears.
   const partners = seen.get('/partners');

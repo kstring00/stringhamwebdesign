@@ -32,7 +32,7 @@ const DPR_MAX = 2;
 const DPR_MAX_SMALL = 1.5;
 const MAX_DOTS = 9000;
 const MAX_ALPHA = 0.7;           // peak dot alpha: the button stays darkest
-const BASE_MIX = 0.35;           // base colour = OKLab mix(paper, green, 35%)
+const BASE_MIX = 0.35;           // base colour = OKLab mix(paper, brand, 35%)
 const CLEAR_HALO = 56;           // px of soft empty paper around a clear block
 const CLEAR_INSET = 6;           // px: the halo starts this far out, so no dot's body overlaps a block
 const WIRE_MARGIN = 48;          // browser window, px beyond the card
@@ -425,9 +425,9 @@ function canvas2d(canvas: HTMLCanvasElement, pal: Palette): Renderer | null {
 
 // ---------- component ----------
 export type BuildFieldProps = {
-  /** Idle dot colour. Defaults to an OKLab mix of --paper and --green. */
+  /** Idle dot colour. Defaults to an OKLab mix of --paper and --brand. */
   baseColor?: string;
-  /** Fully excited dot colour. Defaults to --green. */
+  /** Fully excited dot colour. Defaults to --brand. */
   activeColor?: string;
   /** Peak dot alpha. 0.7 keeps the CTA the darkest thing in the hero. */
   maxAlpha?: number;
@@ -448,11 +448,11 @@ export default function BuildField({ baseColor, activeColor, maxAlpha = MAX_ALPH
     // Colours from the hero's own stylesheet values (so the partner view's
     // violet carries through); props override (for the blue comparison).
     const css = getComputedStyle(hero);
-    const green = toOklab(css.getPropertyValue("--green")) ?? toOklab("#2f5d46")!;
-    const paper = toOklab(css.getPropertyValue("--paper")) ?? toOklab("#f7f8f5")!;
+    const brand = toOklab(css.getPropertyValue("--brand")) ?? toOklab("#0060dc")!;
+    const paper = toOklab(css.getPropertyValue("--paper")) ?? toOklab("#f6f8fb")!;
     const pal: Palette = {
-      active: (activeColor && toOklab(activeColor)) || green,
-      base: (baseColor && toOklab(baseColor)) || mixLab(paper, green, BASE_MIX),
+      active: (activeColor && toOklab(activeColor)) || brand,
+      base: (baseColor && toOklab(baseColor)) || mixLab(paper, brand, BASE_MIX),
       maxAlpha,
     };
 

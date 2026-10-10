@@ -1,34 +1,44 @@
-/* Stringham Web Design — quiet and clear.
-   Off-white paper tinted faintly green, near-black ink, one forest-green
-   accent. A restrained display serif for headings, a clean grotesk for
-   everything else. Everything below is the whole system; component files
-   only arrange it. */
+/* Stringham Web Design — quiet and clear, in the logo's colours.
+   Off-white paper tinted faintly blue, navy ink (the wordmark's), and one
+   brand blue (the logo's "Web Design" blue, a shade deeper so white text
+   on it passes AA). The logo's azure and cyan are for decoration only:
+   gradients and highlights, never text. A restrained display serif for
+   headings, a clean grotesk for everything else. Everything below is the
+   whole system; component files only arrange it. */
 
 :root {
-  --paper: #f7f8f5;
-  --paper-deep: #eef1ec;
-  --ink: #161a17;
-  --ink-soft: #3b423d;
-  --muted: #646b66;
-  --green: #2f5d46;
-  --green-deep: #244a37;
-  --green-soft: #e3ebe5;
-  /* The partner view's accent: it pops against the paper and the green. */
+  --paper: #f6f8fb;
+  --paper-deep: #edf1f7;
+  --ink: #0b1d39;
+  --ink-soft: #34425a;
+  --muted: #5b6880;
+  /* The brand, from the logo. --brand is 5.7:1 on white; --brand-deep is
+     the mark's own blue; --navy is the wordmark. */
+  --brand: #0060dc;
+  --brand-deep: #0352ad;
+  --brand-soft: #e6effd;
+  --navy: #082241;
+  --azure: #0092fc;
+  --cyan: #01cffb;
+  /* The logo's ribbon, navy through blue to cyan: for accents only. */
+  --brand-gradient: linear-gradient(90deg, #073f82 0%, #0067ec 45%, #0092fc 75%, #01cffb 100%);
+  /* The partner view's accent: violet, so it reads at a glance as the
+     other side of the site, and sits beside the blue. */
   --violet: #5a46f0;
   --violet-deep: #4331c9;
   --violet-soft: #ecebfe;
-  --line: rgba(22, 26, 23, 0.13);
-  --line-strong: rgba(22, 26, 23, 0.3);
+  --line: rgba(10, 30, 60, 0.13);
+  --line-strong: rgba(10, 30, 60, 0.3);
 
-  /* On the green ground */
-  --paper-on-ink: #f7f8f5;
-  --muted-on-ink: rgba(247, 248, 245, 0.72);
-  --line-on-ink: rgba(247, 248, 245, 0.18);
+  /* On the navy ground */
+  --paper-on-ink: #f6f8fb;
+  --muted-on-ink: rgba(246, 248, 251, 0.72);
+  --line-on-ink: rgba(246, 248, 251, 0.18);
 
   /* Aliases kept for the hub and legal pages, which predate the accent change. */
-  --ember: var(--green);
-  --ember-deep: var(--green-deep);
-  --ember-on-ink: #9fc7ae;
+  --ember: var(--brand);
+  --ember-deep: var(--brand-deep);
+  --ember-on-ink: #9cc8ff;
 
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
   --max: 90rem;
@@ -97,7 +107,7 @@ body::after {
 }
 
 ::selection {
-  background: var(--green);
+  background: var(--brand);
   color: var(--paper);
 }
 
@@ -139,7 +149,7 @@ p {
 }
 
 :focus-visible {
-  outline: 2px solid var(--green);
+  outline: 2px solid var(--brand);
   outline-offset: 4px;
   border-radius: 2px;
 }
@@ -220,9 +230,9 @@ p {
   color: var(--muted-on-ink);
 }
 
-/* Section backgrounds: the one dark ground is the green. */
+/* Section backgrounds: the one dark ground is the logo's navy. */
 .ink {
-  background: var(--green);
+  background: var(--navy);
   color: var(--paper-on-ink);
 }
 
@@ -250,9 +260,9 @@ p {
   gap: 0.6rem;
   min-height: 3.25rem;
   padding: 0.85rem 1.6rem;
-  border: 1px solid var(--green);
+  border: 1px solid var(--brand);
   border-radius: 999px;
-  background: var(--green);
+  background: var(--brand);
   color: var(--paper);
   font-size: 1rem;
   font-weight: 600;
@@ -264,8 +274,8 @@ p {
 }
 
 .btn:hover {
-  background: var(--green-deep);
-  border-color: var(--green-deep);
+  background: var(--brand-deep);
+  border-color: var(--brand-deep);
   color: var(--paper);
 }
 
@@ -298,7 +308,7 @@ p {
 .ink .btn:hover {
   background: #fff;
   border-color: #fff;
-  color: var(--green-deep);
+  color: var(--brand-deep);
 }
 
 .ink .btn-secondary {

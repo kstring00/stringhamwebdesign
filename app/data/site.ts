@@ -15,6 +15,7 @@ export const site = {
   phone: PHONE,
   phoneHref: `tel:+1${phoneDigits}`,
   phoneE164: `+1${phoneDigits}`,
+  smsHref: `sms:+1${phoneDigits}`,
   /** Scheduling link for the free 30-minute call. Unset means no booking
       buttons render anywhere; everything falls back to the contact form. */
   bookingUrl: (process.env.NEXT_PUBLIC_BOOKING_URL || "").trim(),

@@ -44,8 +44,8 @@ export default function PartnerForm({ sent = false, errorCode = "" }: { sent?: b
   if (state === "sent") {
     return (
       <div className={styles.sent} role="status">
-        <h3>Thanks{name ? `, ${name}` : ""}.</h3>
-        <p>I&rsquo;ll read this and reply within two business days to set up a short call. &mdash; Kyle</p>
+        <h3>Got it{name ? `, ${name}` : ""}. I&rsquo;ll reply within two business days.</h3>
+        <p>I&rsquo;ll read this and email you to set up a short call. No obligation. &mdash; Kyle</p>
         <p className={styles.sentSmall}>Prefer email? <a className="u" href={`mailto:${site.email}`}>{site.email}</a></p>
       </div>
     );
@@ -53,13 +53,14 @@ export default function PartnerForm({ sent = false, errorCode = "" }: { sent?: b
 
   return (
     <form className={styles.form} id="partner-inquiry" onSubmit={onSubmit} method="post" action="/api/partner-inquiry">
+      <p className={styles.fine}><span className={styles.req} aria-hidden="true">*</span> Required</p>
       <div className={styles.row}>
         <div className={styles.field}>
-          <label htmlFor="pi-name">Name</label>
+          <label htmlFor="pi-name">Name <span className={styles.req} aria-hidden="true">*</span></label>
           <input className={styles.input} id="pi-name" name="name" autoComplete="name" required maxLength={100} />
         </div>
         <div className={styles.field}>
-          <label htmlFor="pi-business">Business name</label>
+          <label htmlFor="pi-business">Business name <span className={styles.req} aria-hidden="true">*</span></label>
           <input className={styles.input} id="pi-business" name="business" autoComplete="organization" required maxLength={120} />
         </div>
       </div>
@@ -69,19 +70,19 @@ export default function PartnerForm({ sent = false, errorCode = "" }: { sent?: b
           <input className={styles.input} id="pi-site" name="business_site" type="text" inputMode="url" autoComplete="url" placeholder="yourstudio.com" maxLength={200} />
         </div>
         <div className={styles.field}>
-          <label htmlFor="pi-email">Professional email</label>
+          <label htmlFor="pi-email">Professional email <span className={styles.req} aria-hidden="true">*</span></label>
           <input className={styles.input} id="pi-email" name="email" type="email" autoComplete="email" required maxLength={180} />
         </div>
       </div>
       <div className={styles.field}>
-        <label htmlFor="pi-category">What you do</label>
+        <label htmlFor="pi-category">What you do <span className={styles.req} aria-hidden="true">*</span></label>
         <select className={styles.input} id="pi-category" name="category" required defaultValue="">
           <option value="" disabled>Choose one</option>
           {partnerCategories.map((c) => <option key={c} value={c}>{c}</option>)}
         </select>
       </div>
       <fieldset className={styles.fieldset}>
-        <legend>Interested in</legend>
+        <legend>Interested in <span className={styles.req} aria-hidden="true">*</span></legend>
         <div className={styles.choices}>
           {partnerInterests.map((i) => (
             <label className={styles.choice} key={i}>

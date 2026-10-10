@@ -31,7 +31,7 @@ const interTight = Inter_Tight({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: `Custom websites for independent businesses | ${site.name}`, template: `%s | ${site.name}` },
-  description: "Custom websites for independent businesses starting at $1,800, with fixed written quotes and no required Google Ads spending. League City, Texas.",
+  description: "Custom websites for independent businesses starting at $2,000, with fixed written quotes and no required Google Ads spending. League City, Texas.",
   applicationName: site.name,
   authors: [{ name: site.person, url: site.url }],
   creator: site.person,

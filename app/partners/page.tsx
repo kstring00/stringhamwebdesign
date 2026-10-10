@@ -13,7 +13,7 @@ import PartnerForm from "./PartnerForm";
 import styles from "./partners.module.css";
 
 export const metadata: Metadata = pageMeta({
-  absolute: "Website Partner for Photographers, Designers & Agencies | Stringham Web Design",
+  absolute: "Web Design Partner for Agencies & Creatives, Houston TX | Stringham Web Design",
   description: "Kyle Stringham builds websites for the clients of photographers, brand designers, marketing agencies and consultants in League City and Greater Houston: as a referral partner or white-label behind your brand.",
   path: "/partners",
   image: "/og/partners.png",
@@ -126,7 +126,30 @@ export default async function PartnersPage({ searchParams }: { searchParams: Pro
         </div>
       </section>
 
-      {/* 2. Two ways to partner */}
+      {/* 2. Selected work: "can I see it?" answered before anything else */}
+      <section className={`${styles.section} ${styles.alt}`} id="work" aria-labelledby="work-title">
+        <div className="container">
+          <div className={styles.head}>
+            <h2 id="work-title" className={styles.h2}>Selected work</h2>
+            <p className={styles.lede}>Stringham Web Design is a new studio, so you work with the founder on every project. Here&rsquo;s what I&rsquo;ve built, each labeled for exactly what it is.</p>
+          </div>
+          {legendKinds.length > 1 ? (
+            <dl className={styles.legend} aria-label="What each label means">
+              {legendKinds.map((k) => (
+                <div key={k}>
+                  <dt><span className={`${styles.kind} ${kindClass[k]}`}>{kindLabel[k].label}</span></dt>
+                  <dd>{kindLabel[k].means}</dd>
+                </div>
+              ))}
+            </dl>
+          ) : null}
+          <ol className={styles.work}>
+            {partnerWork.map((w, i) => <Project key={w.key} w={w} index={i} featured={i === 0} />)}
+          </ol>
+        </div>
+      </section>
+
+      {/* 3. Two ways to partner */}
       <section className={styles.section} id="ways" aria-labelledby="ways-title">
         <div className="container">
           <div className={styles.head}>
@@ -174,7 +197,7 @@ export default async function PartnersPage({ searchParams }: { searchParams: Pro
         </div>
       </section>
 
-      {/* 3. Why work with me */}
+      {/* 4. Why work with me */}
       <section className={`${styles.section} ${styles.alt}`} id="why" aria-labelledby="why-title">
         <div className="container">
           <div className={styles.head}>
@@ -191,38 +214,15 @@ export default async function PartnersPage({ searchParams }: { searchParams: Pro
         </div>
       </section>
 
-      {/* 4. Selected work */}
-      <section className={styles.section} id="work" aria-labelledby="work-title">
-        <div className="container">
-          <div className={styles.head}>
-            <h2 id="work-title" className={styles.h2}>Selected work</h2>
-            <p className={styles.lede}>Stringham Web Design is a new studio, and I haven&rsquo;t delivered a paid client website yet. Here&rsquo;s what I have built, each labeled for exactly what it is.</p>
-          </div>
-          {legendKinds.length > 1 ? (
-            <dl className={styles.legend} aria-label="What each label means">
-              {legendKinds.map((k) => (
-                <div key={k}>
-                  <dt><span className={`${styles.kind} ${kindClass[k]}`}>{kindLabel[k].label}</span></dt>
-                  <dd>{kindLabel[k].means}</dd>
-                </div>
-              ))}
-            </dl>
-          ) : null}
-          <ol className={styles.work}>
-            {partnerWork.map((w, i) => <Project key={w.key} w={w} index={i} featured={i === 0} />)}
-          </ol>
-        </div>
-      </section>
-
       {/* Founder */}
-      <section className={`${styles.section} ${styles.alt}`} id="founder" aria-labelledby="founder-title">
+      <section className={styles.section} id="founder" aria-labelledby="founder-title">
         <div className="container">
           <Founder />
         </div>
       </section>
 
       {/* 5. How it works */}
-      <section className={styles.section} id="process" aria-labelledby="process-title">
+      <section className={`${styles.section} ${styles.alt}`} id="process" aria-labelledby="process-title">
         <div className="container">
           <div className={styles.head}>
             <h2 id="process-title" className={styles.h2}>How a partnership works</h2>
@@ -240,7 +240,7 @@ export default async function PartnersPage({ searchParams }: { searchParams: Pro
       </section>
 
       {/* 6. Partner questions */}
-      <section className={`${styles.section} ${styles.alt}`} id="partner-questions" aria-labelledby="pq-title">
+      <section className={styles.section} id="partner-questions" aria-labelledby="pq-title">
         <div className={`container ${styles.qaGrid}`}>
           <div className={styles.qaSide}>
             <h2 id="pq-title" className={styles.h2}>Partner questions</h2>
@@ -258,7 +258,7 @@ export default async function PartnersPage({ searchParams }: { searchParams: Pro
       </section>
 
       {/* 7. Form */}
-      <section className={styles.section} id="partner-form" aria-labelledby="pf-title">
+      <section className={`${styles.section} ${styles.alt}`} id="partner-form" aria-labelledby="pf-title">
         <div className={`container ${styles.formGrid}`}>
           <div className={styles.formSide}>
             <h2 id="pf-title" className={styles.h2}>Explore a partnership</h2>

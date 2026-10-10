@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import Founder from "../components/Founder";
 import { pageMeta } from "../data/meta";
-import { PRICES, plans, websiteSteps as steps } from "../data/offer";
+import { editsNote, PRICES, plans, timelineNote, websitesPageQuestions, websiteSteps as steps, whatINeed } from "../data/offer";
 import { referral } from "../data/referral";
 import CountUp from "../motion/CountUp";
 import { site } from "../data/site";
@@ -13,8 +13,8 @@ import styles from "./websites.module.css";
 import WebsiteQuoteForm from "./WebsiteQuoteForm";
 
 export const metadata: Metadata = pageMeta({
-  absolute: "Custom Business Websites From $1,800 | Stringham Web Design",
-  description: "Custom websites for independent businesses in League City and Greater Houston. Starting at $1,800 with a fixed written quote, no required ad spending, and you own the site.",
+  absolute: "Web Design in League City, TX | Stringham Web Design",
+  description: "Custom websites for owner-run businesses in League City, Webster, Clear Lake and Greater Houston. From $2,000 with a fixed written quote, no ad spend required, and you own the site.",
   path: "/websites",
 });
 
@@ -24,6 +24,7 @@ const starting = `$${PRICES.website.toLocaleString("en-US")}`;
 const points = [
   "Design, build and launch on your domain",
   "No required ad spending, no contract",
+  "Around 3 weeks from go-ahead to launch",
   "You approve it before paying the balance",
   "Paid in full, it’s yours: domain and accounts too",
 ];
@@ -47,6 +48,7 @@ export default async function Websites({ searchParams }: { searchParams: Promise
               <a className="btn" href="#website-quote" data-track="cta" data-location="websites-hero" data-hero-cta>Request a website quote</a>
               <a className={`u ${home.textLink}`} href="#work">See the work</a>
             </div>
+            <p className={styles.lightStep}>Not ready for a website? <a className="u" href="/#free-check" data-track="cta" data-location="websites-hero-check">Start with a free Google check</a>, or <a className="u" href={site.phoneHref}>call</a> or <a className="u" href={site.smsHref}>text</a> {site.phone}.</p>
           </div>
           <aside className={styles.offer} aria-label="What you get">
             <p className={styles.offerTag}>Websites start at</p>
@@ -118,6 +120,7 @@ export default async function Websites({ searchParams }: { searchParams: Promise
             ))}
           </div>
           <p className={styles.noAds}><b>No ad spend. No contract.</b> Any deposit is written in your quote, and the Monthly Plan is month to month. Full details in the <a className="u" href="/terms">Service Terms</a>.</p>
+          <p className={styles.noAds}><b>Can I update it myself?</b> {editsNote}</p>
         </div>
       </section>
 
@@ -126,6 +129,7 @@ export default async function Websites({ searchParams }: { searchParams: Promise
         <div className="container">
           <div className={home.head}>
             <h2 id="how-title" className={home.h2}>How it works</h2>
+            <p className={home.lede}>Three steps, and you know the price before anything starts.</p>
           </div>
           <ol className={home.steps}>
             {steps.map((s) => (
@@ -136,6 +140,16 @@ export default async function Websites({ searchParams }: { searchParams: Promise
               </li>
             ))}
           </ol>
+          <div className={home.needs}>
+            <div>
+              <h3 className={home.needsTitle}>What I need from you</h3>
+              <ul className={home.list}>{whatINeed.map((n) => <li key={n}>{n}</li>)}</ul>
+            </div>
+            <div>
+              <h3 className={home.needsTitle}>How long it takes</h3>
+              <p className={home.body}>{timelineNote}</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -146,7 +160,28 @@ export default async function Websites({ searchParams }: { searchParams: Promise
         </div>
       </section>
 
-      {/* 6. Referral offer */}
+      {/* 6. Questions the sections above don't answer */}
+      <section className={home.section} id="questions" aria-labelledby="q-title">
+        <div className={`container ${home.qaGrid}`}>
+          <div className={home.qaSide}>
+            <h2 id="q-title" className={home.h2}>Questions</h2>
+            <p className={home.body}>Still wondering? <a className="u" href={site.phoneHref}>Call or text {site.phone}</a>.</p>
+          </div>
+          <div className={home.qa}>
+            {websitesPageQuestions.map((item) => (
+              <details className={home.qaItem} key={item.q}>
+                <summary>{item.q}</summary>
+                <p>
+                  {item.a}
+                  {"link" in item && item.link ? <> <a className={`u ${home.qaLink}`} href={item.link.href}>{item.link.label}</a></> : null}
+                </p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 7. Referral offer */}
       <section className={styles.referral} aria-labelledby="refer-title">
         <div className={`container ${styles.referralInner}`}>
           <p className={styles.referralRate} aria-hidden="true"><CountUp value={referral.rate} suffix="%" /></p>
@@ -158,7 +193,7 @@ export default async function Websites({ searchParams }: { searchParams: Promise
         </div>
       </section>
 
-      {/* 7. The form */}
+      {/* 8. The form */}
       <section className={`${home.section} ${home.formSection}`} id="website-quote" aria-labelledby="form-title">
         <div className={`container ${home.formGrid}`}>
           <div className={home.formSide}>

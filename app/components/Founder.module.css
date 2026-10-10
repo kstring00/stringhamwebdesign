@@ -11,7 +11,7 @@
   aspect-ratio: 4 / 5;
   max-width: 20rem;
   border-radius: 12px;
-  background: var(--green-soft);
+  background: var(--brand-soft);
   border: 1px solid var(--line);
 }
 

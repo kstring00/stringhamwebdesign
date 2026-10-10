@@ -1,6 +1,6 @@
 /* The statement band. --f (0 → 1) is scrubbed by scroll; each word fills
    over its own slice (--s is where it starts), from muted to ink, and the
-   accent words to green with an underline. With no JS, --f stays 1. The
+   accent words to the brand blue with an underline in the logo's ribbon gradient. With no JS, --f stays 1. The
    muted start keeps 3:1 contrast on the paper, so text is always legible. */
 
 .band {
@@ -27,13 +27,13 @@
   --k: clamp(0, calc((var(--f) * 1.1 - var(--s)) * 6), 1);
   position: relative;
   display: inline-block;
-  color: color-mix(in oklab, #7f8580 calc((1 - var(--k)) * 100%), var(--ink));
+  color: color-mix(in oklab, #7a8499 calc((1 - var(--k)) * 100%), var(--ink));
   transform: translateY(calc((1 - var(--k)) * 0.14em));
   white-space: pre;
 }
 
 .accent {
-  color: color-mix(in oklab, #7f8580 calc((1 - var(--k)) * 100%), var(--green));
+  color: color-mix(in oklab, #7a8499 calc((1 - var(--k)) * 100%), var(--brand));
 }
 
 /* The underline draws in as the word fills. */
@@ -43,9 +43,9 @@
   left: 0.02em;
   right: 0.32em;
   bottom: 0.04em;
-  height: 0.06em;
+  height: 0.07em;
   border-radius: 1em;
-  background: var(--green);
+  background: var(--brand-gradient);
   transform: scaleX(var(--k));
   transform-origin: left center;
 }
@@ -63,7 +63,7 @@
   display: inline-block;
   height: 1.3em;
   overflow: hidden;
-  color: var(--green-deep);
+  color: var(--brand-deep);
   font-weight: 600;
   vertical-align: bottom;
 }
@@ -74,6 +74,7 @@
 }
 
 .rotTrack span { height: 1.3em; line-height: 1.3em; white-space: nowrap; }
+.rotTrack span::before { content: attr(data-w); }
 
 @keyframes roll {
   0%, 20% { transform: translateY(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
@@ -95,5 +96,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .rot { display: none; }
-  .rotStatic { position: static; width: auto; height: auto; overflow: visible; clip-path: none; white-space: normal; color: var(--green-deep); font-weight: 600; }
+  .rotStatic { position: static; width: auto; height: auto; overflow: visible; clip-path: none; white-space: normal; color: var(--brand-deep); font-weight: 600; }
 }

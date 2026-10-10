@@ -20,12 +20,11 @@ export function BusinessJsonLd() {
         email: site.email,
         telephone: site.phoneE164,
         image: `${site.url}/opengraph-image.png`,
+        logo: `${site.url}/brand/logo-square.png`,
         address,
-        areaServed: [
-          { "@type": "City", name: "League City, TX" },
-          { "@type": "AdministrativeArea", name: "Greater Houston area, TX" },
-          { "@type": "State", name: "Texas" },
-        ],
+        areaServed: ["League City", "Friendswood", "Webster", "Clear Lake", "Kemah", "Dickinson", "Pearland"]
+          .map((name) => ({ "@type": "City", name: `${name}, TX` }))
+          .concat([{ "@type": "AdministrativeArea", name: "Greater Houston area, TX" }]),
         founder: { "@type": "Person", name: site.person },
         description: "Custom websites and Google listing fixes for independent businesses. League City, Texas.",
         knowsAbout: ["Google Business Profile", "Local business directories", "Small business websites"],
