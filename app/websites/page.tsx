@@ -24,6 +24,7 @@ const starting = `$${PRICES.website.toLocaleString("en-US")}`;
 const points = [
   "Design, build and launch on your domain",
   "No required ad spending, no contract",
+  "Around 3 weeks from go-ahead to launch",
   "You approve it before paying the balance",
   "Paid in full, it’s yours: domain and accounts too",
 ];

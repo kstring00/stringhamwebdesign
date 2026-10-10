@@ -53,7 +53,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
         skip: Boolean(q('a.skip[href="#main"]')), landmarks: { main: Boolean(q('main#main')), header: Boolean(q('header')), footer: Boolean(q('footer')), nav: Boolean(q('nav[aria-label]')) },
         phone: qa('a[href^="tel:"]').length, cta: qa('a[href="/websites#website-quote"], a[href="/#free-check"]').length, privacy: Boolean(q('footer a[href="/privacy"]')),
         year: [...qa('footer')].pop()?.textContent.match(/©\s*(\d{4})/)?.[1] || '', jsonld: qa('script[type="application/ld+json"]').map((s) => s.textContent).join(' '),
-        text: document.body.innerText, headerNav: qa('header nav[aria-label="Primary"] a').map((a) => a.textContent.trim()), headerActive: (q('header nav[aria-label="Primary"] a[data-active]') || {}).textContent?.trim() || '', headerCta: (q('header a[data-location="header"]') || {}).textContent?.trim() || '',
+        text: document.body.innerText, headerNav: qa('header nav[aria-label="Primary"] a').map((a) => a.textContent.trim()), headerActive: (q('header nav[aria-label="Primary"] a[data-active]') || {}).textContent?.trim() || '', headerCta: (q('header a[data-location="header"]')?.getAttribute('aria-label') || q('header a[data-location="header"]')?.textContent?.trim() || ''),
         links: qa('a[href]').map((a) => ({ href: a.getAttribute('href'), target: a.getAttribute('target'), rel: a.getAttribute('rel') || '' })),
       };
     });

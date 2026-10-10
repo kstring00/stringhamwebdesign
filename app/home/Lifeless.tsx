@@ -24,7 +24,7 @@ const after = [
  * site starts grey and lifeless with its problems pinned on it; as the
  * "How I build" text scrolls in, it comes alive: colour, a clear action,
  * the phone number travels from the footer to the top, the wall of text
- * becomes cards, and the red pins turn into green fixes.
+ * becomes cards, and the red pins turn into blue fixes.
  *
  * One CSS variable, --p (0 → 1), drives every change in lifeless.module.css;
  * GSAP only scrubs that number with ScrollTrigger. No pinning: the
@@ -86,7 +86,7 @@ export default function Lifeless() {
         y: (i) => SLUMP[i % SLUMP.length] * em,
         rotation: (i) => TIP[i % TIP.length],
         fontWeight: 250,
-        color: "#7f8580",
+        color: "#7a8499",
         duration: 1.4,
         ease: "power3.inOut",
         stagger: 0.06,

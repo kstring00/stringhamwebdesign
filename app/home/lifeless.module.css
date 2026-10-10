@@ -27,7 +27,7 @@
 .problem, .turn { display: grid; align-content: start; gap: 1rem; }
 
 .eyebrow {
-  color: var(--green-deep);
+  color: var(--brand-deep);
   font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -58,7 +58,7 @@
 
 .bloom > span > span {
   --kb: clamp(0, calc((var(--p) - 0.3 - var(--i) * 0.035) / 0.22), 1);
-  color: color-mix(in oklab, #7f8580 calc((1 - var(--kb)) * 100%), var(--ink));
+  color: color-mix(in oklab, #7a8499 calc((1 - var(--kb)) * 100%), var(--ink));
   font-weight: calc(300 + 100 * var(--kb));
   transform: translateY(calc((1 - var(--kb)) * 0.28em)) scale(calc(0.9 + 0.1 * var(--kb)));
 }
@@ -66,7 +66,7 @@
 .point {
   max-width: 32rem;
   padding-left: 1rem;
-  border-left: 2px solid var(--green);
+  border-left: 2px solid var(--brand);
   color: var(--ink);
   font-size: 1.08rem;
   font-weight: 500;
@@ -79,7 +79,7 @@
   align-items: center;
   gap: 0.4rem;
   min-height: 44px;
-  color: var(--green-deep);
+  color: var(--brand-deep);
   font-weight: 600;
 }
 
@@ -106,7 +106,7 @@
   filter: grayscale(calc(1 - var(--kc))) contrast(calc(0.8 + 0.2 * var(--kc)));
   transform: perspective(160cqw) rotateX(calc((1 - var(--kc)) * 7deg)) scale(calc(0.97 + 0.03 * var(--kc)));
   transform-origin: 50% 100%;
-  box-shadow: 0 calc(1cqw + 6cqw * var(--kc)) calc(3cqw + 10cqw * var(--kc)) calc(-2cqw - 4cqw * var(--kc)) rgba(22, 26, 23, calc(0.2 + 0.25 * var(--kc)));
+  box-shadow: 0 calc(1cqw + 6cqw * var(--kc)) calc(3cqw + 10cqw * var(--kc)) calc(-2cqw - 4cqw * var(--kc)) rgba(10, 30, 60, calc(0.2 + 0.25 * var(--kc)));
 }
 
 .chrome {
@@ -157,7 +157,7 @@
   opacity: var(--kh);
 }
 
-.logoAfter em { width: 2.6cqw; height: 2.6cqw; border-radius: 50% 50% 50% 0.6cqw; background: var(--green); }
+.logoAfter em { width: 2.6cqw; height: 2.6cqw; border-radius: 50% 50% 50% 0.6cqw; background: var(--brand); }
 
 .links { display: flex; gap: 1.6cqw; margin-left: auto; }
 .links i { width: 5cqw; height: 0.9cqw; border-radius: 99px; background: var(--line-strong); }
@@ -172,7 +172,7 @@
   gap: 0.8cqw;
   padding: 1cqw 1.8cqw;
   border-radius: 99px;
-  background: var(--green);
+  background: var(--brand);
   color: var(--paper);
   font-size: 1.6cqw;
   font-weight: 600;
@@ -223,11 +223,11 @@
   margin-top: 0.6cqw;
   padding: 1.2cqw 2.6cqw;
   border-radius: 1cqw;
-  background: var(--green);
+  background: var(--brand);
   color: var(--paper);
   font-size: 1.7cqw;
   font-weight: 600;
-  box-shadow: 0 1.2cqw 2.4cqw -1.2cqw rgba(47, 93, 70, 0.6);
+  box-shadow: 0 1.2cqw 2.4cqw -1.2cqw rgba(0, 96, 220, 0.6);
   opacity: var(--kb);
   transform: scale(calc(0.55 + 0.45 * var(--kb)));
   transform-origin: left center;
@@ -246,7 +246,7 @@
 
 /* A warm, simple scene: sky, sun, hills. */
 .photoAfter {
-  background: linear-gradient(170deg, #e8efe6 0%, #cfe0d3 45%, #9fbfa8 100%);
+  background: linear-gradient(170deg, #e6f0fb 0%, #d3e3ee 45%, #9fbfa8 100%);
   opacity: var(--kf);
   transform: scale(calc(1.08 - 0.08 * var(--kf)));
 }
@@ -266,7 +266,7 @@
   inset: auto -10% -35% -10%;
   height: 70%;
   border-radius: 50% 50% 0 0;
-  background: var(--green);
+  background: var(--brand);
 }
 
 .body { position: relative; height: 13cqw; }
@@ -295,7 +295,7 @@
   background: var(--paper);
 }
 
-.cards i { width: 3.4cqw; height: 3.4cqw; border-radius: 1cqw; background: var(--green-soft); }
+.cards i { width: 3.4cqw; height: 3.4cqw; border-radius: 1cqw; background: var(--brand-soft); }
 .cards b { height: 0.9cqw; border-radius: 99px; background: var(--line-strong); }
 .cards b:last-child { width: 70%; background: var(--line); }
 
@@ -318,7 +318,7 @@
   font-size: max(11px, 1.7cqw);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  box-shadow: 0 0 0 3px #fff, 0 6px 14px -6px rgba(22, 26, 23, 0.5);
+  box-shadow: 0 0 0 3px #fff, 0 6px 14px -6px rgba(10, 30, 60, 0.5);
 }
 
 .pin::after {
@@ -341,12 +341,12 @@
 
 .pinAfter {
   --ka: clamp(0, calc((var(--p) - 0.55) / 0.2), 1);
-  background: var(--green);
+  background: var(--brand);
   opacity: var(--ka);
   transform: scale(calc(0.4 + 0.6 * var(--ka)));
 }
 
-.pinAfter::after { border-color: var(--green); }
+.pinAfter::after { border-color: var(--brand); }
 
 /* Where each problem sits on the lifeless page … */
 .pb1 { left: 9%; top: 57%; }   /* no next step: empty space where a button belongs */
@@ -406,7 +406,7 @@
 .legendBefore { opacity: calc(1 - clamp(0, calc((var(--p) - 0.36) / 0.12), 1)); }
 .legendBefore li::before { background: #9b2c1f; }
 .legendAfter { opacity: clamp(0, calc((var(--p) - 0.52) / 0.12), 1); }
-.legendAfter li::before { background: var(--green); }
+.legendAfter li::before { background: var(--brand); }
 
 /* ---------- smaller screens ---------- */
 

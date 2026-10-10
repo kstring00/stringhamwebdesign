@@ -20,6 +20,7 @@ export function BusinessJsonLd() {
         email: site.email,
         telephone: site.phoneE164,
         image: `${site.url}/opengraph-image.png`,
+        logo: `${site.url}/brand/logo-square.png`,
         address,
         areaServed: ["League City", "Friendswood", "Webster", "Clear Lake", "Kemah", "Dickinson", "Pearland"]
           .map((name) => ({ "@type": "City", name: `${name}, TX` }))

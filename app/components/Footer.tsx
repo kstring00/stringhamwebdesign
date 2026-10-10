@@ -1,5 +1,6 @@
 import { footerLinks } from "../data/nav";
 import { site } from "../data/site";
+import Logo from "./Logo";
 import styles from "./Footer.module.css";
 
 export default function Footer() {
@@ -8,8 +9,8 @@ export default function Footer() {
       <div className="container">
         <div className={styles.grid}>
           <div>
-            <p className={styles.name}>{site.legalName}</p>
-            <p className={styles.where}>{site.city}, {site.regionLong}</p>
+            <a className={styles.logoLink} href="/"><Logo className={styles.logo} /></a>
+            <p className={styles.where}>{site.legalName} · {site.city}, {site.regionLong}</p>
           </div>
           <div className={styles.col}>
             <p className={styles.head}>Contact</p>

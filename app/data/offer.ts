@@ -159,7 +159,7 @@ export const websiteQuestions = [
   },
   {
     q: "How long does it take?",
-    a: "It depends on the pages and features you need. Your written quote gives the timeline before anything starts.",
+    a: "Around 3 weeks for most websites, from your go-ahead to launch. Your written quote gives the exact timeline before anything starts.",
   },
   {
     q: "What do you need from me?",
@@ -183,8 +183,8 @@ export const whatINeed = [
   "Your yes at each step: the quote, the review, the launch.",
 ] as const;
 
-/** How long a website takes. No typical range is published yet; the quote sets it. */
-export const timelineNote = "It depends on the pages and features you need. Your written quote gives the timeline before anything starts.";
+/** How long a website takes: Kyle's typical figure; the quote sets the exact one. */
+export const timelineNote = "Around 3 weeks for most websites, from your go-ahead to launch. Your written quote gives the exact timeline before anything starts, and quick replies from you keep it on track.";
 
 /** "Can I update it myself?", answered next to the website price. */
 export const editsNote = `Small changes are covered by the Monthly Plan: 30 minutes of edits a month. If you want to edit pages yourself, say so and it goes in your quote.`;

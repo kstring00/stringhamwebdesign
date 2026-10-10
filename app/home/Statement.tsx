@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { gsap, prefersReducedMotion } from "../motion/gsap";
 import s from "./statement.module.css";
 
-/** The two lines, word by word. Accent words get the green and an underline. */
+/** The two lines, word by word. Accent words get the brand blue and an underline. */
 const LINES: { text: string; accent?: boolean }[][] = [
   [{ text: "Beautiful" }, { text: "gets" }, { text: "them" }, { text: "to" }, { text: "look.", accent: true }],
   [{ text: "Clear" }, { text: "gets" }, { text: "them" }, { text: "to" }, { text: "call.", accent: true }],
