@@ -21,7 +21,7 @@ locally (the contact form logs instead of emailing without `RESEND_API_KEY`).
 
 ## Pages
 
-`/` (everything: hero, findings, how it works, prices, who it's for, questions,
+`/` (everything: hero, findings, how it works, prices, about Kyle, questions,
 the free check form), `/websites` (for owners who want a website: price,
 work, how it works, the founder, the referral offer, the website quote
 form), `/partners` (for photographers, designers, agencies and consultants:
@@ -36,7 +36,7 @@ of the home page (see `next.config.ts`).
 ## Where things live
 
 - `app/data/offer.ts` — every word on the home page: prices, the verified
-  findings, the three steps, the plan cards, the niches, the questions.
+  findings, the three steps, the plan cards, the questions.
   Prices here must match `content/service-terms.md`; change them together.
 - `app/data/site.ts` — identity, phone, email, location.
 - `content/service-terms.md` and `content/privacy.md` — rendered word for
@@ -70,8 +70,16 @@ of the home page (see `next.config.ts`).
 - `app/motion/Reveal.tsx` — a short upward settle on `data-reveal` blocks
   below the fold. Never a fade, so text is always at full contrast. Off under
   reduced motion; nothing depends on it.
+- `app/components/Header.tsx` — the liquid-glass header: logo and the one
+  action in a capsule, plus the "For businesses / For partners" view switch
+  (bottom dock on phones). The view's accent (green or violet) colours the
+  switch, the glass rim and the button. Page-to-page view transitions are
+  in `globals.css`.
+- `app/home/Lifeless.tsx` — home section 2: a lifeless example site that
+  comes alive on scroll; one CSS variable (`--p`) drives it.
 - `app/home/BuildField.tsx` (+ `buildFieldShaders.ts`, `BuildFieldMount.tsx`)
-  — the home hero's dot field: WebGL2 (one draw call) with a Canvas 2D
+  — the dot field on the home and partners heroes (colour from the page's
+  accent): WebGL2 (one draw call) with a Canvas 2D
   fallback, on `gsap.ticker`. Dots clear around every `data-field-clear`
   block; a wireframe website frames the example card on desktop. Loaded at
   idle after first paint, paused offscreen, one still frame under reduced

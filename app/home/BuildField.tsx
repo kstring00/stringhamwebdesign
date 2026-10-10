@@ -9,7 +9,7 @@ import { FRAG, VERT } from "./buildFieldShaders";
 /**
  * The hero's Build Field: a halftone dot lattice behind the hero that
  * assembles from the CTA, breathes, follows the cursor and draws a faint
- * website around the example card. Atmosphere only: text, prices and the
+ * website around the hero card. Atmosphere only: text, prices and the
  * CTA never move or change; dots are cleared to near zero behind every
  * [data-field-clear] block (measured, not guessed), and no dot is ever as
  * dark as the button.
@@ -169,7 +169,7 @@ function segDist(x: number, y: number, [ax, ay, bx, by]: Seg) {
 }
 
 /**
- * The browser window drawn around the free-check card, snapped to the
+ * The browser window drawn around the hero card, snapped to the
  * lattice so every line lands on a row or column of dots: outline, a top
  * bar with three window controls and a nav, and two content blocks whose
  * tops hide behind the card and whose bottoms peek out below it.
@@ -224,7 +224,7 @@ function layout(hero: HTMLElement): Layout {
   const card = cardEl ? rel(cardEl) : null;
   const beside = Boolean(card && textEl && textEl !== cardEl && card.l >= rel(textEl).r);
   const segs = card && beside && w >= DESKTOP ? wireframe(card, s, ox, oy) : [];
-  const ctaEl = hero.querySelector('[data-track="cta"][data-location="hero"]');
+  const ctaEl = hero.querySelector("[data-field-cta]") ?? hero.querySelector('[data-track="cta"][data-location="hero"]');
   const c = ctaEl ? rel(ctaEl) : { l: w / 2, t: h / 2, r: w / 2, b: h / 2 };
 
   const rand = mulberry32(SEED);
@@ -445,8 +445,9 @@ export default function BuildField({ baseColor, activeColor, maxAlpha = MAX_ALPH
     const touch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
     const force2d = new URLSearchParams(window.location.search).get("field") === "2d";
 
-    // Brand colours from the stylesheet; props override (for the blue comparison).
-    const css = getComputedStyle(document.documentElement);
+    // Colours from the hero's own stylesheet values (so the partner view's
+    // violet carries through); props override (for the blue comparison).
+    const css = getComputedStyle(hero);
     const green = toOklab(css.getPropertyValue("--green")) ?? toOklab("#2f5d46")!;
     const paper = toOklab(css.getPropertyValue("--paper")) ?? toOklab("#f7f8f5")!;
     const pal: Palette = {
@@ -575,7 +576,8 @@ export default function BuildField({ baseColor, activeColor, maxAlpha = MAX_ALPH
 
     // ---- entrance: assemble from the CTA once a session; later views fade in ----
     let first = true;
-    try { first = !sessionStorage.getItem(SEEN_KEY); sessionStorage.setItem(SEEN_KEY, "1"); } catch { /* no storage: assemble */ }
+    const seenKey = `${SEEN_KEY}:${window.location.pathname}`; // once per page, per session
+    try { first = !sessionStorage.getItem(seenKey); sessionStorage.setItem(seenKey, "1"); } catch { /* no storage: assemble */ }
     const wireIn = () => { gsap.to(f, { wire: 1, duration: WIRE_IN, ease: "power2.out" }); };
     const intro = first
       ? gsap.fromTo(f, { assemble: 0 }, { assemble: ASSEMBLE, duration: ASSEMBLE, ease: "none", onComplete: wireIn })
@@ -593,7 +595,7 @@ export default function BuildField({ baseColor, activeColor, maxAlpha = MAX_ALPH
     const onMove = (e: PointerEvent) => { if (e.pointerType !== "mouse" || touch) return; toLocal(e); pointer.inside = inHero(); };
     const onOut = (e: PointerEvent) => { if (!e.relatedTarget) pointer.inside = false; };
     const onDown = (e: PointerEvent) => { toLocal(e); if (inHero()) spawn(pointer.x, pointer.y, CLICK.speed, CLICK.width, CLICK.gain); };
-    const cta = hero.querySelector<HTMLElement>('[data-track="cta"][data-location="hero"]');
+    const cta = hero.querySelector<HTMLElement>("[data-field-cta]") ?? hero.querySelector<HTMLElement>('[data-track="cta"][data-location="hero"]');
     const onPulse = () => {
       const now = performance.now();
       if (now - lastPulse < PULSE.every) return;

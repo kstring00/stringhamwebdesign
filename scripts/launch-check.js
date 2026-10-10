@@ -53,7 +53,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
         skip: Boolean(q('a.skip[href="#main"]')), landmarks: { main: Boolean(q('main#main')), header: Boolean(q('header')), footer: Boolean(q('footer')), nav: Boolean(q('nav[aria-label]')) },
         phone: qa('a[href^="tel:"]').length, cta: qa('a[href="/websites#website-quote"], a[href="/#free-check"]').length, privacy: Boolean(q('footer a[href="/privacy"]')),
         year: [...qa('footer')].pop()?.textContent.match(/©\s*(\d{4})/)?.[1] || '', jsonld: qa('script[type="application/ld+json"]').map((s) => s.textContent).join(' '),
-        text: document.body.innerText, headerNav: qa('header nav[aria-label="Primary"] a').map((a) => a.textContent.trim()),
+        text: document.body.innerText, headerNav: qa('header nav[aria-label="Primary"] a').map((a) => a.textContent.trim()), headerActive: (q('header nav[aria-label="Primary"] a[data-active]') || {}).textContent?.trim() || '', headerCta: (q('header a[data-location="header"]') || {}).textContent?.trim() || '',
         links: qa('a[href]').map((a) => ({ href: a.getAttribute('href'), target: a.getAttribute('target'), rel: a.getAttribute('rel') || '' })),
       };
     });
@@ -83,7 +83,8 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     if (path === '/') ok(`${path}: LocalBusiness JSON-LD`, /"@type":"ProfessionalService"/.test(d.jsonld) && /League City/.test(d.jsonld) && /Houston/.test(d.jsonld));
     if (path === '/about') ok(`${path}: Person JSON-LD`, /"@type":"Person"/.test(d.jsonld));
     ok(`${path}: no banned words in rendered text`, !BANNED.test(d.text), (d.text.match(BANNED) || [''])[0]);
-    ok(`${path}: header is the logo, one link and one button`, JSON.stringify(d.headerNav) === JSON.stringify(path === '/partners' ? ['For business owners', 'Explore a partnership'] : ['For partners', 'Request a website quote']), JSON.stringify(d.headerNav));
+    const partnerView = path === '/partners';
+    ok(`${path}: header is the logo, the view switch and one button`, JSON.stringify(d.headerNav) === JSON.stringify(['For businesses', 'For partners']) && d.headerActive === (partnerView ? 'For partners' : 'For businesses') && d.headerCta === (partnerView ? 'Explore a partnership' : 'Request a website quote'), JSON.stringify({ nav: d.headerNav, active: d.headerActive, cta: d.headerCta }));
   }
 
   const home = seen.get('/');

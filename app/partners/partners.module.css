@@ -34,9 +34,24 @@
 
 /* ---------- hero ---------- */
 
-.hero { padding: clamp(2.5rem, 7vw, 6rem) 0 clamp(2.5rem, 5vw, 4.5rem); }
+/* The partner view: the site's accent becomes violet on this page, so it
+   reads at a glance as a different side of the site. */
+.view {
+  --green: var(--violet);
+  --green-deep: var(--violet-deep);
+  --green-soft: var(--violet-soft);
+}
 
-.hero > div { display: grid; gap: 1.3rem; }
+.hero {
+  /* Its own stacking context, so the Build Field (z-index -1) sits behind
+     the content but in front of the page background. */
+  position: relative;
+  isolation: isolate;
+  padding: clamp(2.5rem, 7vw, 6rem) 0 clamp(2.5rem, 5vw, 4.5rem);
+}
+
+/* The text block the field clears around: only as wide as its words. */
+.heroText { display: grid; gap: 1.3rem; max-width: 44rem; }
 
 .eyebrow {
   color: var(--green-deep);

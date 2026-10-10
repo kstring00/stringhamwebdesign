@@ -33,9 +33,12 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
   (`public/kyle-founder.*`). Don't mention his dad's facility by name.
 - Location is "League City, Texas", never just "Texas". Phone is shown as
   "Call or text 413-454-3509".
-- /partners recruits referral and white-label partners without turning the
-  home page into a partner site: one quiet header link, one home band, one
-  footer link. The stage of the business is stated plainly on /partners
+- The site has two views, and the header says which one you're in: a
+  "For businesses / For partners" switch (docked at the bottom on phones)
+  with green for businesses and violet for partners. /partners takes the
+  violet accent throughout (`.view` in partners.module.css) and its hero
+  has the dot field in violet. Besides the switch, the home page has one
+  partner band and one footer link. The stage of the business is stated plainly on /partners
   ("a new studio… I haven't delivered a paid client website yet"); keep it
   true and update it when it stops being true.
 - The referral reward is published: 20% of the website's total price, paid

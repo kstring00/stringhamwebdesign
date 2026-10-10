@@ -2,7 +2,6 @@
 
 import { useState, type FormEvent } from "react";
 
-import { businessTypes } from "../data/offer";
 import { site } from "../data/site";
 import { track } from "../lib/track";
 import { SOURCE_KEYS, useSourceFields } from "../lib/useSourceFields";
@@ -87,10 +86,7 @@ export default function FreeCheckForm({ sent = false, errorCode = "" }: { sent?:
         </div>
         <div className={styles.field}>
           <label htmlFor="fc-type">Type of business <small>optional</small></label>
-          <select className={styles.input} id="fc-type" name="type" defaultValue="">
-            <option value="">Choose one</option>
-            {businessTypes.map((t) => <option key={t} value={t}>{t}</option>)}
-          </select>
+          <input className={styles.input} id="fc-type" name="type" maxLength={40} autoComplete="off" />
         </div>
       </div>
       <div className={styles.field}>
