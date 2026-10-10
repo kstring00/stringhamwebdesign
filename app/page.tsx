@@ -3,12 +3,13 @@ import type { Metadata } from "next";
 import { BusinessJsonLd } from "./components/JsonLd";
 import { pageMeta } from "./data/meta";
 import { cta } from "./data/nav";
-import { findings, noGuarantee, plans, questions, steps } from "./data/offer";
+import { noGuarantee, plans, PRICES, questions, steps } from "./data/offer";
 import { referral } from "./data/referral";
 import { site } from "./data/site";
 import BuildFieldMount from "./home/BuildFieldMount";
 import FreeCheckForm from "./home/FreeCheckForm";
 import Included from "./home/Included";
+import Lifeless from "./home/Lifeless";
 import styles from "./home/home.module.css";
 
 export const metadata: Metadata = pageMeta({
@@ -16,6 +17,15 @@ export const metadata: Metadata = pageMeta({
   description: "Custom websites for independent businesses, starting at $1,800. No required Google Ads spending. Website development and Google listing services in League City, Texas.",
   path: "/",
 });
+
+/** The door arrow: a line and a chevron, so it can slide on hover. */
+function Arrow() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9h12M10 4l5 5-5 5" />
+    </svg>
+  );
+}
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ sent?: string; error?: string }> }) {
   const { sent, error } = await searchParams;
@@ -33,22 +43,26 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
               <a className={`u ${styles.textLink}`} href="#prices">See prices</a>
             </div>
           </div>
-          <aside className={styles.example} aria-label="Example of a free check" data-field-clear>
-            <p className={styles.exampleTag}><span>Example free check</span> <span className={styles.exampleName}>Example RV Park</span></p>
-            <ul className={styles.exampleRows}>
-              {[
-                ["Google phone", "Correct", true],
-                ["Yelp phone", "Different number", false],
-                ["Hours", "Out of date", false],
-                ["Website link", "Dead page", false],
-              ].map(([k, v, ok]) => (
-                <li key={k as string} className={ok ? styles.exOk : styles.exBad}>
-                  <span>{k as string}</span>
-                  <b><i aria-hidden="true">{ok ? "✓" : "✗"}</i><span className="sr-only">{ok ? "OK: " : "Problem: "}</span>{v as string}</b>
-                </li>
-              ))}
-            </ul>
-            <p className={styles.exampleFoot}>Fixed within 7 days, with screenshots.</p>
+          {/* Two doors: the two things people come here for, each to its own place. */}
+          <aside className={styles.chooser} aria-labelledby="chooser-title" data-field-clear>
+            <h2 id="chooser-title" className={styles.chooserTitle}>What do you need?</h2>
+            <a className={styles.door} href="/websites" data-track="cta" data-location="hero-door-website">
+              <span className={styles.doorNum} aria-hidden="true">01</span>
+              <span className={styles.doorText}>
+                <span className={styles.doorName}>A new website</span>
+                <span className={styles.doorMeta}>From ${PRICES.website.toLocaleString("en-US")} · fixed written quote</span>
+              </span>
+              <span className={styles.doorArrow} aria-hidden="true"><Arrow /></span>
+            </a>
+            <a className={styles.door} href="#free-check" data-track="cta" data-location="hero-door-listing">
+              <span className={styles.doorNum} aria-hidden="true">02</span>
+              <span className={styles.doorText}>
+                <span className={styles.doorName}>Fix my Google listing</span>
+                <span className={styles.doorMeta}>Free check first · ${PRICES.listingFix} fix in 7 days</span>
+              </span>
+              <span className={styles.doorArrow} aria-hidden="true"><Arrow /></span>
+            </a>
+            <p className={styles.chooserFoot}>Not sure? <a className="u" href={site.phoneHref}>Call or text {site.phone}</a>.</p>
           </aside>
           <p className={styles.trust} data-field-clear>
             <span className={styles.trustName}>Kyle Stringham</span> · {site.legalName} · {site.city}, {site.regionLong}
@@ -56,20 +70,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
         </div>
       </section>
 
-      {/* 2. What a free check finds */}
-      <section className={styles.section} id="findings" aria-labelledby="findings-title">
-        <div className="container">
-          <div className={styles.head}>
-            <h2 id="findings-title" className={styles.h2}>What I find on real local listings.</h2>
-            <p className={styles.lede}>From my own research on local businesses, names left out.</p>
-          </div>
-          <ul className={styles.findings} data-reveal-group>
-            {findings.map((f) => (
-              <li className={styles.finding} key={f} data-reveal>{f}</li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      {/* 2. Lifeless sites, then the turn */}
+      <Lifeless />
 
       {/* 3. How it works */}
       <section className={`${styles.section} ${styles.alt}`} id="how" aria-labelledby="how-title">

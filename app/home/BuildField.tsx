@@ -9,7 +9,7 @@ import { FRAG, VERT } from "./buildFieldShaders";
 /**
  * The hero's Build Field: a halftone dot lattice behind the hero that
  * assembles from the CTA, breathes, follows the cursor and draws a faint
- * website around the example card. Atmosphere only: text, prices and the
+ * website around the hero card. Atmosphere only: text, prices and the
  * CTA never move or change; dots are cleared to near zero behind every
  * [data-field-clear] block (measured, not guessed), and no dot is ever as
  * dark as the button.
@@ -169,7 +169,7 @@ function segDist(x: number, y: number, [ax, ay, bx, by]: Seg) {
 }
 
 /**
- * The browser window drawn around the free-check card, snapped to the
+ * The browser window drawn around the hero card, snapped to the
  * lattice so every line lands on a row or column of dots: outline, a top
  * bar with three window controls and a nav, and two content blocks whose
  * tops hide behind the card and whose bottoms peek out below it.
