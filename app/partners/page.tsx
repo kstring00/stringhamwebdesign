@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import Founder from "../components/Founder";
 import BuildFieldMount from "../home/BuildFieldMount";
+import home from "../home/home.module.css";
 import { pageMeta } from "../data/meta";
 import { comparison, partnerQuestions, partnerSteps, paths, reasons } from "../data/partners";
 import { referral } from "../data/referral";
@@ -74,6 +75,15 @@ function Project({ w, index, featured }: { w: Work; index: number; featured: boo
   );
 }
 
+/** The door arrow, as on the home page. */
+function Arrow() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9h12M10 4l5 5-5 5" />
+    </svg>
+  );
+}
+
 export default async function PartnersPage({ searchParams }: { searchParams: Promise<{ sent?: string; error?: string }> }) {
   const { sent, error } = await searchParams;
   return (
@@ -81,17 +91,38 @@ export default async function PartnersPage({ searchParams }: { searchParams: Pro
       {/* 1. Hero */}
       <section className={styles.hero} aria-labelledby="partners-title">
         <BuildFieldMount />
-        <div className="container">
+        <div className={`container ${styles.heroGrid}`}>
           <div className={styles.heroText} data-field-clear>
             <p className={styles.eyebrow}>For photographers, designers, agencies and consultants</p>
             <h1 id="partners-title" className={styles.h1}>Your clients need websites. I can build them.</h1>
             <p className={styles.sub}>I work with professionals whose clients need a website, so you can say yes to the project without doing the development yourself. Refer the client to me, or have me build behind your brand.</p>
             <div className={styles.actions}>
-              <a className="btn" href="#partner-form" data-track="cta" data-location="partners-hero" data-field-cta>Explore a partnership</a>
+              <a className="btn" href="#partner-form" data-track="cta" data-location="partners-hero" data-field-cta data-hero-cta>Explore a partnership</a>
               <a className="btn btn-secondary" href="#work">View my work</a>
             </div>
             <p className={styles.trust}><b>Kyle Stringham</b> · {site.legalName} · {site.city}, {site.regionLong}</p>
           </div>
+          {/* The two ways in, each to its own terms below. */}
+          <aside className={`${home.chooser} ${styles.heroCard}`} aria-labelledby="ways-card-title" data-field-clear>
+            <h2 id="ways-card-title" className={home.chooserTitle}>How do you want to work?</h2>
+            <a className={home.door} href="#referrals" data-track="cta" data-location="partners-door-referral">
+              <span className={home.doorNum} aria-hidden="true">01</span>
+              <span className={home.doorText}>
+                <span className={home.doorName}>Refer a client</span>
+                <span className={home.doorMeta}>{referral.percent} of the website total, once they&rsquo;ve paid in full</span>
+              </span>
+              <span className={home.doorArrow} aria-hidden="true"><Arrow /></span>
+            </a>
+            <a className={home.door} href="#ways" data-track="cta" data-location="partners-door-agency">
+              <span className={home.doorNum} aria-hidden="true">02</span>
+              <span className={home.doorText}>
+                <span className={home.doorName}>Build behind your brand</span>
+                <span className={home.doorMeta}>White-label · priced per project, in writing</span>
+              </span>
+              <span className={home.doorArrow} aria-hidden="true"><Arrow /></span>
+            </a>
+            <p className={home.chooserFoot}>Anyone can refer. No sign-up needed.</p>
+          </aside>
         </div>
       </section>
 
@@ -232,7 +263,7 @@ export default async function PartnersPage({ searchParams }: { searchParams: Pro
           <div className={styles.formSide}>
             <h2 id="pf-title" className={styles.h2}>Explore a partnership</h2>
             <p className={styles.lede}><b>What happens next:</b> I&rsquo;ll reply within two business days to set up a short call. No cost and no commitment.</p>
-            <p className={styles.body}>Own a business yourself? The <a className="u" href="/#free-check">free listing check</a> is the place to start.</p>
+            <p className={styles.body}>Need a website for your own business? <a className="u" href="/websites#website-quote">Request a website quote</a> instead.</p>
           </div>
           <PartnerForm sent={sent === "1"} errorCode={typeof error === "string" ? error : ""} />
         </div>

@@ -20,7 +20,7 @@
 }
 
 .problem { grid-column: 1; grid-row: 1; padding-bottom: 32vh; }
-.turn { grid-column: 1; grid-row: 2; padding-bottom: 18vh; }
+.turn { grid-column: 1; grid-row: 2; padding-bottom: 6vh; }
 .stage { grid-column: 2; grid-row: 1 / span 2; }
 .sticky { position: sticky; top: 6rem; }
 
@@ -463,4 +463,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .pin::after { animation: none; }
+  /* "Beautiful," is simply there, finished. */
+  .bloom [aria-hidden] > span { color: inherit; font-weight: inherit; transform: none; }
 }

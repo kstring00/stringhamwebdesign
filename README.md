@@ -36,7 +36,8 @@ of the home page (see `next.config.ts`).
 ## Where things live
 
 - `app/data/offer.ts` — every word on the home page: prices, the verified
-  findings, the three steps, the plan cards, the questions.
+  findings, the website steps and questions (shared with /websites), the
+  listing steps and questions, the plan cards.
   Prices here must match `content/service-terms.md`; change them together.
 - `app/data/site.ts` — identity, phone, email, location.
 - `content/service-terms.md` and `content/privacy.md` — rendered word for
@@ -70,11 +71,14 @@ of the home page (see `next.config.ts`).
 - `app/motion/Reveal.tsx` — a short upward settle on `data-reveal` blocks
   below the fold. Never a fade, so text is always at full contrast. Off under
   reduced motion; nothing depends on it.
-- `app/components/Header.tsx` — the liquid-glass header: logo and the one
-  action in a capsule, plus the "For businesses / For partners" view switch
-  (bottom dock on phones). The view's accent (green or violet) colours the
-  switch, the glass rim and the button. Page-to-page view transitions are
-  in `globals.css`.
+- `app/components/Header.tsx` — the liquid-glass header: logo, the
+  "For businesses / For partners" view switch and the one action, in that
+  order (so the tab order matches). The view's accent (green or violet)
+  colours the switch, the glass rim and the button. On phones the switch is
+  a bottom dock that slides away while scrolling down, and the header's
+  button waits until any `data-hero-cta` button has scrolled out of view, so
+  the first screen has one action. Page-to-page view transitions are in
+  `globals.css`.
 - `app/home/Lifeless.tsx` — home section 2: a lifeless example site that
   comes alive on scroll; one CSS variable (`--p`) drives it.
 - `app/home/BuildField.tsx` (+ `buildFieldShaders.ts`, `BuildFieldMount.tsx`)

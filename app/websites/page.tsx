@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import Founder from "../components/Founder";
 import { pageMeta } from "../data/meta";
-import { PRICES, plans } from "../data/offer";
+import { PRICES, plans, websiteSteps as steps } from "../data/offer";
 import { referral } from "../data/referral";
 import CountUp from "../motion/CountUp";
 import { site } from "../data/site";
@@ -31,11 +31,6 @@ const points = [
 /** The two cards that matter on this page: the build and the upkeep. */
 const sitePlans = plans.filter((p) => p.key === "site" || p.key === "plan");
 
-const steps = [
-  { n: "1", title: "Tell me what you need", body: "Send the form, text or email. We talk about your business, your customers and what they should be able to do on the site." },
-  { n: "2", title: "Get a fixed quote", body: "You get the pages, features, timeline, price and any deposit in writing. Nothing starts until you agree." },
-  { n: "3", title: "Review, approve, launch", body: "I build it and you review it. You pay the balance once you approve, and it goes live on your domain." },
-];
 
 export default async function Websites({ searchParams }: { searchParams: Promise<{ sent?: string; error?: string }> }) {
   const { sent, error } = await searchParams;
@@ -49,7 +44,7 @@ export default async function Websites({ searchParams }: { searchParams: Promise
             <h1 id="websites-title" className={home.h1}>A website that makes it easier for customers to choose you.</h1>
             <p className={home.sub}>I design and build websites for owner-run businesses, built around the one thing your customers need to do: call, book, order or ask. One person, start to finish, and you deal with me directly.</p>
             <div className={home.actions}>
-              <a className="btn" href="#website-quote" data-track="cta" data-location="websites-hero">Request a website quote</a>
+              <a className="btn" href="#website-quote" data-track="cta" data-location="websites-hero" data-hero-cta>Request a website quote</a>
               <a className={`u ${home.textLink}`} href="#work">See the work</a>
             </div>
           </div>

@@ -13,7 +13,15 @@ export const findings = [
   "A matching .com owned by a different business in another state.",
 ] as const;
 
-export const steps = [
+/** How a website project runs. Shared by the home page and /websites. */
+export const websiteSteps = [
+  { n: "1", title: "Tell me what you need", body: "Send the form, text or email. We talk about your business, your customers and what they should be able to do on the site." },
+  { n: "2", title: "Get a fixed quote", body: "You get the pages, features, timeline, price and any deposit in writing. Nothing starts until you agree." },
+  { n: "3", title: "Review, approve, launch", body: "I build it and you review it. You pay the balance once you approve, and it goes live on your domain." },
+] as const;
+
+/** How a Listing Fix runs: the home page's Google listing section. */
+export const listingSteps = [
   {
     n: "1",
     title: "Free check",
@@ -38,7 +46,6 @@ export const plans = [
     name: "Listing Fix",
     price: `$${PRICES.listingFix}`,
     cadence: "one-time",
-    tag: "Most start here",
     lead: "How your business shows up, fixed within 7 days.",
     included: [
       "Google listing corrected: name, hours, phone, website link, photos",
@@ -124,3 +131,47 @@ export const questions = [
 ] as const;
 
 export const noGuarantee = "Google controls rankings, so I don't promise results. I promise the work: every fix within 7 days, with screenshots.";
+
+/** Under the website prices: the objections that come up at the price. */
+export const websitePriceNote = "No ad spend. No contract. Any deposit is written in your quote, you approve the finished site before paying the balance, and the Monthly Plan is month to month.";
+
+/**
+ * The home page's questions, website first. Every answer restates something
+ * already promised on the site or in the Service Terms; nothing new.
+ */
+export const websiteQuestions = [
+  {
+    q: "What does a website cost? Any hidden fees?",
+    a: `Websites start at $${PRICES.website.toLocaleString("en-US")}. Your fixed written quote lists the pages, features, timeline and full price before any work starts. The Monthly Plan is optional, $${PRICES.monthly} a month. Nothing else.`,
+    link: { label: "Service Terms", href: "/terms#website" },
+  },
+  {
+    q: "Do I have to pay for ads or sign a contract?",
+    a: "No. There's no required ad spending and no contract. The Monthly Plan is month to month; cancel anytime by email.",
+  },
+  {
+    q: "When do I pay?",
+    a: "Any deposit is written in your quote. You pay the balance once you've approved the finished site, before it goes live on your domain.",
+  },
+  {
+    q: "Will I own the website?",
+    a: "Yes. Once it's paid in full, the site and its content are yours, and your domain and accounts stay in your name.",
+  },
+  {
+    q: "How long does it take?",
+    a: "It depends on the pages and features you need. Your written quote gives the timeline before anything starts.",
+  },
+  {
+    q: "What do you need from me?",
+    a: "A short conversation about your business and customers, accurate details, and photos you have the right to use. Then you review and approve. Two rounds of changes are included.",
+  },
+  {
+    q: "Will it bring me more customers? Is it guaranteed?",
+    a: "I can't promise that, and nobody honest can. What I promise is the site in your quote, built around the one thing your customers need to do, and on the Monthly Plan a short monthly report of calls and requests.",
+    link: { label: "What I can't promise (Terms)", href: "/terms#what-we-cant-promise" },
+  },
+  {
+    q: "What happens after I send the form?",
+    a: "I read it and text or email you within 24 hours. If it's a fit, we talk, then you get a fixed written quote. No obligation.",
+  },
+] as const;
