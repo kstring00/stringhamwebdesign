@@ -10,6 +10,8 @@ import BuildFieldMount from "./home/BuildFieldMount";
 import FreeCheckForm from "./home/FreeCheckForm";
 import Included from "./home/Included";
 import Lifeless from "./home/Lifeless";
+import Statement from "./home/Statement";
+import CountUp from "./motion/CountUp";
 import styles from "./home/home.module.css";
 
 export const metadata: Metadata = pageMeta({
@@ -72,6 +74,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
 
       {/* 2. Lifeless sites, then the turn */}
       <Lifeless />
+
+      {/* The idea, in one statement */}
+      <Statement />
 
       {/* 3. How it works */}
       <section className={`${styles.section} ${styles.alt}`} id="how" aria-labelledby="how-title">
@@ -150,7 +155,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
       {/* Referrals and partners: one quiet band, the page stays for business owners. */}
       <section className={styles.partnerBand} aria-labelledby="partner-band-title">
         <div className={`container ${styles.partnerBandInner}`}>
-          <p className={styles.referralRate} aria-hidden="true">{referral.percent}</p>
+          <p className={styles.referralRate} aria-hidden="true"><CountUp value={referral.rate} suffix="%" /></p>
           <div>
             <p className={styles.partnerEyebrow}>Referrals &amp; partners</p>
             <h2 id="partner-band-title" className={styles.partnerTitle}>Know a business that needs a website? I pay {referral.percent} of the website total when they hire me.</h2>

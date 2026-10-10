@@ -245,7 +245,7 @@
     position: fixed;
     top: auto;
     bottom: calc(0.85rem + env(safe-area-inset-bottom));
-    background: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.72);
     -webkit-backdrop-filter: blur(18px) saturate(1.8);
     backdrop-filter: blur(18px) saturate(1.8);
     box-shadow:
@@ -262,6 +262,7 @@
 /* Phones: the logo still reads "Stringham Web Design", on two short lines. */
 @media (max-width: 40rem) {
   .glass { min-height: 3.5rem; padding-left: 1.1rem; }
+  .header[data-scrolled] .glass { background: rgba(255, 255, 255, 0.76); }
   .brand { flex-direction: column; align-items: flex-start; justify-content: center; gap: 0.15rem; }
   .wordmark { font-size: 1.3rem; }
   .brandSub { font-size: 0.74rem; }

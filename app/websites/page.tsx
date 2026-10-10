@@ -4,6 +4,7 @@ import Founder from "../components/Founder";
 import { pageMeta } from "../data/meta";
 import { PRICES, plans } from "../data/offer";
 import { referral } from "../data/referral";
+import CountUp from "../motion/CountUp";
 import { site } from "../data/site";
 import { kindLabel, partnerWork } from "../data/work";
 import home from "../home/home.module.css";
@@ -153,7 +154,7 @@ export default async function Websites({ searchParams }: { searchParams: Promise
       {/* 6. Referral offer */}
       <section className={styles.referral} aria-labelledby="refer-title">
         <div className={`container ${styles.referralInner}`}>
-          <p className={styles.referralRate} aria-hidden="true">{referral.percent}</p>
+          <p className={styles.referralRate} aria-hidden="true"><CountUp value={referral.rate} suffix="%" /></p>
           <div>
             <h2 id="refer-title" className={styles.referralTitle}>Know another business that needs a website?</h2>
             <p className={styles.referralBody}>Send them my way. When they hire me and pay in full, I pay you {referral.percent} of their website&rsquo;s total price. On a {referral.example.price} site, that&rsquo;s {referral.example.reward}.</p>

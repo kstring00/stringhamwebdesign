@@ -5,6 +5,7 @@ import BuildFieldMount from "../home/BuildFieldMount";
 import { pageMeta } from "../data/meta";
 import { comparison, partnerQuestions, partnerSteps, paths, reasons } from "../data/partners";
 import { referral } from "../data/referral";
+import CountUp from "../motion/CountUp";
 import { site } from "../data/site";
 import { kindLabel, partnerWork, type Work, type WorkKind } from "../data/work";
 import PartnerForm from "./PartnerForm";
@@ -129,7 +130,7 @@ export default async function PartnersPage({ searchParams }: { searchParams: Pro
           {/* Referral terms: published, and the same for anyone who refers. */}
           <div className={styles.referral} id="referrals">
             <div className={styles.referralLead}>
-              <p className={styles.referralRate} aria-hidden="true">{referral.percent}</p>
+              <p className={styles.referralRate} aria-hidden="true"><CountUp value={referral.rate} suffix="%" /></p>
               <h3 id="referrals-title" className={styles.referralTitle}>Referral terms: {referral.percent} of the website total</h3>
               <p className={styles.referralExample}>
                 <span>Example</span> Your client&rsquo;s website quote is {referral.example.price}. Once they&rsquo;ve paid in full, I pay you <b>{referral.example.reward}</b>.
