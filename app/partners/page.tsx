@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import Founder from "../components/Founder";
+import BuildFieldMount from "../home/BuildFieldMount";
 import { pageMeta } from "../data/meta";
 import { comparison, partnerQuestions, partnerSteps, paths, reasons } from "../data/partners";
 import { referral } from "../data/referral";
@@ -75,18 +76,21 @@ function Project({ w, index, featured }: { w: Work; index: number; featured: boo
 export default async function PartnersPage({ searchParams }: { searchParams: Promise<{ sent?: string; error?: string }> }) {
   const { sent, error } = await searchParams;
   return (
-    <>
+    <div className={styles.view}>
       {/* 1. Hero */}
       <section className={styles.hero} aria-labelledby="partners-title">
+        <BuildFieldMount />
         <div className="container">
-          <p className={styles.eyebrow}>For photographers, designers, agencies and consultants</p>
-          <h1 id="partners-title" className={styles.h1}>Your clients need websites. I can build them.</h1>
-          <p className={styles.sub}>I work with professionals whose clients need a website, so you can say yes to the project without doing the development yourself. Refer the client to me, or have me build behind your brand.</p>
-          <div className={styles.actions}>
-            <a className="btn" href="#partner-form" data-track="cta" data-location="partners-hero">Explore a partnership</a>
-            <a className="btn btn-secondary" href="#work">View my work</a>
+          <div className={styles.heroText} data-field-clear>
+            <p className={styles.eyebrow}>For photographers, designers, agencies and consultants</p>
+            <h1 id="partners-title" className={styles.h1}>Your clients need websites. I can build them.</h1>
+            <p className={styles.sub}>I work with professionals whose clients need a website, so you can say yes to the project without doing the development yourself. Refer the client to me, or have me build behind your brand.</p>
+            <div className={styles.actions}>
+              <a className="btn" href="#partner-form" data-track="cta" data-location="partners-hero" data-field-cta>Explore a partnership</a>
+              <a className="btn btn-secondary" href="#work">View my work</a>
+            </div>
+            <p className={styles.trust}><b>Kyle Stringham</b> · {site.legalName} · {site.city}, {site.regionLong}</p>
           </div>
-          <p className={styles.trust}><b>Kyle Stringham</b> · {site.legalName} · {site.city}, {site.regionLong}</p>
         </div>
       </section>
 
@@ -232,6 +236,6 @@ export default async function PartnersPage({ searchParams }: { searchParams: Pro
           <PartnerForm sent={sent === "1"} errorCode={typeof error === "string" ? error : ""} />
         </div>
       </section>
-    </>
+    </div>
   );
 }

@@ -56,3 +56,8 @@
 @media (max-width: 48rem) {
   .grid { grid-template-columns: 1fr; gap: 1.5rem; }
 }
+
+/* Tablets and phones: room under the docked view switch. */
+@media (max-width: 56rem) {
+  .footer { padding-bottom: calc(5.5rem + env(safe-area-inset-bottom)); }
+}
