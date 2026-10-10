@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
 
 import { cta, navLinks, partnerCta } from "../data/nav";
@@ -14,13 +14,15 @@ function subscribeScroll(cb: () => void) {
 }
 
 /**
- * The header: one liquid-glass bar with the logo, four links (Work,
- * Pricing, About, FAQ), the phone number and the one action, "Get a quote +
- * free demo". The partner page keeps its own action and violet accent.
+ * The header: one liquid-glass bar with the logo, the links (Work, Pricing,
+ * Blog, About, FAQ, and "For partners" set apart as a pill), the phone
+ * number and the one action, "Get a quote + free demo". The partner page
+ * keeps its own action and violet accent.
  *
- * On phones the bar is just the logo: the links collapse and the actions
- * move to the bottom bar (MobileBar), within thumb reach. A soft highlight
- * follows the pointer across the glass. Reduced motion: no highlight.
+ * On phones the bar is the logo and a Menu button that drops the same
+ * links down; the actions move to the bottom bar (MobileBar), within thumb
+ * reach. A soft highlight follows the pointer across the glass. Reduced
+ * motion: no highlight.
  */
 export default function Header() {
   const scrolled = useSyncExternalStore(subscribeScroll, () => window.scrollY > 24, () => false);
@@ -28,6 +30,18 @@ export default function Header() {
   const view = pathname.startsWith("/partners") ? "partners" : "business";
   const action = view === "partners" ? partnerCta : cta;
   const bar = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
+
+  // The phone menu closes on navigation and on Escape.
+  useEffect(() => { setOpen(false); }, [pathname]);
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    const onClick = (e: MouseEvent) => { if (bar.current && !bar.current.contains(e.target as Node)) setOpen(false); };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("click", onClick);
+    return () => { document.removeEventListener("keydown", onKey); document.removeEventListener("click", onClick); };
+  }, [open]);
 
   // The highlight follows the pointer across the glass.
   useEffect(() => {
@@ -45,14 +59,20 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={styles.header} data-view={view} data-scrolled={scrolled || undefined}>
+    <header className={styles.header} data-view={view} data-scrolled={scrolled || undefined} data-menu={open || undefined}>
       <div ref={bar} className={styles.bar}>
         <span className={styles.glass} aria-hidden="true" />
         <a className={styles.brand} href="/" aria-label="Stringham Web Design, home">
           <Logo className={styles.logo} eager />
         </a>
-        <nav className={styles.nav} aria-label="Primary">
-          {navLinks.map((l) => <a key={l.href} className={styles.link} href={l.href}>{l.label}</a>)}
+        <button type="button" className={styles.menuBtn} aria-expanded={open} aria-controls="primary-nav" onClick={() => setOpen((o) => !o)}>
+          <span className={styles.burger} aria-hidden="true"><i /><i /><i /></span>
+          {open ? "Close" : "Menu"}
+        </button>
+        <nav id="primary-nav" className={styles.nav} aria-label="Primary">
+          {navLinks.map((l) => (
+            <a key={l.href} className={`${styles.link} ${"featured" in l && l.featured ? styles.featured : ""}`} href={l.href} onClick={() => setOpen(false)}>{l.label}</a>
+          ))}
         </nav>
         <div className={styles.actions}>
           <a className={styles.phone} href={site.phoneHref}>

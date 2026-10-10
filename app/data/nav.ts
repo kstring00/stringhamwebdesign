@@ -2,8 +2,11 @@
 export const navLinks = [
   { label: "Work", href: "/#work" },
   { label: "Pricing", href: "/#pricing" },
+  { label: "Blog", href: "/blog" },
   { label: "About", href: "/#about" },
   { label: "FAQ", href: "/#faq" },
+  /** The partner side of the site, set apart as a pill. */
+  { label: "For partners", href: "/partners", featured: true },
 ] as const;
 
 /** The site's one action: a fixed quote, and a free demo of the homepage with it. */
