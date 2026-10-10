@@ -251,7 +251,7 @@ p {
   min-height: 3.25rem;
   padding: 0.85rem 1.6rem;
   border: 1px solid var(--green);
-  border-radius: 8px;
+  border-radius: 999px;
   background: var(--green);
   color: var(--paper);
   font-size: 1rem;

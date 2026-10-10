@@ -284,21 +284,6 @@
   line-height: 1.55;
 }
 
-.yours {
-  padding-top: 0.5rem;
-  color: var(--ink);
-  font-weight: 500;
-}
-
-.keep {
-  margin-top: 1.5rem;
-  padding: 0.9rem 1.1rem;
-  border-left: 3px solid var(--green);
-  background: var(--green-soft);
-  color: var(--ink);
-  font-weight: 500;
-}
-
 /* ---------- 4. prices ---------- */
 
 .plans {
@@ -322,19 +307,6 @@
 .plan:first-child {
   border-color: var(--green);
   box-shadow: 0 0 0 1px var(--green);
-}
-
-.planTag {
-  position: absolute;
-  top: -0.7rem;
-  left: 1.25rem;
-  padding: 0.2rem 0.6rem;
-  border-radius: 999px;
-  background: var(--green);
-  color: var(--paper);
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
 }
 
 .planName {
@@ -473,28 +445,6 @@
 
 /* ---------- 5. about ---------- */
 
-/* About Kyle: one readable column. */
-.aboutCol {
-  max-width: 46rem;
-  display: grid;
-  align-content: start;
-  gap: 0.9rem;
-}
-
-.aboutCol .lede { margin: 0; }
-
-.contactLine {
-  line-height: 2;
-}
-
-.contactLine a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  color: var(--ink);
-  font-weight: 500;
-}
-
 /* ---------- 6. questions ---------- */
 
 .qaGrid {
@@ -594,15 +544,13 @@
   .step h3, .step p { grid-column: 2; }
   .hero { padding-bottom: 2rem; }
   .qaItem summary { padding: 0.7rem 0; }
-  .keep { margin-top: 1.1rem; padding: 0.75rem 0.9rem; }
   .plans { gap: 0.75rem; }
   .plan { padding: 1.2rem 1.15rem 1rem; gap: 0.5rem; }
-  .aboutCol { gap: 0.7rem; }
   .chooser { justify-self: start; width: 100%; max-width: 30rem; }
   .qaGrid { grid-template-columns: 1fr; gap: 1.5rem; }
   .qaSide { position: static; }
   .steps { grid-template-columns: 1fr; }
-  .plans { grid-template-columns: 1fr; }
+  .plans, .plansTwo { grid-template-columns: 1fr; }
   .formGrid { grid-template-columns: 1fr; }
   .formSide { position: static; }
 }
@@ -642,23 +590,6 @@
   gap: 0.5rem 1.25rem;
 }
 
-/* About Kyle: a small portrait beside the heading. */
-.kyleHead {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.kylePhoto {
-  display: block;
-  width: 4.5rem;
-  height: 4.5rem;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center 30%;
-  border: 1px solid var(--line);
-}
-
 .partnerEyebrow {
   margin-bottom: 0.35rem;
   color: var(--green-deep);
@@ -685,3 +616,55 @@
   .partnerBandInner { grid-template-columns: 1fr; }
   .partnerBandActions > a[class~="btn"] { width: 100%; }
 }
+
+/* ---------- the website door: two price cards ---------- */
+
+.plansTwo { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 58rem; }
+
+.eyebrow {
+  color: var(--green-deep);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ---------- the listing door ---------- */
+
+.listingSide { display: grid; align-content: start; gap: 1.5rem; }
+
+.miniSteps {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.miniSteps li {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: 0.75rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.miniSteps li > span {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--green);
+  border-radius: 50%;
+  color: var(--green-deep);
+  font-family: var(--font-display);
+  font-size: 1rem;
+}
+
+.miniSteps b { color: var(--ink); font-weight: 600; }
+.miniSteps em { display: block; margin-top: 0.2rem; color: var(--green-deep); font-style: normal; font-size: 0.95rem; }
+
+.fineNote { color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
+
+/* A link inside a sentence: the accent and a little weight, so it reads as one. */
+.inlineLink { color: var(--green-deep); font-weight: 500; }

@@ -1,0 +1,99 @@
+/* The statement band. --f (0 → 1) is scrubbed by scroll; each word fills
+   over its own slice (--s is where it starts), from muted to ink, and the
+   accent words to green with an underline. With no JS, --f stays 1. The
+   muted start keeps 3:1 contrast on the paper, so text is always legible. */
+
+.band {
+  --f: 1;
+  padding: clamp(4rem, 10vw, 8rem) 0;
+  border-top: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.statement {
+  display: grid;
+  gap: 0.05em;
+  margin: 0;
+  font-size: clamp(2.3rem, 6.4vw, 5.4rem);
+  font-weight: 400;
+  font-variation-settings: "opsz" 144, "SOFT" 50;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+
+.line { display: block; }
+
+.word {
+  --k: clamp(0, calc((var(--f) * 1.1 - var(--s)) * 6), 1);
+  position: relative;
+  display: inline-block;
+  color: color-mix(in oklab, #7f8580 calc((1 - var(--k)) * 100%), var(--ink));
+  transform: translateY(calc((1 - var(--k)) * 0.14em));
+  white-space: pre;
+}
+
+.accent {
+  color: color-mix(in oklab, #7f8580 calc((1 - var(--k)) * 100%), var(--green));
+}
+
+/* The underline draws in as the word fills. */
+.accent::after {
+  content: "";
+  position: absolute;
+  left: 0.02em;
+  right: 0.32em;
+  bottom: 0.04em;
+  height: 0.06em;
+  border-radius: 1em;
+  background: var(--green);
+  transform: scaleX(var(--k));
+  transform-origin: left center;
+}
+
+.sub {
+  max-width: 44rem;
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+  color: var(--ink-soft);
+  font-size: clamp(1.08rem, 1.5vw, 1.3rem);
+  line-height: 1.5;
+}
+
+/* The rolling action: four words, each held, each rolled in from below. */
+.rot {
+  display: inline-block;
+  height: 1.3em;
+  overflow: hidden;
+  color: var(--green-deep);
+  font-weight: 600;
+  vertical-align: bottom;
+}
+
+.rotTrack {
+  display: grid;
+  animation: roll 9s infinite;
+}
+
+.rotTrack span { height: 1.3em; line-height: 1.3em; white-space: nowrap; }
+
+@keyframes roll {
+  0%, 20% { transform: translateY(0); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+  25%, 45% { transform: translateY(-20%); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+  50%, 70% { transform: translateY(-40%); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+  75%, 95% { transform: translateY(-60%); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+  100% { transform: translateY(-80%); }
+}
+
+/* The full list, for screen readers (and for everyone under reduced motion). */
+.rotStatic {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rot { display: none; }
+  .rotStatic { position: static; width: auto; height: auto; overflow: visible; clip-path: none; white-space: normal; color: var(--green-deep); font-weight: 600; }
+}

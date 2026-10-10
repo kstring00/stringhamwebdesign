@@ -11,6 +11,8 @@ export const REFERRAL_RATE = 0.2;
 const money = (n: number) => `$${n.toLocaleString("en-US", { maximumFractionDigits: 0 })}`;
 
 export const referral = {
+  /** The rate as a whole number, for display (20). */
+  rate: Math.round(REFERRAL_RATE * 100),
   percent: `${Math.round(REFERRAL_RATE * 100)}%`,
   /** A worked example at the starting price. */
   example: { price: money(PRICES.website), reward: money(PRICES.website * REFERRAL_RATE) },

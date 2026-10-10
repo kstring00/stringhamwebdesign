@@ -20,7 +20,7 @@
 }
 
 .problem { grid-column: 1; grid-row: 1; padding-bottom: 32vh; }
-.turn { grid-column: 1; grid-row: 2; padding-bottom: 18vh; }
+.turn { grid-column: 1; grid-row: 2; padding-bottom: 6vh; }
 .stage { grid-column: 2; grid-row: 1 / span 2; }
 .sticky { position: sticky; top: 6rem; }
 
@@ -48,6 +48,19 @@
   color: var(--ink-soft);
   font-size: clamp(1.05rem, 1.3vw, 1.18rem);
   line-height: 1.6;
+}
+
+/* Kinetic words. "lifeless." slumps (GSAP, on arrival); "Beautiful,"
+   rises letter by letter with the same --p that brings the site to life. */
+.droop, .bloom { white-space: nowrap; }
+.droop [aria-hidden] > span,
+.bloom [aria-hidden] > span { display: inline-block; transform-origin: 50% 100%; }
+
+.bloom [aria-hidden] > span {
+  --kb: clamp(0, calc((var(--p) - 0.3 - var(--i) * 0.035) / 0.22), 1);
+  color: color-mix(in oklab, #7f8580 calc((1 - var(--kb)) * 100%), var(--ink));
+  font-weight: calc(300 + 100 * var(--kb));
+  transform: translateY(calc((1 - var(--kb)) * 0.28em)) scale(calc(0.9 + 0.1 * var(--kb)));
 }
 
 .point {
@@ -450,4 +463,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .pin::after { animation: none; }
+  /* "Beautiful," is simply there, finished. */
+  .bloom [aria-hidden] > span { color: inherit; font-weight: inherit; transform: none; }
 }

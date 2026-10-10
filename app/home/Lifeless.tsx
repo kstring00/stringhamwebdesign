@@ -33,8 +33,23 @@ const after = [
  * shows the finished state; under reduced motion it switches between the
  * two states at the midpoint, without animating.
  */
+/** A word as separate letters for the kinetic type; read as one word by screen readers. */
+function Letters({ word, className }: { word: string; className: string }) {
+  return (
+    <span className={className}>
+      <span className="sr-only">{word}</span>
+      <span aria-hidden="true">{[...word].map((c, i) => <span key={i} style={{ "--i": i } as React.CSSProperties}>{c}</span>)}</span>
+    </span>
+  );
+}
+
+/** How far each letter of "lifeless." slumps (in em) and tips (in degrees). */
+const SLUMP = [0.05, 0.13, 0.03, 0.17, 0.08, 0.15, 0.04, 0.11, 0.09];
+const TIP = [-7, 5, -3, 9, -6, 4, -8, 6, -4];
+
 export default function Lifeless() {
   const scene = useRef<HTMLDivElement>(null);
+  const droopRef = useRef<HTMLHeadingElement>(null);
   const turn = useRef<HTMLDivElement>(null);
   const mock = useRef<HTMLDivElement>(null);
 
@@ -57,7 +72,25 @@ export default function Lifeless() {
     mm.add("(min-width: 64.0625rem)", () => { scrub(turn.current!, "top 92%", "top 30%"); });
     // Phones and tablets: it turns as it crosses the middle of the screen.
     mm.add("(max-width: 64rem)", () => { scrub(mock.current!, "center 62%", "center 28%"); });
-    return () => { mm.revert(); el.style.removeProperty("--p"); };
+    // "lifeless." goes lifeless as the headline arrives: the letters slump
+    // out of line, thin out and grey (never below 3:1 contrast).
+    const h2 = droopRef.current;
+    let droop: gsap.core.Tween | null = null;
+    if (h2 && !reduced) {
+      const letters = h2.querySelectorAll<HTMLElement>(`.${s.droop} [aria-hidden] > span`);
+      const em = parseFloat(getComputedStyle(h2).fontSize);
+      droop = gsap.to(letters, {
+        y: (i) => SLUMP[i % SLUMP.length] * em,
+        rotation: (i) => TIP[i % TIP.length],
+        fontWeight: 250,
+        color: "#7f8580",
+        duration: 1.4,
+        ease: "power3.inOut",
+        stagger: 0.06,
+        scrollTrigger: { trigger: h2, start: "top 78%", once: true },
+      });
+    }
+    return () => { mm.revert(); droop?.scrollTrigger?.kill(); droop?.kill(); el.style.removeProperty("--p"); };
   }, []);
 
   return (
@@ -65,7 +98,7 @@ export default function Lifeless() {
       <div className={`container ${s.scene}`} ref={scene}>
         <div className={s.problem}>
           <p className={s.eyebrow}>The problem</p>
-          <h2 id="why-title" className={s.h2}>Most small-business websites are lifeless.</h2>
+          <h2 id="why-title" className={s.h2} ref={droopRef}>Most small-business websites are <Letters word="lifeless." className={s.droop} /></h2>
           <p className={s.lede}>They look fine and do nothing. There&rsquo;s no clear next step, the phone number is buried at the bottom, and the page says what the business is but never why to choose it. Visitors look, shrug and leave.</p>
           <p className={s.point}>A website has one job: get people over the hump, from looking to calling, booking or buying.</p>
         </div>
@@ -116,7 +149,7 @@ export default function Lifeless() {
 
         <div className={s.turn} ref={turn}>
           <p className={s.eyebrow}>How I build</p>
-          <h3 className={s.h2}>Beautiful, and built around your goals.</h3>
+          <h3 className={s.h2}><Letters word="Beautiful," className={s.bloom} /> and built around your goals.</h3>
           <p className={s.lede}>My sites are designed to look the part, but every choice answers to what your business needs: calls, bookings, orders or requests. The design is there to move people, not to decorate.</p>
           <a className={`u ${s.link}`} href="/websites#website-quote" data-track="cta" data-location="why">Request a website quote <span aria-hidden="true">&rarr;</span></a>
         </div>
