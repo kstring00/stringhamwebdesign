@@ -22,7 +22,7 @@ export const referral = {
     "It’s paid once the business has paid for its website in full.",
     "Anyone can refer. You don’t need to be a partner or sign up first.",
     "Make sure I know it came from you: introduce us by email, or have them put your name in the form.",
-    `Fees for the Listing Fix (the $${PRICES.listingFix} Google listing cleanup) and the Monthly Plan ($${PRICES.monthly} a month of upkeep) don’t count toward it.`,
+    `Fees for the Listing Fix (the $${PRICES.listingFix} Google listing cleanup) and Website Care ($${PRICES.care} a month of hosting and upkeep) don’t count toward it.`,
     "The business is told about the reward, and it never changes their price.",
   ],
 } as const;

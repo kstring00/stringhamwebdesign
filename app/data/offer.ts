@@ -1,9 +1,12 @@
 /**
- * Everything the home page says, in one place. Prices and promises here
- * must match content/service-terms.md; change them together.
+ * Everything the home page and /google-check say about the offer, in one
+ * place. Prices and promises here must match content/service-terms.md;
+ * change them together.
  */
 
-export const PRICES = { listingFix: 150, website: 2000, monthly: 125 } as const;
+export const PRICES = { listingFix: 150, website: 2000, care: 125 } as const;
+
+const money = (n: number) => `$${n.toLocaleString("en-US")}`;
 
 /** The verified, anonymized findings from Kyle's own free checks. */
 export const findings = [
@@ -13,85 +16,134 @@ export const findings = [
   "A matching .com owned by a different business in another state.",
 ] as const;
 
-/** How a website project runs. Shared by the home page and /websites. */
-export const websiteSteps = [
-  { n: "1", title: "Tell me what you need", body: "Send the form, text or email. We talk about your business, your customers and what they should be able to do on the site." },
-  { n: "2", title: "Get a fixed quote", body: "You get the pages, features, timeline, price and any deposit in writing. Nothing starts until you agree." },
-  { n: "3", title: "Review, approve, launch", body: "I build it and you review it. You pay the balance once you approve, and it goes live on your domain." },
-] as const;
-
-/** How a Listing Fix runs: the home page's Google listing section. */
+/** How a Listing Fix runs: /google-check. */
 export const listingSteps = [
   {
     n: "1",
     title: "Free check",
-    body: "I look you up the way your customers do and send you what I find. Yours to keep, whatever you decide.",
+    body: "I look you up the way your customers do and text you what I find within 24 hours. Yours to keep, whatever you decide.",
   },
   {
     n: "2",
     title: "Listing Fix",
-    body: "I fix it within 7 days and send before-and-after screenshots of every change.",
+    body: `${money(PRICES.listingFix)}, done within 7 days, with before-and-after screenshots of every change.`,
     yours: "Your part: add me as a manager on your Google listing, send a few photos, approve the changes.",
   },
   {
     n: "3",
     title: "Keep it right (optional)",
-    body: `The Monthly Plan, $${PRICES.monthly} a month: upkeep so it stays accurate, and a short report of calls and requests. Month to month.`,
+    body: `Website Care, ${money(PRICES.care)} a month: your listing kept accurate, reviews answered, and a short report of calls and requests. Month to month.`,
   },
 ] as const;
 
+/**
+ * The three pricing cards. `highlight` is the one line that answers "what if
+ * I don't like it?" before anything else; `lines` are what's included;
+ * `foot` is the promise under them.
+ */
 export const plans = [
-  {
-    key: "fix",
-    name: "Listing Fix",
-    price: `$${PRICES.listingFix}`,
-    cadence: "one-time",
-    lead: "How your business shows up, fixed within 7 days.",
-    included: [
-      "Google listing corrected: name, hours, phone, website link, photos",
-      "Up to 10 directories corrected (Apple Maps, Bing, Facebook, Yelp…)",
-      "A Google review link and QR code",
-      "Before-and-after screenshots of every change",
-    ],
-    notIncluded: "paid ads, writing reviews, changes a directory refuses to make.",
-    notes: ["You add me as a manager; you stay the owner. Never your password.", "Full refund if you ask before work starts."],
-    terms: "#listing-fix",
-  },
   {
     key: "site",
     name: "Website",
-    price: `$${PRICES.website.toLocaleString("en-US")}`,
-    cadence: "starting price · fixed quote before work",
-    lead: "A custom website built around what your customers need to do.",
-    included: [
-      "Design and build, per your written quote",
-      "A contact or request form",
+    price: money(PRICES.website),
+    cadence: "starting",
+    badge: "Start here",
+    highlight: "Free homepage demo with your quote",
+    lines: [
+      "Custom design and build, per your written quote",
+      "A contact or booking form that reaches you",
       "Launch on your domain, basic search setup",
       "Two rounds of changes",
     ],
-    notIncluded: "photography, paid ads, pages not in your quote.",
-    notes: ["You approve the finished site before paying the balance.", "Once it's paid, you own it. Domain and accounts stay in your name."],
+    foot: "You approve the finished site before paying the balance.",
+    cta: { label: "Get a quote + free demo", href: "#quote" },
     terms: "#website",
   },
   {
-    key: "plan",
-    name: "Monthly Plan",
-    price: `$${PRICES.monthly}`,
+    key: "care",
+    name: "Website Care",
+    price: money(PRICES.care),
     cadence: "per month",
-    lead: "I keep it right so you don't have to think about it.",
-    included: [
-      "Listing and directories kept accurate",
-      "Review replies within 3 business days, up to 4 Google posts",
-      "Hosting and upkeep, if I built or host your site",
-      "30 minutes of edits and a one-page report each month",
+    lines: [
+      "Hosting: fast, secure, online",
+      "Domain: renewals handled, kept in your name",
+      "Edits: 30 minutes a month",
+      "Google: listing kept right, reviews answered",
+      "Report: one page of calls and requests",
     ],
-    notIncluded: "new pages, redesigns, photography, paid ads.",
-    notes: ["Month to month. Cancel anytime by email."],
-    terms: "#monthly-plan",
+    foot: "I run it so you don't have to. Cancel anytime by email. If you leave, I hand over your domain and site files.",
+    cta: { label: "Add it to your quote", href: "#quote", secondary: true },
+    terms: "#website-care",
+  },
+  {
+    key: "fix",
+    name: "Just your Google listing?",
+    price: "Free check",
+    cadence: "first",
+    lines: [
+      "What I find, texted within 24 hours",
+      `Then a ${money(PRICES.listingFix)} fix, done in 7 days`,
+      "Google plus up to 10 directories",
+      "Before-and-after screenshots",
+    ],
+    foot: "You stay the owner. Never your password.",
+    cta: { label: "Get a free Google check", href: "/google-check", secondary: true },
+    terms: "#listing-fix",
   },
 ] as const;
 
-export const questions = [
+export type Plan = (typeof plans)[number];
+
+/** The Listing Fix on its own page: what's in it, what isn't. */
+export const listingFix = {
+  price: money(PRICES.listingFix),
+  included: [
+    "Google listing corrected: name, hours, phone, website link, photos",
+    "Up to 10 directories corrected (Apple Maps, Bing, Facebook, Yelp…)",
+    "A Google review link and QR code",
+    "Before-and-after screenshots of every change",
+  ],
+  notIncluded: "paid ads, writing reviews, changes a directory refuses to make.",
+  notes: ["You add me as a manager; you stay the owner. Never your password.", "Full refund if you ask before work starts."],
+  terms: "#listing-fix",
+} as const;
+
+/** The slim strip under the pricing cards: how a website project goes. */
+export const steps = [
+  { n: "1", title: "Tell me about your business", body: "Form, text or call." },
+  { n: "2", title: "Get your quote + a free demo", body: "See your homepage before you say yes." },
+  { n: "3", title: "Live in about 3 weeks", body: "Approve it, then it goes live." },
+] as const;
+
+/** The home page's five questions, beside the About block. */
+export const faq = [
+  {
+    q: "Will this bring me more customers?",
+    a: "I can't promise that, and nobody honest can: Google controls rankings, and customers decide. What I promise is the work: the site in your written quote, built around the one thing your customers need to do, and on Website Care a one-page monthly report of calls and requests.",
+    link: { label: "What I can't promise (Terms)", href: "/terms#what-we-cant-promise" },
+  },
+  {
+    q: "I already use Facebook, Yelp or a booking app.",
+    a: "Keep them. Your site links to them, and gives you your own front door that you control. Nothing gets taken away.",
+  },
+  {
+    q: "Do I own the website?",
+    a: "Yes. Once it's paid in full, the site and its content are yours. Your domain and accounts stay in your name, and if you ever leave Website Care, I hand over your domain and site files.",
+    link: { label: "Ownership (Terms)", href: "/terms#website" },
+  },
+  {
+    q: "My nephew could do this.",
+    a: "Maybe. What you get from me is a fixed price, a written scope, a demo before you commit, and someone who answers the phone after launch.",
+  },
+  {
+    q: "Can I cancel Website Care?",
+    a: "Yes, anytime, by email. It's month to month with no contract. Cancellation takes effect at the end of the paid month, and you keep your domain and site.",
+    link: { label: "Website Care (Terms)", href: "/terms#website-care" },
+  },
+] as const;
+
+/** /google-check's questions, listing first. */
+export const listingQuestions = [
   {
     q: "Do I have to give you my Google password?",
     a: "No, never. You add me as a manager on your Google listing, which takes about a minute. You stay the owner and can remove me anytime.",
@@ -99,21 +151,13 @@ export const questions = [
   },
   {
     q: "What does it cost? Any hidden fees?",
-    a: `Clear prices: $${PRICES.listingFix} for the Listing Fix, $${PRICES.website.toLocaleString("en-US")} starting price for a website (fixed written quote for your scope), $${PRICES.monthly} a month for the plan. What's included and what isn't is listed above and in the Service Terms. Nothing else.`,
-    link: { label: "Service Terms", href: "/terms" },
+    a: `The check is free. The Listing Fix is ${money(PRICES.listingFix)}, one time. Website Care, if you want it, is ${money(PRICES.care)} a month, month to month. Nothing else.`,
+    link: { label: "Service Terms", href: "/terms#listing-fix" },
   },
   {
     q: "Will this get me more customers? Is it guaranteed?",
-    a: "I can't promise that, and nobody honest can: Google controls rankings. What I do promise is every fix done within 7 days with before-and-after screenshots, and on the plan, a monthly report of calls and requests.",
-    link: { label: "What I can't promise (Terms, section 6)", href: "/terms#what-we-cant-promise" },
-  },
-  {
-    q: "I already use SpareFoot, Facebook or a booking app.",
-    a: "Keep them. This fixes what's wrong in the places customers already look, and gives you your own front door. Nothing gets taken away.",
-  },
-  {
-    q: "My nephew could do this.",
-    a: "Fair. The free check is yours to use either way, with the steps for each fix. You'd pay me to have it done right and kept right.",
+    a: "I can't promise that, and nobody honest can: Google controls rankings. What I do promise is every fix done within 7 days with before-and-after screenshots.",
+    link: { label: "What I can't promise (Terms)", href: "/terms#what-we-cant-promise" },
   },
   {
     q: "How long does it take?",
@@ -121,8 +165,8 @@ export const questions = [
   },
   {
     q: "Can I cancel? What if I change my mind?",
-    a: "The Listing Fix is fully refundable if you ask before work starts. The Monthly Plan is month to month; cancel anytime by email.",
-    link: { label: "Refunds (Terms, section 5)", href: "/terms#refunds" },
+    a: "The Listing Fix is fully refundable if you ask before work starts. Website Care is month to month; cancel anytime by email.",
+    link: { label: "Refunds (Terms)", href: "/terms#refunds" },
   },
   {
     q: "What happens after I send the form?",
@@ -131,101 +175,3 @@ export const questions = [
 ] as const;
 
 export const noGuarantee = "Google controls rankings, so I don't promise results. I promise the work: every fix within 7 days, with screenshots.";
-
-/** Under the website prices: the objections that come up at the price. */
-export const websitePriceNote = "No ad spend. No contract. Any deposit is written in your quote, you approve the finished site before paying the balance, and the Monthly Plan is month to month.";
-
-/**
- * The home page's questions, website first. Every answer restates something
- * already promised on the site or in the Service Terms; nothing new.
- */
-export const websiteQuestions = [
-  {
-    q: "What does a website cost? Any hidden fees?",
-    a: `Websites start at $${PRICES.website.toLocaleString("en-US")}. Your fixed written quote lists the pages, features, timeline and full price before any work starts. The Monthly Plan is optional, $${PRICES.monthly} a month. Nothing else.`,
-    link: { label: "Service Terms", href: "/terms#website" },
-  },
-  {
-    q: "Do I have to pay for ads or sign a contract?",
-    a: "No. There's no required ad spending and no contract. The Monthly Plan is month to month; cancel anytime by email.",
-  },
-  {
-    q: "When do I pay?",
-    a: "Any deposit is written in your quote. You pay the balance once you've approved the finished site, before it goes live on your domain.",
-  },
-  {
-    q: "Will I own the website?",
-    a: "Yes. Once it's paid in full, the site and its content are yours, and your domain and accounts stay in your name.",
-  },
-  {
-    q: "How long does it take?",
-    a: "Around 3 weeks for most websites, from your go-ahead to launch. Your written quote gives the exact timeline before anything starts.",
-  },
-  {
-    q: "What do you need from me?",
-    a: "A short conversation about your business and customers, accurate details, and photos you have the right to use. Then you review and approve. Two rounds of changes are included.",
-  },
-  {
-    q: "Will it bring me more customers? Is it guaranteed?",
-    a: "I can't promise that, and nobody honest can. What I promise is the site in your quote, built around the one thing your customers need to do, and on the Monthly Plan a short monthly report of calls and requests.",
-    link: { label: "What I can't promise (Terms)", href: "/terms#what-we-cant-promise" },
-  },
-  {
-    q: "What happens after I send the form?",
-    a: "I read it and text or email you within 24 hours. If it's a fit, we talk, then you get a fixed written quote. No obligation.",
-  },
-] as const;
-
-/** What a website project needs from the owner. Shared by the home page and /websites. */
-export const whatINeed = [
-  "One short conversation about your business and your customers, by phone or text.",
-  "Your logo, accurate details, and photos you have the right to use.",
-  "Your yes at each step: the quote, the review, the launch.",
-] as const;
-
-/** How long a website takes: Kyle's typical figure; the quote sets the exact one. */
-export const timelineNote = "Around 3 weeks for most websites, from your go-ahead to launch. Your written quote gives the exact timeline before anything starts, and quick replies from you keep it on track.";
-
-/** "Can I update it myself?", answered next to the website price. */
-export const editsNote = `Small changes are covered by the Monthly Plan: 30 minutes of edits a month. If you want to edit pages yourself, say so and it goes in your quote.`;
-
-/**
- * The home page's questions: only what the sections above don't already
- * answer (prices, ownership, ads, timing, the password and what happens
- * after the form are all answered where they come up).
- */
-export const homeQuestions = [
-  {
-    q: "Will this bring me more customers? Is it guaranteed?",
-    a: "I can't promise that, and nobody honest can: Google controls rankings, and customers decide. What I do promise is the work: every listing fix within 7 days with before-and-after screenshots, the website in your written quote, and on the Monthly Plan a short monthly report of calls and requests.",
-    link: { label: "What I can't promise (Terms)", href: "/terms#what-we-cant-promise" },
-  },
-  {
-    q: "I already use Facebook, Yelp or a booking app.",
-    a: "Keep them. This fixes what's wrong in the places customers already look, and gives you your own front door. Nothing gets taken away.",
-  },
-  {
-    q: "My nephew could do this.",
-    a: "Fair. The free check is yours to use either way, with the steps for each fix. You'd pay me to have it done right and kept right.",
-  },
-  {
-    q: "Can I cancel? What if I change my mind?",
-    a: "The Listing Fix is fully refundable if you ask before work starts. The Monthly Plan is month to month; cancel anytime by email. Any website deposit and its terms are written in your quote before you agree.",
-    link: { label: "Refunds (Terms)", href: "/terms#refunds" },
-  },
-  {
-    q: "Do you only work in League City?",
-    a: "I'm based in League City and work with businesses around the Bay Area and Greater Houston: Friendswood, Webster, Clear Lake, Kemah, Dickinson, Pearland and nearby. Most of it happens by phone, text and email.",
-  },
-] as const;
-
-/** The /websites questions: only what its sections above don't already answer. */
-export const websitesPageQuestions = [
-  websiteQuestions.find((q) => q.q.startsWith("Will it bring me more customers"))!,
-  homeQuestions.find((q) => q.q.startsWith("Do you only work"))!,
-  {
-    q: "Can I cancel? What if I change my mind?",
-    a: "Nothing starts until you agree to the written quote, and any deposit and its terms are in it. The Monthly Plan is month to month; cancel anytime by email.",
-    link: { label: "Refunds (Terms)", href: "/terms#refunds" },
-  },
-];

@@ -34,7 +34,7 @@ export default function PartnerForm({ sent = false, errorCode = "" }: { sent?: b
       if (!res.ok || !json.ok) throw new Error(json.error || "That didn't go through.");
       setName(data.name.trim());
       setState("sent");
-      track("partner_inquiry_submit", { partner_category: data.category || "unspecified", partner_interest: data.interest || "unspecified" });
+      track("partner_submit", { partner_category: data.category || "unspecified", partner_interest: data.interest || "unspecified" });
     } catch (err) {
       setState("error");
       setError(err instanceof Error ? err.message : "That didn't go through.");

@@ -12,26 +12,29 @@ const nextConfig: NextConfig = {
       { source: "/admin", destination: "/", statusCode: 301 },
       { source: "/admin/:path*", destination: "/", statusCode: 301 },
       { source: "/login", destination: "/", statusCode: 301 },
-      // Retired public routes.
-      { source: "/pricing", destination: "/#prices", statusCode: 301 },
-      { source: "/quote", destination: "/#free-check", statusCode: 301 },
-      { source: "/quote/:path*", destination: "/#free-check", statusCode: 301 },
-      { source: "/start", destination: "/#free-check", statusCode: 301 },
+      // Retired public routes, each to the part of the home page that took over.
+      { source: "/pricing", destination: "/#pricing", statusCode: 301 },
+      { source: "/quote", destination: "/#quote", statusCode: 301 },
+      { source: "/quote/:path*", destination: "/#quote", statusCode: 301 },
+      { source: "/start", destination: "/#quote", statusCode: 301 },
+      { source: "/contact", destination: "/#quote", statusCode: 301 },
+      { source: "/contact/:path*", destination: "/#quote", statusCode: 301 },
       { source: "/resources", destination: "/", statusCode: 301 },
       { source: "/resources/:path*", destination: "/", statusCode: 301 },
-      // There is no Work page; the project lives on the homepage.
-      { source: "/work", destination: "/", statusCode: 301 },
-      { source: "/work/:path*", destination: "/", statusCode: 301 },
-      { source: "/portfolio", destination: "/", statusCode: 301 },
-      { source: "/portfolio/:path*", destination: "/", statusCode: 301 },
-      { source: "/services/:path+", destination: "/#prices", statusCode: 301 },
-      { source: "/faq", destination: "/#questions", statusCode: 301 },
-      // The conversion-first rebuild (2026-10): one home page does the work.
-      { source: "/services", destination: "/#prices", statusCode: 301 },
+      { source: "/portfolio", destination: "/work", statusCode: 301 },
+      { source: "/portfolio/:path*", destination: "/work", statusCode: 301 },
+      { source: "/services", destination: "/#pricing", statusCode: 301 },
+      { source: "/services/:path+", destination: "/#pricing", statusCode: 301 },
+      { source: "/faq", destination: "/#faq", statusCode: 301 },
       { source: "/about", destination: "/#about", statusCode: 301 },
       { source: "/about/:path*", destination: "/#about", statusCode: 301 },
-      { source: "/contact", destination: "/#free-check", statusCode: 301 },
-      { source: "/contact/:path*", destination: "/#free-check", statusCode: 301 },
+      // The 2026-10 rebuild: the portfolio moved from /websites to /work, and
+      // the free Google check to its own page.
+      { source: "/websites", destination: "/work", statusCode: 301 },
+      { source: "/websites/:path*", destination: "/work", statusCode: 301 },
+      // The old per-project pages under /work: the portfolio is one page now.
+      { source: "/work/:path+", destination: "/work", statusCode: 301 },
+      { source: "/free-check", destination: "/google-check", statusCode: 301 },
       // V3's two niche pages folded into /services and the hub.
       { source: "/coffee-shops", destination: "/", statusCode: 301 },
       { source: "/coffee-shops/:path*", destination: "/", statusCode: 301 },

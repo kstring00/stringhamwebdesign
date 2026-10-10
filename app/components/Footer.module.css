@@ -1,20 +1,49 @@
 .footer {
-  padding: clamp(2.5rem, 5vw, 4rem) 0 1.75rem;
+  padding: var(--section) 0 1.75rem;
   border-top: 1px solid var(--line);
   background: var(--paper-deep);
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-template-columns: 1.5fr 1fr 1fr;
   gap: 2rem;
 }
 
-.logoLink { display: inline-block; margin-bottom: 0.6rem; }
+.about { display: grid; gap: 0.75rem; align-content: start; justify-items: start; }
+
+.logoLink { display: inline-block; }
 .logo { display: block; width: auto; height: 2.75rem; }
 
-.where {
-  color: var(--muted);
+.where { color: var(--muted); }
+
+.referral {
+  max-width: 30rem;
+  margin-top: 0.5rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.referral b { color: var(--ink); }
+
+.partnerLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.partnerLinks a, .col li a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ink);
 }
 
 .col ul {
@@ -25,35 +54,23 @@
   list-style: none;
 }
 
-.col li a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  color: var(--ink);
-}
-
 .head {
   margin: 0 0 0.5rem;
   color: var(--muted);
   font-size: 0.82rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .legal {
-  margin: clamp(2rem, 4vw, 3rem) 0 0;
+  margin-top: 2.5rem;
   padding-top: 1.25rem;
   border-top: 1px solid var(--line);
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
 
 @media (max-width: 48rem) {
   .grid { grid-template-columns: 1fr; gap: 1.5rem; }
-}
-
-/* Tablets and phones: room under the docked view switch. */
-@media (max-width: 56rem) {
-  .footer { padding-bottom: calc(5.5rem + env(safe-area-inset-bottom)); }
 }

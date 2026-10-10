@@ -77,7 +77,7 @@ export const partnerQuestions = [
   { q: "Can an agency use Stringham behind the scenes?", a: "Yes. The work can go out under your name, I won't contact your client or show the project without your permission, and I'll sign a confidentiality agreement if you need one." },
   {
     q: "How is compensation handled?",
-    a: `For referrals: ${referral.percent} of the website's total price, paid once the client has paid for the website in full. On a ${referral.example.price} website, that's ${referral.example.reward}. Monthly Plan fees don't count toward it, and the client is told about the reward. For white-label: you pay me a project price we agree before work starts.`,
+    a: `For referrals: ${referral.percent} of the website's total price, paid once the client has paid for the website in full. On a ${referral.example.price} website, that's ${referral.example.reward}. Website Care fees don't count toward it, and the client is told about the reward. For white-label: you pay me a project price we agree before work starts.`,
   },
   { q: "Do I have to pay anything to participate?", a: "No. There's no fee to become a partner, and you don't need to be one to refer a business." },
   {

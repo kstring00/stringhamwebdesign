@@ -14,7 +14,7 @@ const BLUE = { baseColor: "#8FA5D8", activeColor: "#3568F6", maxAlpha: 0.85 };
  * (600 ms at the latest), so it never competes with the headline for LCP.
  * Without JavaScript nothing renders here and the hero is unchanged.
  */
-export default function BuildFieldMount() {
+export default function BuildFieldMount({ activeColor }: { activeColor?: string } = {}) {
   const [mode, setMode] = useState<"" | "default" | "blue">("");
 
   useEffect(() => {
@@ -28,5 +28,5 @@ export default function BuildFieldMount() {
   }, []);
 
   if (!mode) return null;
-  return mode === "blue" ? <BuildField {...BLUE} /> : <BuildField />;
+  return mode === "blue" ? <BuildField {...BLUE} /> : <BuildField activeColor={activeColor} />;
 }

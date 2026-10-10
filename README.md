@@ -21,26 +21,23 @@ locally (the contact form logs instead of emailing without `RESEND_API_KEY`).
 
 ## Pages
 
-`/` (everything: hero, findings, how it works, prices, about Kyle, questions,
-the free check form), `/websites` (for owners who want a website: price,
-work, how it works, the founder, the referral offer, the website quote
-form), `/partners` (for photographers, designers, agencies and consultants:
-two partnership paths, the published referral terms, selected work, the
-founder, the partner inquiry form), `/terms`, `/privacy`, a designed 404, and
-`/family-resource-hub`, which is live but deliberately unlinked. Every retired
-route (`/services`, `/about`, `/contact`, `/portal*`, `/admin*`, `/login`,
-`/pricing`, `/quote`, `/resources`, `/faq`, `/work*`, `/portfolio*`,
-`/coffee-shops*`, `/autism-clinics*`) answers with a 301 to the right section
-of the home page (see `next.config.ts`).
+`/` (the hero, the work carousel, pricing, about Kyle beside the questions,
+and the quote + free demo form), `/work` (the full portfolio, each project
+labeled for exactly what it is), `/google-check` (the free Google check and
+the $150 Listing Fix, with its form; the page to text to prospects),
+`/partners` (for photographers, designers, agencies and consultants: two
+partnership paths, the published referral terms, selected work, the
+partner form), `/terms`, `/privacy`, and the unlinked
+`/family-resource-hub`. `/websites` redirects to `/work`.
 
 ## Where things live
 
-- `app/data/offer.ts` — every word on the home page: prices, the verified
-  findings, the listing and website steps, "what I need from you", the
-  timeline and edits lines, the plan cards, and the questions for home and
-  /websites (each page asks only what its sections don't already answer).
-  The home page's main action is the free Google check; /websites' is the
-  website quote; the header's button follows the page (`app/data/nav.ts`).
+- `app/data/offer.ts` — the offer in one place: prices, the three pricing
+  cards (Website, Website Care, the Google listing path), the three-step
+  strip, the home page's five questions, and /google-check's findings,
+  steps, Listing Fix card and questions. The site's one action is a quote
+  plus a free demo of the homepage (`app/data/nav.ts`); the free Google
+  check is the secondary path, on its own page.
   Prices here must match `content/service-terms.md`; change them together.
 - `app/data/site.ts` — identity, phone, email, location.
 - `content/service-terms.md` and `content/privacy.md` — rendered word for
@@ -64,13 +61,13 @@ of the home page (see `next.config.ts`).
   one email via Resend, logged instead when the key is unset).
 - `app/data/partners.ts` — every word on /partners.
 - `app/data/referral.ts` — the referral reward (rate, worked example, rules).
-  /partners, /websites and the home page read it; the Service Terms repeat
-  it in words.
+  /partners and the footer read it; the Service Terms repeat it in words.
 - `app/data/work.ts` — selected work, each project labeled for exactly what it
   is: `kind` is live, in-progress, concept or archived. `onPartners` picks the projects
-  on /partners, `onHome` the live work in the home page's Work section (never
-  padded). `type`, `builtFor` and `testimonial` (written permission only)
-  fill the home card. `confirmed: false` projects show only on preview deployments
+  on /partners, `onHome` the three demos in the home page's carousel and
+  hero frames, `onWork` the /work portfolio. `chip`, `type` and `builtFor`
+  label each card; `built` is what was actually built, taken from each
+  project's own code. `confirmed: false` projects show only on preview deployments
   (marked as drafts), never on production. Captures live in `public/showcase/`
   (not `/work`, which redirects).
 - `app/components/Founder.tsx` — who Kyle is, with his own photo
@@ -79,26 +76,31 @@ of the home page (see `next.config.ts`).
   stable id from its name (`/terms#website`, `/terms#refunds`), so links
   survive price and numbering changes.
 - `app/lib/track.ts` + `app/motion/Tracking.tsx` — Clarity custom events:
-  `free_check_submit`, `website_quote_submit`, `partner_inquiry_submit`,
-  `call_tap`, `text_tap`, `work_sample_click`, `cta_click` (with
-  `cta_location`), `email_click`, `terms_view`.
-- `app/motion/Reveal.tsx` — a short upward settle on `data-reveal` blocks
-  below the fold. Never a fade, so text is always at full contrast. Off under
-  reduced motion; nothing depends on it.
-- `app/components/Header.tsx` — the liquid-glass header: logo, the
-  "For businesses / For partners" view switch and the one action, in that
-  order (so the tab order matches). The view's accent (green or violet)
-  colours the switch, the glass rim and the button. On phones the switch is
-  a bottom dock that slides away while scrolling down, and the header's
-  button waits until any `data-hero-cta` button has scrolled out of view, so
-  the first screen has one action. Page-to-page view transitions are in
-  `globals.css`.
-- `app/home/Lifeless.tsx` — the home page's problem section: a lifeless
-  example site that comes alive on scroll; one CSS variable (`--p`) drives
-  it. Kinetic words are one text node (letters `aria-hidden`, the heading
-  carries an `aria-label`), so page text and screen readers read them once.
-- `docs/user-test-webster-remodeler.md` — the 5-minute test to run with a
-  local owner.
+  `quote_submit`, `google_check_submit`, `partner_submit`, `call_tap`,
+  `text_tap`, `demo_link_click` (with `project`), `carousel_interaction`
+  (with `method`), `cta_click` (with `cta_location`), `email_click`,
+  `terms_view`. Both forms carry utm_source/medium/campaign and the
+  referrer in hidden fields.
+- `app/motion/Reveal.tsx` — a one-time fade-up for section headings and
+  cards marked `data-reveal` below the fold; nothing else animates on
+  scroll. `app/motion/Magnetic.tsx` makes `data-magnetic` buttons lean
+  toward the pointer. Both off under reduced motion; nothing depends on them.
+- `app/components/Header.tsx` — the liquid-glass header: logo, Work ·
+  Pricing · About · FAQ, the phone number and the one action. On phones the
+  bar is just the logo and `MobileBar.tsx` docks Call · Text · Get a quote
+  at the bottom (it steps aside while the quote form is on screen). The
+  partner page keeps its violet accent and its own action.
+- `app/home/` — the home page's sections: `Hero.tsx` (+ `HeroFrames.tsx`,
+  three browser frames with scroll parallax), `WorkCarousel.tsx` (GSAP
+  Draggable with inertia snapping; a plain scroller without JS),
+  `Pricing.tsx`, `AboutFaq.tsx`, `QuoteForm.tsx` (one contact field, phone
+  or email), and `Testimonials.tsx`, which stays out of the page until
+  there are quotes with written permission.
+- `app/work/` — the full portfolio; `app/google-check/` — the free check and
+  the Listing Fix, the page to text to prospects. `/websites` redirects to
+  `/work`.
+- `docs/user-test-landscaping.md` and `docs/user-test-webster-remodeler.md`
+  — the 5-minute tests to run with a local owner.
 - `app/home/BuildField.tsx` (+ `buildFieldShaders.ts`, `BuildFieldMount.tsx`)
   — the dot field on the home and partners heroes (colour from the page's
   accent): WebGL2 (one draw call) with a Canvas 2D
