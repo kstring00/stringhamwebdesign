@@ -28,6 +28,8 @@
   }
 
   .bar[data-hidden] { opacity: 0; transform: translateY(140%); pointer-events: none; }
+  /* A blog post has its own "Need help? Text me" pill. */
+  :global(body[data-post]) .bar { display: none; }
 
   .item {
     display: inline-flex;

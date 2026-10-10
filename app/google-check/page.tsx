@@ -73,6 +73,7 @@ export default async function GoogleCheckPage({ searchParams }: { searchParams: 
             <h2 id="q-title" className={home.h2}>Questions owners ask</h2>
             <p>Still wondering? <a className="u" href={site.phoneHref}>Call or text {site.phone}</a>.</p>
             <p>Need a website too? <a className={`u ${home.inlineLink}`} href="/#quote">Get a quote + free demo</a> of your homepage.</p>
+            <p>Designer disappeared? <a className={`u ${home.inlineLink}`} href="/blog/my-web-designer-disappeared">Here&rsquo;s how to get your website back.</a></p>
           </div>
           <div className={home.faq}>
             {listingQuestions.map((item, i) => (

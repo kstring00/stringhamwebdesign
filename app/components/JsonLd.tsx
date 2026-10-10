@@ -6,6 +6,29 @@ function Script({ data }: { data: Record<string, unknown> }) {
 
 const address = { "@type": "PostalAddress", addressLocality: site.city, addressRegion: site.region, addressCountry: "US" };
 
+/** An Article, for a blog post: Kyle as the author, the LLC as the publisher. */
+export function ArticleJsonLd({ title, description, slug, date, author }: { title: string; description: string; slug: string; date: string; author: string }) {
+  const url = `${site.url}/blog/${slug}`;
+  return (
+    <Script
+      data={{
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: title,
+        description,
+        datePublished: date,
+        dateModified: date,
+        inLanguage: "en-US",
+        mainEntityOfPage: { "@type": "WebPage", "@id": url },
+        url,
+        image: [`${url}/opengraph-image`],
+        author: { "@type": "Person", name: author, url: `${site.url}/#about` },
+        publisher: { "@type": "Organization", name: site.legalName, url: site.url, logo: { "@type": "ImageObject", url: `${site.url}/brand/logo-square.png` } },
+      }}
+    />
+  );
+}
+
 /** ProfessionalService (a LocalBusiness type) for the LLC. Homepage only. */
 export function BusinessJsonLd() {
   return (
