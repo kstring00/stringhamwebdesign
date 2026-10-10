@@ -67,7 +67,15 @@ of the home page (see `next.config.ts`).
   `free_check_submit`, `website_quote_submit`, `partner_inquiry_submit`,
   `call_tap`, `text_tap`, `work_sample_click`, `cta_click` (with
   `cta_location`), `email_click`, `terms_view`.
-- `app/motion/Reveal.tsx` — the only animation: a short upward settle on
-  `data-reveal` blocks below the fold. Never a fade, so text is always at
-  full contrast. Off under reduced motion; nothing depends on it.
+- `app/motion/Reveal.tsx` — a short upward settle on `data-reveal` blocks
+  below the fold. Never a fade, so text is always at full contrast. Off under
+  reduced motion; nothing depends on it.
+- `app/home/BuildField.tsx` (+ `buildFieldShaders.ts`, `BuildFieldMount.tsx`)
+  — the home hero's dot field: WebGL2 (one draw call) with a Canvas 2D
+  fallback, on `gsap.ticker`. Dots clear around every `data-field-clear`
+  block; a wireframe website frames the example card on desktop. Loaded at
+  idle after first paint, paused offscreen, one still frame under reduced
+  motion, nothing without JS. Tunables are constants at the top of the file.
+  `/?field=2d` forces the fallback; `/?field=blue` shows the original
+  GrowthGains palette for comparison.
 - `scripts/` — the launch, link and Lighthouse checks (see `scripts/README.md`).

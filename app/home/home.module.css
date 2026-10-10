@@ -56,6 +56,10 @@
 /* ---------- 1. hero ---------- */
 
 .hero {
+  /* Its own stacking context, so the Build Field (z-index -1) sits behind
+     the content but in front of the page background. */
+  position: relative;
+  isolation: isolate;
   padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(2.5rem, 5vw, 4rem);
 }
 

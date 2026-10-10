@@ -6,6 +6,7 @@ import { cta } from "./data/nav";
 import { findings, niches, noGuarantee, plans, questions, steps } from "./data/offer";
 import { referral } from "./data/referral";
 import { site } from "./data/site";
+import BuildFieldMount from "./home/BuildFieldMount";
 import FreeCheckForm from "./home/FreeCheckForm";
 import Included from "./home/Included";
 import styles from "./home/home.module.css";
@@ -22,8 +23,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
     <>
       {/* 1. Hero */}
       <section className={styles.hero} aria-labelledby="hero-title">
+        <BuildFieldMount />
         <div className={`container ${styles.heroGrid}`}>
-          <div className={styles.heroText}>
+          <div className={styles.heroText} data-field-clear>
             <h1 id="hero-title" className={styles.h1}>A better website for the business you’re building.</h1>
             <p className={styles.sub}>I design and build custom websites for independent businesses. Projects start at $1,800, with a fixed quote before work begins. No required Google Ads spending. Need help with your Google listing too? I can do that.</p>
             <div className={styles.actions}>
@@ -31,7 +33,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
               <a className={`u ${styles.textLink}`} href="#prices">See prices</a>
             </div>
           </div>
-          <aside className={styles.example} aria-label="Example of a free check">
+          <aside className={styles.example} aria-label="Example of a free check" data-field-clear>
             <p className={styles.exampleTag}><span>Example free check</span> <span className={styles.exampleName}>Example RV Park</span></p>
             <ul className={styles.exampleRows}>
               {[
@@ -48,7 +50,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
             </ul>
             <p className={styles.exampleFoot}>Fixed within 7 days, with screenshots.</p>
           </aside>
-          <p className={styles.trust}>
+          <p className={styles.trust} data-field-clear>
             <span className={styles.trustName}>Kyle Stringham</span> · {site.legalName} · {site.city}, {site.regionLong}
           </p>
         </div>
