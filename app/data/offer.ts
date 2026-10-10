@@ -84,10 +84,6 @@ export const plans = [
   },
 ] as const;
 
-export const niches = ["Self storage", "RV parks and campgrounds", "Fishing guides", "Horse boarding", "Marinas"] as const;
-
-export const businessTypes = ["Self storage", "RV park or campground", "Fishing guide", "Horse boarding", "Marina", "Other local business"] as const;
-
 export const questions = [
   {
     q: "Do I have to give you my Google password?",

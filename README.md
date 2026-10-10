@@ -21,7 +21,7 @@ locally (the contact form logs instead of emailing without `RESEND_API_KEY`).
 
 ## Pages
 
-`/` (everything: hero, findings, how it works, prices, who it's for, questions,
+`/` (everything: hero, findings, how it works, prices, about Kyle, questions,
 the free check form), `/websites` (for owners who want a website: price,
 work, how it works, the founder, the referral offer, the website quote
 form), `/partners` (for photographers, designers, agencies and consultants:
@@ -36,7 +36,7 @@ of the home page (see `next.config.ts`).
 ## Where things live
 
 - `app/data/offer.ts` — every word on the home page: prices, the verified
-  findings, the three steps, the plan cards, the niches, the questions.
+  findings, the three steps, the plan cards, the questions.
   Prices here must match `content/service-terms.md`; change them together.
 - `app/data/site.ts` — identity, phone, email, location.
 - `content/service-terms.md` and `content/privacy.md` — rendered word for

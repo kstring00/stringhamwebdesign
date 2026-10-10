@@ -27,7 +27,7 @@ export function BusinessJsonLd() {
           { "@type": "State", name: "Texas" },
         ],
         founder: { "@type": "Person", name: site.person },
-        description: "Google listing fixes and simple websites for small local businesses: self storage, RV parks, fishing guides, horse boarding and marinas. League City, Texas.",
+        description: "Custom websites and Google listing fixes for independent businesses. League City, Texas.",
         knowsAbout: ["Google Business Profile", "Local business directories", "Small business websites"],
       }}
     />

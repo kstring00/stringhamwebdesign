@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { BusinessJsonLd } from "./components/JsonLd";
 import { pageMeta } from "./data/meta";
 import { cta } from "./data/nav";
-import { findings, niches, noGuarantee, plans, questions, steps } from "./data/offer";
+import { findings, noGuarantee, plans, questions, steps } from "./data/offer";
 import { referral } from "./data/referral";
 import { site } from "./data/site";
 import BuildFieldMount from "./home/BuildFieldMount";
@@ -124,24 +124,16 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
         </div>
       </section>
 
-      {/* 5. Who it's for + about Kyle */}
+      {/* 5. About Kyle */}
       <section className={`${styles.section} ${styles.alt}`} id="about" aria-labelledby="about-title">
-        <div className={`container ${styles.about}`}>
+        <div className="container">
           <div className={styles.aboutCol}>
-            <h2 id="about-title" className={styles.h2}>Who it&rsquo;s for</h2>
-            <p className={styles.lede}>Owner-run local businesses that get customers through Google, phone calls and directories.</p>
-            <ul className={styles.niches}>
-              {niches.map((n) => <li key={n}>{n}</li>)}
-            </ul>
-            <p className={styles.body}>Run something else local? If customers find you through Google and the phone, the same work applies. Ask for the free check and I&rsquo;ll tell you straight whether it fits.</p>
-          </div>
-          <div className={`${styles.aboutCol} ${styles.kyle}`}>
             <div className={styles.kyleHead}>
               <picture>
                 <source type="image/webp" srcSet="/kyle-founder-sm.webp" />
                 <img className={styles.kylePhoto} src="/kyle-founder.jpg" alt="" width={80} height={100} loading="lazy" decoding="async" />
               </picture>
-              <h2 className={styles.h2}>About Kyle</h2>
+              <h2 id="about-title" className={styles.h2}>About Kyle</h2>
             </div>
             <p className={styles.body}>I&rsquo;m Kyle Stringham. I run {site.legalName} out of {site.city}, {site.regionLong}. I grew up around my dad&rsquo;s self-storage facility, so I know what a wrong phone number or a dead website link costs a small business, and how little time an owner has to chase it.</p>
             <p className={styles.body}>I do the work myself, send you proof of every change, and never ask for your passwords.</p>
