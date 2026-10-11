@@ -3,12 +3,12 @@ import type { Metadata } from "next";
 import { BusinessJsonLd } from "./components/JsonLd";
 import { pageMeta } from "./data/meta";
 import { site } from "./data/site";
-import { homeWork } from "./data/work";
+import { showcaseWork } from "./data/work";
+import Coverflow from "./components/Coverflow";
 import AboutFaq from "./home/AboutFaq";
 import Hero from "./home/Hero";
 import Pricing from "./home/Pricing";
 import QuoteForm from "./home/QuoteForm";
-import WorkCarousel from "./home/WorkCarousel";
 import s from "./home/home.module.css";
 // import Testimonials from "./home/Testimonials";
 
@@ -20,33 +20,20 @@ export const metadata: Metadata = pageMeta({
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ sent?: string; error?: string }> }) {
   const { sent, error } = await searchParams;
-  const slides = homeWork.map((w) => ({
-    key: w.key,
-    name: w.name,
-    chip: w.chip ?? "Design demo",
-    what: w.what,
-    builtFor: w.builtFor ?? "",
-    url: w.liveUrl ?? w.previewUrl ?? "/work",
-    linkLabel: w.liveUrl ? "Visit the live site" : "View the demo",
-    alt: w.alt.desktop,
-  }));
-
   return (
     <>
       {/* 1. The first screen: what, for whom, where, the next step. */}
       <Hero />
 
-      {/* 2. Proof: three demos you can click through. Everything else is on /work. */}
-      <section className={s.section} id="work" aria-labelledby="work-title">
+      {/* 2. Proof: every project, labeled for what it is, the same as on /partners. */}
+      <section className={`${s.section} ${s.workSection}`} id="work" aria-labelledby="work-title">
         <div className="container">
-          <div className={`${s.head} ${s.headRow}`}>
-            <div>
-              <h2 id="work-title" className={s.h2} data-reveal>Work you can click through.</h2>
-              <p className={s.lede}>Three demos, each labeled for exactly what it is. The full list, with the live work, is on the <a className={`u ${s.inlineLink}`} href="/work">work page</a>.</p>
-            </div>
+          <div className={s.head}>
+            <h2 id="work-title" className={s.h2} data-reveal>Work you can click through.</h2>
+            <p className={s.lede}>A live product and three design demos, each labeled for exactly what it is. Drag, swipe or tap through; the full write-ups are on the <a className={`u ${s.inlineLink}`} href="/work">work page</a>.</p>
           </div>
+          <Coverflow items={showcaseWork} label="Selected work" />
         </div>
-        <div className="container"><WorkCarousel items={slides} /></div>
       </section>
 
       {/* 3. The price, what's in it, who runs it after, and the Google path. */}

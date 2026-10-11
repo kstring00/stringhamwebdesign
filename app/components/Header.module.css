@@ -41,7 +41,7 @@
   transition: max-width 600ms var(--ease-out);
 }
 
-.header[data-scrolled] .bar { max-width: 66rem; }
+/* With six links the bar keeps its width when scrolled; the glass still deepens. */
 
 .glass {
   position: absolute;
@@ -125,6 +125,7 @@
   color: var(--ink-soft);
   font-size: 0.95rem;
   font-weight: 500;
+  white-space: nowrap;
   transition: color 240ms var(--ease-out);
 }
 
@@ -156,6 +157,8 @@
 
 .featured::after { display: none; }
 .featured:hover { border-color: var(--violet); color: var(--violet-deep); background: var(--violet-soft); }
+/* On /partners it reads "For businesses", in the business blue. */
+.header[data-view="partners"] .featured:hover { border-color: var(--brand); color: var(--brand-deep); background: var(--brand-soft); }
 
 /* The phone menu button (hidden on desktop). */
 .menuBtn { display: none; }
@@ -178,7 +181,7 @@
   white-space: nowrap;
 }
 
-.phone svg { color: var(--accent); }
+.phone svg { flex: none; color: var(--accent); }
 .phone:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 
 /* The one action, in the view's accent, with a light sweep on hover.
@@ -282,6 +285,7 @@
   .link::after { display: none; }
   .link:hover { background: var(--paper-deep); }
   .featured { margin: 0.35rem 0 0; padding: 0 1rem; justify-content: center; border-color: var(--violet); color: var(--violet-deep); }
+  .header[data-view="partners"] .featured { border-color: var(--brand); color: var(--brand-deep); }
 }
 
 @keyframes drop {

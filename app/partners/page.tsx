@@ -8,7 +8,8 @@ import { comparison, partnerQuestions, partnerSteps, paths, reasons } from "../d
 import { referral } from "../data/referral";
 import CountUp from "../motion/CountUp";
 import { site } from "../data/site";
-import { kindLabel, partnerWork, type Work, type WorkKind } from "../data/work";
+import Coverflow from "../components/Coverflow";
+import { kindLabel, partnerWork, showcaseWork, type WorkKind } from "../data/work";
 import PartnerForm from "./PartnerForm";
 import styles from "./partners.module.css";
 
@@ -20,59 +21,16 @@ export const metadata: Metadata = pageMeta({
   imageAlt: "Your clients need websites. I can build them. Kyle Stringham, Stringham Web Design LLC, League City, Texas.",
 });
 
-/** Real captures, served as AVIF with a WebP fallback. */
-function Capture({ k, view, alt, width, height }: { k: string; view: "desktop" | "mobile"; alt: string; width: number; height: number }) {
-  return (
-    <picture>
-      <source type="image/avif" srcSet={`/showcase/${k}-${view}.avif`} />
-      <img src={`/showcase/${k}-${view}.webp`} alt={alt} width={width} height={height} loading="lazy" decoding="async" />
-    </picture>
-  );
-}
-
 const kindClass: Record<WorkKind, string> = {
   live: styles.kindLive,
+  demo: styles.kindDemo ?? "",
   "in-progress": styles.kindProgress,
   concept: styles.kindConcept,
-  archived: styles.kindArchived, demo: styles.kindDemo ?? "" };
+  archived: styles.kindArchived,
+};
 
-/** The labels in use on this build, explained above the list when there's more than one. */
+/** The labels in use on this build, explained above the carousel when there's more than one. */
 const legendKinds = (Object.keys(kindLabel) as WorkKind[]).filter((k) => partnerWork.some((w) => w.kind === k));
-
-function Project({ w, index, featured }: { w: Work; index: number; featured: boolean }) {
-  return (
-    <li className={`${styles.project} ${featured ? styles.featured : ""}`}>
-      <div className={styles.media}>
-        <div className={`frame ${styles.desk}`}>
-          <span className={styles.bar} aria-hidden="true"><i /><i /><i /></span>
-          <Capture k={w.key} view="desktop" alt={w.alt.desktop} width={1440} height={900} />
-        </div>
-        <div className={styles.phone}>
-          <Capture k={w.key} view="mobile" alt={w.alt.mobile} width={390} height={700} />
-        </div>
-      </div>
-      <div className={styles.projectText}>
-        <p className={styles.status}>
-          <span className={`${styles.kind} ${kindClass[w.kind]}`}>{kindLabel[w.kind].label}</span>
-          <span className={styles.stage}>{w.stage}</span>
-        </p>
-        <h3><span className={styles.index} aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>{w.name}</h3>
-        <p className={styles.what}>{w.what}</p>
-        <p className={styles.builtLabel}>What I built</p>
-        <ul className={styles.built}>
-          {w.built.map((b) => <li key={b}>{b}</li>)}
-        </ul>
-        {w.liveUrl ? (
-          <a className={`u ${styles.visit}`} href={w.liveUrl} target="_blank" rel="noopener noreferrer" data-track="work_sample_click" data-location={w.key}>Visit the live site<span aria-hidden="true"> &#8599;</span><span className="sr-only"> (opens in a new tab)</span></a>
-        ) : w.previewUrl ? (
-          <a className={`u ${styles.visit}`} href={w.previewUrl} target="_blank" rel="noopener noreferrer" data-track="work_sample_click" data-location={w.key}>{w.kind === "archived" ? "View the archived demo" : "View the preview"}<span aria-hidden="true"> &#8599;</span><span className="sr-only"> (opens in a new tab)</span></a>
-        ) : (
-          <p className={styles.private}>Not public yet. These screens are from the working build.</p>
-        )}
-      </div>
-    </li>
-  );
-}
 
 /** The door arrow, as on the home page. */
 function Arrow() {
@@ -142,9 +100,7 @@ export default async function PartnersPage({ searchParams }: { searchParams: Pro
               ))}
             </dl>
           ) : null}
-          <ol className={styles.work}>
-            {partnerWork.map((w, i) => <Project key={w.key} w={w} index={i} featured={i === 0} />)}
-          </ol>
+          <Coverflow items={showcaseWork} label="Selected work" accent="partners" />
         </div>
       </section>
 

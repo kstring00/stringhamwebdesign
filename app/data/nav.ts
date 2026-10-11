@@ -9,6 +9,9 @@ export const navLinks = [
   { label: "For partners", href: "/partners", featured: true },
 ] as const;
 
+/** On /partners the featured pill points back to the business side. */
+export const otherSide = { label: "For businesses", href: "/" } as const;
+
 /** The site's one action: a fixed quote, and a free demo of the homepage with it. */
 export const cta = { label: "Get a quote + free demo", short: "Get a quote", href: "/#quote" } as const;
 

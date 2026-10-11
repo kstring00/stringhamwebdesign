@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
 
-import { cta, navLinks, partnerCta } from "../data/nav";
+import { cta, navLinks, otherSide, partnerCta } from "../data/nav";
 import { site } from "../data/site";
 import Logo from "./Logo";
 import styles from "./Header.module.css";
@@ -70,9 +70,14 @@ export default function Header() {
           {open ? "Close" : "Menu"}
         </button>
         <nav id="primary-nav" className={styles.nav} aria-label="Primary">
-          {navLinks.map((l) => (
-            <a key={l.href} className={`${styles.link} ${"featured" in l && l.featured ? styles.featured : ""}`} href={l.href} onClick={() => setOpen(false)}>{l.label}</a>
-          ))}
+          {navLinks.map((l) => {
+            const featured = "featured" in l && l.featured;
+            // The featured pill always points to the other side of the site.
+            const other = featured && view === "partners" ? otherSide : null;
+            return (
+              <a key={l.href} className={`${styles.link} ${featured ? styles.featured : ""}`} href={other ? other.href : l.href} onClick={() => setOpen(false)}>{other ? other.label : l.label}</a>
+            );
+          })}
         </nav>
         <div className={styles.actions}>
           <a className={styles.phone} href={site.phoneHref}>
