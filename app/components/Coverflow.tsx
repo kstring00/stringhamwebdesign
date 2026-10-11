@@ -21,10 +21,18 @@ export type CoverItem = {
   alt: string;
 };
 
-/** How far apart the cards sit (fraction of a card's width), how far the side ones turn, and how far back they sit. */
-const SPACING = 0.86;
+/**
+ * How far apart the cards sit (fraction of a card's width) and how far the
+ * side ones turn. Each side card swings back on its outer edge, so that
+ * edge stays level with the centre card and the inner edge recedes: the
+ * cards face in, like the inside of a ring.
+ */
+// With the perspective at 2.3 card widths (coverflow.module.css), this
+// spacing leaves the receding inner edges just clear of the centre card.
+const SPACING = 1.05;
 const ROTATE = 40;
-const DEPTH = 120;
+/** sin(ROTATE) / 2: how far back a card sits so its outer edge stays at the front. */
+const BACK = Math.sin((ROTATE * Math.PI) / 180) / 2;
 
 /** Wrap an offset into [-n/2, n/2), so the carousel loops. */
 function wrap(o: number, n: number) {
@@ -33,20 +41,21 @@ function wrap(o: number, n: number) {
 
 /**
  * Where a card sits for a given offset from the centre (0 = centre, ±1 =
- * the neighbours, fractional while dragging): the centre card flat and
- * forward, the neighbours turned in on their outer edge (the "inverted"
- * coverflow) and set back, anything further faded out.
+ * the neighbours, fractional while dragging): the centre card flat, the
+ * neighbours turned to face the centre (the "inverted" coverflow), anything
+ * further faded out. Depth is a fraction of the card width (--w), so the
+ * same pose works at every size, on the server and in the browser.
  */
 function pose(o: number) {
   const a = Math.abs(o);
   const turn = Math.max(-1, Math.min(1, o));
-  const z = -Math.min(a, 1) * DEPTH - Math.max(a - 1, 0) * 80;
+  const back = Math.min(a, 1) * BACK + Math.max(a - 1, 0) * 0.25;
   const opacity = a <= 1.25 ? 1 : Math.max(0, 1 - (a - 1.25) / 0.5);
   return {
-    transform: `translate3d(${(o * SPACING * 100).toFixed(3)}%, 0, ${z.toFixed(1)}px) rotateY(${(turn * ROTATE).toFixed(2)}deg)`,
+    transform: `translateX(${(o * SPACING * 100).toFixed(3)}%) translateZ(calc(var(--w) * ${(-back).toFixed(4)})) rotateY(${(-turn * ROTATE).toFixed(2)}deg)`,
     opacity,
     zIndex: 100 - Math.round(a * 10),
-    shade: Math.min(a, 1) * 0.32,
+    shade: Math.min(a, 1) * 0.22,
   };
 }
 
