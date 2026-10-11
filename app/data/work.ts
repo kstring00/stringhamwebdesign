@@ -217,5 +217,24 @@ export const partnerWork = work.filter((w) => w.onPartners && (w.confirmed || sh
 /** The home page's carousel and hero frames: the three demos, in order. Never padded. */
 export const homeWork = work.filter((w) => w.onHome && w.confirmed);
 
+/**
+ * The selected-work carousel, the same on the business side (home) and the
+ * partner side (/partners): every project shown on /partners, in order.
+ * Shaped for the carousel: the link is the live site, else the preview.
+ */
+export const showcaseWork = partnerWork.map((w) => ({
+  key: w.key,
+  name: w.name,
+  kind: w.kind,
+  stage: w.stage,
+  type: w.type,
+  what: w.what,
+  builtFor: w.builtFor,
+  built: w.built,
+  href: w.liveUrl ?? w.previewUrl,
+  linkLabel: w.liveUrl ? "Visit the live site" : w.kind === "archived" ? "View the archived demo" : "View the demo",
+  alt: w.alt.desktop,
+}));
+
 /** The /work portfolio: everything confirmed, plus drafts on previews. */
 export const allWork = work.filter((w) => w.onWork && (w.confirmed || showDraftWork));

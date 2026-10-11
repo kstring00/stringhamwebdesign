@@ -142,50 +142,10 @@
 .chrome i { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--line-strong); opacity: 0.6; }
 .chrome span { margin-left: 0.45rem; color: var(--muted); font-size: 0.82rem; letter-spacing: 0.01em; }
 
-/* ---------- 2. work carousel ---------- */
+/* ---------- 2. work ---------- */
 
-.carousel { --peek: 10%; --gap: 1.25rem; display: grid; gap: 1.25rem; }
-
-.viewport {
-  overflow-x: auto;
-  overflow-y: hidden;
-  border-radius: 18px;
-  outline-offset: 6px;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-}
-
-.viewport::-webkit-scrollbar { display: none; }
-.viewport[data-js] { overflow: hidden; cursor: grab; }
-.viewport[data-js]:active { cursor: grabbing; }
-
-.track { display: flex; gap: var(--gap); margin: 0; padding: 0; list-style: none; will-change: transform; }
-
-.slide {
-  flex: 0 0 calc(100% - var(--peek));
-  display: grid;
-  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-  gap: clamp(1.25rem, 3vw, 3rem);
-  align-items: start;
-  padding: clamp(1rem, 2vw, 1.75rem);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  background: #fff;
-  scroll-snap-align: start;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-.shot { overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: #f8fafc; }
-.shotClip { overflow: hidden; aspect-ratio: 16 / 10; }
-/* A little wider than the frame, so the parallax never shows an edge. */
-.shotClip img { display: block; width: 112%; max-width: none; height: auto; margin-left: -6%; }
-
-.slideText { display: grid; gap: 0.75rem; align-content: start; }
-.slideText h3 { font-size: clamp(1.6rem, 2.4vw, 2.2rem); letter-spacing: -0.02em; line-height: 1.1; }
-.slideText > p { color: var(--ink-soft); line-height: 1.55; }
-.builtFor { color: var(--ink); }
-.builtFor b { color: var(--ink); }
+/* The coverflow runs full width; the section keeps it from scrolling the page sideways. */
+.workSection { overflow-x: clip; }
 
 .demoLink {
   justify-self: start;
@@ -200,54 +160,6 @@
   background-size: 100% 1px;
   background-position: 0 calc(100% - 0.55rem);
 }
-
-.controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
-
-.tabs { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-
-.tab {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 44px;
-  padding: 0 1rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: #fff;
-  color: var(--ink-soft);
-  font-size: 0.92rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: border-color 240ms var(--ease-out), background-color 240ms var(--ease-out), color 240ms var(--ease-out);
-}
-
-.tab:hover { border-color: var(--line-strong); color: var(--ink); }
-.tab[aria-pressed="true"] { border-color: var(--brand); background: var(--brand-soft); color: var(--brand-deep); }
-.tabN { color: var(--brand); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.08em; font-variant-numeric: tabular-nums; }
-
-.navButtons { display: flex; align-items: center; gap: 0.5rem; }
-
-.counter { margin-right: 0.5rem; color: var(--muted); font-size: 0.95rem; font-variant-numeric: tabular-nums; }
-.counter i { font-style: normal; opacity: 0.5; }
-
-.arrow {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border: 1px solid var(--line-strong);
-  border-radius: 50%;
-  background: #fff;
-  color: var(--ink);
-  cursor: pointer;
-  transition: background-color 240ms var(--ease-out), border-color 240ms var(--ease-out), color 240ms var(--ease-out);
-}
-
-.arrow:hover:not(:disabled) { background: var(--brand); border-color: var(--brand); color: #fff; }
-.arrow:disabled { opacity: 0.35; cursor: default; }
-
-.progress { height: 3px; overflow: hidden; border-radius: 999px; background: var(--line); }
-.progress span { display: block; width: 100%; height: 100%; background: var(--brand-gradient); transform-origin: left center; transition: transform 160ms linear; }
 
 /* ---------- 3. pricing ---------- */
 
@@ -488,8 +400,6 @@
 }
 
 @media (max-width: 56rem) {
-  .slide { grid-template-columns: 1fr; gap: 1rem; padding: 0.85rem; }
-  .carousel { --peek: 12%; --gap: 0.85rem; }
   .plans { grid-template-columns: 1fr; }
   .aboutGrid, .quoteGrid { grid-template-columns: 1fr; gap: 2.5rem; }
   .quoteSide { position: static; }
@@ -500,8 +410,6 @@
   .frames { aspect-ratio: 16 / 11; }
   .frame:nth-child(1) { left: 0; top: 0; width: 100%; }
   .frame:nth-child(2), .frame:nth-child(3) { display: none; }
-  .controls { flex-direction: column; align-items: stretch; }
-  .navButtons { justify-content: space-between; }
 }
 
 @media (max-width: 40rem) {
@@ -511,7 +419,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .line > span { animation: none; }
-  .plan, .tab, .arrow, .qaIcon, .qaIcon::after, .progress span { transition: none; }
+  .plan, .qaIcon, .qaIcon::after { transition: none; }
   .plan:hover { transform: none; }
 }
 
