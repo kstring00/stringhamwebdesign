@@ -4,7 +4,7 @@
  * change them together.
  */
 
-export const PRICES = { listingFix: 150, website: 2000, care: 125 } as const;
+export const PRICES = { listingFix: 150, website: 2000, care: 75 } as const;
 
 const money = (n: number) => `$${n.toLocaleString("en-US")}`;
 
@@ -115,7 +115,7 @@ export const steps = [
   { n: "3", title: "Live in about 3 weeks", body: "Approve it, then it goes live." },
 ] as const;
 
-/** The home page's five questions, beside the About block. */
+/** The home page's questions, beside the About block. */
 export const faq = [
   {
     q: "Will this bring me more customers?",
@@ -130,6 +130,11 @@ export const faq = [
     q: "Do I own the website?",
     a: "Yes. Once it's paid in full, the site and its content are yours. Your domain and accounts stay in your name, and if you ever leave Website Care, I hand over your domain and site files.",
     link: { label: "Ownership (Terms)", href: "/terms#website" },
+  },
+  {
+    q: "What do you need from me to get started?",
+    a: "Mostly what's already in your head: your services, your customers' common questions, and a few phone photos. Rough is fine, and I never need your passwords.",
+    link: { label: "The full list: what I need to build your website", href: "/blog/what-i-need-to-build-your-website" },
   },
   {
     q: "My nephew could do this.",

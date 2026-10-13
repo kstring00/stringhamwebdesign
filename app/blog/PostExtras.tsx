@@ -14,7 +14,7 @@ import styles from "./extras.module.css";
  *   the post and steps aside over the closing card (the site's bottom bar
  *   stands down on posts, so there's one thing at the bottom).
  */
-export default function PostExtras() {
+export default function PostExtras({ slug }: { slug: string }) {
   const bar = useRef<HTMLDivElement>(null);
   const [pill, setPill] = useState<"hidden" | "shown">("hidden");
 
@@ -94,7 +94,7 @@ export default function PostExtras() {
   return (
     <>
       <div className={styles.progress} aria-hidden="true"><div ref={bar} /></div>
-      <a className={styles.pill} href={site.smsHref} data-track="blog-text" data-state={pill} aria-label={`Need help? Text me at ${site.phone}`}>
+      <a className={styles.pill} href={site.smsHref} data-track="blog-text" data-slug={slug} data-state={pill} aria-label={`Need help? Text me at ${site.phone}`}>
         <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2.5h12a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H6l-3.5 3v-3H2a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" /></svg>
         Need help? Text me
       </a>

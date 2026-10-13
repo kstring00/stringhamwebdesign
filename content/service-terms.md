@@ -30,7 +30,7 @@ These terms apply when you buy a Listing Fix, a website, or Website Care from St
 - We may show your website in our portfolio unless you ask us not to.
 - **Referrals:** if someone referred you to us, we pay them 20% of your website's total price once it's paid in full. We pay it ourselves; it never changes your price.
 
-## 3. Website Care ($125/month)
+## 3. Website Care ($75/month)
 
 **Included each month**
 - Website hosting and upkeep: kept fast, secure and online.

@@ -10,6 +10,17 @@ import { getPost, getPosts, longDate } from "../lib";
 import PostExtras from "../PostExtras";
 import styles from "./post.module.css";
 
+/**
+ * What differs from post to post around the markdown: the chip on the
+ * closing card, the side list's title, and any "Related" links under it.
+ */
+const EXTRAS: Record<string, { chip: string; tocTitle: string; related?: string[] }> = {
+  "my-web-designer-disappeared": { chip: "Free look at your situation", tocTitle: "The steps", related: ["what-i-need-to-build-your-website"] },
+  "what-i-need-to-build-your-website": { chip: "Quote + free demo", tocTitle: "What to gather" },
+  "how-to-buy-your-own-domain": { chip: "Quote + free demo", tocTitle: "The steps" },
+};
+const DEFAULT_EXTRAS = { chip: "Quote + free demo", tocTitle: "In this post" };
+
 export function generateStaticParams() {
   return getPosts().map((p) => ({ slug: p.slug }));
 }
@@ -30,17 +41,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
  * as an email card with a copy button, the step headings fading in, a
  * reading-progress line at the top, and the closing call to action as a
  * card. On phones a "Need help? Text me" pill stands in for the site's
- * bottom bar.
+ * bottom bar. Tables stack into cards on phones, and a "Please never…" line
+ * is a callout (both from lib.ts).
  */
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) notFound();
   const [before, after] = post.html.split("<!--keys-->");
+  const extras = { ...DEFAULT_EXTRAS, ...EXTRAS[post.slug] };
+  const related = (extras.related ?? []).map((r) => getPost(r)).filter((r) => r !== null);
 
   return (
     <article className={styles.post} aria-labelledby="post-title">
-      <PostExtras />
+      <PostExtras slug={post.slug} />
       <header className={styles.head}>
         <div className="container">
           <p className={styles.crumbs}><a className="u" href="/blog">Blog</a> <span aria-hidden="true">/</span> <span>{post.category}</span></p>
@@ -59,7 +73,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <div className={`container ${styles.layout}`}>
         {post.steps.length ? (
           <nav className={styles.toc} aria-label="In this post">
-            <p className={styles.tocTitle}>The steps</p>
+            <p className={styles.tocTitle}>{extras.tocTitle}</p>
             <ol>
               {post.steps.map((s, i) => <li key={s.id}><a href={`#${s.id}`}><span aria-hidden="true">{i + 1}</span>{s.label}</a></li>)}
             </ol>
@@ -75,15 +89,31 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           ) : null}
 
           <aside className={styles.cta} id="help" aria-labelledby="cta-title">
-            <p className={home.chipOnInk}>Free look at your situation</p>
-            <h2 id="cta-title" className={styles.ctaTitle}>Want someone to handle it for you?</h2>
+            <p className={home.chipOnInk}>{extras.chip}</p>
+            <h2 id="cta-title" className={styles.ctaTitle}>{post.ctaTitle}</h2>
             <div className={styles.ctaBody} dangerouslySetInnerHTML={{ __html: post.ctaHtml }} />
             <div className={styles.ctaActions}>
-              <a className="btn" href={site.smsHref} data-track="blog-text" data-magnetic>Text me at {site.phone}</a>
-              <a className={`btn btn-secondary ${styles.ctaSecondary}`} href="/#quote" data-track="blog-quote">Tell me what&rsquo;s going on</a>
+              <a className="btn" href={site.smsHref} data-track="blog-text" data-slug={post.slug} data-magnetic>Text me at {site.phone}</a>
+              <a className={`btn btn-secondary ${styles.ctaSecondary}`} href="/#quote" data-track="blog-quote" data-slug={post.slug}>{post.ctaQuoteLabel}</a>
             </div>
             <p className={styles.signature}>{post.author}, {site.name} · {site.city}, {site.regionLong}</p>
           </aside>
+
+          {related.length ? (
+            <nav className={styles.related} aria-labelledby="related-title">
+              <h2 id="related-title" className={styles.relatedTitle}>Related</h2>
+              <ul>
+                {related.map((r) => (
+                  <li key={r.slug}>
+                    <a href={`/blog/${r.slug}`}>
+                      <span className={styles.relatedName}>{r.title}</span>
+                      <span className={styles.relatedDesc}>{r.description}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ) : null}
         </div>
       </div>
 

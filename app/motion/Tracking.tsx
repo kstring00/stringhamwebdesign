@@ -10,7 +10,8 @@ import { track } from "../lib/track";
  * data-location), demo_link_click on a project's demo link (data-project
  * names it), call_tap on any tel: link, text_tap on any sms: link,
  * email_click on any mailto link, blog_cta_text and blog_cta_quote on a
- * post's closing buttons, and terms_view when the terms page opens.
+ * post's text and quote buttons (with the post's slug), and terms_view
+ * when the terms page opens.
  * The forms send quote_submit, google_check_submit and partner_submit; the
  * work carousel sends carousel_interaction.
  */
@@ -27,8 +28,8 @@ export default function Tracking() {
       if (!a) return;
       const href = a.getAttribute("href") || "";
       const page = window.location.pathname;
-      if (a.dataset.track === "blog-text") track("blog_cta_text", { page });
-      else if (a.dataset.track === "blog-quote") track("blog_cta_quote", { page });
+      if (a.dataset.track === "blog-text") track("blog_cta_text", { page, slug: a.dataset.slug || "" });
+      else if (a.dataset.track === "blog-quote") track("blog_cta_quote", { page, slug: a.dataset.slug || "" });
       else if (a.dataset.track === "cta") track("cta_click", { cta_location: a.dataset.location || "unknown", page });
       else if (a.dataset.track === "demo") track("demo_link_click", { project: a.dataset.project || "unknown", page });
       else if (a.dataset.track === "email" || href.startsWith("mailto:")) track("email_click", { page });

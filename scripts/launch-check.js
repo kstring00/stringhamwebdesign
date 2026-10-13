@@ -89,7 +89,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
   }
 
   const home = seen.get('/');
-  ok('home says what, for whom, where above the fold', /Websites that get\s+League City businesses\s+more calls\./.test(home.text) && /owner-run businesses/i.test(home.text) && /Custom websites · League City, Texas/i.test(home.text));
+  ok('home says what, for whom, where above the fold', /Websites that get\s+businesses more calls\./.test(home.text) && /owner-run businesses/i.test(home.text) && /Custom websites · League City, Texas/i.test(home.text));
   ok('home has the one CTA', (home.text.match(/Get a quote \+ free demo/g) || []).length >= 1);
 
   // The referral reward is published in the same words everywhere it appears.
