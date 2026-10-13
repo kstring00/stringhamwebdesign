@@ -23,8 +23,7 @@ export default function Hero() {
           <p className={s.chip}>Custom websites · League City, Texas</p>
           <h1 id="hero-title" className={s.h1}>
             <span className={s.line}><span>Websites that get</span></span>
-            <span className={s.line}><span>League City businesses</span></span>
-            <span className={s.line}><span>more calls.</span></span>
+            <span className={s.line}><span>businesses more calls.</span></span>
           </h1>
           <p className={s.sub}>
             I design, build and run custom websites for owner-run businesses. Ask for a quote and I&rsquo;ll build you a free demo of your homepage to go with it, so you see your new site before you spend a dollar.
