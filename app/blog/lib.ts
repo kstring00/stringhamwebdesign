@@ -4,6 +4,7 @@ import path from "node:path";
 import { marked } from "marked";
 
 import { site } from "../data/site";
+import { postExtras } from "./posts";
 
 const DIR = path.join(process.cwd(), "content", "blog");
 
@@ -62,9 +63,6 @@ function headingId(text: string) {
   return text.toLowerCase().replace(/<[^>]+>/g, "").replace(/&[#a-z0-9]+;/gi, "").replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 }
 
-/** The closing section, which becomes the CTA card. */
-const CTA_HEADING = /want someone to handle it for you|ready to get started|what['’]s next/i;
-
 const ENTITIES: Record<string, string> = { "&amp;": "&", "&#39;": "'", "&quot;": '"', "&lt;": "<", "&gt;": ">" };
 /** Plain text from a rendered fragment: tags gone, entities back to characters. */
 const plain = (html: string) => html.replace(/<[^>]+>/g, "").replace(/&[#a-z0-9]+;/gi, (e) => ENTITIES[e] ?? e);
@@ -92,20 +90,51 @@ function stackable(table: string) {
   return `<div class="table">${body}</div>`;
 }
 
+const esc = (t: string) => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+type ChartSpec = { type?: string; title?: string; unit?: string; data?: { label: string; value: number }[]; source?: string; sourceUrl?: string };
+
+/** "32%", "11.1%", "22 inquiries": the value as the post wrote it, with its unit. */
+const withUnit = (v: number, unit = "") => `${v.toLocaleString("en-US", { maximumFractionDigits: 1 })}${unit}`;
+
+/**
+ * A ```chart block (JSON: title, unit, data [{label, value}], source,
+ * sourceUrl) as a horizontal bar chart in plain HTML: one series, so one
+ * colour and no legend; every bar labelled at its tip; a source line; and
+ * the same numbers as a table behind a toggle. The bars are at full length
+ * in the HTML (PostExtras grows them in as they scroll into view). A block
+ * that won't parse is left out rather than shown as code.
+ */
+function chart(json: string) {
+  let c: ChartSpec;
+  try { c = JSON.parse(json); } catch { return ""; }
+  const data = (c.data ?? []).filter((d) => d && typeof d.value === "number");
+  if (!data.length) return "";
+  const max = Math.max(...data.map((d) => d.value)) || 1;
+  const unit = c.unit ?? "";
+  const rows = data.map((d) => `<li class="barRow" style="--v:${((d.value / max) * 100).toFixed(2)}%"><span class="barLabel">${esc(d.label)}</span><span class="barTrack" aria-hidden="true"><span class="bar"></span></span><span class="barValue">${esc(withUnit(d.value, unit))}</span></li>`).join("");
+  const source = c.source ? `<p class="chartSource">Source: ${c.sourceUrl ? `<a href="${esc(c.sourceUrl)}" target="_blank" rel="noopener noreferrer">${esc(c.source)}</a>` : esc(c.source)}</p>` : "";
+  const table = `<details class="chartTable"><summary>Show the numbers as a table</summary><table><thead><tr><th scope="col">Item</th><th scope="col">Value</th></tr></thead><tbody>${data.map((d) => `<tr><td>${esc(d.label)}</td><td>${esc(withUnit(d.value, unit))}</td></tr>`).join("")}</tbody></table></details>`;
+  return `<figure class="chart" data-chart><figcaption class="chartTitle">${esc(c.title ?? "")}</figcaption><ul class="bars">${rows}</ul>${source}${table}</figure>`;
+}
+
 function render(slug: string, raw: string): PostDoc {
   const { data, body } = parseFrontmatter(raw);
   // The page renders the H1 from the frontmatter, so the body's own H1 goes.
   const withoutH1 = body.replace(/^\s*#\s+.+\r?\n/, "");
-  // The closing section becomes the CTA card.
-  const lines = withoutH1.split(/\r?\n/);
-  const ctaAt = lines.findIndex((l) => /^##\s+/.test(l) && CTA_HEADING.test(l));
+  // Charts come out first (as numbered markers), so their JSON is never read as prose.
+  const charts: string[] = [];
+  const withCharts = withoutH1.replace(/```chart\s*\n([\s\S]*?)\n```/g, (_m, json: string) => `\n<!--chart:${charts.push(chart(json)) - 1}-->\n`);
+  // The closing section (the last H2) becomes the CTA card.
+  const lines = withCharts.split(/\r?\n/);
+  const ctaAt = lines.reduce((at, l, i) => (/^##\s+/.test(l) ? i : at), -1);
   const mainMd = (ctaAt >= 0 ? lines.slice(0, ctaAt) : lines).join("\n").replace(/\n-{3,}\s*$/, "").trim();
   const ctaMd = ctaAt >= 0 ? lines.slice(ctaAt + 1).join("\n") : "";
   const ctaTitle = ctaAt >= 0 ? lines[ctaAt].replace(/^##\s+/, "").trim() : "Want help with your website?";
   const quoteLink = ctaMd.match(/\[([^\]]+)\]\(\/#quote\)/);
   const ctaQuoteLabel = quoteLink ? quoteLink[1].charAt(0).toUpperCase() + quoteLink[1].slice(1) : "Request a quote";
 
-  const words = mainMd.replace(/[#>*_\-[\]()]/g, " ").split(/\s+/).filter(Boolean).length;
+  const words = mainMd.replace(/<!--chart:\d+-->/g, "").replace(/[#>*_\-[\]()]/g, " ").split(/\s+/).filter(Boolean).length;
   const intro = mainMd.split(/\n(?=---|## )/)[0].split(/\n\n+/).map((p) => p.trim()).filter(Boolean).map((p) => p.replace(/\*\*([^*]+)\*\*/g, "$1")).join(" ");
 
   const steps: { id: string; label: string }[] = [];
@@ -114,11 +143,13 @@ function render(slug: string, raw: string): PostDoc {
     // Headings get ids; numbered ones get their number as a badge and a reveal.
     .replace(/<h2>(.*?)<\/h2>/g, (_m, inner: string) => {
       const id = headingId(inner);
-      const num = inner.match(/^(\d+)\.\s*(.*)$/);
+      const num = inner.match(/^(?:Step\s+)?(\d+)[.:]\s*(.*)$/i);
       if (num) { steps.push({ id, label: plain(num[2]) }); return `<h2 id="${id}" class="step" data-reveal><span class="num" aria-hidden="true">${num[1]}</span><span class="stepText">${num[2]}</span></h2>`; }
       return `<h2 id="${id}" data-reveal>${inner}</h2>`;
     })
-    // The email template is a blockquote: give it an email frame and a label.
+    // A blockquote that opens with a bold label is a point to stop on: an insight box.
+    .replace(/<blockquote>\s*(<p><strong>[\s\S]*?)<\/blockquote>/g, '<aside class="callout insight">$1</aside>')
+    // Any other blockquote is the email template: an email frame and a label.
     .replace(/<blockquote>([\s\S]*?)<\/blockquote>/, '<figure class="email"><figcaption>Email template · copy, fill in the blanks, send</figcaption><blockquote>$1</blockquote></figure>')
     // A "Please never…" line is a warning: a callout box.
     .replace(/<p>(<strong>Please never[\s\S]*?)<\/p>/g, '<div class="callout" role="note"><p>$1</p></div>')
@@ -129,7 +160,9 @@ function render(slug: string, raw: string): PostDoc {
     // External links open in a new tab, safely.
     .replace(/<a href="(https?:\/\/[^"]+)"/g, '<a href="$1" target="_blank" rel="noopener noreferrer"')
     // The "four keys" diagram sits right after section 2's list (that post only).
-    .replace(/(<h2 id="2-[^"]*"[\s\S]*?<\/ol>\s*<p>[\s\S]*?<\/p>)/, (m) => (slug === "my-web-designer-disappeared" ? `${m}<!--keys-->` : m));
+    .replace(/(<h2 id="2-[^"]*"[\s\S]*?<\/ol>\s*<p>[\s\S]*?<\/p>)/, (m) => (slug === "my-web-designer-disappeared" ? `${m}<!--keys-->` : m))
+    // The charts go back in where they were written.
+    .replace(/<!--chart:(\d+)-->/g, (_m, i: string) => charts[Number(i)] ?? "");
 
   const ctaHtml = smsLinks(marked.parse(ctaMd, { async: false, gfm: true }) as string)
     // The card has its own buttons and signature; drop the link line and the signature.
@@ -137,6 +170,8 @@ function render(slug: string, raw: string): PostDoc {
     .replace(/<p><em>[\s\S]*?<\/em><\/p>/, "")
     // Links left in the text are the same two the buttons carry: keep the words, lose the links.
     .replace(/<a href="(?:sms:[^"]*|\/#quote)">([\s\S]*?)<\/a>/g, "$1")
+    // A line that only repeats the two buttons goes.
+    .replace(/<p>([\s\S]*?)<\/p>\s*/g, (m, inner: string) => (/^text me at [\d-]+ or request a quote\.?$/i.test(plain(inner).trim()) ? "" : m))
     .trim();
 
   return {
@@ -165,8 +200,8 @@ export function getPosts(): Post[] {
     .filter((f) => f.endsWith(".md"))
     .map((f) => getPost(f.replace(/\.md$/, "")))
     .filter((p): p is PostDoc => Boolean(p))
-    // Newest first; posts from the same day in a fixed order (by slug, Z to A).
-    .sort((a, b) => (a.date !== b.date ? (a.date < b.date ? 1 : -1) : a.slug < b.slug ? 1 : -1))
+    // Newest first; posts from the same day by the order they were published in.
+    .sort((a, b) => (a.date !== b.date ? (a.date < b.date ? 1 : -1) : postExtras(b.slug).seq - postExtras(a.slug).seq))
     .map(({ html: _h, ctaTitle: _t, ctaHtml: _c, ctaQuoteLabel: _q, intro: _i, steps: _s, ...post }) => post);
 }
 

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { site } from "../data/site";
+import { gsap, prefersReducedMotion } from "../motion/gsap";
 import styles from "./extras.module.css";
 
 /**
@@ -10,6 +11,9 @@ import styles from "./extras.module.css";
  * - a thin reading-progress line under the header;
  * - a "Copy" button on the email template, which copies its text;
  * - the current step marked in the side list as you read;
+ * - each chart's bars growing in from the baseline, once, as it scrolls
+ *   into view (left at full length under reduced motion, without JS, or
+ *   if the chart is already on screen);
  * - on phones, a "Need help? Text me" pill that appears once you're into
  *   the post and steps aside over the closing card (the site's bottom bar
  *   stands down on posts, so there's one thing at the bottom).
@@ -60,6 +64,29 @@ export default function PostExtras({ slug }: { slug: string }) {
       cap.appendChild(btn);
     }
     return () => { delete document.body.dataset.post; btn?.remove(); };
+  }, []);
+
+  // Charts: the bars grow in, once, as each chart comes into view.
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    const charts = Array.from(document.querySelectorAll<HTMLElement>("figure[data-chart]")).filter((c) => c.getBoundingClientRect().top > window.innerHeight);
+    if (!charts.length) return;
+    const ctx = gsap.context(() => {
+      charts.forEach((c) => {
+        gsap.set(c.querySelectorAll(".bar"), { scaleX: 0 });
+        gsap.set(c.querySelectorAll(".barValue"), { autoAlpha: 0 });
+      });
+    });
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      ctx.add(() => {
+        gsap.to(e.target.querySelectorAll(".bar"), { scaleX: 1, duration: 0.9, ease: "power3.out", stagger: 0.08 });
+        gsap.to(e.target.querySelectorAll(".barValue"), { autoAlpha: 1, duration: 0.4, delay: 0.45, stagger: 0.08 });
+      });
+    }), { rootMargin: "0px 0px -15% 0px" });
+    charts.forEach((c) => io.observe(c));
+    return () => { io.disconnect(); ctx.revert(); };
   }, []);
 
   // The current step in the side list, and the phone pill's timing.
