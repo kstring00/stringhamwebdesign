@@ -4,7 +4,7 @@
  * change them together.
  */
 
-export const PRICES = { listingFix: 150, website: 2000, care: 125 } as const;
+export const PRICES = { listingFix: 150, website: 2000, care: 75 } as const;
 
 const money = (n: number) => `$${n.toLocaleString("en-US")}`;
 
