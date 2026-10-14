@@ -31,7 +31,7 @@
   isolation: isolate;
   display: flex;
   align-items: center;
-  gap: clamp(1rem, 2.5vw, 2.5rem);
+  gap: clamp(0.75rem, 1.8vw, 1.5rem);
   width: calc(100% - 2 * var(--gutter));
   max-width: var(--max);
   min-height: 4rem;
@@ -100,6 +100,7 @@
 
 .brand {
   display: inline-flex;
+  flex: none;
   align-items: center;
   min-height: 44px;
   margin-right: auto;
@@ -113,14 +114,14 @@
 
 /* ---------- the links ---------- */
 
-.nav { display: flex; align-items: center; gap: clamp(0.25rem, 1vw, 0.75rem); }
+.nav { display: flex; align-items: center; gap: clamp(0.1rem, 0.6vw, 0.4rem); }
 
 .link {
   position: relative;
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  padding: 0 0.6rem;
+  padding: 0 0.55rem;
   border-radius: 999px;
   color: var(--ink-soft);
   font-size: 0.95rem;
@@ -133,8 +134,8 @@
 .link::after {
   content: "";
   position: absolute;
-  left: 0.6rem;
-  right: 0.6rem;
+  left: 0.55rem;
+  right: 0.55rem;
   bottom: 0.7rem;
   height: 1.5px;
   background: var(--accent);
@@ -213,7 +214,7 @@
 .cta:hover::after { transform: translateX(120%); }
 
 /* Mid widths: the number steps out, then the links tighten. */
-@media (max-width: 78rem) {
+@media (max-width: 82rem) {
   .phone span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   .phone { padding: 0 0.5rem; }
   .link { padding: 0 0.5rem; font-size: 0.92rem; }
@@ -222,20 +223,15 @@
   .bar { gap: clamp(0.5rem, 1.5vw, 1.5rem); }
 }
 
-@media (max-width: 66rem) {
+@media (max-width: 75rem) {
   .phone { display: none; }
   .nav { gap: 0; }
   .link { padding: 0 0.45rem; font-size: 0.9rem; }
 }
 
 /* Tablets and phones: the logo and a Menu button; the links drop down
-   from the bar; MobileBar carries the actions. */
-@media (max-width: 56rem) {
-  .actions { display: none; }
-  .bar { min-height: 3.5rem; padding-left: 1.1rem; }
-  .logo { height: 2rem; }
-  .header[data-scrolled] .glass { background: rgba(255, 255, 255, 0.76); }
-
+   from the bar. Below 56rem MobileBar carries the actions too. */
+@media (max-width: 64rem) {
   .menuBtn {
     display: inline-flex;
     align-items: center;
@@ -286,6 +282,13 @@
   .link:hover { background: var(--paper-deep); }
   .featured { margin: 0.35rem 0 0; padding: 0 1rem; justify-content: center; border-color: var(--violet); color: var(--violet-deep); }
   .header[data-view="partners"] .featured { border-color: var(--brand); color: var(--brand-deep); }
+}
+
+@media (max-width: 56rem) {
+  .actions { display: none; }
+  .bar { min-height: 3.5rem; padding-left: 1.1rem; }
+  .logo { height: 2rem; }
+  .header[data-scrolled] .glass { background: rgba(255, 255, 255, 0.76); }
 }
 
 @keyframes drop {

@@ -187,3 +187,7 @@ textarea.input {
 /* Phone or email, either one: a group with one legend and one rule. */
 .either { display: grid; gap: 0.6rem; margin: 0; padding: 0; border: 0; min-width: 0; }
 .either legend { padding: 0; margin-bottom: 0.35rem; font-weight: 600; font-size: 0.95rem; }
+
+/* A Website Checkup result riding along from /checkup. */
+.attached { padding: 0.6rem 0.85rem; border-radius: 10px; background: var(--brand-soft); color: var(--brand-deep); font-size: 0.92rem; line-height: 1.45; }
+.attached b { font-weight: 600; }

@@ -2,6 +2,7 @@
 export const navLinks = [
   { label: "Work", href: "/#work" },
   { label: "Pricing", href: "/#pricing" },
+  { label: "Free checkup", href: "/checkup" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/#about" },
   { label: "FAQ", href: "/#faq" },
@@ -23,6 +24,7 @@ export const footerLinks = [
   { label: "Work", href: "/work" },
   { label: "Pricing", href: "/#pricing" },
   { label: "Free Google check", href: "/google-check" },
+  { label: "Free Website Checkup", href: "/checkup" },
   { label: "Blog", href: "/blog" },
   { label: "Service Terms", href: "/terms" },
   { label: "Privacy", href: "/privacy" },

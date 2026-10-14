@@ -55,3 +55,24 @@ export function BusinessJsonLd() {
     />
   );
 }
+
+/** The Free Website Checkup, as a free web application from the LLC. */
+export function CheckupJsonLd({ description }: { description: string }) {
+  return (
+    <Script
+      data={{
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        name: "Free Website Checkup",
+        description,
+        url: `${site.url}/checkup`,
+        applicationCategory: "BusinessApplication",
+        operatingSystem: "Any",
+        browserRequirements: "Requires JavaScript",
+        isAccessibleForFree: true,
+        offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+        provider: { "@type": "Organization", name: site.legalName, url: site.url },
+      }}
+    />
+  );
+}
