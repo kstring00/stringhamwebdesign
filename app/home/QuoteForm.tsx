@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { site } from "../data/site";
 import styles from "./form.module.css";
 import { track } from "../lib/track";
+import { currentRef } from "../lib/ref";
 import { SOURCE_KEYS, useSourceFields } from "../lib/useSourceFields";
 
 /** Messages for a native (no-JS) post that bounced back with ?error=… */
@@ -34,6 +35,10 @@ export default function QuoteForm({ sent = false, errorCode = "", checkup = "" }
   const done = useRef<HTMLDivElement>(null);
 
   useSourceFields("quote-form");
+  // A referral partner's code, if this visitor came from a shared link.
+  const [ref, setRef] = useState("");
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from this browser after hydration
+  useEffect(() => { setRef(currentRef()); }, []);
   useEffect(() => { if (state === "sent") done.current?.focus(); }, [state]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
@@ -51,10 +56,11 @@ export default function QuoteForm({ sent = false, errorCode = "", checkup = "" }
     setError("");
     try {
       const res = await fetch("/api/website-quote", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
-      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; referred?: boolean; error?: string };
       if (!res.ok || !json.ok) throw new Error(json.error || "That didn't go through.");
       setWho(data.name.trim().split(/\s+/)[0]);
       setState("sent");
+      if (json.referred && data.ref) track("ref_lead", { code: data.ref });
       track("quote_submit", { contact: isEmail(contact) ? "email" : "phone", source: data.utm_source || (data.referrer ? "referral" : "direct") });
     } catch (err) {
       setState("error");
@@ -110,6 +116,7 @@ export default function QuoteForm({ sent = false, errorCode = "", checkup = "" }
       {SOURCE_KEYS.map((k) => <input key={k} type="hidden" name={k} defaultValue="" />)}
       <input type="hidden" name="referrer" defaultValue="" />
       {checkup ? <input type="hidden" name="checkup" value={checkup} /> : null}
+      <input type="hidden" name="ref" value={ref} />
       {/* Honeypot: off screen, inert and skipped by password managers. The API
           drops any submission where `website` has a value. */}
       <div className={styles.honeypot} aria-hidden="true" inert>

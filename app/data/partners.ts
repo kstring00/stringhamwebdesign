@@ -43,7 +43,7 @@ export const comparison = [
   { row: "Who talks to the client", a: "I do, with you copied if you like", b: "You do; I join calls only if you ask" },
   { row: "Who contracts with the client", a: "Stringham Web Design LLC", b: "You" },
   { row: "Whose name is on the work", a: "Mine, with your introduction", b: "Yours, if you prefer" },
-  { row: "How money works", a: `I pay you ${referral.percent} of the website total once it's paid in full`, b: "You pay me a project price we agree before work starts" },
+  { row: "How money works", a: `I pay you ${referral.percent} of the website build price within 14 days after it's paid in full`, b: "You pay me a project price we agree before work starts" },
 ] as const;
 
 export const reasons = [

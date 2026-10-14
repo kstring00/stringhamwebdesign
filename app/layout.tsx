@@ -9,6 +9,7 @@ import MobileBar from "./components/MobileBar";
 import Magnetic from "./motion/Magnetic";
 import Reveal from "./motion/Reveal";
 import Tracking from "./motion/Tracking";
+import RefTracker from "./motion/RefTracker";
 import { site } from "./data/site";
 
 /* Both faces are self-hosted: next/font downloads them at build and serves
@@ -54,6 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Reveal />
         <Magnetic />
         <Tracking />
+        <RefTracker />
         <ClarityAnalytics />
       </body>
     </html>
