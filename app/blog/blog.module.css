@@ -1,45 +1,142 @@
-.hero { padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(2rem, 4vw, 3rem); }
-.hero > div { display: grid; gap: 1.25rem; max-width: 46rem; }
+/* The blog index: a two-column title block, the latest post across the
+   top, the rest two to a row. The post cards are shared with "Related
+   posts" under each post (PostCard.tsx). */
 
-.h1 {
-  font-size: clamp(2.4rem, 5vw, 4rem);
-  font-variation-settings: "opsz" 144, "SOFT" 30;
-  letter-spacing: -0.025em;
-  line-height: 1.02;
+.hero { padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(2rem, 4vw, 3.5rem); }
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: end;
 }
 
-.list { display: grid; gap: 1.25rem; max-width: 48rem; margin: 0; padding: 0; list-style: none; }
+.heroText { display: grid; gap: 1.25rem; justify-items: start; }
+
+.h1 {
+  font-size: clamp(2.6rem, 6.4vw, 5.4rem);
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+}
+
+.heroAside { display: grid; gap: 1.25rem; padding-bottom: 0.6rem; }
+.heroLede { color: var(--ink-soft); font-size: clamp(1.05rem, 1.3vw, 1.2rem); line-height: 1.6; }
+
+.count {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.count b { color: var(--ink); font-weight: 600; }
+
+/* ---------- the grid ---------- */
+
+.posts { padding: 0 0 var(--section); }
+
+.featureRow { margin-bottom: clamp(1rem, 2.5vw, 1.75rem); }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.grid > li { display: grid; }
 
 .card {
   display: grid;
-  gap: 0.75rem;
-  padding: clamp(1.4rem, 3vw, 2rem);
+  grid-template-rows: auto 1fr;
+  gap: 0;
+  height: 100%;
+  overflow: hidden;
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 20px;
   background: #fff;
-  transition: transform 350ms var(--ease-out), box-shadow 350ms var(--ease-out), border-color 350ms var(--ease-out);
+  color: inherit;
+  transition: transform 450ms var(--ease-out), box-shadow 450ms var(--ease-out), border-color 450ms var(--ease-out);
 }
 
-.card:hover { transform: translateY(-3px); border-color: var(--line-strong); box-shadow: 0 28px 56px -32px rgba(11, 27, 61, 0.4); }
+.card:hover { transform: translateY(-4px); border-color: var(--line-strong); box-shadow: 0 40px 70px -44px rgba(11, 27, 61, 0.55); }
 .card:focus-visible { outline: 2px solid var(--brand); outline-offset: 4px; }
 
-.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.6rem; color: var(--muted); font-size: 0.92rem; }
+/* The cover sits flush in the card's top; the card's own corners round it. */
+.card > :first-child { border-radius: 0; }
 
-.category {
+.body { display: grid; gap: 0.8rem; align-content: start; padding: clamp(1.25rem, 2.5vw, 1.9rem); }
+
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.6rem; color: var(--muted); font-size: 0.9rem; }
+
+.category, .latest {
   padding: 0.2rem 0.65rem;
   border-radius: 999px;
   background: var(--brand-soft);
   color: var(--brand-deep);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.04em;
 }
 
-.cardTitle { font-size: clamp(1.6rem, 2.8vw, 2.2rem); letter-spacing: -0.02em; line-height: 1.1; }
-.cardDesc { color: var(--ink-soft); line-height: 1.55; }
-.readMore { color: var(--brand-deep); font-weight: 600; }
+.latest { background: var(--brand); color: #fff; }
+
+.cardTitle { font-size: clamp(1.45rem, 2.2vw, 1.9rem); letter-spacing: -0.02em; line-height: 1.12; text-wrap: balance; }
+.cardDesc { color: var(--ink-soft); line-height: 1.6; }
+
+.readMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+  color: var(--brand-deep);
+  font-weight: 600;
+}
+
+.readMore svg { transition: transform 350ms var(--ease-out); }
+.card:hover .readMore svg { transform: translateX(4px); }
+
+/* The latest post: cover and words side by side, a bigger title. */
+.card[data-variant="feature"] {
+  grid-template-rows: none;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  align-items: center;
+}
+
+.card[data-variant="feature"] > :first-child { align-self: stretch; aspect-ratio: auto; min-height: 24rem; min-width: 0; }
+.card[data-variant="feature"] .body { gap: 1rem; padding: clamp(1.5rem, 4vw, 3.25rem); }
+.card[data-variant="feature"] .cardTitle { font-size: clamp(1.9rem, 3.4vw, 2.9rem); line-height: 1.05; }
+.card[data-variant="feature"] .cardDesc { font-size: 1.08rem; }
+
+/* Under a post: smaller type. */
+.card[data-variant="compact"] { border-radius: 16px; }
+.card[data-variant="compact"] .body { gap: 0.6rem; padding: 1.1rem 1.25rem 1.3rem; }
+.card[data-variant="compact"] .cardTitle { font-size: 1.25rem; line-height: 1.2; }
+.card[data-variant="compact"] .meta { font-size: 0.85rem; }
+
+.end { margin-top: clamp(2rem, 4vw, 3rem); color: var(--ink-soft); font-size: 1.05rem; text-align: center; }
+.end a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink); font-weight: 600; }
+
+/* ---------- smaller screens ---------- */
+
+@media (max-width: 64rem) {
+  .heroGrid { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .card[data-variant="feature"] { grid-template-columns: minmax(0, 1fr); }
+  .card[data-variant="feature"] > :first-child { min-height: 0; aspect-ratio: 16 / 10; }
+}
+
+@media (max-width: 44rem) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .card { transition: none; }
+  .card, .readMore svg { transition: none; }
   .card:hover { transform: none; }
+  .card:hover .readMore svg { transform: none; }
 }
