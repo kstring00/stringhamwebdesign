@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent } from "react";
 
 import { site } from "../data/site";
+import { currentRef } from "../lib/ref";
 import { track } from "../lib/track";
 import { SOURCE_KEYS, useSourceFields } from "../lib/useSourceFields";
 import { gsap, prefersReducedMotion } from "../motion/gsap";
@@ -67,7 +68,7 @@ function Phone({ answers, idx, done, rank }: { answers: (AnswerValue | undefined
 
 /* ---------- the lead form on the report ---------- */
 
-function LeadForm({ summaryText }: { summaryText: string }) {
+function LeadForm({ summaryText, refCode }: { summaryText: string; refCode: string }) {
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [error, setError] = useState("");
   const done = useRef<HTMLParagraphElement>(null);
@@ -85,10 +86,11 @@ function LeadForm({ summaryText }: { summaryText: string }) {
     setError("");
     try {
       const res = await fetch("/api/website-quote", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
-      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; referred?: boolean; error?: string };
       if (!res.ok || !json.ok) throw new Error(json.error || "That didn't go through.");
       setState("sent");
       track("checkup_lead", { contact: isEmail(contact) ? "email" : "phone" });
+      if (json.referred && refCode) track("ref_lead", { code: refCode });
     } catch (err) {
       setState("error");
       setError(err instanceof Error ? err.message : "That didn't go through.");
@@ -108,6 +110,7 @@ function LeadForm({ summaryText }: { summaryText: string }) {
       </div>
       <input type="hidden" name="source" value="checkup" />
       <input type="hidden" name="checkup" value={summaryText} />
+      <input type="hidden" name="ref" value={refCode} />
       {SOURCE_KEYS.map((k) => <input key={k} type="hidden" name={k} defaultValue="" />)}
       <input type="hidden" name="referrer" defaultValue="" />
       <div className={s.honeypot} aria-hidden="true" inert>
@@ -149,6 +152,21 @@ export default function Checkup() {
   const howRef = useRef<HTMLDetailsElement>(null);
   const numRef = useRef<HTMLSpanElement>(null);
   const [today, setToday] = useState("");
+  // A referral partner's code from a shared link, and their first name if the code is real.
+  const [refCode, setRefCode] = useState("");
+  const [sharer, setSharer] = useState("");
+  useEffect(() => {
+    const code = currentRef();
+    if (!code) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from this browser after hydration
+    setRefCode(code);
+    let live = true;
+    fetch(`/api/ref?code=${encodeURIComponent(code)}`)
+      .then((r) => r.json() as Promise<{ valid?: boolean; firstName?: string }>)
+      .then((j) => { if (live && j.valid && j.firstName) setSharer(j.firstName); })
+      .catch(() => {});
+    return () => { live = false; };
+  }, []);
 
   // The estimate's three numbers are remembered on this device.
   useEffect(() => {
@@ -267,6 +285,7 @@ export default function Checkup() {
 
       <header className={s.intro}>
         <p className={s.eyebrow}>Free website checkup · 10 questions · about 2 minutes</p>
+        {sharer ? <p className={s.sharer}>Shared with you by {sharer}.</p> : null}
         <h1 className={s.h1}>Is your website turning visitors into customers?</h1>
         <p className={s.lede}>
           Pull up your site on your phone and answer honestly. Watch each part of the page get checked, then get your score, your biggest leaks, and a fix for each one.
@@ -397,7 +416,7 @@ export default function Checkup() {
                 <p className={s.phoneNo}>{site.phone}</p>
                 <div className={s.ctaRow}>
                   <a className="btn" href={smsHref} onClick={() => track("checkup_cta_text", { score: String(r.score) })}>Text me your score</a>
-                  <a className={`btn btn-secondary ${s.onInkBtn}`} href={`/?checkup=${encodeURIComponent(summaryText)}#quote`} onClick={() => track("checkup_cta_quote", { score: String(r.score) })}>Get a quote + free demo</a>
+                  <a className={`btn btn-secondary ${s.onInkBtn}`} href={`/?checkup=${encodeURIComponent(summaryText)}${refCode ? `&ref=${encodeURIComponent(refCode)}` : ""}#quote`} onClick={() => track("checkup_cta_quote", { score: String(r.score) })}>Get a quote + free demo</a>
                 </div>
                 <div className={s.ctaRow}>
                   <button className={s.ghost} type="button" onClick={copy}>Copy my report</button>
@@ -405,7 +424,7 @@ export default function Checkup() {
                 </div>
                 {copyMsg ? <p className={s.msg} role="status">{copyMsg}</p> : null}
                 {copyText ? <textarea className={s.copybox} readOnly value={copyText} aria-label="Your report to copy" onFocus={(ev) => ev.currentTarget.select()} autoFocus /> : null}
-                <LeadForm summaryText={summaryText} />
+                <LeadForm summaryText={summaryText} refCode={refCode} />
               </section>
 
               <div className={s.row}>

@@ -475,3 +475,6 @@
   .zone .tip { display: none; }
   .zone, .pin, .fill, .working li, .n, .pill, .load, .btnW, .h1bar, .zCall > span, .printHead { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
+
+/* "Shared with you by Maria." when the visitor came from a partner's link. */
+.sharer { justify-self: start; padding: 0.3rem 0.75rem; border-radius: 999px; background: var(--brand-soft); color: var(--brand-deep); font-size: 0.9rem; font-weight: 600; }

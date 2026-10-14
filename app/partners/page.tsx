@@ -66,7 +66,7 @@ export default async function PartnersPage({ searchParams }: { searchParams: Pro
               <span className={home.doorNum} aria-hidden="true">01</span>
               <span className={home.doorText}>
                 <span className={home.doorName}>Refer a client</span>
-                <span className={home.doorMeta}>{referral.percent} of the website total, once they&rsquo;ve paid in full</span>
+                <span className={home.doorMeta}>{referral.percent} of the build price, once they&rsquo;ve paid in full</span>
               </span>
               <span className={home.doorArrow} aria-hidden="true"><Arrow /></span>
             </a>
@@ -140,14 +140,20 @@ export default async function PartnersPage({ searchParams }: { searchParams: Pro
           <div className={styles.referral} id="referrals">
             <div className={styles.referralLead}>
               <p className={styles.referralRate} aria-hidden="true"><CountUp value={referral.rate} suffix="%" /></p>
-              <h3 id="referrals-title" className={styles.referralTitle}>Referral terms: {referral.percent} of the website total</h3>
+              <h3 id="referrals-title" className={styles.referralTitle}>Referral terms: {referral.percent} of the website build price</h3>
               <p className={styles.referralExample}>
                 <span>Example</span> Your client&rsquo;s website quote is {referral.example.price}. Once they&rsquo;ve paid in full, I pay you <b>{referral.example.reward}</b>.
               </p>
             </div>
-            <ul className={styles.ticks}>
-              {referral.rules.map((r) => <li key={r}>{r}</li>)}
-            </ul>
+            <div className={styles.referralRules}>
+              <ul className={styles.ticks}>
+                {referral.rules.map((r) => <li key={r}>{r}</li>)}
+              </ul>
+              <p className={styles.referralCta}>
+                <a className="btn" href="/partners/join" data-track="cta" data-location="partners-referral-join">Get your referral link</a>
+                <a className="u" href="/partners/terms">Read the partner terms</a>
+              </p>
+            </div>
           </div>
         </div>
       </section>

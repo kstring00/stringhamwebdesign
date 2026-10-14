@@ -11,6 +11,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     at("/checkup", 0.9, "monthly"),
     at("/google-check", 0.9, "monthly"),
     at("/partners", 0.8, "monthly"),
+    at("/partners/join", 0.6, "monthly"),
+    at("/partners/terms", 0.3, "yearly"),
     at("/blog", 0.7, "weekly"),
     ...getPosts().map((p) => ({ url: `${site.url}/blog/${p.slug}`, lastModified: new Date(p.date), changeFrequency: "monthly" as const, priority: 0.7 })),
     at("/family-resource-hub", 0.7, "monthly"),

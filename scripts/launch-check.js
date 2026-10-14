@@ -83,7 +83,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     if (path === '/') ok(`${path}: LocalBusiness JSON-LD`, /"@type":"ProfessionalService"/.test(d.jsonld) && /League City/.test(d.jsonld) && /Houston/.test(d.jsonld));
     if (path === '/about') ok(`${path}: Person JSON-LD`, /"@type":"Person"/.test(d.jsonld));
     ok(`${path}: no banned words in rendered text`, !BANNED.test(d.text), (d.text.match(BANNED) || [''])[0]);
-    const partnerView = path === '/partners';
+    const partnerView = path === '/partners' || path.startsWith('/partners/');
     ok(`${path}: header is the logo, the links, the phone and one button`, JSON.stringify(d.headerNav) === JSON.stringify(['Work', 'Pricing', 'Free checkup', 'Blog', 'About', 'FAQ', partnerView ? 'For businesses' : 'For partners']) && d.headerCta === (partnerView ? 'Explore a partnership' : 'Get a quote + free demo'), JSON.stringify({ nav: d.headerNav, cta: d.headerCta }));
     ok(`${path}: the mobile bar has call, text and the one action`, d.mobileBar.length === 3 && d.mobileBar[0].startsWith('tel:') && d.mobileBar[1].startsWith('sms:') && (partnerView ? d.mobileBar[2] === '/partners#partner-form' : d.mobileBar[2] === '/#quote'), JSON.stringify(d.mobileBar));
   }
@@ -94,7 +94,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
 
   // The referral reward is published in the same words everywhere it appears.
   const partners = seen.get('/partners');
-  ok('/partners publishes the referral terms', partners && /Referral terms: 20% of the website total/.test(partners.text) && /paid in full/.test(partners.text));
+  ok('/partners publishes the referral terms', partners && /Referral terms: 20% of the website build price/.test(partners.text) && /within 14 days after/.test(partners.text));
   ok('home mentions the referral reward', /20%/.test(home.text));
   ok('no leftover "not published" referral wording', ![home, partners, seen.get('/work'), seen.get('/google-check')].some((d) => d && /not published here yet|fixed referral reward/i.test(d.text)));
 
@@ -136,7 +136,8 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
         const small = [...document.querySelectorAll('a, button, input, select, textarea')].filter((el) => {
           const cs = getComputedStyle(el); if (cs.display === 'none' || cs.visibility === 'hidden' || el.closest('[hidden]') || el.closest('[aria-hidden="true"]')) return false;
           if (inline(el)) return false; const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0;
-        }).map((el) => ({ h: Math.round(el.offsetHeight || el.getBoundingClientRect().height), t: (el.getAttribute('aria-label') || el.textContent || el.name || el.tagName).replace(/\s+/g, ' ').trim().slice(0, 30) })).filter((x) => x.h < 44);
+        }).map((el) => (/^(checkbox|radio)$/.test(el.type) && el.closest('label')) || el) // a box inside its label: the label is what you tap
+        .map((el) => ({ h: Math.round(el.offsetHeight || el.getBoundingClientRect().height), t: (el.getAttribute('aria-label') || el.textContent || el.name || el.tagName).replace(/\s+/g, ' ').trim().slice(0, 30) })).filter((x) => x.h < 44);
         const fs = Math.min(...[...document.querySelectorAll('p, li, dd, a, label')].filter((e) => e.textContent.trim() && !e.closest('[aria-hidden="true"]')).map((e) => parseFloat(getComputedStyle(e).fontSize)));
         return { overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth, small, minFont: fs };
       });

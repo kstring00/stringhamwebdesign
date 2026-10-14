@@ -18,10 +18,10 @@ export const referral = {
   example: { price: money(PRICES.website), reward: money(PRICES.website * REFERRAL_RATE) },
   /** The rules, in plain words. Kept short; the Service Terms say the same. */
   rules: [
-    `You get ${Math.round(REFERRAL_RATE * 100)}% of the website’s total price, as written in your client’s quote.`,
-    "It’s paid once the business has paid for its website in full.",
-    "Anyone can refer. You don’t need to be a partner or sign up first.",
-    "Make sure I know it came from you: introduce us by email, or have them put your name in the form.",
+    `You get ${Math.round(REFERRAL_RATE * 100)}% of the website build price, as written in your client’s quote.`,
+    "It’s paid within 14 days after the business has paid for its website in full.",
+    "Get your own link and share the free Website Checkup. Your link credits you for 90 days. Or just introduce us by email.",
+    "Whenever you share, say that you earn a referral fee.",
     `Fees for the Listing Fix (the $${PRICES.listingFix} Google listing cleanup) and Website Care ($${PRICES.care} a month of hosting and upkeep) don’t count toward it.`,
     "The business is told about the reward, and it never changes their price.",
   ],

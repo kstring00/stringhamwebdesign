@@ -14,6 +14,8 @@ I'm Kyle Stringham. I run Stringham Web Design LLC out of League City, Texas. Qu
 
 **When you use the contact form.** Your name, your email, your business name, what you need, and your message. I use it to reply to you and to scope the work. That's the whole purpose. It goes to my inbox, and nowhere else.
 
+**When you sign up as a referral partner.** Your name, email, phone if you give it, how you know business owners, and the code you pick. I use it to credit you for referrals and to pay you. Your code is the only part that ever appears in a link.
+
 **When you just visit.** Pages you view, links you click, how far you scroll, roughly where in the world you are, and what browser and device you're on. The next section covers this in full.
 
 I don't ask for anything I don't need. There's no account to create, and no newsletter collecting addresses for later.
@@ -40,9 +42,16 @@ None of these change what the site does for you.
 
 ---
 
+## Referral links
+
+If someone shared a link with you that ends in `?ref=` and a short code (like `?ref=maria-cpa`), this site remembers that code for **90 days**, in a first-party cookie called `swd_ref` and in your browser's local storage. If you then ask for a quote or a checkup review, the code goes along with your request so I know who to thank. It's only the code: never your name, email or phone, and the link itself never carries anyone's personal details. To clear it, delete this site's cookies and site data in your browser.
+
+---
+
 ## Who else handles your data
 
 - **Vercel** hosts the site. Every page you load is served by them, so their servers see your requests and IP address.
+- **Supabase** stores referral partner signups and the requests that came in through a partner's link, so I can track and pay referral fees.
 - **Resend** delivers email. A contact-form message passes through them on the way to my inbox.
 - **Microsoft Clarity**, as above.
 
