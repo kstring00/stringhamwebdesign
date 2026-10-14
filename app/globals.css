@@ -422,3 +422,12 @@ p {
 @media (max-width: 56rem) {
   body { padding-bottom: calc(4.75rem + env(safe-area-inset-bottom)); }
 }
+
+/* The Free Website Checkup's PDF: only the report prints (the page sets
+   body[data-checkup] while it's open; the rest is in checkup.module.css). */
+@media print {
+  body[data-checkup], body[data-checkup] main { background: #fff; }
+  body[data-checkup] > :not(main),
+  body[data-checkup] [data-print-hide] { display: none !important; }
+  body[data-checkup] main .container { width: 100%; max-width: none; padding: 0; }
+}

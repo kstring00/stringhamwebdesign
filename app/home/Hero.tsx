@@ -33,7 +33,7 @@ export default function Hero() {
               Get a quote + free demo
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
             </a>
-            <a className={`u ${s.textLink}`} href="/google-check" data-track="cta" data-location="hero-check">Or start with a free Google check</a>
+            <a className={`u ${s.textLink}`} href="/checkup" data-track="cta" data-location="hero-checkup">Or get a free website checkup</a>
           </div>
           <p className={s.trust}>
             <span>Free demo with every quote</span>

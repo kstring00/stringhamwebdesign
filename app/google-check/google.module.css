@@ -94,3 +94,7 @@
 @media (max-width: 40rem) {
   .findings { grid-template-columns: 1fr; }
 }
+
+/* One line pointing to the website checkup. */
+.checkupLine { margin-top: 1rem; color: var(--ink-soft); font-size: 0.98rem; }
+.checkupLine a { color: var(--ink); font-weight: 600; }

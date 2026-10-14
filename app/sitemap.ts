@@ -8,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     at("/", 1, "monthly"),
     at("/work", 0.9, "monthly"),
+    at("/checkup", 0.9, "monthly"),
     at("/google-check", 0.9, "monthly"),
     at("/partners", 0.8, "monthly"),
     at("/blog", 0.7, "weekly"),

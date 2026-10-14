@@ -22,9 +22,11 @@ const R = <span className={styles.req} aria-hidden="true">*</span>;
  * The quote + free demo form. One contact field, a phone number or an
  * email, either accepted. Posts JSON with JavaScript, or natively to the
  * same route without it. The confirmation replaces the form and takes
- * focus. utm tags and the referrer ride along hidden.
+ * focus. utm tags and the referrer ride along hidden, and so does a
+ * Website Checkup result when the visitor came from /checkup (shown above
+ * the fields, so they know it's attached).
  */
-export default function QuoteForm({ sent = false, errorCode = "" }: { sent?: boolean; errorCode?: string }) {
+export default function QuoteForm({ sent = false, errorCode = "", checkup = "" }: { sent?: boolean; errorCode?: string; checkup?: string }) {
   const nativeError = NATIVE_ERRORS[errorCode] ?? (errorCode ? "That didn't go through." : "");
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">(sent ? "sent" : nativeError ? "error" : "idle");
   const [error, setError] = useState(nativeError);
@@ -72,6 +74,7 @@ export default function QuoteForm({ sent = false, errorCode = "" }: { sent?: boo
 
   return (
     <form className={styles.form} id="quote-form" onSubmit={onSubmit} method="post" action="/api/website-quote">
+      {checkup ? <p className={styles.attached}><b>Attached:</b> {checkup.replace(/^Website Checkup:\s*/, "your Website Checkup, ").replace(/\.\s*Top leaks:[\s\S]*$/, "")}</p> : null}
       <p className={styles.fine}>{R} Required</p>
       <div className={styles.row}>
         <div className={styles.field}>
@@ -106,6 +109,7 @@ export default function QuoteForm({ sent = false, errorCode = "" }: { sent?: boo
       {/* Where the visitor came from. Filled by the script; harmless when empty. */}
       {SOURCE_KEYS.map((k) => <input key={k} type="hidden" name={k} defaultValue="" />)}
       <input type="hidden" name="referrer" defaultValue="" />
+      {checkup ? <input type="hidden" name="checkup" value={checkup} /> : null}
       {/* Honeypot: off screen, inert and skipped by password managers. The API
           drops any submission where `website` has a value. */}
       <div className={styles.honeypot} aria-hidden="true" inert>

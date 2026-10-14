@@ -18,8 +18,8 @@ export const metadata: Metadata = pageMeta({
   path: "/",
 });
 
-export default async function Home({ searchParams }: { searchParams: Promise<{ sent?: string; error?: string }> }) {
-  const { sent, error } = await searchParams;
+export default async function Home({ searchParams }: { searchParams: Promise<{ sent?: string; error?: string; checkup?: string }> }) {
+  const { sent, error, checkup } = await searchParams;
   return (
     <>
       {/* 1. The first screen: what, for whom, where, the next step. */}
@@ -55,7 +55,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
             <p className={s.quoteLede}>Tell me about your business. I reply within 24 hours, and if it&rsquo;s a fit you get a fixed written quote plus a demo of your homepage, built for you. No obligation.</p>
             <p className={s.quoteContact}>Rather talk? <a className="u" href={site.phoneHref}>Call {site.phone}</a> or <a className="u" href={site.smsHref}>text me</a>.</p>
           </div>
-          <QuoteForm sent={sent === "1"} errorCode={typeof error === "string" ? error : ""} />
+          <QuoteForm sent={sent === "1"} errorCode={typeof error === "string" ? error : ""} checkup={typeof checkup === "string" && checkup.startsWith("Website Checkup:") ? checkup.slice(0, 600) : ""} />
         </div>
       </section>
 

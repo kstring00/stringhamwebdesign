@@ -15,6 +15,8 @@ export type PostExtras = {
   related?: string[];
   /** A project from app/data/work.ts (by key) to show in the closing card. */
   demo?: string;
+  /** End with a pointer to the Free Website Checkup. */
+  checkup?: boolean;
 };
 
 const DEFAULTS: PostExtras = { seq: 0, cover: "plain", chip: "Quote + free demo", tocTitle: "In this post" };
@@ -23,13 +25,14 @@ const EXTRAS: Record<string, Partial<PostExtras>> = {
   "my-web-designer-disappeared": { seq: 1, cover: "keys", chip: "Free look at your situation", tocTitle: "The steps", related: ["what-i-need-to-build-your-website"] },
   "what-i-need-to-build-your-website": { seq: 2, cover: "checklist", tocTitle: "What to gather", related: ["how-to-buy-your-own-domain"] },
   "how-to-buy-your-own-domain": { seq: 3, cover: "domain", tocTitle: "The steps", related: ["what-i-need-to-build-your-website"] },
-  "do-i-need-a-website-if-business-is-good": { seq: 4, cover: "growth", tocTitle: "In this post", related: ["how-i-turn-visitors-into-customers"] },
+  "do-i-need-a-website-if-business-is-good": { seq: 4, cover: "growth", tocTitle: "In this post", related: ["how-i-turn-visitors-into-customers"], checkup: true },
   "how-i-turn-visitors-into-customers": {
     seq: 5,
     cover: "convert",
     tocTitle: "The process",
     related: ["do-i-need-a-website-if-business-is-good"],
     demo: "lake-city-storage",
+    checkup: true,
   },
 };
 

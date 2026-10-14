@@ -94,6 +94,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             </>
           ) : null}
 
+          {extras.checkup ? (
+            <a className={styles.checkup} href="/checkup" data-track="cta" data-location={`blog-checkup-${post.slug}`}>
+              <span className={styles.checkupKicker}>Free Website Checkup · 10 questions</span>
+              <span className={styles.checkupText}>Run your own site through these steps<span aria-hidden="true"> →</span></span>
+            </a>
+          ) : null}
+
           <aside className={styles.cta} id="help" aria-labelledby="cta-title">
             <p className={home.chipOnInk}>{extras.chip}</p>
             <h2 id="cta-title" className={styles.ctaTitle}>{post.ctaTitle}</h2>

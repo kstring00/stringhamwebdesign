@@ -30,6 +30,7 @@ export default async function GoogleCheckPage({ searchParams }: { searchParams: 
             <a className="btn" href="#free-check" data-track="cta" data-location="check-hero" data-hero-cta data-magnetic>Get my free check</a>
             <a className={`u ${home.textLink}`} href={site.smsHref}>Or text me your business name</a>
           </div>
+          <p className={styles.checkupLine}>Wondering about your website too? <a className="u" href="/checkup">Try the free Website Checkup</a>: 10 questions, about 2 minutes.</p>
         </div>
       </section>
 
