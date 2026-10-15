@@ -14,7 +14,7 @@ const STATUSES: { v: Status; label: string }[] = [
 ];
 const money = (n: number) => `$${n.toLocaleString("en-US", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 })}`;
 
-export type LeadView = { id: string; created_at: string; kind: "quote" | "checkup"; business: string | null; contact_name: string | null; contact: string | null; website: string | null; checkup: string | null; status: Status; build_price: number | null; notes: string | null };
+export type LeadView = { id: string; created_at: string; kind: "quote" | "checkup"; business: string | null; contact_name: string | null; contact: string | null; website: string | null; checkup: string | null; utm_source?: string | null; status: Status; build_price: number | null; notes: string | null };
 
 /**
  * One referral lead in the admin: who it is, and the three things Kyle
@@ -54,6 +54,7 @@ export default function LeadRow({ lead, rate }: { lead: LeadView; rate: number }
         <p className={s.leadMeta}>
           <span className={s.kind}>{lead.kind === "checkup" ? "Checkup review" : "Quote request"}</span>
           <time dateTime={lead.created_at}>{when}</time>
+          <span className={s.utm}>Source: {lead.utm_source || "direct"}</span>
           {lead.contact ? <span>{lead.contact}</span> : null}
           {lead.website ? <span>{lead.website}</span> : null}
         </p>

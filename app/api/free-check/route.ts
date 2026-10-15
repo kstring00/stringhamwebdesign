@@ -56,7 +56,8 @@ export async function POST(request: NextRequest) {
     return reply(400, { error: "Please fill in your name, business, town and phone number." });
   }
 
-  const sourceLine = Object.entries(source).filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`).join(", ") || "direct (no tags, no referrer)";
+  // Same format as the quote email: "utm_source=card · utm_medium=print · …".
+  const sourceLine = Object.entries(source).filter(([, v]) => v).map(([k, v]) => `${k}=${v}`).join(" · ") || "direct";
   const text = [
     `Free check request`,
     ``,

@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
   // The checkup's "check it for me" form: a website and a way to reply.
   if (fromCheckup) {
     if (currentSite.length < 3 || (!email && !phone)) return reply(400, { error: "Please add your website and a phone number or email." });
-    const att = await attribute({ kind: "checkup", website: currentSite, contact: email || phone, checkup: checkup || null });
+    const att = await attribute({ kind: "checkup", website: currentSite, contact: email || phone, checkup: checkup || null, utm_source: source.utm_source || null });
     const text = [
       "Website Checkup: please check my site",
       "",
@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
     return reply(400, { error: "Please fill in your name, your business, and a phone number or email." });
   }
 
-  const att = await attribute({ kind: "quote", business, contact_name: name, contact: email || phone, website: currentSite || null, checkup: checkup || null });
+  const att = await attribute({ kind: "quote", business, contact_name: name, contact: email || phone, website: currentSite || null, checkup: checkup || null, utm_source: source.utm_source || null });
   const text = [
     `Quote + free demo request from ${name}`,
     "",

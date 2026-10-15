@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { clean, clientIp, deliver, isEmail, rateLimited } from "@/app/lib/inbox";
-import { isValidCode, toCode } from "@/app/lib/refCode";
+import { isReserved, isValidCode, toCode } from "@/app/lib/refCode";
 import { codeTaken, createPartner } from "@/app/lib/referrals";
 import { supabaseConfigured } from "@/app/lib/supabase";
 import { site } from "@/app/data/site";
@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
 
   if (name.length < 2 || !isEmail(email)) return reply(400, { error: "Please add your name and a working email.", field: name.length < 2 ? "name" : "email" });
   if (!agreed) return reply(400, { error: "Please read and agree to the partner terms.", field: "agree" });
+  if (wanted && isReserved(wanted)) return reply(400, { error: `“${wanted}” is reserved for the site. Try another, like “${toCode(name.split(/\s+/)[0]) || "your-name"}-${wanted}”.`, field: "code" });
   if (wanted && !isValidCode(wanted)) return reply(400, { error: "Codes are 3 to 32 letters, numbers or hyphens. Try another.", field: "code" });
 
   if (!supabaseConfigured()) {

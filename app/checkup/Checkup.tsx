@@ -5,7 +5,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, typ
 import { site } from "../data/site";
 import { currentRef } from "../lib/ref";
 import { track } from "../lib/track";
-import { SOURCE_KEYS, useSourceFields } from "../lib/useSourceFields";
+import { SOURCE_KEYS, sourceQuery, useSourceFields } from "../lib/useSourceFields";
 import { gsap, prefersReducedMotion } from "../motion/gsap";
 import {
   ESTIMATE_DEFAULTS, EXAMPLE, EXPECT, FOOTNOTE, HOW_CALCULATED, OPTIONS, QUESTIONS, TIMELINE, WEBSITE_PRICE,
@@ -155,10 +155,13 @@ export default function Checkup() {
   // A referral partner's code from a shared link, and their first name if the code is real.
   const [refCode, setRefCode] = useState("");
   const [sharer, setSharer] = useState("");
+  // The visit's utm tags (a business-card scan, outreach), for the quote link.
+  const [srcQuery, setSrcQuery] = useState("");
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from this browser after hydration
+    setSrcQuery(sourceQuery());
     const code = currentRef();
     if (!code) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from this browser after hydration
     setRefCode(code);
     let live = true;
     fetch(`/api/ref?code=${encodeURIComponent(code)}`)
@@ -416,7 +419,7 @@ export default function Checkup() {
                 <p className={s.phoneNo}>{site.phone}</p>
                 <div className={s.ctaRow}>
                   <a className="btn" href={smsHref} onClick={() => track("checkup_cta_text", { score: String(r.score) })}>Text me your score</a>
-                  <a className={`btn btn-secondary ${s.onInkBtn}`} href={`/?checkup=${encodeURIComponent(summaryText)}${refCode ? `&ref=${encodeURIComponent(refCode)}` : ""}#quote`} onClick={() => track("checkup_cta_quote", { score: String(r.score) })}>Get a quote + free demo</a>
+                  <a className={`btn btn-secondary ${s.onInkBtn}`} href={`/?checkup=${encodeURIComponent(summaryText)}${refCode ? `&ref=${encodeURIComponent(refCode)}` : ""}${srcQuery ? `&${srcQuery}` : ""}#quote`} onClick={() => track("checkup_cta_quote", { score: String(r.score) })}>Get a quote + free demo</a>
                 </div>
                 <div className={s.ctaRow}>
                   <button className={s.ghost} type="button" onClick={copy}>Copy my report</button>

@@ -74,6 +74,13 @@ const hrefsIn = (html) => [...html.matchAll(/\shref="([^"]+)"/g)].map((m) => m[1
   }
   console.log(`${Object.keys(REDIRECTS).length} old routes checked for permanent redirects`);
 
+  // The business card's QR code: a TEMPORARY redirect (307, so browsers never
+  // cache it and /card can be repointed), landing on the checkup with the utm tags.
+  const card = await fetch(BASE + '/card?ref=card', { redirect: 'manual' });
+  const cardTo = new URL(card.headers.get('location') || '/', BASE);
+  if (card.status !== 307 || cardTo.pathname !== '/checkup' || cardTo.searchParams.get('utm_source') !== 'card' || cardTo.searchParams.get('utm_medium') !== 'print' || cardTo.searchParams.get('utm_campaign') !== 'business-card') bad(`/card → expected 307 to /checkup with the card utm tags, got ${card.status} ${card.headers.get('location') || ''}`);
+  else console.log(`/card → 307 ${cardTo.pathname}${cardTo.search}`);
+
   const nf = await fetch(BASE + '/definitely-not-a-page', { redirect: 'manual' });
   if (nf.status !== 404) bad(`unknown route returned ${nf.status}, expected 404`);
 
