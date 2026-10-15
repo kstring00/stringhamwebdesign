@@ -7,7 +7,10 @@
 export const REF_PATTERN = /^[a-z0-9][a-z0-9-]{1,30}[a-z0-9]$/;
 
 /** Codes nobody can take: they'd read as the site's own pages or people. */
-const RESERVED = new Set(["admin", "manage", "kyle", "stringham", "swd", "test", "null", "undefined", "partners", "checkup", "quote", "blog", "api", "www", "support", "help"]);
+const RESERVED = new Set(["admin", "manage", "kyle", "stringham", "swd", "test", "null", "undefined", "partners", "checkup", "quote", "blog", "api", "www", "support", "help", "card", "qr", "print"]);
+
+/** Codes the site keeps for itself ("card" is the business card's QR code). */
+export const isReserved = (code: string) => RESERVED.has(code);
 
 /** "Maria, CPA!" → "maria-cpa". Empty when nothing usable is left. */
 export function toCode(input: string) {

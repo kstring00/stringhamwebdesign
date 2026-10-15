@@ -7,7 +7,9 @@ links are tagged with the partner's code. You track each lead at `/manage`.
 ## One-time setup (about 5 minutes)
 
 1. **Create the tables.** Supabase → your project → SQL Editor → paste
-   `supabase/migrations/20261014000000_referrals.sql` → Run.
+   `supabase/migrations/20261014000000_referrals.sql` → Run. (If you ran it
+   before October 15, also run `20261015000000_referral_leads_utm_source.sql`,
+   which adds the lead's source. Leads still save without it.)
 2. **Add three environment variables** in Vercel → the project → Settings →
    Environment Variables (Production):
    - `SUPABASE_URL`: the project URL, e.g. `https://abcd1234.supabase.co`
@@ -45,6 +47,19 @@ of the client paying in full, then mark it "Partner paid".
 
 To deactivate a partner, set `active` to false on their row in Supabase →
 Table Editor → partners. Their links stop crediting new visitors.
+
+## The business card
+
+The card's QR code points to `/card?ref=card`. `/card` is a **temporary
+(307)** redirect to `/checkup?utm_source=card&utm_medium=print&utm_campaign=business-card`,
+set in `next.config.ts`, so it can be repointed any time without breaking
+printed cards (a 301 would be cached by phones forever). `card` is a
+reserved code: it is never saved as a partner code, never replaces one, and
+no partner can sign up with it. Card visitors' leads say
+`Source: utm_source=card · utm_medium=print · utm_campaign=business-card`
+in the email (and "Source: card" in /manage when a partner also referred
+them). Clarity gets `card_scan` once per visit, with the session tagged
+`source=card`; filter recordings by that tag.
 
 ## Clarity events
 

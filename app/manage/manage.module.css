@@ -98,3 +98,4 @@
   .owed { grid-column: 1 / -1; }
   .saveRow { grid-column: 1 / -1; justify-content: start; }
 }
+.utm { color: var(--ink-soft); }

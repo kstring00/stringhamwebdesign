@@ -33,6 +33,8 @@ export type Lead = {
   contact: string | null;
   website: string | null;
   checkup: string | null;
+  /** utm_source of the visit ("card" for the business card), if any. Needs the 2026-10-15 column. */
+  utm_source?: string | null;
   status: LeadStatus;
   build_price: number | null;
   notes: string | null;
@@ -75,11 +77,19 @@ export async function createPartner(p: { code: string; name: string; email: stri
 }
 
 /** Records a lead against a partner code, if that partner exists and is active. Never throws. */
-export async function recordLead(code: string, lead: Pick<Lead, "kind"> & Partial<Pick<Lead, "business" | "contact_name" | "contact" | "website" | "checkup">>) {
+export async function recordLead(code: string, lead: Pick<Lead, "kind"> & Partial<Pick<Lead, "business" | "contact_name" | "contact" | "website" | "checkup" | "utm_source">>) {
   try {
     const partner = await findPartner(code);
     if (!partner) return null;
-    await supabase("referral_leads", { method: "POST", body: JSON.stringify({ partner_code: partner.code, ...lead }) });
+    const post = (row: object) => supabase("referral_leads", { method: "POST", body: JSON.stringify({ partner_code: partner.code, ...row }) });
+    try {
+      await post(lead);
+    } catch (e) {
+      // The utm_source column comes from a later migration; if it isn't there yet, save the lead without it.
+      if (!(e instanceof SupabaseError && e.status === 400 && /utm_source/.test(e.detail) && "utm_source" in lead)) throw e;
+      const { utm_source: _drop, ...rest } = lead;
+      await post(rest);
+    }
     return partner;
   } catch (e) {
     console.error("Referral lead not recorded", code, e instanceof Error ? e.message : e);

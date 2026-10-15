@@ -5,6 +5,11 @@ const nextConfig: NextConfig = {
   images: { formats: ["image/avif", "image/webp"] },
   async redirects() {
     return [
+      // The QR code on the printed business card. Temporary (307) on purpose:
+      // thousands of cards point here, and a 301 would be cached by browsers,
+      // so /card could never be pointed anywhere else. ?ref=card passes
+      // through; "card" is a reserved code, never a partner's.
+      { source: "/card", destination: "/checkup?utm_source=card&utm_medium=print&utm_campaign=business-card", permanent: false },
       // The client portal was removed in the 2026-09 rebuild. Every old
       // entry point lands on the homepage, permanently.
       { source: "/portal", destination: "/", statusCode: 301 },

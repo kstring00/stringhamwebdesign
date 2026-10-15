@@ -29,6 +29,8 @@ create table if not exists public.referral_leads (
   contact text,
   website text,
   checkup text,
+  -- Where the visit came from (utm_source), e.g. "card" for the business card's QR code.
+  utm_source text check (utm_source is null or char_length(utm_source) <= 120),
   status text not null default 'new'
     check (status in ('new', 'quoted', 'hired', 'paid', 'partner_paid')),
   -- The website build price from the client's written quote, in dollars.
