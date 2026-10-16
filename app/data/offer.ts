@@ -4,9 +4,10 @@
  * change them together.
  */
 
-export const PRICES = { listingFix: 150, website: 2000, care: 75 } as const;
+export const PRICES = { listingFix: 150, website: 1500, care: 75 } as const;
 
-const money = (n: number) => `$${n.toLocaleString("en-US")}`;
+/** "$1,500": a whole-dollar price, for copy anywhere on the site. */
+export const money = (n: number) => `$${n.toLocaleString("en-US")}`;
 
 /** The verified, anonymized findings from Kyle's own free checks. */
 export const findings = [
@@ -47,6 +48,7 @@ export const plans = [
     name: "Website",
     price: money(PRICES.website),
     cadence: "starting",
+    priceNote: `Most sites land between ${money(PRICES.website)} and $3,000. Tell me what you need and I'll send a fixed written price within 24 hours.`,
     badge: "Start here",
     highlight: "Free homepage demo with your quote",
     lines: [

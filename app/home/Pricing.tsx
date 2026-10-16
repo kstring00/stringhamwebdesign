@@ -21,6 +21,7 @@ export default function Pricing() {
               {"badge" in p && p.badge ? <p className={s.badge}>{p.badge}</p> : null}
               <h3 id={`plan-${p.key}`} className={s.planName}>{p.name}</h3>
               <p className={s.price}><b>{p.price}</b> <span>{p.cadence}</span></p>
+              {"priceNote" in p && p.priceNote ? <p className={s.priceNote}>{p.priceNote}</p> : null}
               <ul className={s.planLines}>
                 {"highlight" in p && p.highlight ? <li className={s.highlight}><span aria-hidden="true">★</span> {p.highlight}</li> : null}
                 {p.lines.map((l) => <li key={l}>{l}</li>)}
