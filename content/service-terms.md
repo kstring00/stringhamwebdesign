@@ -19,12 +19,12 @@ These terms apply when you buy a Listing Fix, a website, or Website Care from St
 
 **Not included:** paid ads, writing or posting reviews, creating new profiles for locations that don't exist, or changes a directory refuses to make. When a directory refuses or ignores a change request, we'll tell you what happened.
 
-## 2. Website (projects start at $2,000; final price in your written quote)
+## 2. Website (projects start at $1,500; final price in your written quote)
 
 - The pages, features and timeline are listed in your written quote.
 - **Free demo:** every website quote comes with a demo of your homepage, designed for your business at no charge, so you can see it before you pay anything. The demo is ours until a quote is accepted; it isn't a finished site and isn't published.
 - Includes design, building, a contact or request form, launch on your domain, basic search setup, and two rounds of changes.
-- **Pricing:** new website projects start at $2,000. Your written quote specifies the full price and scope before any payment. Previously accepted written quotes retain their agreed pricing and terms.
+- **Pricing:** new website projects start at $1,500. Your written quote specifies the full price and scope before any payment. Previously accepted written quotes retain their agreed pricing and terms.
 - **Payment:** any eligible Listing Fix credit is applied first. Any start payment or deposit must be stated in the written quote. The remaining balance is due when you approve the finished site, before it goes live on your domain.
 - **Ownership:** once the website is paid in full, you own it and its content. Your domain and accounts stay in your name.
 - We may show your website in our portfolio unless you ask us not to.

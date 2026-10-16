@@ -5,6 +5,8 @@
  * every question), the quiz, and the share image.
  */
 
+import { PRICES } from "../data/offer";
+
 export type ZoneKey = "clarity" | "action" | "questions" | "price" | "speed" | "call" | "words" | "reviews" | "form" | "google";
 
 export type Question = {
@@ -148,7 +150,8 @@ export function summary(score: number, bandName: string, leaks: Leak[]) {
 /* ---------- the estimate ---------- */
 
 export const ESTIMATE_DEFAULTS = { vis: 200, close: 30, val: 250 };
-export const WEBSITE_PRICE = 2000;
+/** The website starting price, from the one place prices live (app/data/offer.ts). */
+export const WEBSITE_PRICE = PRICES.website;
 
 /** An inquiry rate between 2% (score 0) and 8% (score 100). */
 export const rate = (s: number) => 0.02 + (0.06 * Math.min(100, Math.max(0, s))) / 100;
