@@ -1,6 +1,7 @@
-import { homeWork } from "../data/work";
+import { heroWallWork, homeWork } from "../data/work";
 import BuildFieldMount from "./BuildFieldMount";
 import HeroFrames from "./HeroFrames";
+import HeroWall from "./HeroWall";
 import s from "./home.module.css";
 
 /** The dots near the cursor shift to this, a soft violet, so the field answers the pointer. */
@@ -8,9 +9,11 @@ const CURSOR_DOT = "#8E86EC";
 
 /**
  * The first screen: what, for whom, where, and the one next step, in five
- * seconds. Left, the words; right, three browser frames of the demos.
- * Behind it, the Build Field (dots that clear around the text and answer
- * the cursor). The headline's three lines rise in behind a mask on load
+ * seconds. Left, the words; right, the work wall: the real projects as
+ * small browser and phone frames drifting in a slow loop (or, with fewer
+ * than three projects to show, the three stacked frames). Behind it, the
+ * Build Field (dots that clear around the text and answer the cursor).
+ * The headline's lines rise in behind a mask on load
  * (CSS, 0.6 s, none under reduced motion); the words are in the HTML the
  * whole time, so nothing waits on JavaScript.
  */
@@ -20,7 +23,7 @@ export default function Hero() {
       <BuildFieldMount activeColor={CURSOR_DOT} />
       <div className={`container ${s.heroGrid}`}>
         <div className={s.heroText} data-field-clear>
-          <p className={s.chip}>Custom websites · League City, Texas</p>
+          <p className={s.chip}>Custom websites · Built in Texas, for businesses anywhere</p>
           <h1 id="hero-title" className={s.h1}>
             <span className={s.line}><span>Websites that get</span></span>
             <span className={s.line}><span>businesses more calls.</span></span>
@@ -41,7 +44,9 @@ export default function Hero() {
             <span>You own your domain</span>
           </p>
         </div>
-        <HeroFrames items={homeWork.map((w) => ({ key: w.key, name: w.name, alt: w.alt.desktop }))} />
+        {heroWallWork.length >= 3
+          ? <HeroWall work={heroWallWork} />
+          : <HeroFrames items={homeWork.map((w) => ({ key: w.key, name: w.name, alt: w.alt.desktop }))} />}
       </div>
     </section>
   );

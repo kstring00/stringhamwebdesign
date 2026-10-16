@@ -238,3 +238,12 @@ export const showcaseWork = partnerWork.map((w) => ({
 
 /** The /work portfolio: everything confirmed, plus drafts on previews. */
 export const allWork = work.filter((w) => w.onWork && (w.confirmed || showDraftWork));
+
+/**
+ * The home page's work wall: the same projects as /work (confirmed in
+ * production, plus drafts on previews), each as a desktop and a phone
+ * tile. New projects join the wall when they're marked confirmed. Never
+ * padded: with fewer than three projects the hero falls back to the
+ * three frames (HeroFrames).
+ */
+export const heroWallWork = allWork;
