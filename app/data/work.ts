@@ -27,6 +27,8 @@
  *
  * Screens are real captures of each project's own code, run locally, at
  * 1440 and 390 wide, under public/showcase/<key>-desktop|mobile.(avif|webp).
+ * A project without a phone capture leaves `alt.mobile` out, and shows
+ * desktop-only (the hero wall never fakes a phone view from a desktop one).
  */
 export type WorkKind = "live" | "demo" | "in-progress" | "concept" | "archived";
 
@@ -41,6 +43,8 @@ export const kindLabel: Record<WorkKind, { label: string; means: string }> = {
 export type Work = {
   key: string;
   name: string;
+  /** A shorter name for small spaces (the hero wall's browser bars), when `name` is long. */
+  shortName?: string;
   kind: WorkKind;
   /** A short line after the status pill, saying where the project stands. */
   stage: string;
@@ -58,7 +62,8 @@ export type Work = {
   built: string[];
   liveUrl?: string;
   previewUrl?: string;
-  alt: { desktop: string; mobile: string };
+  /** `mobile` only when there is a real phone capture; without one the project shows desktop-only. */
+  alt: { desktop: string; mobile?: string };
   onHome?: boolean;
   onWork?: boolean;
   onPartners: boolean;
@@ -89,23 +94,45 @@ export const work: Work[] = [
     confirmed: true,
   },
   {
+    key: "bcba-prep",
+    name: "BCBA Prep by Bee the Behavior Bae",
+    shortName: "BCBA Prep",
+    kind: "live",
+    stage: "Built for a BCBA candidate · live",
+    type: "BCBA exam prep",
+    what: "A study site for BCBA exam candidates, built around the nine exam domains so students always know what to study next.",
+    builtFor: "Start studying a domain.",
+    built: [
+      "A homepage that lays out the nine BCBA exam domains (A–I), each linking to its own study page.",
+      "Student sign-up and accounts on a Supabase backend.",
+      "A phone view built to hook visitors from TikTok, and a desktop view built for real study sessions.",
+    ],
+    liveUrl: "https://beethebehaviorbae.com",
+    alt: {
+      desktop: "BCBA Prep home page: “Nine domains. One standard.” above a stack of book spines, one per exam domain, from Domain A Foundations to Domain E Ethics",
+    },
+    onWork: true,
+    onPartners: true,
+    // Bryana (the owner) said it's fine to show.
+    confirmed: true,
+  },
+  {
     key: "growthgains",
     name: "GrowthGains",
-    kind: "demo",
-    chip: "Design demo · Preview link",
-    stage: "Demo with a preview link",
+    kind: "live",
+    stage: "Built for a life coach · live",
     type: "Life coach",
-    what: "A demo for a life coach that meets visitors at “I know something needs to change” and gives them one easy next move.",
+    what: "A site for a life coach that meets visitors at “I know something needs to change” and gives them one easy next move.",
     builtFor: "Book a free consultation.",
     built: [
       "A first screen that names the feeling a visitor arrives with, “You know something needs to change,” and one button: book a free consultation.",
       "Three doorways, life after sport, foster care and adoption, identity and leadership change, each a short resource page that ends at the same next step.",
       "A three-step start flow: what you're navigating, what you'd most like to change, then a consultation time, with those answers carried into the booking.",
     ],
-    previewUrl: "https://rawrxd-nu.vercel.app/",
+    liveUrl: "https://rawrxd-nu.vercel.app/",
     alt: {
-      desktop: "GrowthGains demo home page: “You know something needs to change,” a Book a free consultation button, and a portrait beside a current-to-next-chapter diagram",
-      mobile: "GrowthGains demo home page on a phone",
+      desktop: "GrowthGains home page: “You know something needs to change,” a Book a free consultation button, and a portrait beside a current-to-next-chapter diagram",
+      mobile: "GrowthGains home page on a phone",
     },
     onHome: true,
     onWork: true,

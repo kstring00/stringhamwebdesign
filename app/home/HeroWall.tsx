@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { kindLabel, type Work } from "../data/work";
 import s from "./herowall.module.css";
 
-type Tile = { key: string; name: string; label: string; href: string; shape: "desktop" | "mobile"; alt: string; w: number; h: number };
+type Tile = { key: string; name: string; short: string; label: string; href: string; shape: "desktop" | "mobile"; alt: string; w: number; h: number };
 
 /** The thumbnails (public/showcase/thumbs, from scripts/make-thumbs.js), 520px wide. */
 const THUMB = { desktop: { w: 520, h: 325 }, mobile: { w: 520, h: 934 } };
@@ -15,17 +15,18 @@ const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
 const PHONE = "(max-width: 44.99rem)";
 
 /**
- * Every project twice, a desktop tile and a phone tile, in an order that
- * alternates the two shapes so no row of the wall lines up.
+ * Every project as a desktop tile, and as a phone tile when it has a phone
+ * capture, alternating the two shapes so no row of the wall lines up.
  */
-const phoneTiles = (work: Work[]) => work.map((w): Tile => ({ key: w.key, name: w.name, label: kindLabel[w.kind].label, href: `/work#${w.key}`, shape: "mobile", alt: w.alt.mobile, ...THUMB.mobile }));
+/** Phone tiles only for projects with a real phone capture. */
+const phoneTiles = (work: Work[]) => work.filter((w) => w.alt.mobile).map((w): Tile => ({ key: w.key, name: w.name, short: w.shortName ?? w.name, label: kindLabel[w.kind].label, href: `/work#${w.key}`, shape: "mobile", alt: w.alt.mobile!, ...THUMB.mobile }));
 
 function tiles(work: Work[]): Tile[] {
-  const d = work.map((w): Tile => ({ key: w.key, name: w.name, label: kindLabel[w.kind].label, href: `/work#${w.key}`, shape: "desktop", alt: w.alt.desktop, ...THUMB.desktop }));
+  const d = work.map((w): Tile => ({ key: w.key, name: w.name, short: w.shortName ?? w.name, label: kindLabel[w.kind].label, href: `/work#${w.key}`, shape: "desktop", alt: w.alt.desktop, ...THUMB.desktop }));
   const m = phoneTiles(work);
-  const n = work.length;
   const out: Tile[] = [];
-  for (let i = 0; i < n; i++) { out.push(d[i]); out.push(m[(i + 1) % n]); }
+  // Each desktop tile, then the next phone capture round (each phone once).
+  d.forEach((tile, i) => { out.push(tile); if (i < m.length) out.push(m[(i + 1) % m.length]); });
   return out;
 }
 
@@ -45,7 +46,7 @@ function Frame({ t, first, eager }: { t: Tile; first: boolean; eager: boolean })
       data-project={t.key}
     >
       {t.shape === "desktop" ? (
-        <span className={s.chrome} aria-hidden="true"><i /><i /><i /><span className={s.chromeName}>{t.name}</span></span>
+        <span className={s.chrome} aria-hidden="true"><i /><i /><i /><span className={s.chromeName}>{t.short}</span></span>
       ) : (
         <span className={s.notch} aria-hidden="true" />
       )}
@@ -57,7 +58,7 @@ function Frame({ t, first, eager }: { t: Tile; first: boolean; eager: boolean })
       </picture>
       {/* The honest kind, from work.ts, as a badge over the capture. */}
       <span className={s.kind} aria-hidden="true">{t.label}</span>
-      {t.shape === "mobile" ? <span className={s.phoneLabel} aria-hidden="true">{t.name}</span> : null}
+      {t.shape === "mobile" ? <span className={s.phoneLabel} aria-hidden="true">{t.short}</span> : null}
     </a>
   );
 }
