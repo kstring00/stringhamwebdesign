@@ -30,7 +30,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
         <div className="container">
           <div className={s.head}>
             <h2 id="work-title" className={s.h2} data-reveal>Work you can click through.</h2>
-            <p className={s.lede}>A live product and three design demos, each labeled for exactly what it is. Drag, swipe or tap through; the full write-ups are on the <a className={`u ${s.inlineLink}`} href="/work">work page</a>.</p>
+            <p className={s.lede}>Three live sites and two demos, each labeled for exactly what it is. Drag, swipe or tap through; the full write-ups are on the <a className={`u ${s.inlineLink}`} href="/work">work page</a>.</p>
           </div>
           <Coverflow items={showcaseWork} label="Selected work" />
         </div>
