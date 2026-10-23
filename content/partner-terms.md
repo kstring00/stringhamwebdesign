@@ -4,7 +4,7 @@ These are the rules for sharing Stringham Web Design and earning a referral fee.
 
 ## What you earn
 
-**20% of the website build price** in your client's written quote. On a $1,500 website, that's $300.
+**20% of the website build price** in your client's written quote.
 
 Only the website build counts. **Website Care** (the monthly hosting and upkeep plan), the **Listing Fix**, and any other add-ons or monthly fees don't count toward it.
 

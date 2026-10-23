@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 
 import { BusinessJsonLd } from "./components/JsonLd";
 import { pageMeta } from "./data/meta";
-import { money, PRICES } from "./data/offer";
 import { site } from "./data/site";
 import { showcaseWork } from "./data/work";
 import Coverflow from "./components/Coverflow";
@@ -15,7 +14,7 @@ import s from "./home/home.module.css";
 
 export const metadata: Metadata = pageMeta({
   absolute: "Web Design in League City, TX | Stringham Web Design",
-  description: `Custom websites for owner-run businesses in League City, Texas, from ${money(PRICES.website)} with a fixed written quote and a free demo of your homepage. No ad spend, no contract. Website Care from ${money(PRICES.care)} a month.`,
+  description: "Custom websites for owner-run businesses in League City, Texas. Every site is quoted after a free website checkup or a short call: a fixed written quote, a free homepage demo, payment plans, no contract.",
   path: "/",
 });
 

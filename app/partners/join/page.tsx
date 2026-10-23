@@ -24,7 +24,7 @@ export default function JoinPage() {
             <li><b>Get your link.</b> It takes a minute. Your code is all that goes in the link.</li>
             <li><b>Share it with business owners you know,</b> and say you earn a referral fee.</li>
             <li><b>They run the free checkup or ask for a quote.</b> I see it came from you.</li>
-            <li><b>If they hire me,</b> you get {referral.percent} of the website build price ({referral.example.reward} on a {referral.example.price} site), paid within 14 days after they pay in full.</li>
+            <li><b>If they hire me,</b> you get {referral.percent} of the website build price, paid within 14 days after they pay in full.</li>
           </ol>
           <p className={s.fine}>Website Care, the Listing Fix and other add-ons don&rsquo;t count. The full rules are short: <a className="u" href="/partners/terms">partner terms</a>.</p>
         </div>

@@ -8,7 +8,7 @@ import { track } from "../lib/track";
 import { SOURCE_KEYS, sourceQuery, useSourceFields } from "../lib/useSourceFields";
 import { gsap, prefersReducedMotion } from "../motion/gsap";
 import {
-  ESTIMATE_DEFAULTS, EXAMPLE, EXPECT, FOOTNOTE, HOW_CALCULATED, OPTIONS, QUESTIONS, TIMELINE, WEBSITE_PRICE,
+  ESTIMATE_DEFAULTS, EXAMPLE, EXPECT, FOOTNOTE, HOW_CALCULATED, OPTIONS, QUESTIONS, TIMELINE, PAYBACK_LINE,
   estimate, result, summary, type AnswerValue, type ZoneKey,
 } from "./data";
 import s from "./checkup.module.css";
@@ -393,7 +393,7 @@ export default function Checkup() {
                   </div>
                   <p className={s.payback}>
                     {e.payback
-                      ? <>At the low end of this estimate, a {money(WEBSITE_PRICE)} website would pay for itself in about <b>{e.payback} month{e.payback === 1 ? "" : "s"}</b>.</>
+                      ? PAYBACK_LINE
                       : r.score >= 85 ? "Your site is already strong, so a rebuild may not pay off. Small fixes or Website Care might be the better fit." : "Add your numbers above to see an estimate."}
                   </p>
                   <details className={s.how} ref={howRef}>

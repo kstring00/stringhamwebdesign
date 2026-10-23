@@ -205,6 +205,13 @@
 .price { display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
 .price b { font-family: var(--font-display); font-size: clamp(2.2rem, 3vw, 2.8rem); font-weight: 500; letter-spacing: -0.03em; line-height: 1; }
 .price span { color: var(--muted); font-size: 0.95rem; }
+/* How pricing works, above the cards: what affects the price, the small print. */
+.factors { display: grid; gap: 0.5rem; }
+.factorsTitle { color: var(--muted); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.factors ul { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0; padding: 0; list-style: none; }
+.factors li { padding: 0.3rem 0.75rem; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink-soft); font-size: 0.92rem; line-height: 1.4; }
+.pricingFine { color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
+
 /* One line under a price, in the same small muted text as "starting". */
 .priceNote { margin-top: -0.35rem; color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
 

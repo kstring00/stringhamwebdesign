@@ -24,7 +24,7 @@ locally (the contact form logs instead of emailing without `RESEND_API_KEY`).
 `/` (the hero, the work carousel, pricing, about Kyle beside the questions,
 and the quote + free demo form), `/work` (the full portfolio, each project
 labeled for exactly what it is), `/google-check` (the free Google check and
-the $150 Listing Fix, with its form; the page to text to prospects),
+the Listing Fix, quoted after the check, with its form; the page to text to prospects),
 `/partners` (for photographers, designers, agencies and consultants: two
 partnership paths, the published referral terms, selected work, the
 partner form), `/terms`, `/privacy`, and the unlinked
@@ -32,13 +32,18 @@ partner form), `/terms`, `/privacy`, and the unlinked
 
 ## Where things live
 
-- `app/data/offer.ts` — the offer in one place: prices, the three pricing
+- `app/data/offer.ts` — the offer in one place: how pricing is worded
+  (`pricing`). Pricing is quote-only: every service is quoted separately
+  by scope, with no dollar amounts anywhere public (copy, meta, social
+  cards, alt text, schema, terms), and there's no price table in the code.
+  It holds the website line (fixed written quote, payment plans), what
+  affects the price, the Listing Fix and Website Care lines, the three pricing
   cards (Website, Website Care, the Google listing path), the three-step
   strip, the home page's five questions, and /google-check's findings,
   steps, Listing Fix card and questions. The site's one action is a quote
   plus a free demo of the homepage (`app/data/nav.ts`); the free Google
   check is the secondary path, on its own page.
-  Prices here must match `content/service-terms.md`; change them together.
+  The wording here must match `content/service-terms.md`; change them together.
 - `app/data/site.ts` — identity, phone, email, location.
 - `content/service-terms.md` and `content/privacy.md` — rendered word for
   word at `/terms` and `/privacy`.

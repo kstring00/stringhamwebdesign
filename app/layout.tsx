@@ -10,7 +10,6 @@ import Magnetic from "./motion/Magnetic";
 import Reveal from "./motion/Reveal";
 import Tracking from "./motion/Tracking";
 import RefTracker from "./motion/RefTracker";
-import { money, PRICES } from "./data/offer";
 import { site } from "./data/site";
 
 /* Both faces are self-hosted: next/font downloads them at build and serves
@@ -35,7 +34,7 @@ const interTight = Inter_Tight({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: `Web Design in League City, TX | ${site.name}`, template: `%s | ${site.name}` },
-  description: `Custom websites for owner-run businesses in League City, Texas, from ${money(PRICES.website)} with a fixed written quote and a free demo of your homepage. No ad spend, no contract.`,
+  description: "Custom websites for owner-run businesses in League City, Texas. Every site is quoted after a free website checkup or a short call: a fixed written quote, a free homepage demo, payment plans, no contract.",
   applicationName: site.name,
   authors: [{ name: site.person, url: site.url }],
   creator: site.person,
