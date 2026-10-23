@@ -17,10 +17,19 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
 - One job: get small local business owners (self storage, RV parks, fishing
   guides, horse boarding, marinas, and other owner-run local businesses) to
   request a free check. The home page does all of it; the form is the anchor.
-- Three fixed prices on the page, matching `content/service-terms.md`:
-  Listing Fix $300, Website $1,500, Monthly Plan $125/month. Change the
-  terms and `app/data/offer.ts` together. The only guarantees on the site
-  are the ones in the terms.
+- Pricing is quote-only. Every service (website, Listing Fix, Website
+  Care) is quoted separately by scope, and no dollar amount appears
+  anywhere a visitor or Google can see it: page copy, meta, Open Graph,
+  Twitter cards, image alt text, schema, or the terms. Websites: "Every
+  site is quoted after I see what you have. You get a fixed written quote
+  before anything starts. Payment plans available." Listing Fix: "Quoted
+  after your free check, done within 7 days." Website Care: "Monthly care
+  plans, quoted with your site." Wherever price comes up, the next step is
+  the checkup (or call or text 413-454-3509; a booking link replaces that
+  once NEXT_PUBLIC_BOOKING_URL is set). The wording lives in
+  `app/data/offer.ts` (`pricing`); there is deliberately no price table in
+  the code, so a number can't leak back in. Keep the terms and that file
+  matching. The only guarantees on the site are the ones in the terms.
 - Plain words. "Google listing," "customers," "calls." No "SEO," "GBP,"
   "citations," "conversion" in visible copy. First person from Kyle.
 - Minimal: one accent (forest green `#2F5D46`), generous space, at most two
@@ -41,8 +50,10 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
   partner band and one footer link. The stage of the business is stated plainly on /partners
   ("a new studio… I haven't delivered a paid client website yet"); keep it
   true and update it when it stops being true.
-- The referral reward is published: 20% of the website's total price, paid
-  once the client has paid in full, open to anyone who refers. It lives in
+- The referral reward is published: 20% of the website build price, paid
+  within 14 days after the client has paid in full, open to anyone who
+  refers. No dollar examples: "You earn 20% of the build price in your
+  client's written quote." It lives in
   `app/data/referral.ts` and in the Service Terms ("Referrals" under
   Website); change both together. White-label pricing stays off the site.
 - Selected work: never imply a concept or spec build was a paid engagement,

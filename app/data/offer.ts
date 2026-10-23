@@ -1,13 +1,22 @@
 /**
  * Everything the home page and /google-check say about the offer, in one
- * place. Prices and promises here must match content/service-terms.md;
- * change them together.
+ * place. Promises here must match content/service-terms.md; change them
+ * together.
+ *
+ * Pricing is quote-only: every service is quoted separately, by scope, and
+ * no dollar amount appears anywhere a visitor or a search engine can see.
+ * There is deliberately no price table in the code, so none can leak back
+ * into the copy.
  */
-
-export const PRICES = { listingFix: 150, website: 1500, care: 75 } as const;
-
-/** "$1,500": a whole-dollar price, for copy anywhere on the site. */
-export const money = (n: number) => `$${n.toLocaleString("en-US")}`;
+export const pricing = {
+  /** The website message. */
+  website: "Every site is quoted after I see what you have. You get a fixed written quote before anything starts. Payment plans available.",
+  /** The way to a quote: a booking link when NEXT_PUBLIC_BOOKING_URL is set, otherwise the phone. */
+  next: { booking: "Run the free checkup or book a call to get yours.", phone: "Run the free checkup or give me a call to get yours." },
+  factors: ["Number of pages", "Whether your content and photos are ready", "Booking, payment or store features", "Moving an existing site"],
+  listingFix: "Quoted after your free check, done within 7 days.",
+  care: "Monthly care plans, quoted with your site.",
+} as const;
 
 /** The verified, anonymized findings from Kyle's own free checks. */
 export const findings = [
@@ -27,13 +36,13 @@ export const listingSteps = [
   {
     n: "2",
     title: "Listing Fix",
-    body: `${money(PRICES.listingFix)}, done within 7 days, with before-and-after screenshots of every change.`,
+    body: "Quoted after your free check, done within 7 days, with before-and-after screenshots of every change.",
     yours: "Your part: add me as a manager on your Google listing, send a few photos, approve the changes.",
   },
   {
     n: "3",
     title: "Keep it right (optional)",
-    body: `Website Care, ${money(PRICES.care)} a month: your listing kept accurate, reviews answered, and a short report of calls and requests. Month to month.`,
+    body: `Website Care. ${pricing.care} Your listing kept accurate, reviews answered, and a short report of calls and requests. Month to month.`,
   },
 ] as const;
 
@@ -46,9 +55,9 @@ export const plans = [
   {
     key: "site",
     name: "Website",
-    price: money(PRICES.website),
-    cadence: "starting",
-    priceNote: `Most sites land between ${money(PRICES.website)} and $3,000. Tell me what you need and I'll send a fixed written price within 24 hours.`,
+    price: "Custom quote",
+    cadence: "",
+    priceNote: pricing.website,
     badge: "Start here",
     highlight: "Free homepage demo with your quote",
     lines: [
@@ -58,14 +67,15 @@ export const plans = [
       "Two rounds of changes",
     ],
     foot: "You approve the finished site before paying the balance.",
-    cta: { label: "Get a quote + free demo", href: "#quote" },
+    cta: { label: "Run the free checkup", href: "/checkup" },
     terms: "#website",
   },
   {
     key: "care",
     name: "Website Care",
-    price: money(PRICES.care),
-    cadence: "per month",
+    price: "Monthly plan",
+    cadence: "",
+    priceNote: pricing.care,
     lines: [
       "Hosting: fast, secure, online",
       "Domain: renewals handled, kept in your name",
@@ -84,7 +94,7 @@ export const plans = [
     cadence: "first",
     lines: [
       "What I find, texted within 24 hours",
-      `Then a ${money(PRICES.listingFix)} fix, done in 7 days`,
+      "Then a Listing Fix: quoted after your free check, done within 7 days",
       "Google plus up to 10 directories",
       "Before-and-after screenshots",
     ],
@@ -98,7 +108,8 @@ export type Plan = (typeof plans)[number];
 
 /** The Listing Fix on its own page: what's in it, what isn't. */
 export const listingFix = {
-  price: money(PRICES.listingFix),
+  price: "Quoted",
+  priceLine: "after your free check, done within 7 days",
   included: [
     "Google listing corrected: name, hours, phone, website link, photos",
     "Up to 10 directories corrected (Apple Maps, Bing, Facebook, Yelp…)",
@@ -119,6 +130,11 @@ export const steps = [
 
 /** The home page's questions, beside the About block. */
 export const faq = [
+  {
+    q: "How much does a website cost?",
+    a: pricing.website,
+    link: { label: "Run the free checkup to get your quote", href: "/checkup" },
+  },
   {
     q: "Will this bring me more customers?",
     a: "I can't promise that, and nobody honest can: Google controls rankings, and customers decide. What I promise is the work: the site in your written quote, built around the one thing your customers need to do, and on Website Care a one-page monthly report of calls and requests.",
@@ -158,7 +174,7 @@ export const listingQuestions = [
   },
   {
     q: "What does it cost? Any hidden fees?",
-    a: `The check is free. The Listing Fix is ${money(PRICES.listingFix)}, one time. Website Care, if you want it, is ${money(PRICES.care)} a month, month to month. Nothing else.`,
+    a: "Every price is quoted up front in writing after your free check. No hidden fees, no contracts. Website Care is month to month.",
     link: { label: "Service Terms", href: "/terms#listing-fix" },
   },
   {

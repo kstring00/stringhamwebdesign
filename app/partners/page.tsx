@@ -142,7 +142,7 @@ export default async function PartnersPage({ searchParams }: { searchParams: Pro
               <p className={styles.referralRate} aria-hidden="true"><CountUp value={referral.rate} suffix="%" /></p>
               <h3 id="referrals-title" className={styles.referralTitle}>Referral terms: {referral.percent} of the website build price</h3>
               <p className={styles.referralExample}>
-                <span>Example</span> Your client&rsquo;s website quote is {referral.example.price}. Once they&rsquo;ve paid in full, I pay you <b>{referral.example.reward}</b>.
+                <span>How it works</span> {referral.how}
               </p>
             </div>
             <div className={styles.referralRules}>

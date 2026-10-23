@@ -9,13 +9,14 @@ import styles from "./google.module.css";
 
 export const metadata: Metadata = pageMeta({
   absolute: "Free Google Listing Check, League City, TX | Stringham Web Design",
-  description: "A free check of how your business shows up on Google and the directories, texted to you within 24 hours. Then a $150 Listing Fix, done in 7 days with before-and-after screenshots. League City, Texas.",
+  description: "A free check of how your business shows up on Google and the directories, texted to you within 24 hours. Then a Listing Fix, quoted after your free check and done within 7 days, with before-and-after screenshots. League City, Texas.",
   path: "/google-check",
 });
 
 /**
  * The page Kyle texts to prospects: the free Google check, what he's found
- * on real listings, the three steps, the $150 Listing Fix, and the form.
+ * on real listings, the three steps, the Listing Fix (quoted after the
+ * free check), and the form.
  */
 export default async function GoogleCheckPage({ searchParams }: { searchParams: Promise<{ sent?: string; error?: string }> }) {
   const { sent, error } = await searchParams;
@@ -55,7 +56,7 @@ export default async function GoogleCheckPage({ searchParams }: { searchParams: 
               </ol>
               <article className={styles.card} aria-labelledby="fix-title">
                 <h3 id="fix-title" className={styles.cardName}>Listing Fix</h3>
-                <p className={styles.price}><b>{listingFix.price}</b> <span>one-time · done within 7 days</span></p>
+                <p className={styles.price}><b>{listingFix.price}</b> <span>{listingFix.priceLine}</span></p>
                 <ul className={home.planLines}>{listingFix.included.map((l) => <li key={l}>{l}</li>)}</ul>
                 <p className={styles.notIncluded}><b>Not included:</b> {listingFix.notIncluded}</p>
                 <ul className={styles.notes}>{listingFix.notes.map((n) => <li key={n}>{n}</li>)}</ul>

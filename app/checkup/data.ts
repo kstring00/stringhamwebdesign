@@ -5,8 +5,6 @@
  * every question), the quiz, and the share image.
  */
 
-import { PRICES } from "../data/offer";
-
 export type ZoneKey = "clarity" | "action" | "questions" | "price" | "speed" | "call" | "words" | "reviews" | "form" | "google";
 
 export type Question = {
@@ -150,8 +148,8 @@ export function summary(score: number, bandName: string, leaks: Leak[]) {
 /* ---------- the estimate ---------- */
 
 export const ESTIMATE_DEFAULTS = { vis: 200, close: 30, val: 250 };
-/** The website starting price, from the one place prices live (app/data/offer.ts). */
-export const WEBSITE_PRICE = PRICES.website;
+/** The payback line, shown when the estimate finds extra revenue. No price: every site is quoted separately. */
+export const PAYBACK_LINE = "Most owners only need a few new customers a month for a website to pay for itself.";
 
 /** An inquiry rate between 2% (score 0) and 8% (score 100). */
 export const rate = (s: number) => 0.02 + (0.06 * Math.min(100, Math.max(0, s))) / 100;
@@ -163,7 +161,7 @@ export function estimate(score: number, vis: number, close: number, val: number)
   const extraLo = Math.max(0, lo - now), extraHi = Math.max(0, hi - now);
   const custLo = (extraLo * close) / 100, custHi = (extraHi * close) / 100;
   const revLo = custLo * val, revHi = custHi * val;
-  const payback = revLo >= 1 ? Math.ceil(WEBSITE_PRICE / revLo) : null;
+  const payback = revLo >= 1;
   return { now, lo, hi, extraLo, extraHi, custLo, custHi, revLo, revHi, payback };
 }
 
