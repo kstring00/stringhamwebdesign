@@ -36,7 +36,7 @@ export const dynamic = "force-dynamic";
 export async function POST(request: NextRequest) {
   const native = !(request.headers.get("content-type") || "").includes("application/json");
   let fromCheckup = false;
-  const reply = (status: number, payload: { ok?: true; sent?: boolean; referred?: boolean; error?: string }) => {
+  const reply = (status: number, payload: { ok?: true; sent?: boolean; saved?: boolean; referred?: boolean; error?: string }) => {
     if (!native) return NextResponse.json(payload, { status });
     const to = new URL(fromCheckup ? "/checkup" : "/", request.url);
     if (payload.ok) to.searchParams.set("sent", "1");
@@ -78,12 +78,25 @@ export async function POST(request: NextRequest) {
   };
   /** Writes the lead to the ledger (credited to the partner when the code is real) and says so in the email. */
   const attribute = async (lead: Omit<LeadInput, "source">) => {
-    if (!supabaseConfigured()) return { lines: [ref ? `Referral code: ${ref} (not checked: Supabase isn't set up)` : "", "Not saved to /manage: Supabase isn't set up"].filter(Boolean), partner: null };
+    if (!supabaseConfigured()) return { lines: [ref ? `Referral code: ${ref} (not checked: Supabase isn't set up)` : "", "Not saved to /manage: Supabase isn't set up"].filter(Boolean), partner: null, durable: false };
     const rec = await recordLead({ ...lead, source }, ref);
     const lines: string[] = [];
     if (ref) lines.push(rec.partner ? `Referred by: ${rec.partner.name} (${rec.partner.code}) · ${rec.partner.email}` : `Referral code: ${ref} (no active partner with this code)`);
     lines.push(rec.saved ? "Saved to /manage" : rec.duplicate ? "Not saved to /manage: already recorded today (same contact, same form)" : `Not saved to /manage: ${rec.reason}`);
-    return { lines, partner: rec.partner };
+    // A duplicate is durable too: the earlier row is in the ledger.
+    return { lines, partner: rec.partner, durable: rec.saved || rec.duplicate };
+  };
+  /**
+   * The visitor is told "got it" only when the lead reached at least one
+   * durable place: a sent email, or a ledger row. Otherwise a truthful
+   * failure, and a log line that says what failed, never what was typed.
+   */
+  const finish = (label: string, result: { ok: boolean; sent: boolean }, att: { durable: boolean; partner: unknown }) => {
+    if (!result.sent && !att.durable) {
+      console.error(`${label}: not delivered anywhere (email ${result.ok ? "not configured" : "failed"}, ledger ${supabaseConfigured() ? "write failed" : "not configured"})`);
+      return reply(502, { error: "I couldn't send that just now. Please text or email me directly." });
+    }
+    return reply(200, { ok: true, sent: result.sent, saved: att.durable, referred: Boolean(att.partner) });
   };
 
   // One field, either way: an email, or something with at least 7 digits.
@@ -107,8 +120,7 @@ export async function POST(request: NextRequest) {
       `Sent: ${new Date().toISOString()}`,
     ].join("\n");
     const result = await deliver({ subject: `Checkup review: ${currentSite}${att.partner ? ` · via ${att.partner.code}` : ""}`, text, replyTo: email || undefined, label: "checkup review request" });
-    if (!result.ok) return reply(502, { error: "I couldn't send that just now. Please text or email me directly." });
-    return reply(200, { ok: true, sent: result.sent, referred: Boolean(att.partner) });
+    return finish("checkup review request", result, att);
   }
 
   if (name.length < 2 || business.length < 2 || (!email && !phone)) {
@@ -135,6 +147,5 @@ export async function POST(request: NextRequest) {
 
   const subject = `Quote + demo: ${business} (${name})${heard ? ` · via ${heard}` : ""}${att.partner ? ` · ref ${att.partner.code}` : ""}${checkup ? " · from the checkup" : ""}`;
   const result = await deliver({ subject, text, replyTo: email || undefined, label: "quote + demo request" });
-  if (!result.ok) return reply(502, { error: "I couldn't send that just now. Please text or email me directly." });
-  return reply(200, { ok: true, sent: result.sent, referred: Boolean(att.partner) });
+  return finish("quote + demo request", result, att);
 }

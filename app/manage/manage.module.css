@@ -104,7 +104,10 @@
 
 .h2 { margin: 1.75rem 0 0.75rem; font-size: 1.35rem; line-height: 1.2; }
 .lead[data-status="consulted"] { border-left-color: #6b5bd6; }
-.lead[data-status="not_fit"] { border-left-color: var(--line); opacity: 0.7; }
+.lead[data-status="lost"] { border-left-color: var(--line-strong); }
+.lead[data-status="spam"] { border-left-color: var(--line); opacity: 0.6; }
+.signed { color: var(--brand-deep); font-weight: 600; }
+.utm small { color: var(--muted); font-size: 0.8em; }
 
 .tableWrap { overflow-x: auto; margin: 0 0 1.25rem; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
 .table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
@@ -131,3 +134,10 @@
 @media (max-width: 64rem) {
   .twoUp { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* "Explain my leads" */
+.explain { display: grid; gap: 0.6rem; }
+.explainOut { display: grid; gap: 0.5rem; padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+.explainText { color: var(--ink); font-size: 0.98rem; line-height: 1.6; white-space: pre-wrap; }
+.explainMeta { color: var(--muted); font-size: 0.82rem; }
+.how i { font-style: italic; }

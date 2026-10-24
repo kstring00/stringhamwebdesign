@@ -3,9 +3,10 @@ import { site } from "@/app/data/site";
 /**
  * Shared plumbing for the site's two forms (the free check and the partner
  * inquiry): input cleaning, a per-IP rate limit, and one email to Kyle via
- * Resend. With RESEND_API_KEY unset, `deliver` logs the message on the
- * server and reports `sent: false`, so a missing key never loses a lead
- * silently. The key is server-only and never reaches the browser.
+ * Resend. With RESEND_API_KEY unset, `deliver` reports `sent: false` and
+ * the route decides what that means (a lead needs at least one durable
+ * destination: a sent email or a saved ledger row). Nothing a prospect
+ * typed is ever written to the server log. The key is server-only.
  */
 
 const RATE_WINDOW_MS = 10 * 60 * 1000;
@@ -42,17 +43,19 @@ export async function deliver({ subject, text, replyTo, label }: { subject: stri
   const from = process.env.CONTACT_FROM_EMAIL || "Stringham Web Design <onboarding@resend.dev>";
 
   if (!apiKey) {
-    console.warn(`RESEND_API_KEY is not set; ${label} logged instead of sent:\n` + text);
+    console.warn(`RESEND_API_KEY is not set; ${label} was not emailed.`);
     return { ok: true, sent: false };
   }
 
-  const res = await fetch("https://api.resend.com/emails", {
+  // The local test points this at a stand-in; production always uses Resend.
+  const base = (process.env.RESEND_API_BASE || "https://api.resend.com").replace(/\/+$/, "");
+  const res = await fetch(`${base}/emails`, {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({ from, to: [to], subject, text, ...(replyTo ? { reply_to: replyTo } : {}) }),
   });
   if (!res.ok) {
-    console.error(`${label} email failed`, res.status, await res.text().catch(() => ""));
+    console.error(`${label} email failed`, res.status);
     return { ok: false, sent: false };
   }
   return { ok: true, sent: true };

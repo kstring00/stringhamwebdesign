@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
  */
 export async function POST(request: NextRequest) {
   const native = !(request.headers.get("content-type") || "").includes("application/json");
-  const reply = (status: number, payload: { ok?: true; sent?: boolean; error?: string }) => {
+  const reply = (status: number, payload: { ok?: true; sent?: boolean; saved?: boolean; error?: string }) => {
     if (!native) return NextResponse.json(payload, { status });
     const to = new URL("/partners", request.url);
     if (payload.ok) to.searchParams.set("sent", "1");
@@ -80,6 +80,11 @@ export async function POST(request: NextRequest) {
   ].join("\n");
 
   const result = await deliver({ subject: `Partner inquiry: ${business} (${category}, ${interest})`, text, replyTo: email, label: "partner inquiry" });
-  if (!result.ok) return reply(502, { error: "I couldn't send that just now. Please email me directly." });
-  return reply(200, { ok: true, sent: result.sent });
+  // "Got it" only once the inquiry is somewhere durable: a sent email or a ledger row (a duplicate counts: the earlier row stands).
+  const durable = Boolean(rec && (rec.saved || rec.duplicate));
+  if (!result.sent && !durable) {
+    console.error(`partner inquiry: not delivered anywhere (email ${result.ok ? "not configured" : "failed"}, ledger ${rec ? "write failed" : "not configured"})`);
+    return reply(502, { error: "I couldn't send that just now. Please email me directly." });
+  }
+  return reply(200, { ok: true, sent: result.sent, saved: durable });
 }

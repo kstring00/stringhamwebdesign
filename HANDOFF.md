@@ -48,8 +48,11 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
   the `leads` table (Supabase), referred or not; calls and texts are logged
   by hand at `/manage`, which is the monthly dashboard (inquiries, consults,
   quotes, signed clients, Search Console numbers typed in by month). A lead
-  is a form or a logged conversation, never a tap on the phone number. See
-  `docs/referrals-setup.md`.
+  is a form or a logged conversation, never a tap on the phone number. A
+  form says "got it" only once the lead is somewhere durable (a sent email
+  or a ledger row); nothing a prospect types is ever logged. "Explain my
+  leads" sends counts only, to `claude-haiku-5-5`, on a button press, with
+  `ANTHROPIC_API_KEY` (optional). See `docs/referrals-setup.md`.
 - The site has two views, and the header says which one you're in: a
   "For businesses / For partners" switch (docked at the bottom on phones)
   with green for businesses and violet for partners. /partners takes the

@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import s from "./manage.module.css";
 
-type Status = "new" | "consulted" | "quoted" | "hired" | "paid" | "partner_paid" | "not_fit";
+type Status = "new" | "consulted" | "quoted" | "hired" | "paid" | "partner_paid" | "lost" | "spam";
 const STATUSES: { v: Status; label: string }[] = [
   { v: "new", label: "New" },
   { v: "consulted", label: "Consultation held" },
@@ -12,16 +12,21 @@ const STATUSES: { v: Status; label: string }[] = [
   { v: "hired", label: "Hired" },
   { v: "paid", label: "Client paid" },
   { v: "partner_paid", label: "Partner paid" },
-  { v: "not_fit", label: "Not a fit / no reply" },
+  { v: "lost", label: "Lost (real inquiry, no project)" },
+  { v: "spam", label: "Spam / not a real inquiry" },
 ];
 const money = (n: number) => `$${n.toLocaleString("en-US", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 })}`;
+const date = (iso: string) => new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 
 export type LeadView = {
   id: string;
   created_at: string;
   kind: string;
   kindLabel: string;
+  /** Where the visit came from, and the evidence behind it. */
   source: string;
+  evidence: string;
+  evidenceNote: string;
   business: string | null;
   contact_name: string | null;
   contact: string | null;
@@ -34,32 +39,35 @@ export type LeadView = {
   status: Status;
   build_price: number | null;
   notes: string | null;
+  signed_at: string | null;
 };
 
 /**
- * One lead in the admin: who it is and where it came from, and the three
- * things Kyle updates by hand (status, build price, notes). For a referred
- * lead the partner's 20% shows once the status is "Client paid" or
- * "Partner paid".
+ * One lead in the admin: who it is and where it came from (with how sure
+ * that is), and the three things Kyle updates by hand: status, build
+ * price, notes. For a referred lead the partner's 20% shows once the
+ * status is "Client paid" or "Partner paid".
  */
 export default function LeadRow({ lead, rate }: { lead: LeadView; rate: number }) {
   const [status, setStatus] = useState<Status>(lead.status);
   const [price, setPrice] = useState(lead.build_price != null ? String(lead.build_price) : "");
   const [notes, setNotes] = useState(lead.notes ?? "");
+  const [signedAt, setSignedAt] = useState(lead.signed_at);
   const [saved, setSaved] = useState<"" | "saving" | "saved" | "error">("");
   const [error, setError] = useState("");
 
   const p = parseFloat(price);
   const paid = status === "paid" || status === "partner_paid";
-  const cut = paid && p > 0 ? Math.round(p * rate * 100) / 100 : 0;
+  const cut = lead.partner_code && paid && p > 0 ? Math.round(p * rate * 100) / 100 : 0;
 
   async function save() {
     setSaved("saving");
     setError("");
     try {
       const res = await fetch("/api/manage/lead", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: lead.id, status, build_price: price, notes }) });
-      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; lead?: { signed_at: string | null } };
       if (!res.ok || !json.ok) throw new Error(json.error || "Couldn't save.");
+      if (json.lead) setSignedAt(json.lead.signed_at);
       setSaved("saved");
     } catch (e) {
       setSaved("error");
@@ -67,21 +75,21 @@ export default function LeadRow({ lead, rate }: { lead: LeadView; rate: number }
     }
   }
 
-  const when = new Date(lead.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   return (
     <li className={s.lead} data-status={status}>
       <div className={s.leadWho}>
         <p className={s.leadName}>{lead.business || lead.website || lead.contact || "Lead"}{lead.contact_name ? <span> · {lead.contact_name}</span> : null}</p>
         <p className={s.leadMeta}>
           <span className={s.kind}>{lead.kindLabel}</span>
-          <time dateTime={lead.created_at}>{when}</time>
-          <span className={s.utm}>Source: {lead.source}</span>
+          <time dateTime={lead.created_at}>{date(lead.created_at)}</time>
+          <span className={s.utm} title={lead.evidenceNote}>Source: {lead.source} <small>({lead.evidence})</small></span>
           {lead.landing_page ? <span>Landed on {lead.landing_page}</span> : null}
           {lead.contact ? <span>{lead.contact}</span> : null}
           {lead.website ? <span>{lead.website}</span> : null}
           {lead.detail ? <span>{lead.detail}</span> : null}
+          {signedAt ? <span className={s.signed}>Signed {date(signedAt)}</span> : null}
         </p>
-        {lead.heard ? <p className={s.leadCheckup}>Heard: {lead.heard}</p> : null}
+        {lead.heard ? <p className={s.leadCheckup}>Said: {lead.heard}</p> : null}
         {lead.checkup ? <p className={s.leadCheckup}>{lead.checkup}</p> : null}
       </div>
       <div className={s.leadEdit}>
@@ -101,7 +109,7 @@ export default function LeadRow({ lead, rate }: { lead: LeadView; rate: number }
             ? paid
               ? cut ? <><b>{money(cut)}</b><span>{status === "partner_paid" ? "paid to partner" : "owed to partner"}</span></> : <span>Add the build price to see the {Math.round(rate * 100)}%</span>
               : <span>Partner&rsquo;s {Math.round(rate * 100)}% shows once the client has paid</span>
-            : <span>Build price: from the written quote, once sent</span>}
+            : <span>Not referred: no partner fee. Build price from the written quote, once sent.</span>}
         </div>
         <div className={s.saveRow}>
           <button type="button" className={s.save} onClick={save} disabled={saved === "saving"}>{saved === "saving" ? "Saving…" : "Save"}</button>

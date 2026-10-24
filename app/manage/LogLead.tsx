@@ -5,10 +5,22 @@ import { useRouter } from "next/navigation";
 
 import s from "./manage.module.css";
 
+/** The "how they heard" options, mirrored from HEARD_OPTIONS in app/lib/referrals.ts; the server validates against that list. */
+const HEARD: { v: string; label: string }[] = [
+  { v: "unknown", label: "Didn't say / don't know" },
+  { v: "google", label: "Google / search" },
+  { v: "friend", label: "A person recommended me" },
+  { v: "card", label: "Business card" },
+  { v: "social", label: "Facebook / Instagram" },
+  { v: "partner", label: "A referral partner" },
+  { v: "other", label: "Something else" },
+];
+
 /**
  * "Log a call or text": a lead that came in by phone, written down by hand
  * so it counts like a form. A tap on the phone number is never a lead; a
- * conversation is.
+ * conversation is. "How they heard" is a fixed list, so it can be counted
+ * next to the tagged and browser-reported sources without guessing.
  */
 export default function LogLead() {
   const router = useRouter();
@@ -42,11 +54,15 @@ export default function LogLead() {
           <option value="text">Text</option>
         </select>
       </label>
+      <label>How they heard (what they said)
+        <select name="heard" defaultValue="unknown">
+          {HEARD.map((h) => <option key={h.v} value={h.v}>{h.label}</option>)}
+        </select>
+      </label>
       <label>Business<input name="business" maxLength={120} autoComplete="off" /></label>
       <label>Name<input name="contact_name" maxLength={100} autoComplete="off" /></label>
       <label>Phone or email<input name="contact" maxLength={180} autoComplete="off" /></label>
-      <label>How they heard<input name="heard" maxLength={160} autoComplete="off" placeholder="Google, a friend, the card…" /></label>
-      <label className={s.logNotes}>Notes<input name="notes" maxLength={1000} autoComplete="off" /></label>
+      <label>Notes<input name="notes" maxLength={1000} autoComplete="off" /></label>
       <div className={s.saveRow}>
         <button type="submit" className={s.save} disabled={state === "saving"}>{state === "saving" ? "Saving…" : "Log it"}</button>
         <span role="status" className={s.savedMsg}>{state === "saved" ? "Logged" : state === "error" ? error : ""}</span>

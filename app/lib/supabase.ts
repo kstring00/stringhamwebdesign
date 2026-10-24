@@ -26,8 +26,10 @@ export async function supabase<T>(resource: string, init: RequestInit & { return
   });
   if (!res.ok) {
     const detail = await res.text().catch(() => "");
-    console.error("Supabase request failed", res.status, detail.slice(0, 500));
-    throw new SupabaseError(res.status, detail);
+    // A constraint error's detail repeats the row ("Failing row contains (…)", "Key (…)=(…)"): redacted.
+    const safe = detail.replace(/Failing row contains \([^)]*\)/g, "Failing row contains (redacted)").replace(/Key \([^)]*\)=\([^)]*\)/g, "Key (redacted)");
+    console.error("Supabase request failed", res.status, resource.split("?")[0], safe.slice(0, 300));
+    throw new SupabaseError(res.status, safe);
   }
   if (res.status === 204) return undefined as T;
   const text = await res.text();

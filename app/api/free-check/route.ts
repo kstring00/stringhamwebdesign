@@ -9,10 +9,8 @@ export const dynamic = "force-dynamic";
 /**
  * The free check form. One email to Kyle via Resend (RESEND_API_KEY, server
  * only), reply-to set to the sender when they gave an email, and one row in
- * the lead ledger (Supabase `leads`, shown at /manage). With no key
- * the request still succeeds (the visitor sees the confirmation) and the
- * server logs the request instead, so a missing key never swallows a lead
- * silently.
+ * the lead ledger (Supabase, shown at /manage). The visitor sees "got it"
+ * only when at least one of those worked; otherwise a truthful error.
  *
  * The form script posts JSON and gets JSON back. Without JavaScript the
  * browser posts natively; that gets a 303 back to /google-check?sent=1#free-check
@@ -20,7 +18,7 @@ export const dynamic = "force-dynamic";
  */
 export async function POST(request: NextRequest) {
   const native = !(request.headers.get("content-type") || "").includes("application/json");
-  const reply = (status: number, payload: { ok?: true; sent?: boolean; error?: string }) => {
+  const reply = (status: number, payload: { ok?: true; sent?: boolean; saved?: boolean; error?: string }) => {
     if (!native) return NextResponse.json(payload, { status });
     const to = new URL("/google-check", request.url);
     if (payload.ok) to.searchParams.set("sent", "1");
@@ -85,6 +83,11 @@ export async function POST(request: NextRequest) {
   ].join("\n");
 
   const result = await deliver({ subject: `Free check: ${business}, ${town} (${name})`, text, replyTo: email || undefined, label: "free check request" });
-  if (!result.ok) return reply(502, { error: "I couldn't send that just now. Please text or email me directly." });
-  return reply(200, { ok: true, sent: result.sent });
+  // "Got it" only once the request is somewhere durable: a sent email or a ledger row (a duplicate counts: the earlier row stands).
+  const durable = Boolean(rec && (rec.saved || rec.duplicate));
+  if (!result.sent && !durable) {
+    console.error(`free check request: not delivered anywhere (email ${result.ok ? "not configured" : "failed"}, ledger ${rec ? "write failed" : "not configured"})`);
+    return reply(502, { error: "I couldn't send that just now. Please text or email me directly." });
+  }
+  return reply(200, { ok: true, sent: result.sent, saved: durable });
 }
