@@ -36,6 +36,40 @@ export const EVIDENCE_NOTE: Record<Evidence, string> = {
   unknown: "No tag, no referrer and nothing said. Could be typed, a bookmark, a private browser, an app that hides where it came from, or a search engine that stripped it. Not proof of a direct visit.",
 };
 
+/**
+ * The only campaign tags that get a name of their own outside the admin.
+ * utm values come from the link, so anyone can put anything in one; for
+ * the AI, anything not on this list is "Other tagged link".
+ */
+export const KNOWN_CAMPAIGNS: Record<string, string> = {
+  card: "Business card",
+  gbp: "Google Business Profile link",
+  email: "Email link",
+  sms: "Text message link",
+  text: "Text message link",
+  print: "Printed material",
+  chamber: "Chamber listing",
+  social: "Social post",
+};
+export const OTHER_CAMPAIGN = "Other tagged link";
+
+/** The site's own pages, as categories for anything that leaves the admin. Any other path is "Other page". */
+const PAGE_CATEGORY: [RegExp, string][] = [
+  [/^\/$/, "Home"],
+  [/^\/checkup$/, "Website Checkup"],
+  [/^\/google-check$/, "Google check"],
+  [/^\/work$/, "Work"],
+  [/^\/partners(\/join|\/terms)?$/, "Partners"],
+  [/^\/blog(\/.*)?$/, "Blog"],
+  [/^\/(terms|privacy)$/, "Terms or privacy"],
+  [/^\/family-resource-hub$/, "Family Resource Hub"],
+];
+export function pageCategory(path: string | null): string {
+  if (!path) return "Not recorded";
+  for (const [re, name] of PAGE_CATEGORY) if (re.test(path)) return name;
+  return "Other page";
+}
+
 const SEARCH_HOSTS = /(^|\.)(google\.[a-z.]+|bing\.com|duckduckgo\.com|yahoo\.com|search\.brave\.com|ecosia\.org)$/;
 const SOCIAL_HOSTS = /(^|\.)(facebook\.com|instagram\.com|fb\.com|l\.instagram\.com|lm\.facebook\.com|t\.co|x\.com|twitter\.com|linkedin\.com|tiktok\.com|nextdoor\.com|youtube\.com)$/;
 
@@ -60,9 +94,9 @@ export function heardBucket(heard: string | null): HeardOption | null {
 }
 
 export type SourceRead = {
-  /** The short label on the dashboard ("Business card", "Search", "Partner link (maria)", "Unknown"). */
+  /** The short label on the dashboard ("Business card", "Search", "Partner link (maria)", "gbp / profile", "Unknown"). Admin only. */
   label: string;
-  /** The label with the partner's code and the referrer host taken out, for anything aggregated or sent off. */
+  /** A fixed category for anything aggregated or sent off: no partner code, no referrer host, no raw campaign text. */
   group: string;
   evidence: Evidence;
   /** What the person said, when they said something, as a bucket. */
@@ -78,8 +112,9 @@ export function sourceRead(l: Pick<Lead, "partner_code" | "utm_source" | "utm_me
   const said = heardBucket(l.heard);
   if (l.partner_code) return { label: `Partner link (${l.partner_code})`, group: "Partner link", evidence: "partner", said };
   if (l.utm_source) {
-    const tag = l.utm_source === "card" ? "Business card" : `${l.utm_source}${l.utm_medium ? ` / ${l.utm_medium}` : ""}`;
-    return { label: tag, group: tag, evidence: "campaign", said };
+    const known = KNOWN_CAMPAIGNS[l.utm_source.toLowerCase()];
+    const label = known && l.utm_source.toLowerCase() === "card" ? known : `${l.utm_source}${l.utm_medium ? ` / ${l.utm_medium}` : ""}`;
+    return { label, group: known ?? OTHER_CAMPAIGN, evidence: "campaign", said };
   }
   if (l.referrer_host) {
     const g = hostGroup(l.referrer_host);
@@ -180,10 +215,13 @@ export function sourceRows(leads: Lead[]): SourceRow[] {
 /* ---------- what the AI gets to see ---------- */
 
 /**
- * The aggregate, de-identified picture for "Explain my leads": counts only.
- * No names, contacts, businesses, websites, notes, checkup text, partner
- * codes or referrer hosts; "how they heard" only as buckets. Everything the
- * model is told is in this object, so it can be read and checked here.
+ * The aggregate, de-identified picture for "Explain my leads": counts only,
+ * keyed by fixed category names. No names, contacts, businesses, websites,
+ * notes, checkup text, partner codes or referrer hosts; campaign tags only
+ * as the known list (else "Other tagged link"); landing pages only as the
+ * site's page categories (else "Other page"); "how they heard" only as
+ * buckets. Every string the model sees is written in this file or in
+ * referrals.ts, never typed by a visitor or pasted into a link.
  */
 export type AiAggregate = {
   as_of: string;
@@ -216,7 +254,8 @@ export function aiAggregate(leads: Lead[], search: SearchMonth[], now = new Date
     if (r.evidence === "unknown") unknown++;
     if (r.said) heard[HEARD_LABEL[r.said]] = (heard[HEARD_LABEL[r.said]] ?? 0) + 1;
     kinds[KIND_LABEL[l.kind]] = (kinds[KIND_LABEL[l.kind]] ?? 0) + 1;
-    if (l.landing_page) landing[l.landing_page] = (landing[l.landing_page] ?? 0) + 1;
+    const page = pageCategory(l.landing_page);
+    landing[page] = (landing[page] ?? 0) + 1;
   }
   return {
     as_of: now.toISOString().slice(0, 10),
@@ -226,6 +265,7 @@ export function aiAggregate(leads: Lead[], search: SearchMonth[], now = new Date
       "Month rows are cohorts by the month the inquiry arrived; signed_this_calendar_month counts by signing date instead.",
       "Source evidence: partner and campaign are tagged links (strong); referrer is browser-reported (often stripped); self-reported is what the person said; unknown means no tag, no referrer, nothing said, and is NOT a direct visit.",
       "Search impressions/clicks are Search Console totals typed in by hand; null means not entered yet.",
+      "Sources and landing pages are fixed categories: 'Other tagged link' is a utm tag not on the known list; 'Other page' is a page outside the main ones.",
     ],
     months: months.map((m) => ({ month: m.month, inquiries: m.inquiries, consulted: m.consulted, quoted: m.quoted, signed_from_this_cohort: m.signed, lost: m.lost, spam: m.spam, partner_inquiries: m.partnerInquiries, signed_this_calendar_month: m.signedThisMonth, search_impressions: m.search?.impressions ?? null, search_clicks: m.search?.clicks ?? null })),
     sources: [...srcByGroup.values()].sort((a, b) => b.inquiries - a.inquiries || a.source.localeCompare(b.source)),
