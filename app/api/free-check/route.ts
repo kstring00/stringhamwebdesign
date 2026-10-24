@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { clean, clientIp, deliver, isEmail, rateLimited } from "@/app/lib/inbox";
+import { recordLead } from "@/app/lib/referrals";
+import { supabaseConfigured } from "@/app/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
 /**
  * The free check form. One email to Kyle via Resend (RESEND_API_KEY, server
- * only), reply-to set to the sender when they gave an email. With no key
+ * only), reply-to set to the sender when they gave an email, and one row in
+ * the lead ledger (Supabase `leads`, shown at /manage). With no key
  * the request still succeeds (the visitor sees the confirmation) and the
  * server logs the request instead, so a missing key never swallows a lead
  * silently.
@@ -50,14 +53,19 @@ export async function POST(request: NextRequest) {
     utm_medium: clean(body.utm_medium, 120),
     utm_campaign: clean(body.utm_campaign, 120),
     referrer: clean(body.referrer, 300),
+    landing: clean(body.landing, 200),
   };
 
   if (name.length < 2 || business.length < 2 || town.length < 2 || phone.replace(/\D/g, "").length < 7 || (email && !isEmail(email))) {
     return reply(400, { error: "Please fill in your name, business, town and phone number." });
   }
 
+  // The ledger row: the phone is the contact (required), the town the detail. Never blocks the email.
+  const rec = supabaseConfigured() ? await recordLead({ kind: "google_check", business, contact_name: name, contact: phone, heard, detail: town, source }) : null;
+  const savedLine = !rec ? "Not saved to /manage: Supabase isn't set up" : rec.saved ? "Saved to /manage" : rec.duplicate ? "Not saved to /manage: already recorded today (same phone, same form)" : `Not saved to /manage: ${rec.reason}`;
+
   // Same format as the quote email: "utm_source=card · utm_medium=print · …".
-  const sourceLine = Object.entries(source).filter(([, v]) => v).map(([k, v]) => `${k}=${v}`).join(" · ") || "direct";
+  const sourceLine = Object.entries(source).filter(([k, v]) => v && k !== "landing").map(([k, v]) => `${k}=${v}`).join(" · ") || "direct";
   const text = [
     `Free check request`,
     ``,
@@ -72,6 +80,7 @@ export async function POST(request: NextRequest) {
     notes || "(nothing written)",
     ``,
     `Source: ${sourceLine}`,
+    savedLine,
     `Received: ${new Date().toISOString()}`,
   ].join("\n");
 

@@ -2,13 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { partnerCategories, partnerInterests } from "@/app/data/partners";
 import { clean, clientIp, deliver, isEmail, rateLimited } from "@/app/lib/inbox";
+import { recordLead } from "@/app/lib/referrals";
+import { supabaseConfigured } from "@/app/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
 /**
  * The partner inquiry form on /partners. Same plumbing as the free check:
  * honeypot, per-IP rate limit, one email to Kyle via Resend with reply-to
- * set to the sender. JSON in, JSON out from the script; a native (no-JS)
+ * set to the sender, and one row in the lead ledger (/manage). JSON in, JSON out from the script; a native (no-JS)
  * post gets a 303 back to /partners?sent=1#partner-form or ?error=….
  */
 export async function POST(request: NextRequest) {
@@ -48,6 +50,17 @@ export async function POST(request: NextRequest) {
     return reply(400, { error: "Please fill in your name, business, email, what you do and what you're interested in." });
   }
 
+  const source = {
+    utm_source: clean(body.utm_source, 120),
+    utm_medium: clean(body.utm_medium, 120),
+    utm_campaign: clean(body.utm_campaign, 120),
+    referrer: clean(body.referrer, 300),
+    landing: clean(body.landing, 200),
+  };
+  const rec = supabaseConfigured() ? await recordLead({ kind: "partner", business, contact_name: name, contact: email, website: site, detail: `${category} · ${interest}`, source }) : null;
+  const savedLine = !rec ? "Not saved to /manage: Supabase isn't set up" : rec.saved ? "Saved to /manage" : rec.duplicate ? "Not saved to /manage: already recorded today (same email, same form)" : `Not saved to /manage: ${rec.reason}`;
+  const sourceLine = Object.entries(source).filter(([k, v]) => v && k !== "landing").map(([k, v]) => `${k}=${v}`).join(" · ") || "direct";
+
   const text = [
     `Partner inquiry`,
     ``,
@@ -61,6 +74,8 @@ export async function POST(request: NextRequest) {
     `Message:`,
     message || "(nothing written)",
     ``,
+    `Source: ${sourceLine}`,
+    savedLine,
     `Received: ${new Date().toISOString()}`,
   ].join("\n");
 

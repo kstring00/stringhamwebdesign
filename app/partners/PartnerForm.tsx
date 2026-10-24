@@ -6,6 +6,7 @@ import { partnerCategories, partnerInterests } from "../data/partners";
 import { site } from "../data/site";
 import styles from "../home/form.module.css";
 import { track } from "../lib/track";
+import { useSourceFields, VISIT_KEYS } from "../lib/useSourceFields";
 
 const NATIVE_ERRORS: Record<string, string> = {
   fields: "Please fill in your name, business, email, what you do and what you're interested in.",
@@ -22,6 +23,7 @@ export default function PartnerForm({ sent = false, errorCode = "" }: { sent?: b
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">(sent ? "sent" : nativeError ? "error" : "idle");
   const [error, setError] = useState(nativeError);
   const [name, setName] = useState("");
+  useSourceFields("partner-inquiry");
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -101,6 +103,8 @@ export default function PartnerForm({ sent = false, errorCode = "" }: { sent?: b
           off screen. Password managers are told to leave it alone, so a real
           person never fills it by accident. The API drops any submission where
           `website` has a value. */}
+      {/* Where the visitor came from. Filled by the script; harmless when empty. */}
+      {VISIT_KEYS.map((k) => <input key={k} type="hidden" name={k} defaultValue="" />)}
       <div className={styles.honeypot} aria-hidden="true" inert>
         <label htmlFor="pi-website">Leave this empty</label>
         <input id="pi-website" name="website" type="text" tabIndex={-1} autoComplete="off" data-1p-ignore="" data-lpignore="true" data-bwignore="true" data-form-type="other" />

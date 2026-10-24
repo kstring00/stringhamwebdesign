@@ -4,22 +4,43 @@ import { useState } from "react";
 
 import s from "./manage.module.css";
 
-type Status = "new" | "quoted" | "hired" | "paid" | "partner_paid";
+type Status = "new" | "consulted" | "quoted" | "hired" | "paid" | "partner_paid" | "not_fit";
 const STATUSES: { v: Status; label: string }[] = [
   { v: "new", label: "New" },
+  { v: "consulted", label: "Consultation held" },
   { v: "quoted", label: "Quoted" },
   { v: "hired", label: "Hired" },
   { v: "paid", label: "Client paid" },
   { v: "partner_paid", label: "Partner paid" },
+  { v: "not_fit", label: "Not a fit / no reply" },
 ];
 const money = (n: number) => `$${n.toLocaleString("en-US", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 })}`;
 
-export type LeadView = { id: string; created_at: string; kind: "quote" | "checkup"; business: string | null; contact_name: string | null; contact: string | null; website: string | null; checkup: string | null; utm_source?: string | null; status: Status; build_price: number | null; notes: string | null };
+export type LeadView = {
+  id: string;
+  created_at: string;
+  kind: string;
+  kindLabel: string;
+  source: string;
+  business: string | null;
+  contact_name: string | null;
+  contact: string | null;
+  website: string | null;
+  checkup: string | null;
+  heard: string | null;
+  detail: string | null;
+  landing_page: string | null;
+  partner_code: string | null;
+  status: Status;
+  build_price: number | null;
+  notes: string | null;
+};
 
 /**
- * One referral lead in the admin: who it is, and the three things Kyle
- * updates by hand (status, build price, notes). The partner's 20% shows
- * once the status is "Client paid" or "Partner paid".
+ * One lead in the admin: who it is and where it came from, and the three
+ * things Kyle updates by hand (status, build price, notes). For a referred
+ * lead the partner's 20% shows once the status is "Client paid" or
+ * "Partner paid".
  */
 export default function LeadRow({ lead, rate }: { lead: LeadView; rate: number }) {
   const [status, setStatus] = useState<Status>(lead.status);
@@ -52,12 +73,15 @@ export default function LeadRow({ lead, rate }: { lead: LeadView; rate: number }
       <div className={s.leadWho}>
         <p className={s.leadName}>{lead.business || lead.website || lead.contact || "Lead"}{lead.contact_name ? <span> · {lead.contact_name}</span> : null}</p>
         <p className={s.leadMeta}>
-          <span className={s.kind}>{lead.kind === "checkup" ? "Checkup review" : "Quote request"}</span>
+          <span className={s.kind}>{lead.kindLabel}</span>
           <time dateTime={lead.created_at}>{when}</time>
-          <span className={s.utm}>Source: {lead.utm_source || "direct"}</span>
+          <span className={s.utm}>Source: {lead.source}</span>
+          {lead.landing_page ? <span>Landed on {lead.landing_page}</span> : null}
           {lead.contact ? <span>{lead.contact}</span> : null}
           {lead.website ? <span>{lead.website}</span> : null}
+          {lead.detail ? <span>{lead.detail}</span> : null}
         </p>
+        {lead.heard ? <p className={s.leadCheckup}>Heard: {lead.heard}</p> : null}
         {lead.checkup ? <p className={s.leadCheckup}>{lead.checkup}</p> : null}
       </div>
       <div className={s.leadEdit}>
@@ -73,9 +97,11 @@ export default function LeadRow({ lead, rate }: { lead: LeadView; rate: number }
           <input value={notes} maxLength={1000} onChange={(e) => { setNotes(e.target.value); setSaved(""); }} />
         </label>
         <div className={s.owed}>
-          {paid
-            ? cut ? <><b>{money(cut)}</b><span>{status === "partner_paid" ? "paid to partner" : "owed to partner"}</span></> : <span>Add the build price to see the {Math.round(rate * 100)}%</span>
-            : <span>{Math.round(rate * 100)}% shows once the client has paid</span>}
+          {lead.partner_code
+            ? paid
+              ? cut ? <><b>{money(cut)}</b><span>{status === "partner_paid" ? "paid to partner" : "owed to partner"}</span></> : <span>Add the build price to see the {Math.round(rate * 100)}%</span>
+              : <span>Partner&rsquo;s {Math.round(rate * 100)}% shows once the client has paid</span>
+            : <span>Build price: from the written quote, once sent</span>}
         </div>
         <div className={s.saveRow}>
           <button type="button" className={s.save} onClick={save} disabled={saved === "saving"}>{saved === "saving" ? "Saving…" : "Save"}</button>

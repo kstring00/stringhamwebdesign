@@ -24,7 +24,8 @@ export const site = {
   year: 2026,
 } as const;
 
-export const locationLine = "League City, Texas. Working with owners across Texas and beyond.";
+/** Where the studio is, in one sentence. On the home page's About block. */
+export const locationLine = "I’m based in League City, Texas, and I work with small businesses across the Houston area and beyond.";
 
 /** The studio line: eyebrow, meta and footer. */
 export const studioLine = "Stringham Web Design LLC · League City, Texas";

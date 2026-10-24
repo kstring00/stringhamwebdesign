@@ -5,7 +5,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, typ
 import { site } from "../data/site";
 import { currentRef } from "../lib/ref";
 import { track } from "../lib/track";
-import { SOURCE_KEYS, sourceQuery, useSourceFields } from "../lib/useSourceFields";
+import { sourceQuery, useSourceFields, VISIT_KEYS } from "../lib/useSourceFields";
 import { gsap, prefersReducedMotion } from "../motion/gsap";
 import {
   ESTIMATE_DEFAULTS, EXAMPLE, EXPECT, FOOTNOTE, HOW_CALCULATED, OPTIONS, QUESTIONS, TIMELINE, PAYBACK_LINE,
@@ -111,8 +111,7 @@ function LeadForm({ summaryText, refCode }: { summaryText: string; refCode: stri
       <input type="hidden" name="source" value="checkup" />
       <input type="hidden" name="checkup" value={summaryText} />
       <input type="hidden" name="ref" value={refCode} />
-      {SOURCE_KEYS.map((k) => <input key={k} type="hidden" name={k} defaultValue="" />)}
-      <input type="hidden" name="referrer" defaultValue="" />
+      {VISIT_KEYS.map((k) => <input key={k} type="hidden" name={k} defaultValue="" />)}
       <div className={s.honeypot} aria-hidden="true" inert>
         <label htmlFor="cl-website">Leave this empty</label>
         <input id="cl-website" name="website" type="text" tabIndex={-1} autoComplete="off" data-1p-ignore="" data-lpignore="true" data-bwignore="true" data-form-type="other" />

@@ -6,7 +6,7 @@ import { site } from "../data/site";
 import styles from "./form.module.css";
 import { track } from "../lib/track";
 import { currentRef } from "../lib/ref";
-import { SOURCE_KEYS, useSourceFields } from "../lib/useSourceFields";
+import { useSourceFields, VISIT_KEYS } from "../lib/useSourceFields";
 
 /** Messages for a native (no-JS) post that bounced back with ?error=… */
 const NATIVE_ERRORS: Record<string, string> = {
@@ -113,8 +113,7 @@ export default function QuoteForm({ sent = false, errorCode = "", checkup = "" }
       </div>
 
       {/* Where the visitor came from. Filled by the script; harmless when empty. */}
-      {SOURCE_KEYS.map((k) => <input key={k} type="hidden" name={k} defaultValue="" />)}
-      <input type="hidden" name="referrer" defaultValue="" />
+      {VISIT_KEYS.map((k) => <input key={k} type="hidden" name={k} defaultValue="" />)}
       {checkup ? <input type="hidden" name="checkup" value={checkup} /> : null}
       <input type="hidden" name="ref" value={ref} />
       {/* Honeypot: off screen, inert and skipped by password managers. The API

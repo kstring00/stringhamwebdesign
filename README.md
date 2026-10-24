@@ -65,8 +65,17 @@ partner form), `/terms`, `/privacy`, and the unlinked
   its inquiry form. Both forms share `app/lib/inbox.ts` (cleaning, rate limit,
   one email via Resend, logged instead when the key is unset).
 - `app/data/partners.ts` — every word on /partners.
-- `app/data/referral.ts` — the referral reward (rate, worked example, rules).
-  /partners and the footer read it; the Service Terms repeat it in words.
+- `app/data/referral.ts` — the referral reward (rate, rules; no dollar
+  examples). /partners and the footer read it; the Service Terms repeat it
+  in words.
+- `app/lib/referrals.ts` + `supabase/migrations/` — the lead ledger: every
+  validated form submission is written to the `leads` table (referred or
+  not; the same person, same form, same day is one row), calls and texts
+  are logged by hand, and `search_months` holds Search Console totals typed
+  in by month. `app/lib/leadStats.ts` turns the ledger into the monthly
+  numbers `/manage` shows (inquiries, consultations, quotes, signed clients,
+  conversion rates, as cohorts by the month the lead came in). See
+  `docs/referrals-setup.md`.
 - `app/data/work.ts` — selected work, each project labeled for exactly what it
   is: `kind` is live, in-progress, concept or archived. `onPartners` picks the projects
   on /partners, `onHome` the three demos in the home page's carousel and

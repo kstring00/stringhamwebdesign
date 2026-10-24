@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 
 import { site } from "../data/site";
 import { track } from "../lib/track";
-import { SOURCE_KEYS, useSourceFields } from "../lib/useSourceFields";
+import { useSourceFields, VISIT_KEYS } from "../lib/useSourceFields";
 import styles from "./form.module.css";
 
 /** Messages for a native (no-JS) post that bounced back with ?error=… */
@@ -94,8 +94,7 @@ export default function FreeCheckForm({ sent = false, errorCode = "" }: { sent?:
       </div>
 
       {/* Where the visitor came from. Filled by the script; harmless when empty. */}
-      {SOURCE_KEYS.map((k) => <input key={k} type="hidden" name={k} defaultValue="" />)}
-      <input type="hidden" name="referrer" defaultValue="" />
+      {VISIT_KEYS.map((k) => <input key={k} type="hidden" name={k} defaultValue="" />)}
       {/* Honeypot. `inert` keeps it out of focus, clicks and the accessibility
           tree in every browser; aria-hidden covers older ones; the CSS keeps it
           off screen. Password managers are told to leave it alone, so a real
