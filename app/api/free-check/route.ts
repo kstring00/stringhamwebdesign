@@ -1,15 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { clean, clientIp, deliver, isEmail, rateLimited } from "@/app/lib/inbox";
+import { recordLead } from "@/app/lib/referrals";
+import { supabaseConfigured } from "@/app/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
 /**
  * The free check form. One email to Kyle via Resend (RESEND_API_KEY, server
- * only), reply-to set to the sender when they gave an email. With no key
- * the request still succeeds (the visitor sees the confirmation) and the
- * server logs the request instead, so a missing key never swallows a lead
- * silently.
+ * only), reply-to set to the sender when they gave an email, and one row in
+ * the lead ledger (Supabase, shown at /manage). The visitor sees "got it"
+ * only when at least one of those worked; otherwise a truthful error.
  *
  * The form script posts JSON and gets JSON back. Without JavaScript the
  * browser posts natively; that gets a 303 back to /google-check?sent=1#free-check
@@ -17,7 +18,7 @@ export const dynamic = "force-dynamic";
  */
 export async function POST(request: NextRequest) {
   const native = !(request.headers.get("content-type") || "").includes("application/json");
-  const reply = (status: number, payload: { ok?: true; sent?: boolean; error?: string }) => {
+  const reply = (status: number, payload: { ok?: true; sent?: boolean; saved?: boolean; error?: string }) => {
     if (!native) return NextResponse.json(payload, { status });
     const to = new URL("/google-check", request.url);
     if (payload.ok) to.searchParams.set("sent", "1");
@@ -50,14 +51,19 @@ export async function POST(request: NextRequest) {
     utm_medium: clean(body.utm_medium, 120),
     utm_campaign: clean(body.utm_campaign, 120),
     referrer: clean(body.referrer, 300),
+    landing: clean(body.landing, 200),
   };
 
   if (name.length < 2 || business.length < 2 || town.length < 2 || phone.replace(/\D/g, "").length < 7 || (email && !isEmail(email))) {
     return reply(400, { error: "Please fill in your name, business, town and phone number." });
   }
 
+  // The ledger row: the phone is the contact (required), the town the detail. Never blocks the email.
+  const rec = supabaseConfigured() ? await recordLead({ kind: "google_check", business, contact_name: name, contact: phone, heard, detail: town, source }) : null;
+  const savedLine = !rec ? "Not saved to /manage: Supabase isn't set up" : rec.saved ? "Saved to /manage" : rec.duplicate ? "Not saved to /manage: already recorded today (same phone, same form)" : `Not saved to /manage: ${rec.reason}`;
+
   // Same format as the quote email: "utm_source=card · utm_medium=print · …".
-  const sourceLine = Object.entries(source).filter(([, v]) => v).map(([k, v]) => `${k}=${v}`).join(" · ") || "direct";
+  const sourceLine = Object.entries(source).filter(([k, v]) => v && k !== "landing").map(([k, v]) => `${k}=${v}`).join(" · ") || "direct";
   const text = [
     `Free check request`,
     ``,
@@ -72,10 +78,16 @@ export async function POST(request: NextRequest) {
     notes || "(nothing written)",
     ``,
     `Source: ${sourceLine}`,
+    savedLine,
     `Received: ${new Date().toISOString()}`,
   ].join("\n");
 
   const result = await deliver({ subject: `Free check: ${business}, ${town} (${name})`, text, replyTo: email || undefined, label: "free check request" });
-  if (!result.ok) return reply(502, { error: "I couldn't send that just now. Please text or email me directly." });
-  return reply(200, { ok: true, sent: result.sent });
+  // "Got it" only once the request is somewhere durable: a sent email or a ledger row (a duplicate counts: the earlier row stands).
+  const durable = Boolean(rec && (rec.saved || rec.duplicate));
+  if (!result.sent && !durable) {
+    console.error(`free check request: not delivered anywhere (email ${result.ok ? "not configured" : "failed"}, ledger ${rec ? "write failed" : "not configured"})`);
+    return reply(502, { error: "I couldn't send that just now. Please text or email me directly." });
+  }
+  return reply(200, { ok: true, sent: result.sent, saved: durable });
 }

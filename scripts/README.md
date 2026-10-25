@@ -20,5 +20,20 @@ with Playwright and Lighthouse installed locally, not saved:
   performance ≥ 80 and accessibility ≥ 95.
 - `clarity-check.js` — the analytics tag loads only in production with an id,
   and only after load.
+- `leads-check.js` — unit tests for the lead ledger's pure logic
+  (`app/lib/leadStats.ts`, `app/lib/referrals.ts`): referral money only on
+  referred leads ($2,000 direct paid → $0; referred → $400), the month
+  cohorts and the calendar "signed this month" across a month boundary,
+  partner inquiries out of the funnel, lost vs spam, the source evidence
+  order, the dedupe key, and that the aggregate sent to the AI contains no
+  name, contact, note, code or host. Needs no server and no packages:
+  `node scripts/leads-check.js`.
+- `migration-check.js` — runs `supabase/migrations/20261024000000_leads.sql`
+  against a real Postgres (PGlite, in-process) four ways: a clean database,
+  an existing one with referred leads from the older migrations (rows,
+  statuses and build prices preserved), run twice, and the old code's
+  insert shape still accepted after it (rollback safety). Install once:
+  `npm install --no-save @electric-sql/pglite`, then
+  `node scripts/migration-check.js`.
 
     BASE=http://localhost:3300 NODE_PATH=./node_modules node scripts/launch-check.js

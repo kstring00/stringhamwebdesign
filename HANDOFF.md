@@ -41,7 +41,18 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
   for word. No stock or AI photos; the only photo of Kyle is his own
   (`public/kyle-founder.*`). Don't mention his dad's facility by name.
 - Location is "League City, Texas", never just "Texas". Phone is shown as
-  "Call or text 413-454-3509".
+  "Call or text 413-454-3509". The home page says where the studio is in
+  one sentence (`locationLine` in `app/data/site.ts`, in the About block);
+  no city pages, ever.
+- Leads: every validated form submission is emailed (Resend) and written to
+  the `leads` table (Supabase), referred or not; calls and texts are logged
+  by hand at `/manage`, which is the monthly dashboard (inquiries, consults,
+  quotes, signed clients, Search Console numbers typed in by month). A lead
+  is a form or a logged conversation, never a tap on the phone number. A
+  form says "got it" only once the lead is somewhere durable (a sent email
+  or a ledger row); nothing a prospect types is ever logged. "Explain my
+  leads" sends counts only, to `claude-haiku-5-5`, on a button press, with
+  `ANTHROPIC_API_KEY` (optional). See `docs/referrals-setup.md`.
 - The site has two views, and the header says which one you're in: a
   "For businesses / For partners" switch (docked at the bottom on phones)
   with green for businesses and violet for partners. /partners takes the

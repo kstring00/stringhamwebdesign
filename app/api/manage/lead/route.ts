@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { ADMIN_COOKIE, validSession } from "@/app/lib/adminAuth";
 import { clean } from "@/app/lib/inbox";
-import { LEAD_STATUSES, owed, updateLead, type LeadStatus } from "@/app/lib/referrals";
+import { createManualLead, HEARD_OPTIONS, LEAD_STATUSES, owed, updateLead, type HeardOption, type LeadStatus } from "@/app/lib/referrals";
 
 export const dynamic = "force-dynamic";
 
-/** Updates one referral lead's status, build price and notes. Signed-in admin only. */
+/** Updates one lead's status, build price and notes; signed_at follows the status (see updateLead). Signed-in admin only. */
 export async function PATCH(request: NextRequest) {
   if (!validSession(request.cookies.get(ADMIN_COOKIE)?.value)) return NextResponse.json({ error: "Please sign in again." }, { status: 401 });
   let body: Record<string, unknown>;
@@ -24,5 +24,26 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ ok: true, lead, owed: owed(lead) });
   } catch {
     return NextResponse.json({ error: "Couldn't save. Try again." }, { status: 502 });
+  }
+}
+
+/** Logs a call or a text Kyle took by phone, as a lead. Signed-in admin only. */
+export async function POST(request: NextRequest) {
+  if (!validSession(request.cookies.get(ADMIN_COOKIE)?.value)) return NextResponse.json({ error: "Please sign in again." }, { status: 401 });
+  let body: Record<string, unknown>;
+  try { body = (await request.json()) as Record<string, unknown>; } catch { return NextResponse.json({ error: "Invalid request." }, { status: 400 }); }
+  const kind = body.kind === "text" ? "text" : body.kind === "call" ? "call" : null;
+  const business = clean(body.business, 120);
+  const contact_name = clean(body.contact_name, 100);
+  const contact = clean(body.contact, 180);
+  if (!kind || (!business && !contact_name && !contact)) return NextResponse.json({ error: "Add at least a business, a name or a number." }, { status: 400 });
+  // "How they heard" is one of a fixed list; anything else is "unknown".
+  const heardRaw = clean(body.heard, 20);
+  const heard: HeardOption = (HEARD_OPTIONS as readonly string[]).includes(heardRaw) ? (heardRaw as HeardOption) : "unknown";
+  try {
+    const lead = await createManualLead({ kind, business, contact_name, contact, heard, notes: clean(body.notes, 1000) });
+    return NextResponse.json({ ok: true, lead });
+  } catch {
+    return NextResponse.json({ error: "Couldn't save. Check that the leads SQL has been run." }, { status: 502 });
   }
 }

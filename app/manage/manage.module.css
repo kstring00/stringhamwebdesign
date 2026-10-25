@@ -99,3 +99,45 @@
   .saveRow { grid-column: 1 / -1; justify-content: start; }
 }
 .utm { color: var(--ink-soft); }
+
+/* ---------- the leads dashboard ---------- */
+
+.h2 { margin: 1.75rem 0 0.75rem; font-size: 1.35rem; line-height: 1.2; }
+.lead[data-status="consulted"] { border-left-color: #6b5bd6; }
+.lead[data-status="lost"] { border-left-color: var(--line-strong); }
+.lead[data-status="spam"] { border-left-color: var(--line); opacity: 0.6; }
+.signed { color: var(--brand-deep); font-weight: 600; }
+.utm small { color: var(--muted); font-size: 0.8em; }
+
+.tableWrap { overflow-x: auto; margin: 0 0 1.25rem; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+.table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.table th, .table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+.table th[scope="col"] { color: var(--muted); font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+.table th[scope="row"], .table th[scope="col"]:first-child { text-align: left; }
+.table tbody tr:first-child td, .table tbody tr:first-child th { background: var(--paper); font-weight: 600; }
+.table tbody tr:last-child td, .table tbody tr:last-child th { border-bottom: 0; }
+.table small { display: block; color: var(--muted); font-size: 0.75rem; font-weight: 400; }
+
+.twoUp { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.panel { display: grid; align-content: start; gap: 0.5rem; padding: 1.1rem 1.2rem; border: 1px solid var(--line); border-radius: 16px; background: #fff; }
+.panel .h2 { margin: 0; }
+.panelHow { color: var(--ink-soft); font-size: 0.9rem; line-height: 1.5; }
+.panelHow a { color: var(--brand-deep); }
+
+.log { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; margin-top: 0.4rem; }
+.log label { display: grid; gap: 0.3rem; color: var(--ink); font-size: 0.9rem; font-weight: 600; }
+.log input, .log select { width: 100%; min-height: 44px; padding: 0.5rem 0.7rem; border: 1.5px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); font: inherit; font-size: 1rem; font-weight: 400; }
+.log input:focus-visible, .log select:focus-visible { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
+.logNotes { grid-column: 1 / -1; }
+.log .saveRow { grid-column: 1 / -1; justify-content: start; }
+
+@media (max-width: 64rem) {
+  .twoUp { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* "Explain my leads" */
+.explain { display: grid; gap: 0.6rem; }
+.explainOut { display: grid; gap: 0.5rem; padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+.explainText { color: var(--ink); font-size: 0.98rem; line-height: 1.6; white-space: pre-wrap; }
+.explainMeta { color: var(--muted); font-size: 0.82rem; }
+.how i { font-style: italic; }

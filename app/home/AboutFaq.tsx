@@ -1,5 +1,5 @@
 import { faq } from "../data/offer";
-import { site } from "../data/site";
+import { locationLine, site } from "../data/site";
 import s from "./home.module.css";
 
 /**
@@ -17,7 +17,7 @@ export default function AboutFaq() {
           </picture>
           <h2 id="about-title" className={s.h2} data-reveal>You work with me, start to finish.</h2>
           <p>I&rsquo;m Kyle Stringham, and I&rsquo;m the one who plans, designs, builds and runs your site. My degree is in psychology, and I study why customers choose one business over another; that shapes what goes on your page, in what order, before someone calls.</p>
-          <p>No agency layers, no hand-offs. I use AI-assisted tools so you get custom work faster, and I review, test and stand behind every line that ships.</p>
+          <p>{locationLine} No agency layers, no hand-offs. I use AI-assisted tools so you get custom work faster, and I review, test and stand behind every line that ships.</p>
           <p className={s.aboutLinks}>
             <a className="u" href={`mailto:${site.email}`} data-track="email">{site.email}</a>
             <a className="u" href={site.phoneHref}>Call or text {site.phone}</a>

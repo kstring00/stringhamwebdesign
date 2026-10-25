@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { clean, clientIp, deliver, isEmail, rateLimited } from "@/app/lib/inbox";
 import { isValidCode } from "@/app/lib/refCode";
-import { recordLead } from "@/app/lib/referrals";
+import { recordLead, type LeadInput } from "@/app/lib/referrals";
 import { supabaseConfigured } from "@/app/lib/supabase";
 
 export const dynamic = "force-dynamic";
@@ -24,9 +24,10 @@ export const dynamic = "force-dynamic";
  * the visitor came from /checkup. `source=checkup` is the checkup's own
  * "Want me to check it for you?" form: just a website and a phone or email.
  *
- * `ref` is a referral partner's code, remembered from a shared link. A
- * valid, active code records the lead against that partner in Supabase
- * (for the Referrals view) and names the partner in the email.
+ * Every validated request is written to the lead ledger (Supabase `leads`,
+ * shown at /manage); the email says whether it was saved. `ref` is a
+ * referral partner's code, remembered from a shared link: a valid, active
+ * code credits the lead to that partner and names them in the email.
  *
  * JSON in, JSON out from the form script. A native post (no JavaScript)
  * gets a 303 back to /?sent=1#quote or /?error=…#quote (the checkup form
@@ -35,7 +36,7 @@ export const dynamic = "force-dynamic";
 export async function POST(request: NextRequest) {
   const native = !(request.headers.get("content-type") || "").includes("application/json");
   let fromCheckup = false;
-  const reply = (status: number, payload: { ok?: true; sent?: boolean; referred?: boolean; error?: string }) => {
+  const reply = (status: number, payload: { ok?: true; sent?: boolean; saved?: boolean; referred?: boolean; error?: string }) => {
     if (!native) return NextResponse.json(payload, { status });
     const to = new URL(fromCheckup ? "/checkup" : "/", request.url);
     if (payload.ok) to.searchParams.set("sent", "1");
@@ -68,18 +69,34 @@ export async function POST(request: NextRequest) {
   const checkup = clean(body.checkup, 600);
   const refCode = clean(body.ref, 40).toLowerCase();
   const ref = isValidCode(refCode) ? refCode : "";
-  /** Records the lead against the partner, and says who referred them (or that the code wasn't found). */
-  const attribute = async (lead: Parameters<typeof recordLead>[1]) => {
-    if (!ref) return { line: "", partner: null as Awaited<ReturnType<typeof recordLead>> };
-    if (!supabaseConfigured()) return { line: `Referral code: ${ref} (not checked: Supabase isn't set up)`, partner: null };
-    const partner = await recordLead(ref, lead);
-    return { line: partner ? `Referred by: ${partner.name} (${partner.code}) · ${partner.email}` : `Referral code: ${ref} (no active partner with this code)`, partner };
-  };
   const source = {
     utm_source: clean(body.utm_source, 120),
     utm_medium: clean(body.utm_medium, 120),
     utm_campaign: clean(body.utm_campaign, 120),
     referrer: clean(body.referrer, 300),
+    landing: clean(body.landing, 200),
+  };
+  /** Writes the lead to the ledger (credited to the partner when the code is real) and says so in the email. */
+  const attribute = async (lead: Omit<LeadInput, "source">) => {
+    if (!supabaseConfigured()) return { lines: [ref ? `Referral code: ${ref} (not checked: Supabase isn't set up)` : "", "Not saved to /manage: Supabase isn't set up"].filter(Boolean), partner: null, durable: false };
+    const rec = await recordLead({ ...lead, source }, ref);
+    const lines: string[] = [];
+    if (ref) lines.push(rec.partner ? `Referred by: ${rec.partner.name} (${rec.partner.code}) · ${rec.partner.email}` : `Referral code: ${ref} (no active partner with this code)`);
+    lines.push(rec.saved ? "Saved to /manage" : rec.duplicate ? "Not saved to /manage: already recorded today (same contact, same form)" : `Not saved to /manage: ${rec.reason}`);
+    // A duplicate is durable too: the earlier row is in the ledger.
+    return { lines, partner: rec.partner, durable: rec.saved || rec.duplicate };
+  };
+  /**
+   * The visitor is told "got it" only when the lead reached at least one
+   * durable place: a sent email, or a ledger row. Otherwise a truthful
+   * failure, and a log line that says what failed, never what was typed.
+   */
+  const finish = (label: string, result: { ok: boolean; sent: boolean }, att: { durable: boolean; partner: unknown }) => {
+    if (!result.sent && !att.durable) {
+      console.error(`${label}: not delivered anywhere (email ${result.ok ? "not configured" : "failed"}, ledger ${supabaseConfigured() ? "write failed" : "not configured"})`);
+      return reply(502, { error: "I couldn't send that just now. Please text or email me directly." });
+    }
+    return reply(200, { ok: true, sent: result.sent, saved: att.durable, referred: Boolean(att.partner) });
   };
 
   // One field, either way: an email, or something with at least 7 digits.
@@ -90,28 +107,27 @@ export async function POST(request: NextRequest) {
   // The checkup's "check it for me" form: a website and a way to reply.
   if (fromCheckup) {
     if (currentSite.length < 3 || (!email && !phone)) return reply(400, { error: "Please add your website and a phone number or email." });
-    const att = await attribute({ kind: "checkup", website: currentSite, contact: email || phone, checkup: checkup || null, utm_source: source.utm_source || null });
+    const att = await attribute({ kind: "checkup", website: currentSite, contact: email || phone, checkup });
     const text = [
       "Website Checkup: please check my site",
       "",
       `Website: ${currentSite}`,
       `Contact: ${email || phone}${email ? " (email)" : " (phone)"}`,
       checkup ? `Result: ${checkup}` : "Result: (not given)",
-      ...(att.line ? [att.line] : []),
+      ...att.lines,
       "",
       sourceLine,
       `Sent: ${new Date().toISOString()}`,
     ].join("\n");
     const result = await deliver({ subject: `Checkup review: ${currentSite}${att.partner ? ` · via ${att.partner.code}` : ""}`, text, replyTo: email || undefined, label: "checkup review request" });
-    if (!result.ok) return reply(502, { error: "I couldn't send that just now. Please text or email me directly." });
-    return reply(200, { ok: true, sent: result.sent, referred: Boolean(att.partner) });
+    return finish("checkup review request", result, att);
   }
 
   if (name.length < 2 || business.length < 2 || (!email && !phone)) {
     return reply(400, { error: "Please fill in your name, your business, and a phone number or email." });
   }
 
-  const att = await attribute({ kind: "quote", business, contact_name: name, contact: email || phone, website: currentSite || null, checkup: checkup || null, utm_source: source.utm_source || null });
+  const att = await attribute({ kind: "quote", business, contact_name: name, contact: email || phone, website: currentSite, checkup, heard });
   const text = [
     `Quote + free demo request from ${name}`,
     "",
@@ -122,7 +138,8 @@ export async function POST(request: NextRequest) {
     `What the site should help customers do: ${goals || "(not given)"}`,
     `How they heard / who referred: ${heard || "(not given)"}`,
     ...(checkup ? ["", checkup] : []),
-    ...(att.line ? ["", att.line] : []),
+    "",
+    ...att.lines,
     "",
     sourceLine,
     `Sent: ${new Date().toISOString()}`,
@@ -130,6 +147,5 @@ export async function POST(request: NextRequest) {
 
   const subject = `Quote + demo: ${business} (${name})${heard ? ` · via ${heard}` : ""}${att.partner ? ` · ref ${att.partner.code}` : ""}${checkup ? " · from the checkup" : ""}`;
   const result = await deliver({ subject, text, replyTo: email || undefined, label: "quote + demo request" });
-  if (!result.ok) return reply(502, { error: "I couldn't send that just now. Please text or email me directly." });
-  return reply(200, { ok: true, sent: result.sent, referred: Boolean(att.partner) });
+  return finish("quote + demo request", result, att);
 }
