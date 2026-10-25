@@ -4,7 +4,7 @@ import { getPosts } from "./blog/lib";
 import { site } from "./data/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const at = (path: string, priority: number, changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]) => ({ url: `${site.url}${path}`, lastModified: new Date(), changeFrequency, priority });
+  const at = (path: string, priority: number, changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]) => ({ url: `${site.url}${path}`, changeFrequency, priority });
   return [
     at("/", 1, "monthly"),
     at("/work", 0.9, "monthly"),
