@@ -6,8 +6,8 @@ import home from "../home/home.module.css";
 import styles from "./work.module.css";
 
 export const metadata: Metadata = pageMeta({
-  absolute: "Web Design Work & Demos, League City, TX | Stringham Web Design",
-  description: "Websites built by Stringham Web Design in League City, Texas: a live product, design demos you can click through, and work in progress, each labeled for exactly what it is.",
+  absolute: "Custom Web Design Portfolio, League City, TX | Stringham Web Design",
+  description: "Explore custom websites and design demos by Stringham Web Design in League City, TX. Every project is clearly labeled and built around a specific visitor action.",
   path: "/work",
 });
 
@@ -25,7 +25,7 @@ export default function WorkPage() {
       <section className={styles.hero} aria-labelledby="work-title">
         <div className="container">
           <p className={home.chip}>Work</p>
-          <h1 id="work-title" className={styles.h1}>Work you can click through.</h1>
+          <h1 id="work-title" className={styles.h1}>Custom website projects and demos.</h1>
           <p className={home.lede}>Every project labeled for exactly what it is: a live product, a design demo, a work in progress or a concept. Nothing here is padded, and nothing claims a result.</p>
           <div className={home.actions}>
             <a className="btn" href="/#quote" data-track="cta" data-location="work-hero" data-magnetic>Get a quote + free demo</a>
