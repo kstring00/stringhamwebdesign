@@ -13,8 +13,8 @@ import s from "./home/home.module.css";
 // import Testimonials from "./home/Testimonials";
 
 export const metadata: Metadata = pageMeta({
-  absolute: "Web Design in League City, TX | Stringham Web Design",
-  description: "Custom websites for owner-run businesses in League City, Texas. Every site is quoted after a free website checkup or a short call: a fixed written quote, a free homepage demo, payment plans, no contract.",
+  absolute: "Custom Web Design in League City, TX | Stringham Web Design",
+  description: "Custom website design for businesses in League City, Houston and beyond. Thoughtful customer journeys, distinctive visuals, fixed written quotes and a free homepage demo.",
   path: "/",
 });
 
@@ -29,8 +29,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
       <section className={`${s.section} ${s.workSection}`} id="work" aria-labelledby="work-title">
         <div className="container">
           <div className={s.head}>
-            <h2 id="work-title" className={s.h2} data-reveal>Work you can click through.</h2>
-            <p className={s.lede}>Three live sites and two demos, each labeled for exactly what it is. Drag, swipe or tap through; the full write-ups are on the <a className={`u ${s.inlineLink}`} href="/work">work page</a>.</p>
+            <h2 id="work-title" className={s.h2} data-reveal>Custom website design you can explore.</h2>
+            <p className={s.lede}>Live projects and clearly labeled demos, each designed around a specific visitor action. Drag, swipe or tap through, then explore the <a className={`u ${s.inlineLink}`} href="/work">full web design portfolio</a>.</p>
           </div>
           <Coverflow items={showcaseWork} label="Selected work" />
         </div>
