@@ -23,13 +23,13 @@ export default function Hero() {
       <BuildFieldMount activeColor={CURSOR_DOT} />
       <div className={`container ${s.heroGrid}`}>
         <div className={s.heroText} data-field-clear>
-          <p className={s.chip}>Custom websites · Built in Texas, for businesses anywhere</p>
+          <p className={s.chip}>Custom web design · League City, TX · Nationwide</p>
           <h1 id="hero-title" className={s.h1}>
-            <span className={s.line}><span>Websites that get</span></span>
-            <span className={s.line}><span>businesses more calls.</span></span>
+            <span className={s.line}><span>Custom web design.</span></span>
+            <span className={s.line}><span>Made for your customers.</span></span>
           </h1>
           <p className={s.sub}>
-            I design, build and run custom websites for owner-run businesses. Ask for a quote and I&rsquo;ll build you a free demo of your homepage to go with it, so you see your new site before you spend a dollar.
+            I design, build and care for custom websites around your customers: what they need to understand, what builds trust, and how they take the next step. Based in League City, serving businesses anywhere. Every quote includes a free homepage demo.
           </p>
           <div className={s.actions}>
             <a className="btn" href="#quote" data-track="cta" data-location="hero" data-hero-cta data-magnetic>
