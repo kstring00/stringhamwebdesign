@@ -43,7 +43,7 @@ export default function Pricing() {
             <article className={`${s.plan} ${p.key === "site" ? s.planStart : ""}`} key={p.key} aria-labelledby={`plan-${p.key}`} data-reveal>
               {"badge" in p && p.badge ? <p className={s.badge}>{p.badge}</p> : null}
               <h3 id={`plan-${p.key}`} className={s.planName}>{p.name}</h3>
-              <p className={s.price}><b>{p.price}</b>{p.cadence ? <> <span>{p.cadence}</span></> : null}</p>
+              <p className={s.price}><b>{p.price}</b>{p.cadence ? <>{p.cadence.startsWith("/") ? "" : " "}<span>{p.cadence}</span></> : null}</p>
               {"priceNote" in p && p.priceNote ? <p className={s.priceNote}>{p.priceNote}</p> : null}
               <ul className={s.planLines}>
                 {"highlight" in p && p.highlight ? <li className={s.highlight}><span aria-hidden="true">★</span> {p.highlight}</li> : null}

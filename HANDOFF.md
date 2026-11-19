@@ -17,19 +17,15 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
 - One job: get small local business owners (self storage, RV parks, fishing
   guides, horse boarding, marinas, and other owner-run local businesses) to
   request a free check. The home page does all of it; the form is the anchor.
-- Pricing is quote-only. Every service (website, Listing Fix, Website
-  Care) is quoted separately by scope, and no dollar amount appears
-  anywhere a visitor or Google can see it: page copy, meta, Open Graph,
-  Twitter cards, image alt text, schema, or the terms. Websites: "Every
-  site is quoted after I see what you have. You get a fixed written quote
-  before anything starts. Payment plans available." Listing Fix: "Quoted
-  after your free check, done within 7 days." Website Care: "Monthly care
-  plans, quoted with your site." Wherever price comes up, the next step is
-  the checkup (or call or text 413-454-3509; a booking link replaces that
-  once NEXT_PUBLIC_BOOKING_URL is set). The wording lives in
-  `app/data/offer.ts` (`pricing`); there is deliberately no price table in
-  the code, so a number can't leak back in. Keep the terms and that file
-  matching. The only guarantees on the site are the ones in the terms.
+- Pricing, matching `content/service-terms.md`: custom websites start at
+  $300 and the final price is set in the written quote (fixed, not hourly;
+  payment plans available); the Listing Fix is $25 one-time; Website Care
+  is $25 a month, month to month. The three numbers live in
+  `app/data/offer.ts` (`PRICES`) and nowhere else; change them and the
+  terms together. Wherever price comes up, the next step is the checkup
+  (or call or text 413-454-3509; a booking link replaces that once
+  NEXT_PUBLIC_BOOKING_URL is set). The only guarantees on the site are the
+  ones in the terms.
 - Plain words. "Google listing," "customers," "calls." No "SEO," "GBP,"
   "citations," "conversion" in visible copy. First person from Kyle.
 - Minimal: one accent (forest green `#2F5D46`), generous space, at most two

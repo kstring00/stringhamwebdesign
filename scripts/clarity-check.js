@@ -5,7 +5,7 @@ const { chromium } = require('playwright');
 const BASE = process.env.BASE || 'http://localhost:3000'; const ID = process.env.CLARITY_ID || '';
 let fails = 0; const ok = (l, c, x = '') => { if (!c) fails++; console.log(`${c ? 'ok  ' : 'FAIL'} ${l}${x ? '  ' + x : ''}`); };
 (async () => {
-  const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+  const b = await chromium.launch({ executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
   for (const path of ['/', '/contact', '/family-resource-hub']) {
     const ctx = await b.newContext(); const p = await ctx.newPage(); const reqs = [];
     p.on('request', (r) => { if (/clarity\.ms/.test(r.url())) reqs.push(r.url()); });

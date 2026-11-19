@@ -97,7 +97,10 @@ textarea.input {
   background: #fff;
 }
 
+/* The card is white even inside the dark quote section, so its heading
+   sets its own color instead of inheriting the section's white. */
 .sent h3 {
+  color: var(--ink);
   font-size: 1.8rem;
 }
 

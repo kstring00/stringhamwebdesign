@@ -5,7 +5,7 @@ Effective October 10, 2026
 
 These terms apply when you buy a Listing Fix, a website, or Website Care from Stringham Web Design LLC ("we," "us"). By paying, you ("you," the business owner) agree to them. If anything here is unclear, email us before you pay.
 
-## 1. Listing Fix
+## 1. Listing Fix ($25, one-time)
 
 **What we do**
 - Review and correct your Google Business Profile: business name, categories, hours, phone, website link, description, services or products, and the photos you provide.
@@ -15,22 +15,22 @@ These terms apply when you buy a Listing Fix, a website, or Website Care from St
 
 **Timeline:** finished within 7 days of receiving manager access to your Google listing and the information we need from you.
 
-**Credit toward a website:** if you buy a website from us within 60 days, the Listing Fix fee counts toward the website price.
+**Credit toward a website:** if you buy a website from us within 60 days, the $25 Listing Fix fee counts toward the website price.
 
 **Not included:** paid ads, writing or posting reviews, creating new profiles for locations that don't exist, or changes a directory refuses to make. When a directory refuses or ignores a change request, we'll tell you what happened.
 
-## 2. Website
+## 2. Website (from $300)
 
 - The pages, features and timeline are listed in your written quote.
 - **Free demo:** every website quote comes with a demo of your homepage, designed for your business at no charge, so you can see it before you pay anything. The demo is ours until a quote is accepted; it isn't a finished site and isn't published.
 - Includes design, building, a contact or request form, launch on your domain, basic search setup, and two rounds of changes.
-- **Pricing:** Final price is set in your written quote. Previously accepted written quotes keep their agreed pricing.
+- **Pricing:** custom websites start at $300. The final price is set in your written quote, before any payment, and it's fixed, not hourly. Previously accepted written quotes keep their agreed pricing.
 - **Payment:** Payment plans are available; the schedule is written into your quote. Any eligible Listing Fix credit is applied first. Any start payment or deposit must be stated in the written quote. Unless your quote sets a payment plan, the remaining balance is due when you approve the finished site, before it goes live on your domain.
 - **Ownership:** once the website is paid in full, you own it and its content. Your domain and accounts stay in your name.
 - We may show your website in our portfolio unless you ask us not to.
 - **Referrals:** if someone referred you to us, we pay them 20% of your website's build price within 14 days after it's paid in full (Website Care isn't included). We pay it ourselves; it never changes your price. Partners follow our [partner terms](/partners/terms).
 
-## 3. Website Care
+## 3. Website Care ($25/month)
 
 **Included each month**
 - Website hosting and upkeep: kept fast, secure and online.
