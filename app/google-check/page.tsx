@@ -9,7 +9,7 @@ import styles from "./google.module.css";
 
 export const metadata: Metadata = pageMeta({
   absolute: "Free Google Listing Check, League City, TX | Stringham Web Design",
-  description: "A free check of how your business shows up on Google and the directories, texted to you within 24 hours. Then a Listing Fix, quoted after your free check and done within 7 days, with before-and-after screenshots. League City, Texas.",
+  description: "A free check of how your business shows up on Google and the directories, texted to you within 24 hours. Then a $25 Listing Fix, done within 7 days with before-and-after screenshots. League City, Texas.",
   path: "/google-check",
 });
 

@@ -99,7 +99,7 @@ export default function LeadRow({ lead, rate }: { lead: LeadView; rate: number }
           </select>
         </label>
         <label>Build price
-          <span className={s.money}><span>$</span><input type="number" inputMode="decimal" min={0} step={50} value={price} placeholder="1500" onChange={(e) => { setPrice(e.target.value); setSaved(""); }} /></span>
+          <span className={s.money}><span>$</span><input type="number" inputMode="decimal" min={0} step={50} value={price} placeholder="300" onChange={(e) => { setPrice(e.target.value); setSaved(""); }} /></span>
         </label>
         <label className={s.notes}>Notes
           <input value={notes} maxLength={1000} onChange={(e) => { setNotes(e.target.value); setSaved(""); }} />

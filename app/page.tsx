@@ -14,7 +14,7 @@ import s from "./home/home.module.css";
 
 export const metadata: Metadata = pageMeta({
   absolute: "Web Design in League City, TX | Stringham Web Design",
-  description: "Custom websites for owner-run businesses in League City, Texas. Every site is quoted after a free website checkup or a short call: a fixed written quote, a free homepage demo, payment plans, no contract.",
+  description: "Custom websites from $300 for owner-run businesses in League City, Texas. Every site is quoted after a free website checkup or a short call: a fixed written quote, a free homepage demo, payment plans, no contract.",
   path: "/",
 });
 

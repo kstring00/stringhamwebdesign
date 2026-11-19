@@ -32,12 +32,11 @@ partner form), `/terms`, `/privacy`, and the unlinked
 
 ## Where things live
 
-- `app/data/offer.ts` — the offer in one place: how pricing is worded
-  (`pricing`). Pricing is quote-only: every service is quoted separately
-  by scope, with no dollar amounts anywhere public (copy, meta, social
-  cards, alt text, schema, terms), and there's no price table in the code.
-  It holds the website line (fixed written quote, payment plans), what
-  affects the price, the Listing Fix and Website Care lines, the three pricing
+- `app/data/offer.ts` — the offer in one place: the three prices
+  (`PRICES`: websites from $300, Listing Fix $25, Website Care $25/month)
+  and how pricing is worded (`pricing`: the final website price is set in
+  the written quote, payment plans), what affects the price, the Listing
+  Fix and Website Care lines, the three pricing
   cards (Website, Website Care, the Google listing path), the three-step
   strip, the home page's five questions, and /google-check's findings,
   steps, Listing Fix card and questions. The site's one action is a quote

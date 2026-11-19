@@ -28,7 +28,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
   try { hits = execSync('grep -rniE "lorem|placeholder|example\\.com|\\(000\\)|000-0000|\\bTODO\\b|Texas ABA|ABA Centers|texasabacenterscg" app content --include=*.ts --include=*.tsx --include=*.md --include=*.css | grep -viE "input placeholder|::placeholder|placeholder=|Honeypot|placeholder text" | grep -vE "^app/data/(casaMatcha|flags)\\.ts:" || true').toString().trim(); } catch (e) { hits = e.stdout.toString(); }
   ok('no placeholder text or banned names in the source', hits === '', hits.split('\n').slice(0, 4).join(' | '));
 
-  const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-gl=swiftshader'] });
+  const b = await chromium.launch({ executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-gl=swiftshader'] });
   const seen = new Map();
   const queue = ['/'];
   const externals = new Map();
