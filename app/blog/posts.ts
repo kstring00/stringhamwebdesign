@@ -31,7 +31,7 @@ const EXTRAS: Record<string, Partial<PostExtras>> = {
     cover: "convert",
     tocTitle: "The process",
     related: ["do-i-need-a-website-if-business-is-good"],
-    demo: "lake-city-storage",
+    demo: "common-ground",
     checkup: true,
   },
 };

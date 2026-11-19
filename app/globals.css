@@ -22,11 +22,6 @@
   --cyan: #01cffb;
   /* The logo's ribbon, navy through blue to cyan: for accents only. */
   --brand-gradient: linear-gradient(90deg, #073f82 0%, #0067ec 45%, #0092fc 75%, #01cffb 100%);
-  /* The partner view's accent: violet, so it reads at a glance as the
-     other side of the site, and sits beside the blue. */
-  --violet: #5a46f0;
-  --violet-deep: #4331c9;
-  --violet-soft: #ecebfe;
   --line: #dce3ee;
   --line-strong: rgba(11, 27, 61, 0.3);
 

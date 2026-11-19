@@ -1,21 +1,26 @@
 # Open work
 
-Updated 2026-10-09 (referral terms, /websites).
+Updated 2026-11-19 (mental-health practice rework, Phase 1).
 
 ## Needs the owner
 
 - Send one real request through each form on the live site (free check,
-  website quote, partner inquiry) and confirm each arrives at
+  website quote) and confirm each arrives at
   kyle@stringhamwebdesign.com. Without `RESEND_API_KEY` in Vercel
   Production, requests are only written to the Vercel logs.
 - Referral reward: decide whether it applies to any new client, or only to
   businesses that weren't already talking to Kyle, and whether there's a
   payout window. Today the site says only "paid once the business has paid
   for its website in full".
-- Dubai & Dips is shown as archived with a demo link
-  (dubaianddips2.vercel.app). Confirm the owner is fine with it being public.
-- The Vary Board is off the partner page (`onPartners: false`) until the owner
-  agrees. Northline and Casa Matcha are off too; their data is kept.
+- The Support Shelf (thesupportshelf.org, live, Kyle's own product) is to be
+  added to `app/data/work.ts` with real 1440 and 390 captures. It isn't in
+  the list yet: the build sandbox couldn't reach the site to capture it.
+- Website Care promises replies to Google reviews (Service Terms, section 3,
+  and the pricing card). For a therapy practice, replying to a review can
+  confirm someone is a client. Decide whether that line stays, changes or
+  goes before Phase 2 rewrites the terms.
+- The blog and the Free Website Checkup still speak to "business owners" and
+  "customers"; the checkup is reworded in Phase 4, the blog isn't scheduled.
 - Set `NEXT_PUBLIC_CLARITY_ID` in Vercel (Production only) if it isn't, so the
   custom events (`free_check_submit`, `website_quote_submit`, `cta_click`,
   `call_tap`, `email_click`, `work_sample_click`, `terms_view`) start

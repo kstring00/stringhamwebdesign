@@ -62,7 +62,7 @@ function pose(o: number) {
 const pad = (n: number) => String(n).padStart(2, "0");
 
 /**
- * The selected-work carousel, shared by the home page and /partners: the
+ * The selected-work carousel on the home page: the
  * projects as browser-framed screenshots in a 3D coverflow, the centred
  * one flat and forward, its neighbours turned in on either side. Drag or
  * swipe, the arrows, the dots, a tap on a side card, or the arrow keys with
@@ -73,7 +73,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
  * Under reduced motion every move is instant. GSAP only (Draggable for the
  * drag); one number, the position, drives every card.
  */
-export default function Coverflow({ items, label, accent = "business" }: { items: CoverItem[]; label: string; accent?: "business" | "partners" }) {
+export default function Coverflow({ items, label }: { items: CoverItem[]; label: string }) {
   const n = items.length;
   const stage = useRef<HTMLDivElement>(null);
   const cards = useRef<(HTMLLIElement | null)[]>([]);
@@ -184,7 +184,7 @@ export default function Coverflow({ items, label, accent = "business" }: { items
   };
 
   return (
-    <div className={s.root} data-accent={accent}>
+    <div className={s.root}>
       <div ref={stage} className={s.stage} role="region" aria-roledescription="carousel" aria-label={label} tabIndex={0} onKeyDown={onKey}>
         <ul className={s.track}>
           {items.map((w, i) => {

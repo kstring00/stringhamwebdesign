@@ -33,8 +33,8 @@ const interTight = Inter_Tight({
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: `Web Design in League City, TX | ${site.name}`, template: `%s | ${site.name}` },
-  description: "Custom websites from $300 for owner-run businesses in League City, Texas. Every site is quoted after a free website checkup or a short call: a fixed written quote, a free homepage demo, payment plans, no contract.",
+  title: { default: `Web Design for Therapists & Mental Health Practices | ${site.name}`, template: `%s | ${site.name}` },
+  description: "Custom websites from $300 for therapists, counselors and mental-health practices. Thoughtfully designed, clear upfront pricing and a free homepage demo. Based in League City, Texas.",
   applicationName: site.name,
   authors: [{ name: site.person, url: site.url }],
   creator: site.person,

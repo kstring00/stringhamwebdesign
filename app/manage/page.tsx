@@ -230,7 +230,7 @@ export default async function ManagePage({ searchParams }: { searchParams: Promi
                 );
               })}
             </ul>
-          ) : <p className={s.empty}>No partners yet. Share <a className="u" href="/partners/join">/partners/join</a>.</p>}
+          ) : <p className={s.empty}>No partners. New partner signups are closed; existing partners&rsquo; links still credit them.</p>}
         </>
       )}
     </section>

@@ -17,29 +17,7 @@
 
 .where { color: var(--muted); }
 
-.referral {
-  max-width: 30rem;
-  margin-top: 0.5rem;
-  padding: 0.9rem 1.1rem;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: #fff;
-  color: var(--ink-soft);
-  line-height: 1.5;
-}
-
-.referral b { color: var(--ink); }
-
-.partnerLinks {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 1.25rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.partnerLinks a, .col li a {
+.col li a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;

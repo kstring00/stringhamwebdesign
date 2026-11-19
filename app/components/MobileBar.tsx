@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 
-import { cta, partnerCta } from "../data/nav";
+import { cta } from "../data/nav";
 import { site } from "../data/site";
 import styles from "./MobileBar.module.css";
 
@@ -15,7 +15,6 @@ import styles from "./MobileBar.module.css";
  */
 export default function MobileBar() {
   const pathname = usePathname();
-  const action = pathname.startsWith("/partners") ? partnerCta : cta;
   const bar = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -24,8 +23,8 @@ export default function MobileBar() {
     delete el.dataset.hidden;
     let overForm = false, typing = false;
     const apply = () => { if (overForm || typing) el.dataset.hidden = "1"; else delete el.dataset.hidden; };
-    // The form section with the page's own submit button: #quote on home, the form on /google-check and /partners.
-    const target = document.querySelector("#quote, #free-check, #partner-form");
+    // The form section with the page's own submit button: #quote on home, the form on /google-check.
+    const target = document.querySelector("#quote, #free-check");
     const io = target ? new IntersectionObserver(([e]) => { overForm = e.isIntersecting; apply(); }, { threshold: 0.15 }) : null;
     if (target && io) io.observe(target);
     const isField = (t: EventTarget | null) => t instanceof HTMLElement && t.matches("input, textarea, select");
@@ -46,8 +45,8 @@ export default function MobileBar() {
         <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2.5h12a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H6l-3.5 3v-3H2a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" /></svg>
         Text
       </a>
-      <a className={`${styles.item} ${styles.primary}`} href={action.href} data-track="cta" data-location="mobile-bar" aria-label={action.label}>
-        {action.short}
+      <a className={`${styles.item} ${styles.primary}`} href={cta.href} data-track="cta" data-location="mobile-bar" aria-label={cta.label}>
+        {cta.short}
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
       </a>
     </nav>

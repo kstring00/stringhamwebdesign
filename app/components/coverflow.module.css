@@ -1,7 +1,6 @@
 /* The selected-work coverflow: a 3D stage of browser-framed screenshots,
    arrows at its edges, dots under it, and the centred project's text
-   below. --brand is violet inside the partner page's .view, so the same
-   component wears each side's accent. */
+   below. */
 
 .root {
   /* The card width; the side cards reach about 1.45 widths out, so 500px fits both on a desktop screen. */

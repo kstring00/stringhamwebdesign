@@ -1,12 +1,11 @@
-import { footerLinks, partnerLinks } from "../data/nav";
-import { referral } from "../data/referral";
-import { site } from "../data/site";
+import { footerLinks } from "../data/nav";
+import { site, studioWhat } from "../data/site";
 import Logo from "./Logo";
 import styles from "./Footer.module.css";
 
 /**
- * The footer: the logo, the referral line (a plain number, no counter),
- * the partner side of the site, contact, pages and the legal line.
+ * The footer: the logo, what the studio does and where, contact, pages
+ * and the legal line.
  */
 export default function Footer() {
   return (
@@ -16,12 +15,7 @@ export default function Footer() {
           <div className={styles.about}>
             <a className={styles.logoLink} href="/"><Logo className={styles.logo} /></a>
             <p className={styles.where}>{site.legalName} · {site.city}, {site.regionLong}</p>
-            <p className={styles.referral}>
-              <b>Know a business that needs a website?</b> I pay you {referral.percent} when they hire me.
-            </p>
-            <ul className={styles.partnerLinks}>
-              {partnerLinks.map((l) => <li key={l.href}><a className="u" href={l.href}>{l.label}</a></li>)}
-            </ul>
+            <p className={styles.where}>{studioWhat}</p>
           </div>
           <div className={styles.col}>
             <p className={styles.head}>Contact</p>

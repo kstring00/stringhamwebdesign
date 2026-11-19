@@ -12,9 +12,9 @@ I'm Kyle Stringham. I run Stringham Web Design LLC out of League City, Texas. Qu
 
 ## What I collect, and why
 
-**When you use the contact form.** Your name, your email, your business name, what you need, and your message. I use it to reply to you and to scope the work. That's the whole purpose. It goes to my inbox, and nowhere else.
+**When you use the contact form.** Your name, your email, your practice's name, what you need, and your message. I use it to reply to you and to scope the work. That's the whole purpose. It goes to my inbox, and nowhere else.
 
-**When you sign up as a referral partner.** Your name, email, phone if you give it, how you know business owners, and the code you pick. I use it to credit you for referrals and to pay you. Your code is the only part that ever appears in a link.
+**If you signed up as a referral partner.** New signups are closed. For existing partners I keep what you gave me then: your name, email, phone if you gave it, how you know the people you refer, and the code you picked. I use it to credit you for referrals and to pay you. Your code is the only part that ever appears in a link.
 
 **When you just visit.** Pages you view, links you click, how far you scroll, roughly where in the world you are, and what browser and device you're on. The next section covers this in full.
 
