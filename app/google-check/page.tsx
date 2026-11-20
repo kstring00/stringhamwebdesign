@@ -9,7 +9,7 @@ import styles from "./google.module.css";
 
 export const metadata: Metadata = pageMeta({
   absolute: "Free Google Listing Check, League City, TX | Stringham Web Design",
-  description: "A free check of how your business shows up on Google and the directories, texted to you within 24 hours. Then a $25 Listing Fix, done within 7 days with before-and-after screenshots. League City, Texas.",
+  description: "A free check of how your practice shows up on Google and the directories, texted to you within 24 hours. Then a $25 Listing Fix, done within 7 days with before-and-after screenshots. League City, Texas.",
   path: "/google-check",
 });
 
@@ -26,10 +26,10 @@ export default async function GoogleCheckPage({ searchParams }: { searchParams: 
         <div className="container">
           <p className={home.chip}>Free Google check · League City, Texas</p>
           <h1 id="check-title" className={styles.h1}>Is your Google listing costing you calls?</h1>
-          <p className={home.lede}>I look up your business the way your customers do, then text or email you what I find within 24 hours. Free, no obligation, and yours to keep whatever you decide.</p>
+          <p className={home.lede}>I look up your practice the way someone searching for care would, then text or email you what I find within 24 hours. Free, no obligation, and yours to keep whatever you decide.</p>
           <div className={home.actions}>
             <a className="btn" href="#free-check" data-track="cta" data-location="check-hero" data-hero-cta data-magnetic>Get my free check</a>
-            <a className={`u ${home.textLink}`} href={site.smsHref}>Or text me your business name</a>
+            <a className={`u ${home.textLink}`} href={site.smsHref}>Or text me your practice&rsquo;s name</a>
           </div>
           <p className={styles.checkupLine}>Wondering about your website too? <a className="u" href="/checkup">Try the free Website Checkup</a>: 10 questions, about 2 minutes.</p>
         </div>
@@ -74,7 +74,7 @@ export default async function GoogleCheckPage({ searchParams }: { searchParams: 
           <div className={home.about}>
             <h2 id="q-title" className={home.h2}>Questions owners ask</h2>
             <p>Still wondering? <a className="u" href={site.phoneHref}>Call or text {site.phone}</a>.</p>
-            <p>Need a website too? <a className={`u ${home.inlineLink}`} href="/#quote">Get a quote + free demo</a> of your homepage.</p>
+            <p>Need a website too? <a className={`u ${home.inlineLink}`} href="/#quote">Get a free demo</a> of your homepage.</p>
             <p>Designer disappeared? <a className={`u ${home.inlineLink}`} href="/blog/my-web-designer-disappeared">Here&rsquo;s how to get your website back.</a></p>
           </div>
           <div className={home.faq}>

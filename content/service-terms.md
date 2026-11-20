@@ -10,7 +10,6 @@ These terms apply when you buy a Listing Fix, a website, or Website Care from St
 **What we do**
 - Review and correct your Google Business Profile: business name, categories, hours, phone, website link, description, services or products, and the photos you provide.
 - Correct your listings on up to 10 major directories where changes are possible (for example Apple Maps, Bing, Facebook, Yelp and the main directories for your industry).
-- Set up a Google review link and QR code for you to share with customers.
 - Send you before-and-after screenshots of every change.
 
 **Timeline:** finished within 7 days of receiving manager access to your Google listing and the information we need from you.
@@ -28,7 +27,7 @@ These terms apply when you buy a Listing Fix, a website, or Website Care from St
 - **Payment:** Payment plans are available; the schedule is written into your quote. Any eligible Listing Fix credit is applied first. Any start payment or deposit must be stated in the written quote. Unless your quote sets a payment plan, the remaining balance is due when you approve the finished site, before it goes live on your domain.
 - **Ownership:** once the website is paid in full, you own it and its content. Your domain and accounts stay in your name.
 - We may show your website in our portfolio unless you ask us not to.
-- **Referrals:** if someone referred you to us, we pay them 20% of your website's build price within 14 days after it's paid in full (Website Care isn't included). We pay it ourselves; it never changes your price. Partners follow our [partner terms](/partners/terms).
+- **Referrals:** if someone referred you to us, we pay them 20% of your website's build price within 14 days after it's paid in full (Website Care isn't included). We pay it ourselves; it never changes your price.
 
 ## 3. Website Care ($25/month)
 
@@ -37,7 +36,7 @@ These terms apply when you buy a Listing Fix, a website, or Website Care from St
 - Your domain: we handle renewals and keep it registered in your name.
 - Up to 30 minutes of content edits (prices, hours, photos, text).
 - Keeping your Google listing and directories accurate.
-- Replying to new Google reviews within 3 business days, in a tone you approve.
+- Flagging new Google reviews to you within 3 business days. We don't reply to reviews on a practice's behalf.
 - Up to 4 Google posts.
 - A one-page monthly report of calls and requests.
 

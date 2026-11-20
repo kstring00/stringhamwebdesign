@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
 
 import { pageMeta } from "../data/meta";
-import { allWork, kindLabel, type WorkKind } from "../data/work";
+import { kindLabel, work, type WorkKind } from "../data/work";
 import home from "../home/home.module.css";
 import styles from "./work.module.css";
 
 export const metadata: Metadata = pageMeta({
-  absolute: "Custom Web Design Portfolio, League City, TX | Stringham Web Design",
-  description: "Explore custom websites and design demos by Stringham Web Design in League City, TX. Every project is clearly labeled and built around a specific visitor action.",
+  absolute: "Web Design Work | Stringham Web Design",
+  description: "Websites designed and built by Stringham Web Design, a studio for therapists, counselors and mental-health practices. Every project is labeled for exactly what it is.",
   path: "/work",
 });
 
 /** The labels present on the page, for the legend. */
-const legendKinds = [...new Set(allWork.map((w) => w.kind))] as WorkKind[];
+const legendKinds = [...new Set(work.map((w) => w.kind))] as WorkKind[];
 
 /**
  * The full portfolio: every project with its write-up, labeled for what
@@ -25,10 +25,10 @@ export default function WorkPage() {
       <section className={styles.hero} aria-labelledby="work-title">
         <div className="container">
           <p className={home.chip}>Work</p>
-          <h1 id="work-title" className={styles.h1}>Custom website projects and demos.</h1>
-          <p className={home.lede}>Every project labeled for exactly what it is: a live product, a design demo, a work in progress or a concept. Nothing here is padded, and nothing claims a result.</p>
+          <h1 id="work-title" className={styles.h1}>Work you can explore.</h1>
+          <p className={home.lede}>Every project is labeled for exactly what it is. Two are my own products for autism families; one was built for a life coach. None of the three is a therapy practice&rsquo;s site, and nothing here claims a result.</p>
           <div className={home.actions}>
-            <a className="btn" href="/#quote" data-track="cta" data-location="work-hero" data-magnetic>Get a quote + free demo</a>
+            <a className="btn" href="/#quote" data-track="cta" data-location="work-hero" data-magnetic>Get a free homepage demo</a>
             <a className={`u ${home.textLink}`} href="/#pricing">See pricing</a>
           </div>
           {legendKinds.length > 1 ? (
@@ -47,23 +47,22 @@ export default function WorkPage() {
       <section className={`${home.section} ${home.alt}`} aria-label="Projects">
         <div className="container">
           <ol className={styles.list}>
-            {allWork.map((w, i) => {
+            {work.map((w, i) => {
               const href = w.liveUrl ?? w.previewUrl;
-              const draft = !w.confirmed;
+              
               return (
                 <li key={w.key} className={styles.project} id={w.key}>
                   <div className={styles.shot}>
                     <div className={home.chrome}><i /><i /><i /><span>{href ? new URL(href).host : w.name}</span></div>
                     <picture>
                       <source type="image/avif" srcSet={`/showcase/${w.key}-desktop.avif`} />
-                      <img src={`/showcase/${w.key}-desktop.webp`} alt={w.alt.desktop} width={1440} height={900} loading={i === 0 ? "eager" : "lazy"} decoding="async" />
+                      <img src={`/showcase/${w.key}-desktop.webp`} alt={w.alt} width={1440} height={900} loading={i === 0 ? "eager" : "lazy"} decoding="async" />
                     </picture>
                   </div>
                   <div className={styles.text}>
                     <p className={styles.meta}>
                       <span className={`${styles.kind} ${styles[`kind_${w.kind.replace("-", "_")}`] ?? ""}`}>{kindLabel[w.kind].label}</span>
                       <span>{w.stage}</span>
-                      {draft ? <span className={styles.draft}>Draft · preview only</span> : null}
                     </p>
                     <h2 className={styles.name}>{w.name}</h2>
                     {w.type ? <p className={styles.type}>{w.type}</p> : null}
@@ -85,10 +84,10 @@ export default function WorkPage() {
 
       <section className={home.section} aria-labelledby="work-cta-title">
         <div className={`container ${styles.cta}`}>
-          <h2 id="work-cta-title" className={home.h2}>Want one of these for your business?</h2>
-          <p className={home.lede}>Ask for a quote and I&rsquo;ll build a free demo of your homepage to go with it, so you see your site before you spend a dollar.</p>
+          <h2 id="work-cta-title" className={home.h2}>Want to see one for your practice?</h2>
+          <p className={home.lede}>Ask for a free demo and I&rsquo;ll design your homepage, with a fixed written quote to go with it, so you see your site before you spend a dollar.</p>
           <div className={home.actions}>
-            <a className="btn" href="/#quote" data-track="cta" data-location="work-end" data-magnetic>Get a quote + free demo</a>
+            <a className="btn" href="/#quote" data-track="cta" data-location="work-end" data-magnetic>Get a free homepage demo</a>
             <a className={`u ${home.textLink}`} href="/#pricing">What it costs</a>
           </div>
         </div>

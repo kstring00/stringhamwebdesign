@@ -10,7 +10,7 @@ import { useSourceFields, VISIT_KEYS } from "../lib/useSourceFields";
 
 /** Messages for a native (no-JS) post that bounced back with ?error=… */
 const NATIVE_ERRORS: Record<string, string> = {
-  fields: "Please fill in your name, your business, and a phone number or email.",
+  fields: "Please fill in your name, your practice, and a phone number or email.",
   busy: "Too many requests in a row. Please wait a few minutes.",
   send: "I couldn't send that just now.",
 };
@@ -20,8 +20,10 @@ const isPhone = (v: string) => v.replace(/\D/g, "").length >= 7;
 const R = <span className={styles.req} aria-hidden="true">*</span>;
 
 /**
- * The quote + free demo form. One contact field, a phone number or an
- * email, either accepted. Posts JSON with JavaScript, or natively to the
+ * The free homepage demo form, for a practice's owner or someone acting
+ * for it. It asks for practice contact details only, and says so: never
+ * anything about a client. One contact field, a phone number or an email,
+ * either accepted. Posts JSON with JavaScript, or natively to the
  * same route without it. The confirmation replaces the form and takes
  * focus. utm tags and the referrer ride along hidden, and so does a
  * Website Checkup result when the visitor came from /checkup (shown above
@@ -72,7 +74,7 @@ export default function QuoteForm({ sent = false, errorCode = "", checkup = "" }
     return (
       <div ref={done} className={styles.sent} role="status" tabIndex={-1}>
         <h3>Got it{who ? `, ${who}` : ""}.</h3>
-        <p>I&rsquo;ll text or email you within 24 hours to set up a short call. After that you&rsquo;ll get your fixed quote and a demo of your homepage.</p>
+        <p>I&rsquo;ll text or email you within 24 hours to set up a short call. After that you&rsquo;ll get a demo of your homepage and your fixed quote.</p>
         <p className={styles.sentSmall}>Need me sooner? <a className="u" href={site.phoneHref}>Call or text {site.phone}</a>.</p>
       </div>
     );
@@ -88,7 +90,7 @@ export default function QuoteForm({ sent = false, errorCode = "", checkup = "" }
           <input className={styles.input} id="q-name" name="name" autoComplete="name" required maxLength={100} />
         </div>
         <div className={styles.field}>
-          <label htmlFor="q-business">Business name {R}</label>
+          <label htmlFor="q-business">Practice name {R}</label>
           <input className={styles.input} id="q-business" name="business" autoComplete="organization" required maxLength={120} />
         </div>
       </div>
@@ -100,12 +102,13 @@ export default function QuoteForm({ sent = false, errorCode = "", checkup = "" }
         </div>
         <div className={styles.field}>
           <label htmlFor="q-current">Current website <small>optional</small></label>
-          <input className={styles.input} id="q-current" name="current_site" inputMode="url" maxLength={200} placeholder="yourbusiness.com" />
+          <input className={styles.input} id="q-current" name="current_site" inputMode="url" maxLength={200} placeholder="yourpractice.com" />
         </div>
       </div>
       <div className={styles.field}>
-        <label htmlFor="q-goals">What should your site help customers do? <small>optional</small></label>
-        <textarea className={styles.input} id="q-goals" name="goals" rows={3} maxLength={1000} placeholder="Call, book, order, ask for a quote…" />
+        <label htmlFor="q-goals">What should your site help people do? <small>optional</small></label>
+        <textarea className={styles.input} id="q-goals" name="goals" rows={3} maxLength={1000} placeholder="Book a consultation, call, check insurance and fees…" aria-describedby="q-goals-note" />
+        <span className={styles.fine} id="q-goals-note">About your practice only. Please don&rsquo;t include anything about a client.</span>
       </div>
       <div className={styles.field}>
         <label htmlFor="q-heard">How did you hear about me, or who referred you? <small>optional</small></label>
@@ -126,7 +129,7 @@ export default function QuoteForm({ sent = false, errorCode = "", checkup = "" }
       {state === "error" ? <p className={styles.error} role="alert">{error} Nothing was lost; try again, or <a className="u" href={site.phoneHref}>text me</a>.</p> : null}
       <div className={styles.submitRow}>
         <button className="btn" type="submit" disabled={state === "sending"} data-magnetic>
-          {state === "sending" ? "Sending…" : "Get my quote + free demo"}
+          {state === "sending" ? "Sending…" : "Get my free homepage demo"}
         </button>
         <p className={styles.fine}>No obligation. I reply within 24 hours. <a className="u" href="/privacy">Privacy</a></p>
       </div>

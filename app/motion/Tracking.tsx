@@ -12,8 +12,8 @@ import { track } from "../lib/track";
  * email_click on any mailto link, blog_cta_text and blog_cta_quote on a
  * post's text and quote buttons (with the post's slug), and terms_view
  * when the terms page opens.
- * The forms send quote_submit, google_check_submit and partner_submit; the
- * work carousel sends carousel_interaction.
+ * The forms send quote_submit and google_check_submit; the
+ * home page's project cards send cta_click with their project.
  */
 export default function Tracking() {
   const pathname = usePathname();

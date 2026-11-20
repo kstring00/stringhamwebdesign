@@ -1,41 +1,34 @@
 /**
- * Selected work, shown on /partners. Every project is labeled for exactly
- * what it is. Nothing here is a paid client engagement, and no project
- * claims results.
+ * Selected work: one list, shown in this order on the home page and on /work. Every project is labeled for exactly what it is, and no
+ * project claims results.
+ *
+ * None of these is a commissioned website for a therapy or counseling
+ * practice, and the copy around them must never say or imply otherwise.
+ * `type` and `stage` say what each one is: two of Kyle's own products for
+ * autism families, and a site built for a life coach.
  *
  * `kind` is the honest state of the project:
  *   live        public and in use
  *   demo        a design demo with a preview link; not a client's live site
- *   in-progress built with the business owner, not launched
+ *   in-progress built with the owner, not launched
  *   concept     built on spec, never commissioned
+ *   archived    earlier design work, no longer in active development
  *
- * `onHome`: in the home page's work carousel (and the hero's browser
- * frames), in this order. Three demos, each labeled; Common Ground lives
- * on /work. `onWork`: on the /work portfolio.
+ * A project for someone else goes in this list only after Kyle confirms
+ * its label and the owner's OK to show it. `liveUrl` is only for something
+ * that is actually live; `previewUrl` only for a public preview Kyle has
+ * checked. Leave both empty rather than guess.
  *
- * `onPartners`: shown in the /partners portfolio. Projects set to false keep
- * their data and screenshots here so they can come back later.
- *
- * `confirmed`: Kyle has confirmed the status label AND, for a business he
- * doesn't own, that the owner is fine with it being shown. Unconfirmed
- * projects render only on preview deployments (and locally with
- * SHOW_DRAFT_WORK=1), marked as drafts; production never shows them.
- *
- * `liveUrl` is only for something that is actually live. `previewUrl` is
- * only for a public preview Kyle has checked works and the owner is fine
- * with sharing. Leave both empty rather than guess.
- *
- * Screens are real captures of each project's own code, run locally, at
- * 1440 and 390 wide, under public/showcase/<key>-desktop|mobile.(avif|webp).
- * A project without a phone capture leaves `alt.mobile` out, and shows
- * desktop-only (the hero wall never fakes a phone view from a desktop one).
+ * Screens are real captures of each project's first screen at 1440 x 900,
+ * under public/showcase/<key>-desktop.(avif|webp), taken with
+ * scripts/capture-work.js. `alt` says what the capture shows.
  */
 export type WorkKind = "live" | "demo" | "in-progress" | "concept" | "archived";
 
 export const kindLabel: Record<WorkKind, { label: string; means: string }> = {
-  live: { label: "Live product", means: "Public and in use." },
+  live: { label: "Live", means: "Public and in use." },
   demo: { label: "Design demo", means: "Built to show the approach. Not a client's live site." },
-  "in-progress": { label: "Work in progress", means: "Built with the business owner. Not launched yet." },
+  "in-progress": { label: "Work in progress", means: "Built with the owner. Not launched yet." },
   concept: { label: "Concept", means: "Built on spec. Never commissioned." },
   archived: { label: "Archived", means: "Earlier design work, no longer in active development." },
 };
@@ -43,31 +36,23 @@ export const kindLabel: Record<WorkKind, { label: string; means: string }> = {
 export type Work = {
   key: string;
   name: string;
-  /** A shorter name for small spaces (the hero wall's browser bars), when `name` is long. */
+  /** A shorter name for small spaces, when `name` is long. */
   shortName?: string;
   kind: WorkKind;
-  /** A short line after the status pill, saying where the project stands. */
+  /** A short line after the status pill, saying whose project it is and where it stands. */
   stage: string;
   /** One plain line on what it is. */
   what: string;
-  /** What kind of business or project it is, in a few words. */
+  /** What kind of organization or project it is, in a few words. */
   type?: string;
   /** The one action the site was built around. */
   builtFor?: string;
-  /** The carousel chip: the kind, then where the demo stands. */
-  chip?: string;
-  /** A testimonial, only with the person's written permission. Never invented. */
-  testimonial?: { quote: string; name: string; business: string };
   /** What was actually designed and built. Features, never outcomes or metrics. */
   built: string[];
   liveUrl?: string;
   previewUrl?: string;
-  /** `mobile` only when there is a real phone capture; without one the project shows desktop-only. */
-  alt: { desktop: string; mobile?: string };
-  onHome?: boolean;
-  onWork?: boolean;
-  onPartners: boolean;
-  confirmed: boolean;
+  /** What the desktop capture shows. */
+  alt: string;
 };
 
 export const work: Work[] = [
@@ -85,36 +70,7 @@ export const work: Work[] = [
     type: "Support hub for autism families · my own product",
     builtFor: "Help a parent find one clear next step today.",
     liveUrl: "https://www.commongroundautism.org",
-    alt: {
-      desktop: "Common Ground home page: “Real autism support for real families,” with a Find My Next Step button",
-      mobile: "Common Ground home page on a phone",
-    },
-    onWork: true,
-    onPartners: true,
-    confirmed: true,
-  },
-  {
-    key: "bcba-prep",
-    name: "BCBA Prep by Bee the Behavior Bae",
-    shortName: "BCBA Prep",
-    kind: "live",
-    stage: "Built for a BCBA candidate · live",
-    type: "BCBA exam prep",
-    what: "A study site for BCBA exam candidates, built around the nine exam domains so students always know what to study next.",
-    builtFor: "Start studying a domain.",
-    built: [
-      "A homepage that lays out the nine BCBA exam domains (A–I), each linking to its own study page.",
-      "Student sign-up and accounts on a Supabase backend.",
-      "A phone view built to hook visitors from TikTok, and a desktop view built for real study sessions.",
-    ],
-    liveUrl: "https://beethebehaviorbae.com",
-    alt: {
-      desktop: "BCBA Prep home page: “Nine domains. One standard.” above a stack of book spines, one per exam domain, from Domain A Foundations to Domain E Ethics",
-    },
-    onWork: true,
-    onPartners: true,
-    // Bryana (the owner) said it's fine to show.
-    confirmed: true,
+    alt: "Common Ground home page: “Real autism support for real families,” with a Find My Next Step button",
   },
   {
     key: "growthgains",
@@ -130,126 +86,28 @@ export const work: Work[] = [
       "A three-step start flow: what you're navigating, what you'd most like to change, then a consultation time, with those answers carried into the booking.",
     ],
     liveUrl: "https://rawrxd-nu.vercel.app/",
-    alt: {
-      desktop: "GrowthGains home page: “You know something needs to change,” a Book a free consultation button, and a portrait beside a current-to-next-chapter diagram",
-      mobile: "GrowthGains home page on a phone",
-    },
-    onHome: true,
-    onWork: true,
-    onPartners: true,
-    confirmed: true,
+    alt: "GrowthGains home page: “You know something needs to change,” a Book a free consultation button, and a portrait beside a current-to-next-chapter diagram",
   },
   {
-    key: "lake-city-storage",
-    name: "Lake City Self Storage",
-    kind: "demo",
-    chip: "Design demo · Not launched",
-    stage: "Demo · not launched",
-    type: "Family-owned storage facility",
-    what: "A demo for a family-owned storage facility that starts with what you're storing, then walks renters to the right unit type, size and price.",
-    builtFor: "Get a renter to the right unit and price.",
+    key: "support-shelf",
+    name: "The Support Shelf",
+    kind: "live",
+    stage: "My own product",
+    type: "Printable tools for autism families · my own product",
+    what: "Printable tools and guides for parents whose child is in ABA therapy, organized as four shelves a parent can pull from.",
+    builtFor: "Help a parent find the right tool for today.",
     built: [
-      "Starts with what you're storing: climate-controlled or drive-up first, then size and current price, before any price list.",
-      "Unit doors and scenes drawn in code in one reference layout, so the same picture scales from a desktop stage to a phone without a second layout.",
-      "Office hours, gate access, a contact bar that stays within reach on phones, a map to the facility, and a pay-online link, all in the header.",
+      "Four shelves (Get Organized, Make a Plan, Everyday Life, Support at Home), each with free and paid printables.",
+      "A free ABC tracker for recording behavior and sharing it with the child's BCBA.",
+      "A custom front end with Shopify handling checkout.",
     ],
-    previewUrl: "https://storage-cyan-mu.vercel.app/",
-    alt: {
-      desktop: "Lake City Self Storage demo: the climate-controlled sizes step, unit sizes with current prices and a reserve button for each",
-      mobile: "Lake City Self Storage demo, the unit sizes step on a phone",
-    },
-    onHome: true,
-    onWork: true,
-    onPartners: true,
-    confirmed: true,
-  },
-  {
-    key: "dubai-and-dips",
-    name: "Dubai & Dips",
-    kind: "archived",
-    chip: "Design demo · Archived",
-    stage: "Previous design work · not a launched site",
-    type: "Clear Lake dessert shop",
-    what: "A website for a Clear Lake dessert shop, designed around ordering ahead.",
-    builtFor: "Order ahead for pickup.",
-    built: [
-      "An order-ahead flow for pickup, delivery and group orders, built to hand off to the shop’s ordering system. In the demo, ordering is simulated.",
-      "An open, closing-soon or closed status worked out in the shop’s own time zone, shown in the header, menu and footer.",
-      "An animated flight-route map that doubles as the site’s navigation. It loads only when needed and holds still for visitors who prefer reduced motion.",
-    ],
-    alt: {
-      desktop: "Dubai & Dips home page design: a chocolate bar hero with “Made here, every morning” and an order-ahead button",
-      mobile: "Dubai & Dips home page design, on a phone",
-    },
-    previewUrl: "https://dubaianddips2.vercel.app/",
-    onHome: true,
-    onWork: true,
-    onPartners: true,
-    confirmed: true,
-  },
-  {
-    key: "vary-board",
-    name: "The Vary Board",
-    kind: "in-progress",
-    stage: "In development with the owner",
-    what: "A new product site for a wall-mounted training board designed by a physical therapist. Checkout stays on the existing store.",
-    built: [
-      "A three-question plan builder that turns a visitor’s situation into a four-week plan.",
-      "A drag-to-place room planner that shows whether the board fits a bedroom, garage, patio or clinic, drawn to scale.",
-      "Every price, spec and review read from one file, with a check that blocks launch until the owners have approved each item.",
-    ],
-    alt: {
-      desktop: "The Vary Board home page in development: “One wall. Six ways to move better,” with a hexagon diagram of six exercises",
-      mobile: "The Vary Board home page in development, on a phone",
-    },
-    onPartners: false,
-    confirmed: false,
-  },
-  {
-    key: "northline",
-    name: "Northline Wheelchair Transportation",
-    kind: "in-progress",
-    stage: "Built for a local business · pre-launch",
-    what: "A booking-first site for a non-emergency wheelchair van service in north Houston.",
-    built: ["Planning, design and build, including the ride request flow. Waiting on the owner's photos, reviews and final details before launch."],
-    alt: {
-      desktop: "Northline Wheelchair Transportation home page draft: “Wheelchair van rides in north Houston,” with a Book a Ride button and a route map",
-      mobile: "Northline Wheelchair Transportation home page draft on a phone",
-    },
-    onPartners: false,
-    confirmed: false,
-  },
-  {
-    key: "casa-matcha",
-    name: "Casa Matcha",
-    kind: "concept",
-    stage: "Not commissioned",
-    what: "A concept site for a two-location matcha and coffee café, with a demo order-ahead flow.",
-    built: ["Designed and built as a concept. The café's own photos and logo would replace the stand-ins."],
-    alt: {
-      desktop: "Casa Matcha concept home page: a matcha drink splash with “Real matcha. Real coffee. Real familia.”",
-      mobile: "Casa Matcha concept home page on a phone",
-    },
-    onPartners: false,
-    confirmed: false,
+    liveUrl: "https://www.thesupportshelf.org",
+    alt: "The Support Shelf home page: “Practical support for every step of the autism journey,” a Find my shelf button, and four books on a shelf labeled Get Organized, Make a Plan, Everyday Life and Support at Home",
   },
 ];
 
-/** Preview deployments (and SHOW_DRAFT_WORK=1 locally) show unconfirmed projects as drafts. Production never does. */
-export const showDraftWork = process.env.VERCEL_ENV === "preview" || process.env.SHOW_DRAFT_WORK === "1";
-
-/** The /partners portfolio: on the partner list, and confirmed unless this is a preview. */
-export const partnerWork = work.filter((w) => w.onPartners && (w.confirmed || showDraftWork));
-
-/** The home page's carousel and hero frames: the three demos, in order. Never padded. */
-export const homeWork = work.filter((w) => w.onHome && w.confirmed);
-
-/**
- * The selected-work carousel, the same on the business side (home) and the
- * partner side (/partners): every project shown on /partners, in order.
- * Shaped for the carousel: the link is the live site, else the preview.
- */
-export const showcaseWork = partnerWork.map((w) => ({
+/** The same list, shaped for the carousel and the blog's closing card: the link is the live site, else the preview. */
+export const showcaseWork = work.map((w) => ({
   key: w.key,
   name: w.name,
   kind: w.kind,
@@ -260,17 +118,5 @@ export const showcaseWork = partnerWork.map((w) => ({
   built: w.built,
   href: w.liveUrl ?? w.previewUrl,
   linkLabel: w.liveUrl ? "Visit the live site" : w.kind === "archived" ? "View the archived demo" : "View the demo",
-  alt: w.alt.desktop,
+  alt: w.alt,
 }));
-
-/** The /work portfolio: everything confirmed, plus drafts on previews. */
-export const allWork = work.filter((w) => w.onWork && (w.confirmed || showDraftWork));
-
-/**
- * The home page's work wall: the same projects as /work (confirmed in
- * production, plus drafts on previews), each as a desktop and a phone
- * tile. New projects join the wall when they're marked confirmed. Never
- * padded: with fewer than three projects the hero falls back to the
- * three frames (HeroFrames).
- */
-export const heroWallWork = allWork;

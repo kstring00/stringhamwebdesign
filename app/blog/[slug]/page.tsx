@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { ArticleJsonLd } from "../../components/JsonLd";
 import { pageMeta } from "../../data/meta";
 import { site } from "../../data/site";
-import { showcaseWork } from "../../data/work";
+import { kindLabel, showcaseWork } from "../../data/work";
 import home from "../../home/home.module.css";
 import Cover from "../Cover";
 import FourKeys from "../FourKeys";
@@ -111,7 +111,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
                   <img src={`/showcase/${demo.key}-desktop.webp`} alt={demo.alt} width={1440} height={900} loading="lazy" decoding="async" />
                 </picture>
                 <span className={styles.demoText}>
-                  <span className={styles.demoKind}>Design demo · not launched</span>
+                  <span className={styles.demoKind}>{kindLabel[demo.kind].label} · {demo.stage}</span>
                   <b>{demo.name}</b>
                   <span className={styles.demoLink}>{demo.linkLabel}<span aria-hidden="true"> ↗</span><span className="sr-only"> (opens in a new tab)</span></span>
                 </span>

@@ -418,7 +418,7 @@ export default function Checkup() {
                 <p className={s.phoneNo}>{site.phone}</p>
                 <div className={s.ctaRow}>
                   <a className="btn" href={smsHref} onClick={() => track("checkup_cta_text", { score: String(r.score) })}>Text me your score</a>
-                  <a className={`btn btn-secondary ${s.onInkBtn}`} href={`/?checkup=${encodeURIComponent(summaryText)}${refCode ? `&ref=${encodeURIComponent(refCode)}` : ""}${srcQuery ? `&${srcQuery}` : ""}#quote`} onClick={() => track("checkup_cta_quote", { score: String(r.score) })}>Get a quote + free demo</a>
+                  <a className={`btn btn-secondary ${s.onInkBtn}`} href={`/?checkup=${encodeURIComponent(summaryText)}${refCode ? `&ref=${encodeURIComponent(refCode)}` : ""}${srcQuery ? `&${srcQuery}` : ""}#quote`} onClick={() => track("checkup_cta_quote", { score: String(r.score) })}>Get a free homepage demo</a>
                 </div>
                 <div className={s.ctaRow}>
                   <button className={s.ghost} type="button" onClick={copy}>Copy my report</button>

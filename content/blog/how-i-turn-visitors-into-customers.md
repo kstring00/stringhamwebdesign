@@ -23,7 +23,7 @@ Before I design anything, we answer one question: **what's the one action that m
 
 - A plumber wants a phone call.
 - A salon wants a booking.
-- A storage facility wants a unit reserved.
+- A counseling practice wants a consultation booked.
 - A bakery wants an order for pickup.
 
 Every page gets built around that one action. When a site asks visitors to do ten things (follow us, sign up, read our story, browse our gallery), they usually do none of them.
@@ -130,9 +130,9 @@ Your customers should feel good about choosing you, not pressured into it.
 
 ## See it applied to your business
 
-Here's one example of this process: a design demo I built for a family-owned self-storage facility. *(It's a demo, not a launched site.)* Instead of opening with a price list, it starts with the renter's real question, *"What are you storing?"*, then walks them to the right unit type, size and current price, with the reserve button right there.
+Here's one example of this process: Common Ground, a free support hub I built for parents raising a child with autism. *(It's my own product, not a client's site.)* Instead of opening with a menu of everything, it starts with the parent's real question, *"What do you need today?"*, then walks them down one of six paths to a single next step.
 
-Same process, applied to one customer question at a time.
+Same process, applied to one question at a time.
 
 **Want to see what it looks like for your business?** Every quote comes with a **free demo of your homepage**, built using this exact process, so you can see the difference before you spend a dollar.
 

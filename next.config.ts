@@ -40,6 +40,10 @@ const nextConfig: NextConfig = {
       // The old per-project pages under /work: the portfolio is one page now.
       { source: "/work/:path+", destination: "/work", statusCode: 301 },
       { source: "/free-check", destination: "/google-check", statusCode: 301 },
+      // The partner side of the site was removed in the 2026-11 rework. (The
+      // referral links themselves, ?ref=CODE, /api/ref and /card, still work.)
+      { source: "/partners", destination: "/", statusCode: 301 },
+      { source: "/partners/:path*", destination: "/", statusCode: 301 },
       // V3's two niche pages folded into /services and the hub.
       { source: "/coffee-shops", destination: "/", statusCode: 301 },
       { source: "/coffee-shops/:path*", destination: "/", statusCode: 301 },

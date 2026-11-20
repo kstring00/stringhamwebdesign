@@ -33,8 +33,8 @@ export default function Pricing() {
             <ul>{pricing.factors.map((f) => <li key={f}>{f}</li>)}</ul>
           </div>
           <div className={s.actions}>
-            <a className="btn" href="/checkup" data-track="cta" data-location="pricing-checkup">Run the free checkup</a>
-            <CallOrBook location="pricing-call" />
+            <a className="btn" href="#quote" data-track="cta" data-location="pricing-demo">Get a free homepage demo</a>
+            <a className={`u ${s.textLink}`} href="/checkup" data-track="cta" data-location="pricing-checkup">Or run the free website checkup</a>
           </div>
           <p className={s.pricingFine}>No ad spend, no contract. Website Care is month to month. Full details in the <a className={`u ${s.inlineLink}`} href="/terms">Service Terms</a>.</p>
         </div>

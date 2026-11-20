@@ -1,6 +1,7 @@
 /**
  * Everything the home page and /google-check say about the offer, in one
- * place. Promises here must match content/service-terms.md; change them
+ * place, written for a therapy, counseling or mental-health practice:
+ * "practice", never "business"; "clients" are the people seeking care. Promises here must match content/service-terms.md; change them
  * together.
  *
  * The three prices live in PRICES and nowhere else: websites start at
@@ -16,7 +17,7 @@ export const pricing = {
   website: `Custom websites start at ${money(PRICES.website)}. Every site is quoted after I see what you have, and you get a fixed written quote before anything starts. Payment plans available.`,
   /** The way to a quote: a booking link when NEXT_PUBLIC_BOOKING_URL is set, otherwise the phone. */
   next: { booking: "Run the free checkup or book a call to get yours.", phone: "Run the free checkup or give me a call to get yours." },
-  factors: ["Number of pages", "Whether your content and photos are ready", "Booking, payment or store features", "Moving an existing site"],
+  factors: ["Number of pages", "Whether your words and photos are ready", "Scheduling, intake or payment tools to connect", "Moving an existing site"],
   listingFix: `${money(PRICES.listingFix)} one-time, done within 7 days.`,
   care: `${money(PRICES.care)} a month, month to month.`,
 } as const;
@@ -34,7 +35,7 @@ export const listingSteps = [
   {
     n: "1",
     title: "Free check",
-    body: "I look you up the way your customers do and text you what I find within 24 hours. Yours to keep, whatever you decide.",
+    body: "I look your practice up the way someone searching for care would and text you what I find within 24 hours. Yours to keep, whatever you decide.",
   },
   {
     n: "2",
@@ -45,7 +46,7 @@ export const listingSteps = [
   {
     n: "3",
     title: "Keep it right (optional)",
-    body: `Website Care, ${money(PRICES.care)} a month: your listing kept accurate, reviews answered, and a short report of calls and requests. Month to month.`,
+    body: `Website Care, ${money(PRICES.care)} a month: your listing kept accurate, new reviews flagged to you, and a short report of calls and requests. Month to month.`,
   },
 ] as const;
 
@@ -70,7 +71,7 @@ export const plans = [
       "Two rounds of changes",
     ],
     foot: "You approve the finished site before paying the balance.",
-    cta: { label: "Run the free checkup", href: "/checkup" },
+    cta: { label: "Get a free homepage demo", href: "#quote" },
     terms: "#website",
   },
   {
@@ -83,7 +84,7 @@ export const plans = [
       "Hosting: fast, secure, online",
       "Domain: renewals handled, kept in your name",
       "Edits: 30 minutes a month",
-      "Google: listing kept right, reviews answered",
+      "Google: listing kept right, new reviews flagged to you",
       "Report: one page of calls and requests",
     ],
     foot: "I run it so you don't have to. Cancel anytime by email. If you leave, I hand over your domain and site files.",
@@ -116,7 +117,6 @@ export const listingFix = {
   included: [
     "Google listing corrected: name, hours, phone, website link, photos",
     "Up to 10 directories corrected (Apple Maps, Bing, Facebook, Yelp…)",
-    "A Google review link and QR code",
     "Before-and-after screenshots of every change",
   ],
   notIncluded: "paid ads, writing reviews, changes a directory refuses to make.",
@@ -126,8 +126,8 @@ export const listingFix = {
 
 /** The slim strip under the pricing cards: how a website project goes. */
 export const steps = [
-  { n: "1", title: "Tell me about your business", body: "Form, text or call." },
-  { n: "2", title: "Get your quote + a free demo", body: "See your homepage before you say yes." },
+  { n: "1", title: "Tell me about your practice", body: "Form, text or call." },
+  { n: "2", title: "Get your free homepage demo + quote", body: "See your homepage before you say yes." },
   { n: "3", title: "Live in about 3 weeks", body: "Approve it, then it goes live." },
 ] as const;
 
@@ -136,16 +136,20 @@ export const faq = [
   {
     q: "How much does a website cost?",
     a: pricing.website,
-    link: { label: "Run the free checkup to get your quote", href: "/checkup" },
+    link: { label: "Get a free homepage demo and your quote", href: "/#quote" },
   },
   {
-    q: "Will this bring me more customers?",
-    a: "I can't promise that, and nobody honest can: Google controls rankings, and customers decide. What I promise is the work: the site in your written quote, built around the one thing your customers need to do, and on Website Care a one-page monthly report of calls and requests.",
+    q: "Will this bring me more clients?",
+    a: "I can't promise that, and nobody honest can: Google controls rankings, and people choose their own care. What I promise is the work: the site in your written quote, built around the one next step someone looking for help needs to take, and on Website Care a one-page monthly report of calls and requests.",
     link: { label: "What I can't promise (Terms)", href: "/terms#what-we-cant-promise" },
   },
   {
-    q: "I already use Facebook, Yelp or a booking app.",
-    a: "Keep them. Your site links to them, and gives you your own front door that you control. Nothing gets taken away.",
+    q: "I already have a Psychology Today profile or a scheduling tool.",
+    a: "Keep them. Your site links to them, and gives your practice its own front door that you control. Nothing gets taken away.",
+  },
+  {
+    q: "Can clients book or fill out intake forms through my site?",
+    a: "Yes, through a scheduling or intake tool built for healthcare, which you choose and hold the account for. Your site links to it or embeds it. That tool, not the website, holds client information and carries its own privacy responsibilities. The site's own contact form asks for contact details only, and I don't promise HIPAA compliance on a tool's behalf.",
   },
   {
     q: "Do I own the website?",
@@ -154,12 +158,12 @@ export const faq = [
   },
   {
     q: "What do you need from me to get started?",
-    a: "Mostly what's already in your head: your services, your customers' common questions, and a few phone photos. Rough is fine, and I never need your passwords.",
+    a: "Mostly what's already in your head: who you help, your services, the questions new clients ask most, and a few photos. Rough is fine. I never need your passwords, and please don't send client information.",
     link: { label: "The full list: what I need to build your website", href: "/blog/what-i-need-to-build-your-website" },
   },
   {
-    q: "My nephew could do this.",
-    a: "Maybe. What you get from me is a fixed price, a written scope, a demo before you commit, and someone who answers the phone after launch.",
+    q: "Do you work with Wix, Squarespace or WordPress?",
+    a: "I build custom sites rather than working inside those platforms. If your site is on one, I rebuild it and move your words, photos and domain over. If you'd rather stay where you are, I'm not the right fit, and I'll say so up front.",
   },
   {
     q: "Can I cancel Website Care?",
@@ -181,7 +185,7 @@ export const listingQuestions = [
     link: { label: "Service Terms", href: "/terms#listing-fix" },
   },
   {
-    q: "Will this get me more customers? Is it guaranteed?",
+    q: "Will this get me more clients? Is it guaranteed?",
     a: "I can't promise that, and nobody honest can: Google controls rankings. What I do promise is every fix done within 7 days with before-and-after screenshots.",
     link: { label: "What I can't promise (Terms)", href: "/terms#what-we-cant-promise" },
   },
@@ -196,7 +200,7 @@ export const listingQuestions = [
   },
   {
     q: "What happens after I send the form?",
-    a: "I look up your business the way your customers do and text or email you what I found within 24 hours. Free, no obligation.",
+    a: "I look up your practice the way someone searching for care would and text or email you what I found within 24 hours. Free, no obligation.",
   },
 ] as const;
 

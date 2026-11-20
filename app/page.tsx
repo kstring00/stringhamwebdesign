@@ -3,18 +3,16 @@ import type { Metadata } from "next";
 import { BusinessJsonLd } from "./components/JsonLd";
 import { pageMeta } from "./data/meta";
 import { site } from "./data/site";
-import { showcaseWork } from "./data/work";
-import Coverflow from "./components/Coverflow";
 import AboutFaq from "./home/AboutFaq";
 import Hero from "./home/Hero";
 import Pricing from "./home/Pricing";
 import QuoteForm from "./home/QuoteForm";
+import WorkRow from "./home/WorkRow";
 import s from "./home/home.module.css";
-// import Testimonials from "./home/Testimonials";
 
 export const metadata: Metadata = pageMeta({
-  absolute: "Custom Web Design in League City, TX | Stringham Web Design",
-  description: "Custom website design from $300 for businesses in League City, Houston and beyond. Thoughtful customer journeys, distinctive visuals, fixed written quotes and a free homepage demo.",
+  absolute: "Web Design for Therapists & Mental Health Practices | Stringham Web Design",
+  description: "Custom websites from $300 for therapists, counselors and mental-health practices. Thoughtfully designed, clear upfront pricing and a free homepage demo. Based in League City, Texas.",
   path: "/",
 });
 
@@ -22,37 +20,26 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
   const { sent, error, checkup } = await searchParams;
   return (
     <>
-      {/* 1. The first screen: what, for whom, where, the next step. */}
+      {/* 1. The first screen: what, for whom, the next step. */}
       <Hero />
 
-      {/* 2. Proof: every project, labeled for what it is, the same as on /partners. */}
-      <section className={`${s.section} ${s.workSection}`} id="work" aria-labelledby="work-title">
-        <div className="container">
-          <div className={s.head}>
-            <h2 id="work-title" className={s.h2} data-reveal>Custom website design you can explore.</h2>
-            <p className={s.lede}>Live projects and clearly labeled demos, each designed around a specific visitor action. Drag, swipe or tap through, then explore the <a className={`u ${s.inlineLink}`} href="/work">full web design portfolio</a>.</p>
-          </div>
-          <Coverflow items={showcaseWork} label="Selected work" />
-        </div>
-      </section>
+      {/* 2. Proof: the three real projects, as a still row, each labeled for what it is. */}
+      <WorkRow />
 
       {/* 3. The price, what's in it, who runs it after, and the Google path. */}
       <Pricing />
 
-      {/* Testimonials: none with written permission yet, so nothing is shown.
-          When there are, uncomment the import above and this line:
-          <Testimonials items={[{ quote: "…", name: "…", business: "…" }]} /> */}
 
       {/* 4. Who you'd work with, and the questions that come up. */}
       <AboutFaq />
 
-      {/* 5. The close: a quote and a free demo. */}
+      {/* 5. The close: a free homepage demo, with a fixed written quote. */}
       <section className={s.quote} id="quote" aria-labelledby="quote-title">
         <div className={`container ${s.quoteGrid}`}>
           <div className={s.quoteSide}>
-            <p className={s.chipOnInk}>Quote + free demo</p>
-            <h2 id="quote-title" className={s.h2}>See your new site before you pay a dollar.</h2>
-            <p className={s.quoteLede}>Tell me about your business. I reply within 24 hours, and if it&rsquo;s a fit you get a fixed written quote plus a demo of your homepage, built for you. No obligation.</p>
+            <p className={s.chipOnInk}>Free homepage demo</p>
+            <h2 id="quote-title" className={s.h2}>See your practice&rsquo;s new homepage before you pay a dollar.</h2>
+            <p className={s.quoteLede}>Tell me about your practice. I reply within 24 hours, and if it&rsquo;s a fit you get a demo of your homepage, built for you, with a fixed written quote. No obligation.</p>
             <p className={s.quoteContact}>Rather talk? <a className="u" href={site.phoneHref}>Call {site.phone}</a> or <a className="u" href={site.smsHref}>text me</a>.</p>
           </div>
           <QuoteForm sent={sent === "1"} errorCode={typeof error === "string" ? error : ""} checkup={typeof checkup === "string" && checkup.startsWith("Website Checkup:") ? checkup.slice(0, 600) : ""} />

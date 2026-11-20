@@ -2,8 +2,7 @@
 .hero > div { display: grid; gap: 1.25rem; max-width: 46rem; }
 
 .h1 {
-  font-size: clamp(2.4rem, 5vw, 4rem);
-  font-variation-settings: "opsz" 144, "SOFT" 30;
+  font-size: clamp(2.76rem, 5.75vw, 4.6rem);
   letter-spacing: -0.025em;
   line-height: 1.02;
 }
@@ -54,7 +53,7 @@
   border: 1px solid var(--line);
   border-radius: 14px;
   background: #fff;
-  box-shadow: 0 30px 70px -40px rgba(11, 27, 61, 0.4);
+  box-shadow: 0 30px 70px -40px rgba(11, 42, 32, 0.4);
 }
 
 .shot img { display: block; width: 100%; height: auto; }
@@ -64,7 +63,7 @@
 .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; color: var(--muted); font-size: 0.9rem; }
 .draft { padding: 0.2rem 0.6rem; border: 1px dashed var(--line-strong); border-radius: 999px; font-size: 0.82rem; }
 
-.name { font-size: clamp(1.7rem, 2.6vw, 2.3rem); letter-spacing: -0.02em; line-height: 1.1; }
+.name { font-size: clamp(2.04rem, 3.12vw, 2.76rem); letter-spacing: -0.02em; line-height: 1.1; }
 .type { margin-top: -0.4rem; color: var(--muted); }
 .what { color: var(--ink-soft); line-height: 1.55; }
 .builtFor { color: var(--ink); }

@@ -1,12 +1,14 @@
 # Leads and referral partners: setup and day-to-day
 
 Every inquiry the site receives (the quote form, the checkup's "check my
-site for me", the free Google check, the partner inquiry) is emailed to you
+site for me", the free Google check) is emailed to you
 and written to one table, `leads`, which `/manage` turns into the monthly
-dashboard. Calls and texts you take are logged there by hand. Referral
-partners sign up at `/partners/join`, share `/checkup?ref=CODE` or
-`/?ref=CODE`, and leads that arrive through those links carry the
-partner's code.
+dashboard. Calls and texts you take are logged there by hand. The partner
+pages and the signup form were removed in the 2026-11 rework, so no new
+partners can join from the site; existing partners still share
+`/checkup?ref=CODE` or `/?ref=CODE`, and leads that arrive through those
+links carry the partner's code. (To add a partner by hand, insert a row in
+Supabase → Table Editor → partners.)
 
 ## One-time setup (about 5 minutes)
 
@@ -33,7 +35,7 @@ partner's code.
    - `ADMIN_PASSWORD`: the password for `/manage`, 8+ characters.
 3. **Redeploy** (Deployments → the latest → Redeploy) so the variables load.
 
-Until then, `/partners/join` tells people to text you, ref links are not
+Until then, ref links are not
 saved, and quote emails still show any `ref` code with a "not checked" note.
 
 ## How it works
@@ -117,7 +119,7 @@ After the SQL has run and the site is deployed with `RESEND_API_KEY`,
 `SUPABASE_URL`, `SUPABASE_SECRET_KEY` and `ADMIN_PASSWORD` set in Vercel
 (Production): send one request through each form on the live site with
 the word TEST in the business name (quote, checkup "check my site for me",
-free Google check, partner inquiry). Each email must end "Saved to
+free Google check). Each email must end "Saved to
 /manage"; `/manage` must show the four TEST leads with their sources. Mark
 them Spam so they drop out of the numbers.
 
@@ -142,5 +144,5 @@ them). Clarity gets `card_scan` once per visit, with the session tagged
 
 ## Clarity events
 
-`partner_signup` (code), `ref_visit` (code), `ref_lead` (code). Clarity
+`ref_visit` (code), `ref_lead` (code). Clarity
 never loads on `/manage`.

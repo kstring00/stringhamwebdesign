@@ -14,9 +14,8 @@
 .heroText { display: grid; gap: 1.25rem; justify-items: start; }
 
 .h1 {
-  font-size: clamp(2.6rem, 6.4vw, 5.4rem);
-  font-variation-settings: "opsz" 144, "SOFT" 30;
-  letter-spacing: -0.035em;
+  font-size: clamp(2.808rem, 6.912vw, 5.832rem);
+  letter-spacing: -0.025em;
   line-height: 0.98;
 }
 
@@ -65,7 +64,7 @@
   transition: transform 450ms var(--ease-out), box-shadow 450ms var(--ease-out), border-color 450ms var(--ease-out);
 }
 
-.card:hover { transform: translateY(-4px); border-color: var(--line-strong); box-shadow: 0 40px 70px -44px rgba(11, 27, 61, 0.55); }
+.card:hover { transform: translateY(-4px); border-color: var(--line-strong); box-shadow: 0 40px 70px -44px rgba(11, 42, 32, 0.55); }
 .card:focus-visible { outline: 2px solid var(--brand); outline-offset: 4px; }
 
 /* The cover sits flush in the card's top; the card's own corners round it. */
@@ -87,7 +86,7 @@
 
 .latest { background: var(--brand); color: #fff; }
 
-.cardTitle { font-size: clamp(1.45rem, 2.2vw, 1.9rem); letter-spacing: -0.02em; line-height: 1.12; text-wrap: balance; }
+.cardTitle { font-size: clamp(1.74rem, 2.64vw, 2.28rem); letter-spacing: -0.02em; line-height: 1.12; text-wrap: balance; }
 .cardDesc { color: var(--ink-soft); line-height: 1.6; }
 
 .readMore {

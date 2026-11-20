@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter_Tight } from "next/font/google";
+import { DM_Sans, Instrument_Serif } from "next/font/google";
 
 import "./globals.css";
 import ClarityAnalytics from "./ClarityAnalytics";
@@ -14,27 +14,27 @@ import { site } from "./data/site";
 
 /* Both faces are self-hosted: next/font downloads them at build and serves
    them from this origin, subset to latin, with no request to Google from a
-   visitor's browser. */
-const fraunces = Fraunces({
+   visitor's browser. Instrument Serif (one weight, roman and italic) is
+   for headings; DM Sans (variable, roman and italic) is everything else. */
+const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
-  axes: ["opsz", "SOFT"],
-  weight: "variable",
-  style: ["normal"],
+  weight: "400",
+  style: ["normal", "italic"],
   display: "swap",
-  variable: "--font-fraunces",
+  variable: "--font-instrument-serif",
 });
 
-const interTight = Inter_Tight({
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
   display: "swap",
-  variable: "--font-inter-tight",
+  variable: "--font-dm-sans",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: `Web Design in League City, TX | ${site.name}`, template: `%s | ${site.name}` },
-  description: "Custom websites from $300 for owner-run businesses in League City, Texas. Every site is quoted after a free website checkup or a short call: a fixed written quote, a free homepage demo, payment plans, no contract.",
+  title: { default: `Web Design for Therapists & Mental Health Practices | ${site.name}`, template: `%s | ${site.name}` },
+  description: "Custom websites from $300 for therapists, counselors and mental-health practices. Thoughtfully designed, clear upfront pricing and a free homepage demo. Based in League City, Texas.",
   applicationName: site.name,
   authors: [{ name: site.person, url: site.url }],
   creator: site.person,
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${interTight.variable}`}>
+    <html lang="en" className={`${instrumentSerif.variable} ${dmSans.variable}`}>
       <body>
         <a className="skip" href="#main">Skip to content</a>
         <Header />

@@ -1,4 +1,4 @@
-import { site } from "../data/site";
+import { site, studioWhat } from "../data/site";
 
 function Script({ data }: { data: Record<string, unknown> }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
@@ -29,7 +29,10 @@ export function ArticleJsonLd({ title, description, slug, date, author }: { titl
   );
 }
 
-/** ProfessionalService (a LocalBusiness type) for the LLC. Homepage only. */
+/**
+ * ProfessionalService (a LocalBusiness type) for the LLC. Homepage only.
+ * It's a web design studio: never a medical or mental-health provider type.
+ */
 export function BusinessJsonLd() {
   return (
     <Script
@@ -49,8 +52,9 @@ export function BusinessJsonLd() {
           .map((name) => ({ "@type": "City", name: `${name}, TX` }))
           .concat([{ "@type": "AdministrativeArea", name: "Greater Houston area, TX" }]),
         founder: { "@type": "Person", name: site.person },
-        description: "Custom websites and Google listing fixes for independent businesses. League City, Texas.",
-        knowsAbout: ["Google Business Profile", "Local business directories", "Small business websites"],
+        description: `${studioWhat} League City, Texas.`,
+        serviceType: "Web design",
+        knowsAbout: ["Web design for mental-health practices", "Therapist and counselor websites", "Google Business Profile"],
       }}
     />
   );

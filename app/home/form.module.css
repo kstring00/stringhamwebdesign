@@ -47,7 +47,7 @@
   outline: none;
   border-color: var(--brand);
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(0, 96, 220, 0.18);
+  box-shadow: 0 0 0 3px rgba(11, 42, 32, 0.18);
 }
 
 textarea.input {

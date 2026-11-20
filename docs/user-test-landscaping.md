@@ -32,7 +32,7 @@ Write down the time and what they said or did at each moment.
 | First 5 seconds | Can they say what this is, who it's for and where? Ask afterwards if you missed it. |
 | The first move | Do they tap "Get a quote + free demo", scroll, or open the menu? On a phone, do they notice the Call · Text · Get a quote bar at the bottom? |
 | The free demo | Do they understand, without help, that a quote comes with a demo of their homepage before they pay? Where did they get it: the hero, the pricing card, or the form heading? |
-| The work | Do they swipe or click through the carousel? Do they open a demo? Do they read the labels ("Design demo · Not launched") and what do they make of them? |
+| The work | Do they click a project card? Do they open a demo? Do they read the labels ("Design demo · Not launched") and what do they make of them? |
 | The price | With no prices shown, do they understand every site is quoted, and find the free checkup (or call or text) as the way to a quote? Do they notice "fixed written quote" and "payment plans"? Does no price make them hesitate? Do they read what Website Care is for? |
 | Hesitations | Any pause longer than about 3 seconds, a frown, or "hmm". Note where on the page it happened. |
 | Back and forth | Scrolling up again usually means something didn't answer a question. Note what they went back to. |

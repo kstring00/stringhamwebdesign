@@ -13,7 +13,7 @@ import { site } from "./site";
 // shared one unless a niche page passes its own).
 const DEFAULT_IMAGE = {
   url: "/opengraph-image.png",
-  alt: "Stringham Web Design logo. Websites that get businesses more calls. Free website checkup, fixed written quotes, no ad spend required.",
+  alt: "Stringham Web Design logo. Custom web design for therapists, counselors and mental-health practices.",
 };
 
 export function pageMeta({ title, absolute, description, path, image, imageAlt }: { title?: string; absolute?: string; description: string; path: string; image?: string; imageAlt?: string }): Metadata {

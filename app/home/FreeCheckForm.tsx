@@ -9,7 +9,7 @@ import styles from "./form.module.css";
 
 /** Messages for a native (no-JS) post that bounced back with ?error=… */
 const NATIVE_ERRORS: Record<string, string> = {
-  fields: "Please fill in your name, business, town and phone number.",
+  fields: "Please fill in your name, practice, town and phone number.",
   busy: "Too many requests in a row. Please wait a few minutes.",
   send: "I couldn't send that just now.",
 };
@@ -51,7 +51,7 @@ export default function FreeCheckForm({ sent = false, errorCode = "" }: { sent?:
     return (
       <div className={styles.sent} role="status">
         <h3>Got it{who.name ? `, ${who.name}` : ""}. I&rsquo;ll text or email you within 24 hours.</h3>
-        <p>I&rsquo;ll look up {who.business || "your business"} the way your customers do and send you what I find. No obligation. &mdash; Kyle</p>
+        <p>I&rsquo;ll look up {who.business || "your practice"} the way someone searching for care would and send you what I find. No obligation. &mdash; Kyle</p>
         <p className={styles.sentSmall}>Need me sooner? <a className="u" href={site.phoneHref}>Call or text {site.phone}</a>.</p>
       </div>
     );
@@ -66,7 +66,7 @@ export default function FreeCheckForm({ sent = false, errorCode = "" }: { sent?:
           <input className={styles.input} id="fc-name" name="name" autoComplete="name" required maxLength={100} />
         </div>
         <div className={styles.field}>
-          <label htmlFor="fc-business">Business name <span className={styles.req} aria-hidden="true">*</span></label>
+          <label htmlFor="fc-business">Practice name <span className={styles.req} aria-hidden="true">*</span></label>
           <input className={styles.input} id="fc-business" name="business" autoComplete="organization" required maxLength={120} />
         </div>
       </div>

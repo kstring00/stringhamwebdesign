@@ -6,18 +6,10 @@ export const navLinks = [
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/#about" },
   { label: "FAQ", href: "/#faq" },
-  /** The partner side of the site, set apart as a pill. */
-  { label: "For partners", href: "/partners", featured: true },
 ] as const;
 
-/** On /partners the featured pill points back to the business side. */
-export const otherSide = { label: "For businesses", href: "/" } as const;
-
-/** The site's one action: a fixed quote, and a free demo of the homepage with it. */
-export const cta = { label: "Get a quote + free demo", short: "Get a quote", href: "/#quote" } as const;
-
-/** The action on /partners. */
-export const partnerCta = { label: "Explore a partnership", short: "Partnership", href: "/partners#partner-form" } as const;
+/** The site's one action: a free demo of the practice's homepage, with a fixed written quote. */
+export const cta = { label: "Get a free homepage demo", nav: "Free homepage demo", short: "Free demo", href: "/#quote" } as const;
 
 /** Footer links. */
 export const footerLinks = [
@@ -28,10 +20,4 @@ export const footerLinks = [
   { label: "Blog", href: "/blog" },
   { label: "Service Terms", href: "/terms" },
   { label: "Privacy", href: "/privacy" },
-] as const;
-
-/** The partner side of the site, from the footer. */
-export const partnerLinks = [
-  { label: "How referrals work", href: "/partners#referrals" },
-  { label: "For agencies & creatives", href: "/partners" },
 ] as const;

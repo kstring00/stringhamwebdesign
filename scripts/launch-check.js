@@ -51,7 +51,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
         robots: meta('robots'), h1s: qa('h1').map((h) => h.textContent.replace(/\s+/g, ' ').trim()),
         imgsNoAlt: qa('img').filter((i) => !i.hasAttribute('alt')).map((i) => i.getAttribute('src')),
         skip: Boolean(q('a.skip[href="#main"]')), landmarks: { main: Boolean(q('main#main')), header: Boolean(q('header')), footer: Boolean(q('footer')), nav: Boolean(q('nav[aria-label]')) },
-        phone: qa('a[href^="tel:"]').length, cta: qa('a[href="/#quote"], a[href="#quote"], a[href="/partners#partner-form"], a[href="#partner-form"], a[href="#free-check"]').length, privacy: Boolean(q('footer a[href="/privacy"]')),
+        phone: qa('a[href^="tel:"]').length, cta: qa('a[href="/#quote"], a[href="#quote"], a[href="#free-check"]').length, privacy: Boolean(q('footer a[href="/privacy"]')),
         year: [...qa('footer')].pop()?.textContent.match(/©\s*(\d{4})/)?.[1] || '', jsonld: qa('script[type="application/ld+json"]').map((s) => s.textContent).join(' '),
         text: document.body.innerText, headerNav: qa('header nav[aria-label="Primary"] a').map((a) => a.textContent.trim()), mobileBar: qa('nav[aria-label="Quick actions"] a').map((a) => a.getAttribute('href') || ''), headerCta: (q('header a[data-location="header"]')?.getAttribute('aria-label') || q('header a[data-location="header"]')?.textContent?.trim() || ''),
         links: qa('a[href]').map((a) => ({ href: a.getAttribute('href'), target: a.getAttribute('target'), rel: a.getAttribute('rel') || '' })),
@@ -83,20 +83,16 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     if (path === '/') ok(`${path}: LocalBusiness JSON-LD`, /"@type":"ProfessionalService"/.test(d.jsonld) && /League City/.test(d.jsonld) && /Houston/.test(d.jsonld));
     if (path === '/about') ok(`${path}: Person JSON-LD`, /"@type":"Person"/.test(d.jsonld));
     ok(`${path}: no banned words in rendered text`, !BANNED.test(d.text), (d.text.match(BANNED) || [''])[0]);
-    const partnerView = path === '/partners' || path.startsWith('/partners/');
-    ok(`${path}: header is the logo, the links, the phone and one button`, JSON.stringify(d.headerNav) === JSON.stringify(['Work', 'Pricing', 'Free checkup', 'Blog', 'About', 'FAQ', partnerView ? 'For businesses' : 'For partners']) && d.headerCta === (partnerView ? 'Explore a partnership' : 'Get a quote + free demo'), JSON.stringify({ nav: d.headerNav, cta: d.headerCta }));
-    ok(`${path}: the mobile bar has call, text and the one action`, d.mobileBar.length === 3 && d.mobileBar[0].startsWith('tel:') && d.mobileBar[1].startsWith('sms:') && (partnerView ? d.mobileBar[2] === '/partners#partner-form' : d.mobileBar[2] === '/#quote'), JSON.stringify(d.mobileBar));
+    ok(`${path}: header is the logo, the links, the phone and one button`, JSON.stringify(d.headerNav) === JSON.stringify(['Work', 'Pricing', 'Free checkup', 'Blog', 'About', 'FAQ']) && d.headerCta === 'Free homepage demo', JSON.stringify({ nav: d.headerNav, cta: d.headerCta }));
+    ok(`${path}: the mobile bar has call, text and the one action`, d.mobileBar.length === 3 && d.mobileBar[0].startsWith('tel:') && d.mobileBar[1].startsWith('sms:') && d.mobileBar[2] === '/#quote', JSON.stringify(d.mobileBar));
   }
 
   const home = seen.get('/');
-  ok('home says what, for whom, where above the fold', /Custom web design\.\s+Made for your customers\./.test(home.text) && /Based in League City/i.test(home.text) && /Custom web design · League City, TX · Nationwide/i.test(home.text));
-  ok('home has the one CTA', (home.text.match(/Get a quote \+ free demo/g) || []).length >= 1);
-
-  // The referral reward is published in the same words everywhere it appears.
-  const partners = seen.get('/partners');
-  ok('/partners publishes the referral terms', partners && /Referral terms: 20% of the website build price/.test(partners.text) && /within 14 days after/.test(partners.text));
-  ok('home mentions the referral reward', /20%/.test(home.text));
-  ok('no leftover "not published" referral wording', ![home, partners, seen.get('/work'), seen.get('/google-check')].some((d) => d && /not published here yet|fixed referral reward/i.test(d.text)));
+  // The hero is Kyle's own copy, word for word.
+  ok('home says what and for whom above the fold', /Custom web design for mental health professionals/i.test(home.text) && /Websites for the people who\s+help people\./.test(home.text) && /Your work changes lives\. Your website should reflect that\./.test(home.text) && /I combine a background in psychology and behavioral healthcare with modern web design, so your website helps people understand your services, feel comfortable reaching out, and take the next step toward care\./.test(home.text) && /They arrive overwhelmed\./.test(home.text) && /Your site makes it clear\./.test(home.text) && /They reach out\./.test(home.text));
+  ok('home has the one CTA, and says where the studio is', (home.text.match(/Get a free homepage demo/g) || []).length >= 2 && /based in League City, Texas/i.test(home.text));
+  ok('the studio never presents itself as a care provider', /I don.t provide care/.test(home.text) && !/"@type":"(Medical|Physician|Psychologist)/.test(home.jsonld || ''));
+  ok('the partner side is gone from the pages', ![...seen.values()].some((d) => /For partners|Explore a partnership|I pay you 20%/.test(d.text)));
 
   for (const [href, uses] of externals) {
     ok(`external ${href}: opens safely`, uses.every((u) => u.target !== '_blank' || /noopener/.test(u.rel)), JSON.stringify(uses.filter((u) => u.target === '_blank' && !/noopener/.test(u.rel)).map((u) => u.page)));
@@ -105,6 +101,12 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
   // ---- redirects, 404, robots, sitemap, assets ----
   {
     const c = await b.newContext(); const p = await c.newPage();
+    // The partner side's old addresses: a true 301, not Next's default 308.
+    for (const from of ['/partners', '/partners/join', '/partners/terms', '/partners/anything/else']) {
+      const r = await p.request.get(BASE + from, { maxRedirects: 0 });
+      const loc = (r.headers()['location'] || '').replace(BASE, '').replace(/^https?:\/\/[^/]+/, '');
+      ok(`${from} → / (301)`, r.status() === 301 && loc === '/', `${r.status()} ${loc}`);
+    }
     for (const [from, to] of [['/portal', '/'], ['/portal/dashboard', '/'], ['/portal/projects/x', '/'], ['/admin', '/'], ['/admin/x', '/'], ['/login', '/'], ['/quote', '/#quote'], ['/resources', '/'], ['/pricing', '/#pricing'], ['/websites', '/work'], ['/websites/x', '/work'], ['/portfolio', '/work'], ['/services', '/#pricing'], ['/services/anything', '/#pricing'], ['/about', '/#about'], ['/contact', '/#quote'], ['/free-check', '/google-check'], ['/work/x', '/work'], ['/coffee-shops', '/'], ['/autism-clinics', '/family-resource-hub'], ['/faq', '/#faq']]) {
       const r = await p.request.get(BASE + from, { maxRedirects: 0 });
       const loc = r.headers()['location'] || '';
