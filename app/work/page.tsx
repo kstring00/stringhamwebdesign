@@ -26,7 +26,7 @@ export default function WorkPage() {
         <div className="container">
           <p className={home.chip}>Work</p>
           <h1 id="work-title" className={styles.h1}>Work you can explore.</h1>
-          <p className={home.lede}>Every project is labeled for exactly what it is. One is my own product for autism families; one was built for a life coach. Neither is a therapy practice&rsquo;s site, and nothing here claims a result.</p>
+          <p className={home.lede}>Every project is labeled for exactly what it is. Two are my own products for autism families; one was built for a life coach. None of the three is a therapy practice&rsquo;s site, and nothing here claims a result.</p>
           <div className={home.actions}>
             <a className="btn" href="/#quote" data-track="cta" data-location="work-hero" data-magnetic>Get a free homepage demo</a>
             <a className={`u ${home.textLink}`} href="/#pricing">See pricing</a>

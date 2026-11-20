@@ -46,7 +46,7 @@ export const listingSteps = [
   {
     n: "3",
     title: "Keep it right (optional)",
-    body: `Website Care, ${money(PRICES.care)} a month: your listing kept accurate, reviews answered, and a short report of calls and requests. Month to month.`,
+    body: `Website Care, ${money(PRICES.care)} a month: your listing kept accurate, new reviews flagged to you, and a short report of calls and requests. Month to month.`,
   },
 ] as const;
 
@@ -84,7 +84,7 @@ export const plans = [
       "Hosting: fast, secure, online",
       "Domain: renewals handled, kept in your name",
       "Edits: 30 minutes a month",
-      "Google: listing kept right, reviews answered",
+      "Google: listing kept right, new reviews flagged to you",
       "Report: one page of calls and requests",
     ],
     foot: "I run it so you don't have to. Cancel anytime by email. If you leave, I hand over your domain and site files.",
@@ -117,7 +117,6 @@ export const listingFix = {
   included: [
     "Google listing corrected: name, hours, phone, website link, photos",
     "Up to 10 directories corrected (Apple Maps, Bing, Facebook, Yelp…)",
-    "A Google review link and QR code",
     "Before-and-after screenshots of every change",
   ],
   notIncluded: "paid ads, writing reviews, changes a directory refuses to make.",

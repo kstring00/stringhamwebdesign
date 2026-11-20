@@ -25,9 +25,10 @@ export default function Hero() {
         <div className={s.heroText} data-field-clear>
           <p className={s.chip}>Custom web design for mental health professionals</p>
           <h1 id="hero-title" className={s.h1}>
-            <span className={s.line}><span>Your work changes lives.</span></span>
-            <span className={s.line}><span>Your website should reflect that.</span></span>
+            <span className={s.line}><span>Websites for the</span></span>
+            <span className={s.line}><span>people who help people.</span></span>
           </h1>
+          <p className={`${s.sub} ${s.subLead}`}>Your work changes lives. Your website should reflect that.</p>
           <p className={s.sub}>Thoughtfully designed, custom-built websites for therapists, counselors, and mental-health practices.</p>
           <p className={s.sub}>I combine a background in psychology and behavioral healthcare with modern web design to create websites that help people understand your services, feel comfortable reaching out, and take the next step toward care.</p>
           <div className={s.actions}>

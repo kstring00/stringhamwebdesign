@@ -12,15 +12,14 @@ Updated 2026-11-19 (mental-health practice rework, Phase 1).
   businesses that weren't already talking to Kyle, and whether there's a
   payout window. Today the site says only "paid once the business has paid
   for its website in full".
-- The Support Shelf (thesupportshelf.org, live, Kyle's own product) is to be
-  added to `app/data/work.ts` with real 1440 and 390 captures. It isn't in
-  the list yet: the build sandbox couldn't reach the site to capture it.
-- Website Care promises replies to Google reviews (Service Terms, section 3,
-  and the pricing card). For a therapy practice, replying to a review can
-  confirm someone is a client. Decide whether that line stays, changes or
-  goes before Phase 2 rewrites the terms.
-- The blog and the Free Website Checkup still speak to "business owners" and
-  "customers"; the checkup is reworded in Phase 4, the blog isn't scheduled.
+- The Support Shelf is in `app/data/work.ts`, but its captures are not in
+  the repo yet: the build sandbox couldn't reach the site. From a machine
+  that can, run `node scripts/capture-work.js support-shelf https://www.thesupportshelf.org/`,
+  look at the eight files it writes under `public/showcase/`, and commit
+  them. Don't merge before that; its images are broken until then.
+- The Free Website Checkup still speaks to "business owners" and
+  "customers"; its wording is Phase 2 (its puzzle animation, Phase 4). The
+  blog stays as it is.
 - Set `NEXT_PUBLIC_CLARITY_ID` in Vercel (Production only) if it isn't, so the
   custom events (`free_check_submit`, `website_quote_submit`, `cta_click`,
   `call_tap`, `email_click`, `work_sample_click`, `terms_view`) start

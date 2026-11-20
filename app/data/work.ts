@@ -5,8 +5,8 @@
  *
  * None of these is a commissioned website for a therapy or counseling
  * practice, and the copy around them must never say or imply otherwise.
- * `type` and `stage` say what each one is: Kyle's own product in autism
- * family support, and a site built for a life coach.
+ * `type` and `stage` say what each one is: two of Kyle's own products for
+ * autism families, and a site built for a life coach.
  *
  * `kind` is the honest state of the project:
  *   live        public and in use
@@ -94,6 +94,25 @@ export const work: Work[] = [
     alt: {
       desktop: "GrowthGains home page: “You know something needs to change,” a Book a free consultation button, and a portrait beside a current-to-next-chapter diagram",
       mobile: "GrowthGains home page on a phone",
+    },
+  },
+  {
+    key: "support-shelf",
+    name: "The Support Shelf",
+    kind: "live",
+    stage: "My own product",
+    type: "Printable tools for autism families · my own product",
+    what: "Printable tools and guides for parents whose child is in ABA therapy, organized as four shelves a parent can pull from.",
+    builtFor: "Help a parent find the right tool for today.",
+    built: [
+      "Four shelves (Get Organized, Make a Plan, Everyday Life, Support at Home), each with free and paid printables.",
+      "A free ABC tracker for recording behavior and sharing it with the child's BCBA.",
+      "A custom front end with Shopify handling checkout.",
+    ],
+    liveUrl: "https://www.thesupportshelf.org",
+    alt: {
+      desktop: "The Support Shelf home page",
+      mobile: "The Support Shelf home page on a phone",
     },
   },
 ];

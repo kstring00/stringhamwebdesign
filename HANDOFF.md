@@ -26,8 +26,12 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
   not a licensed mental-health professional and the studio provides no
   treatment; nothing on the site may say or imply otherwise (the schema
   type stays a professional service, never a medical one).
-- The hero's words are Kyle's own, in `app/home/Hero.tsx`. Don't paraphrase
-  or "improve" them; change them only when he supplies new ones.
+- The hero's words are Kyle's own, in `app/home/Hero.tsx`: the headline
+  "Websites for the people who help people.", then "Your work changes
+  lives. Your website should reflect that." as the first line under it,
+  then his two paragraphs, "Get a free homepage demo", "Or explore my
+  work" and the three checks. Don't paraphrase or "improve" them; change
+  them only when he supplies new ones.
 - Owner-first: the practice owns its site and can run it without Kyle. The
   domain, hosting, code and accounts are in the practice's name. Kyle
   running the site afterwards (Website Care) is optional, never assumed,
@@ -49,13 +53,16 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
   guarantees. The four findings on /google-check are real and anonymized;
   don't add more without Kyle. No testimonials until he supplies one word
   for word, with written permission (and remember that therapists
-  generally can't ask their own clients for them). No stock or AI photos;
+  generally can't ask their own clients for them, which is also why the
+  Listing Fix sets up no review link and Website Care flags new reviews
+  to the practice instead of replying). No stock or AI photos;
   the only photo of Kyle is his own (`public/kyle-founder.*`).
 - Selected work is one list, `app/data/work.ts`, shown the same everywhere.
   Every project is labeled for exactly what it is. None of the current
   projects is a commissioned site for a therapy or counseling practice, and
-  the copy must never say or imply one is: Common Ground is Kyle's own
-  product for autism families, GrowthGains was built for a life coach.
+  the copy must never say or imply one is: Common Ground and The Support
+  Shelf are Kyle's own products for autism families, GrowthGains was built
+  for a life coach.
   Never imply a concept or demo was a paid engagement, never claim results,
   and add someone else's project only after Kyle confirms its label and
   the owner's OK. Screens are real captures only.

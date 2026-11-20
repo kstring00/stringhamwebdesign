@@ -67,8 +67,7 @@
 .heroText { display: grid; gap: 1.4rem; max-width: 40rem; }
 
 .h1 {
-  font-size: clamp(2.2rem, 4.3vw, 3.6rem);
-  text-wrap: balance;
+  font-size: clamp(2.5rem, 5.2vw, 4.4rem);
   font-variation-settings: "opsz" 144, "SOFT" 30;
   letter-spacing: -0.025em;
   line-height: 1.02;
@@ -92,6 +91,9 @@
   font-size: clamp(1.05rem, 1.3vw, 1.2rem);
   line-height: 1.55;
 }
+
+/* The first line under the headline: the same size, in full ink. */
+.subLead { color: var(--ink); font-weight: 500; }
 
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; }
 
