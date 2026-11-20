@@ -2,10 +2,8 @@
 //   node scripts/capture-work.js <key> <url>
 //   node scripts/capture-work.js support-shelf https://www.thesupportshelf.org/
 //
-// Writes the first screen of <url>, as the browser renders it, to
-//   public/showcase/<key>-desktop.(avif|webp)   1440x900
-//   public/showcase/<key>-mobile.(avif|webp)    390x700 at 2x (780x1400)
-// then runs scripts/make-thumbs.js for the home page's work wall.
+// Writes the first screen of <url>, as the browser renders it at 1440 x 900, to
+//   public/showcase/<key>-desktop.(avif|webp)
 //
 // Look at the files before committing them: an error page, a cookie wall or
 // a blank screen is not a capture. Nothing here is edited or composed.
@@ -15,7 +13,6 @@
 // and a Chromium: CHROME_PATH, or one under /opt/pw-browsers, or Playwright's own.
 const fs = require('fs');
 const path = require('path');
-const { execFileSync } = require('child_process');
 
 const [key, url] = process.argv.slice(2);
 if (!/^[a-z0-9-]+$/.test(key || '') || !/^https?:\/\//.test(url || '')) {
@@ -41,10 +38,7 @@ function findChrome() {
   const sharp = require('sharp');
   const out = path.join(process.cwd(), 'public', 'showcase');
   const browser = await chromium.launch({ executablePath: findChrome() });
-  const shots = [
-    ['desktop', { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 }],
-    ['mobile', { viewport: { width: 390, height: 700 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true }],
-  ];
+  const shots = [['desktop', { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 }]];
   for (const [shape, options] of shots) {
     const context = await browser.newContext(options);
     const page = await context.newPage();
@@ -60,6 +54,5 @@ function findChrome() {
     await context.close();
   }
   await browser.close();
-  execFileSync(process.execPath, [path.join(__dirname, 'make-thumbs.js')], { stdio: 'inherit' });
   console.log(`Done. Look at public/showcase/${key}-*.webp before committing.`);
 })().catch((e) => { console.error('capture failed:', e.message); process.exit(1); });

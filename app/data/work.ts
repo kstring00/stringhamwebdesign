@@ -1,6 +1,5 @@
 /**
- * Selected work: one list, shown in this order on the home page, on /work
- * and in the hero. Every project is labeled for exactly what it is, and no
+ * Selected work: one list, shown in this order on the home page and on /work. Every project is labeled for exactly what it is, and no
  * project claims results.
  *
  * None of these is a commissioned website for a therapy or counseling
@@ -20,10 +19,9 @@
  * that is actually live; `previewUrl` only for a public preview Kyle has
  * checked. Leave both empty rather than guess.
  *
- * Screens are real captures of each project, at 1440 and 390 wide, under
- * public/showcase/<key>-desktop|mobile.(avif|webp), with thumbnails from
- * scripts/make-thumbs.js. A project without a phone capture leaves
- * `alt.mobile` out and shows desktop-only.
+ * Screens are real captures of each project's first screen at 1440 x 900,
+ * under public/showcase/<key>-desktop.(avif|webp), taken with
+ * scripts/capture-work.js. `alt` says what the capture shows.
  */
 export type WorkKind = "live" | "demo" | "in-progress" | "concept" | "archived";
 
@@ -53,8 +51,8 @@ export type Work = {
   built: string[];
   liveUrl?: string;
   previewUrl?: string;
-  /** `mobile` only when there is a real phone capture. */
-  alt: { desktop: string; mobile?: string };
+  /** What the desktop capture shows. */
+  alt: string;
 };
 
 export const work: Work[] = [
@@ -72,10 +70,7 @@ export const work: Work[] = [
     type: "Support hub for autism families · my own product",
     builtFor: "Help a parent find one clear next step today.",
     liveUrl: "https://www.commongroundautism.org",
-    alt: {
-      desktop: "Common Ground home page: “Real autism support for real families,” with a Find My Next Step button",
-      mobile: "Common Ground home page on a phone",
-    },
+    alt: "Common Ground home page: “Real autism support for real families,” with a Find My Next Step button",
   },
   {
     key: "growthgains",
@@ -91,10 +86,7 @@ export const work: Work[] = [
       "A three-step start flow: what you're navigating, what you'd most like to change, then a consultation time, with those answers carried into the booking.",
     ],
     liveUrl: "https://rawrxd-nu.vercel.app/",
-    alt: {
-      desktop: "GrowthGains home page: “You know something needs to change,” a Book a free consultation button, and a portrait beside a current-to-next-chapter diagram",
-      mobile: "GrowthGains home page on a phone",
-    },
+    alt: "GrowthGains home page: “You know something needs to change,” a Book a free consultation button, and a portrait beside a current-to-next-chapter diagram",
   },
   {
     key: "support-shelf",
@@ -110,10 +102,7 @@ export const work: Work[] = [
       "A custom front end with Shopify handling checkout.",
     ],
     liveUrl: "https://www.thesupportshelf.org",
-    alt: {
-      desktop: "The Support Shelf home page: “Practical support for every step of the autism journey,” a Find my shelf button, and four books on a shelf labeled Get Organized, Make a Plan, Everyday Life and Support at Home",
-      mobile: "The Support Shelf home page on a phone: the same headline and Find my shelf button, with the four shelf books below",
-    },
+    alt: "The Support Shelf home page: “Practical support for every step of the autism journey,” a Find my shelf button, and four books on a shelf labeled Get Organized, Make a Plan, Everyday Life and Support at Home",
   },
 ];
 
@@ -129,5 +118,5 @@ export const showcaseWork = work.map((w) => ({
   built: w.built,
   href: w.liveUrl ?? w.previewUrl,
   linkLabel: w.liveUrl ? "Visit the live site" : w.kind === "archived" ? "View the archived demo" : "View the demo",
-  alt: w.alt.desktop,
+  alt: w.alt,
 }));

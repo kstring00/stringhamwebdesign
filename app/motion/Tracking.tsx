@@ -13,7 +13,7 @@ import { track } from "../lib/track";
  * post's text and quote buttons (with the post's slug), and terms_view
  * when the terms page opens.
  * The forms send quote_submit and google_check_submit; the
- * work carousel sends carousel_interaction.
+ * home page's project cards send cta_click with their project.
  */
 export default function Tracking() {
   const pathname = usePathname();

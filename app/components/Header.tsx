@@ -8,15 +8,22 @@ import { site } from "../data/site";
 import Logo from "./Logo";
 import styles from "./Header.module.css";
 
+/** How far down the home page the header stays part of the hero (plain, no bar) before the glass bar takes over. */
+const HERO_PLAIN_UNTIL = 420;
+
 function subscribeScroll(cb: () => void) {
   window.addEventListener("scroll", cb, { passive: true });
   return () => window.removeEventListener("scroll", cb);
 }
 
 /**
- * The header: one liquid-glass bar with the logo, the links (Work, Pricing,
- * Free checkup, Blog, About, FAQ), the phone number and the one action,
- * "Get a free homepage demo".
+ * The header: the logo, the links (Work, Pricing, Free checkup, Blog,
+ * About, FAQ), the phone number and the one action, "Free homepage demo".
+ *
+ * On the home page, at the top, it is part of the hero: no bar at all,
+ * just the logo, the links and an outlined button on white, and it scrolls
+ * away with the page ("plain"). Further down, and on every other page, it
+ * is the liquid-glass bar.
  *
  * On phones the bar is the logo and a Menu button that drops the same
  * links down; the actions move to the bottom bar (MobileBar), within thumb
@@ -26,6 +33,9 @@ function subscribeScroll(cb: () => void) {
 export default function Header() {
   const scrolled = useSyncExternalStore(subscribeScroll, () => window.scrollY > 24, () => false);
   const pathname = usePathname();
+  const home = pathname === "/";
+  const pastHero = useSyncExternalStore(subscribeScroll, () => window.scrollY > HERO_PLAIN_UNTIL, () => false);
+  const plain = home && !pastHero;
   const bar = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
 
@@ -56,7 +66,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={styles.header} data-scrolled={scrolled || undefined} data-menu={open || undefined}>
+    <header className={styles.header} data-home={home || undefined} data-plain={plain || undefined} data-scrolled={scrolled || undefined} data-menu={open || undefined}>
       <div ref={bar} className={styles.bar}>
         <span className={styles.glass} aria-hidden="true" />
         <a className={styles.brand} href="/" aria-label="Stringham Web Design, home">
@@ -75,7 +85,7 @@ export default function Header() {
             <span>{site.phone}</span>
           </a>
           <a className={`btn ${styles.cta}`} href={cta.href} data-track="cta" data-location="header" data-magnetic>
-            {cta.label}
+            {cta.nav}
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
           </a>
         </div>

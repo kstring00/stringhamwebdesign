@@ -16,6 +16,47 @@
   pointer-events: none;
 }
 
+/* On the home page the header never takes room in the page: the hero
+   leaves a strip for it. At the top it is "plain", part of the hero (no
+   glass, deep green on white, an outlined button) and scrolls away with
+   it; further down it comes back as the fixed glass bar. */
+.header[data-home] { position: fixed; left: 0; right: 0; }
+.header[data-home]:not([data-plain]) { animation: drop 260ms var(--ease-out); }
+
+.header[data-plain] {
+  --accent: var(--emerald);
+  --accent-deep: var(--hero-ink);
+  position: absolute;
+  padding-top: 28px;
+  color: var(--hero-ink);
+  font-family: var(--font-hero-text);
+}
+
+.header[data-plain] .bar {
+  width: calc(100% - 2 * clamp(20px, 4vw, 56px));
+  max-width: 1328px;
+  min-height: 48px;
+  padding: 0;
+}
+
+.header[data-plain] .glass { display: none; }
+.header[data-plain] .link { color: var(--hero-text-2); }
+.header[data-plain] .link:hover { color: var(--emerald); }
+.header[data-plain] .phone { color: var(--hero-ink); }
+
+/* The nav button, outlined: 1.5px of ink, nothing behind it. */
+.header[data-plain] .bar .cta {
+  min-height: 48px;
+  padding: 0 22px;
+  border: 1.5px solid var(--hero-ink);
+  background: transparent;
+  color: var(--hero-ink);
+  box-shadow: none;
+}
+
+.header[data-plain] .bar .cta:hover { background: var(--hero-ink); border-color: var(--hero-ink); color: var(--mint); }
+.header[data-plain] .cta svg, .header[data-plain] .cta::after { display: none; }
+
 /* ---------- the bar and its glass ---------- */
 
 .bar {
@@ -270,6 +311,15 @@
   .header[data-scrolled] .glass { background: rgba(255, 255, 255, 0.76); }
 }
 
+/* The plain state on tablets and phones: an outlined Menu button, and a
+   solid white panel for the links. */
+@media (max-width: 64rem) {
+  .header[data-plain] .menuBtn { border: 1.5px solid var(--hero-ink); background: transparent; color: var(--hero-ink); }
+  .header[data-plain] .nav { border: 1px solid rgba(11, 42, 32, 0.14); background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: 0 24px 50px -24px rgba(11, 42, 32, 0.35); }
+  .header[data-plain] .link { color: var(--hero-ink); }
+  .header[data-plain] .link:hover { background: var(--mint); color: var(--hero-ink); }
+}
+
 @keyframes drop {
   from { opacity: 0; transform: translateY(-8px); }
   to { opacity: 1; transform: none; }
@@ -279,4 +329,5 @@
   .bar, .glass, .glass::before, .cta, .cta::after, .link, .link::after, .burger i { transition: none; }
   .cta::after { display: none; }
   .header[data-menu] .nav { animation: none; }
+  .header[data-home]:not([data-plain]) { animation: none; }
 }

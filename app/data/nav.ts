@@ -9,7 +9,7 @@ export const navLinks = [
 ] as const;
 
 /** The site's one action: a free demo of the practice's homepage, with a fixed written quote. */
-export const cta = { label: "Get a free homepage demo", short: "Free demo", href: "/#quote" } as const;
+export const cta = { label: "Get a free homepage demo", nav: "Free homepage demo", short: "Free demo", href: "/#quote" } as const;
 
 /** Footer links. */
 export const footerLinks = [

@@ -22,7 +22,7 @@ locally (the contact form logs instead of emailing without `RESEND_API_KEY`).
 
 ## Pages
 
-`/` (the hero, the work carousel, pricing, about Kyle beside the questions,
+`/` (the hero, a still row of the three projects, pricing, about Kyle beside the questions,
 and the free homepage demo form), `/work` (the full portfolio, each project
 labeled for exactly what it is), `/google-check` (the free Google check and
 the Listing Fix, quoted after the check, with its form; the page to text to prospects),
@@ -73,19 +73,16 @@ the Listing Fix, quoted after the check, with its form; the page to text to pros
   conversion rates, as cohorts by the month the lead came in). See
   `docs/referrals-setup.md`.
 - `app/data/work.ts` — selected work as one list, shown in the same order
-  on the home page, on /work and in the hero. Each project is labeled for
+  on the home page and on /work. Each project is labeled for
   exactly what it is (`kind`, `stage`, `type`); `built` is what was actually
-  built. Real captures live in `public/showcase/` (thumbnails from
-  `scripts/make-thumbs.js`).
+  built. Real desktop captures live in `public/showcase/`, taken with
+  `scripts/capture-work.js`.
 - `docs/user-test-landscaping.md` and `docs/user-test-webster-remodeler.md`
   — the 5-minute tests to run with a local owner.
-- `app/home/BuildField.tsx` (+ `buildFieldShaders.ts`, `BuildFieldMount.tsx`)
-  — the dot field on the home hero (colour from the page's
-  accent): WebGL2 (one draw call) with a Canvas 2D
-  fallback, on `gsap.ticker`. Dots clear around every `data-field-clear`
-  block; a wireframe website frames the example card on desktop. Loaded at
-  idle after first paint, paused offscreen, one still frame under reduced
-  motion, nothing without JS. Tunables are constants at the top of the file.
-  `/?field=2d` forces the fallback; `/?field=blue` shows the original
-  GrowthGains palette for comparison.
+- `app/home/Hero.tsx` + `hero.module.css` — the home hero: white, deep
+  green, Instrument Serif and DM Sans; a generated line (`heroPath.ts`,
+  from `scripts/hero-path.py`) that draws in once, a breathing dot and five
+  drifting clouds, all plain CSS and all off under reduced motion.
+  `WorkRow.tsx` is the still row of project cards under it. The header's
+  "plain" state (`app/components/Header.tsx`) is the hero's top strip.
 - `scripts/` — the launch, link and Lighthouse checks (see `scripts/README.md`).

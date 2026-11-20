@@ -22,6 +22,21 @@
   --cyan: #01cffb;
   /* The logo's ribbon, navy through blue to cyan: for accents only. */
   --brand-gradient: linear-gradient(90deg, #073f82 0%, #0067ec 45%, #0092fc 75%, #01cffb 100%);
+  /* The home hero's palette (hero.module.css and the header's plain state):
+     deep green ink on white, emerald and cobalt accents, mint and sky
+     grounds, two cloud tints. The rest of the site still wears the navy
+     and blue above; it moves to these in the next pass. */
+  --hero-page: #ffffff;
+  --hero-ink: #0b2a20;
+  --hero-text-2: #1d4a3c;
+  --emerald: #0e6b4e;
+  --cobalt: #2450b8;
+  --mint: #d6f5e6;
+  --sky: #dcedfb;
+  --cloud-blue: #dfecfa;
+  --cloud-mint: #ddf3e8;
+  --font-hero-display: var(--font-instrument-serif), "Iowan Old Style", Georgia, serif;
+  --font-hero-text: var(--font-dm-sans), "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --line: #dce3ee;
   --line-strong: rgba(11, 27, 61, 0.3);
 

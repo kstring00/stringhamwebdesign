@@ -26,12 +26,31 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
   not a licensed mental-health professional and the studio provides no
   treatment; nothing on the site may say or imply otherwise (the schema
   type stays a professional service, never a medical one).
-- The hero's words are Kyle's own, in `app/home/Hero.tsx`: the headline
-  "Websites for the people who help people.", then "Your work changes
-  lives. Your website should reflect that." as the first line under it,
-  then his two paragraphs, "Get a free homepage demo", "Or explore my
-  work" and the three checks. Don't paraphrase or "improve" them; change
-  them only when he supplies new ones.
+- The home hero (`app/home/Hero.tsx`, `hero.module.css`) is on white, in
+  its own palette and faces: deep green ink, emerald and cobalt accents,
+  mint and sky grounds (the `--hero-*`, `--emerald`, `--cobalt`, `--mint`,
+  `--sky` and cloud tokens in `globals.css`), Instrument Serif for the
+  headline and DM Sans for everything else. Top to bottom: the site header
+  with no bar of its own (logo, links, phone, an outlined "Free homepage
+  demo" button); a mint eyebrow; the headline "Websites for the people who
+  help people." with "help people." in cobalt italic; the story panel, a
+  tangled line that unravels into one calm, straight line over three
+  captions ("They arrive overwhelmed." / "Your site makes it clear." /
+  "They reach out."); then "Your work changes lives. Your website should
+  reflect that." and Kyle's paragraph beside the button "Get a free
+  homepage demo", the link "Or explore my work" and the three checks.
+  The words are Kyle's own. Don't paraphrase or "improve" them; change
+  them only when he supplies new ones. The line's path is generated
+  (`scripts/hero-path.py` → `app/home/heroPath.ts`), never hand-drawn.
+- Three things move in the hero and nothing else, in plain CSS: the line
+  draws in once on load, the dot at its end breathes, and five clouds
+  drift across behind the content. No project wall, no carousel, no phone
+  frames. Under the hero the three real projects sit as a still row of
+  cards (`app/home/WorkRow.tsx`).
+- The rest of the site (pricing, About and FAQ, the quote band, the footer,
+  the phone's bottom bar, every other page) still wears the earlier navy
+  and blue with Fraunces and Inter Tight. Restyling it is a separate pass;
+  don't mix the two inside one section.
 - Owner-first: the practice owns its site and can run it without Kyle. The
   domain, hosting, code and accounts are in the practice's name. Kyle
   running the site afterwards (Website Care) is optional, never assumed,
@@ -86,9 +105,10 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
   the rate is in `app/data/referral.ts` and the Service Terms.
 - The client portal is gone (branch `archive/portal-site`). No "Client login"
   anywhere. `/family-resource-hub` stays live and unlinked.
-- Motion: small reveals only; content is visible at rest, the headline is
-  real HTML that doesn't wait on JavaScript, and everything is off under
-  `prefers-reduced-motion`.
+- Motion: content is visible at rest, the headline is real HTML that
+  doesn't wait on JavaScript, and everything is off under
+  `prefers-reduced-motion` (the hero's line shows fully drawn and its
+  clouds sit still). Outside the hero, small reveals only.
 - Accessibility failures are disqualifying: Lighthouse accessibility 95+.
 - Don't merge to `main` or deploy to production without the owner's OK.
 

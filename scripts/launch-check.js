@@ -83,13 +83,13 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     if (path === '/') ok(`${path}: LocalBusiness JSON-LD`, /"@type":"ProfessionalService"/.test(d.jsonld) && /League City/.test(d.jsonld) && /Houston/.test(d.jsonld));
     if (path === '/about') ok(`${path}: Person JSON-LD`, /"@type":"Person"/.test(d.jsonld));
     ok(`${path}: no banned words in rendered text`, !BANNED.test(d.text), (d.text.match(BANNED) || [''])[0]);
-    ok(`${path}: header is the logo, the links, the phone and one button`, JSON.stringify(d.headerNav) === JSON.stringify(['Work', 'Pricing', 'Free checkup', 'Blog', 'About', 'FAQ']) && d.headerCta === 'Get a free homepage demo', JSON.stringify({ nav: d.headerNav, cta: d.headerCta }));
+    ok(`${path}: header is the logo, the links, the phone and one button`, JSON.stringify(d.headerNav) === JSON.stringify(['Work', 'Pricing', 'Free checkup', 'Blog', 'About', 'FAQ']) && d.headerCta === 'Free homepage demo', JSON.stringify({ nav: d.headerNav, cta: d.headerCta }));
     ok(`${path}: the mobile bar has call, text and the one action`, d.mobileBar.length === 3 && d.mobileBar[0].startsWith('tel:') && d.mobileBar[1].startsWith('sms:') && d.mobileBar[2] === '/#quote', JSON.stringify(d.mobileBar));
   }
 
   const home = seen.get('/');
   // The hero is Kyle's own copy, word for word.
-  ok('home says what and for whom above the fold', /Custom web design for mental health professionals/i.test(home.text) && /Websites for the\s+people who help people\./.test(home.text) && /Your work changes lives\. Your website should reflect that\./.test(home.text) && /Thoughtfully designed, custom-built websites for therapists, counselors, and mental-health practices\./.test(home.text) && /I combine a background in psychology and behavioral healthcare with modern web design to create websites that help people understand your services, feel comfortable reaching out, and take the next step toward care\./.test(home.text));
+  ok('home says what and for whom above the fold', /Custom web design for mental health professionals/i.test(home.text) && /Websites for the people who\s+help people\./.test(home.text) && /Your work changes lives\. Your website should reflect that\./.test(home.text) && /I combine a background in psychology and behavioral healthcare with modern web design, so your website helps people understand your services, feel comfortable reaching out, and take the next step toward care\./.test(home.text) && /They arrive overwhelmed\./.test(home.text) && /Your site makes it clear\./.test(home.text) && /They reach out\./.test(home.text));
   ok('home has the one CTA, and says where the studio is', (home.text.match(/Get a free homepage demo/g) || []).length >= 2 && /based in League City, Texas/i.test(home.text));
   ok('the studio never presents itself as a care provider', /I don.t provide care/.test(home.text) && !/"@type":"(Medical|Physician|Psychologist)/.test(home.jsonld || ''));
   ok('the partner side is gone from the pages', ![...seen.values()].some((d) => /For partners|Explore a partnership|I pay you 20%/.test(d.text)));

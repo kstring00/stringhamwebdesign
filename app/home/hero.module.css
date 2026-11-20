@@ -1,0 +1,311 @@
+/* The home hero and the project row under it: white, deep green ink,
+   Instrument Serif for the headline and DM Sans for everything else. The
+   colors are the hero tokens in globals.css. Three things move (the line,
+   the dot, the clouds), all here, all off under reduced motion. */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 28px clamp(20px, 4vw, 56px) 72px;
+  background: var(--hero-page);
+  color: var(--hero-ink);
+  font-family: var(--font-hero-text);
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1328px;
+  margin: 0 auto;
+}
+
+/* The site header overlays this strip (Header.module.css, the plain state). */
+.headerSpace { height: var(--hero-header-h, 48px); }
+
+/* ---------- eyebrow and headline ---------- */
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 60px;
+  padding: 10px 18px;
+  border-radius: 22px;
+  background: var(--mint);
+  color: var(--hero-text-2);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.eyebrowDot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--cobalt); }
+
+.h1 {
+  margin-top: 28px;
+  color: var(--hero-ink);
+  font-family: var(--font-hero-display);
+  font-size: clamp(3.1rem, 8.6vw, 8rem);
+  font-weight: 400;
+  font-variation-settings: normal;
+  letter-spacing: -0.025em;
+  line-height: 0.96;
+  text-wrap: balance;
+}
+
+.h1 em { color: var(--cobalt); font-style: italic; }
+
+/* ---------- the story panel ---------- */
+
+.panel {
+  margin-top: 44px;
+  padding: clamp(20px, 3vw, 40px) clamp(20px, 3.2vw, 44px) clamp(18px, 2.2vw, 30px);
+  border-radius: 28px;
+  background: linear-gradient(100deg, var(--mint) 45%, var(--sky) 100%);
+}
+
+.story { display: block; width: 100%; height: auto; overflow: visible; }
+
+/* The line is fully drawn at rest; on load it draws in once. */
+.line {
+  stroke-dasharray: 3000;
+  stroke-dashoffset: 0;
+  animation: draw 4.5s cubic-bezier(0.45, 0, 0.2, 1) both;
+}
+
+@keyframes draw {
+  from { stroke-dashoffset: 3000; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* The circle behind the end dot swells and fades, slowly. */
+.breath {
+  opacity: 0.45;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: breathe 7s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.45; }
+  50% { transform: scale(2.3); opacity: 0.08; }
+}
+
+.captions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--hero-text-2);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.captions li:nth-child(2) { text-align: center; }
+.captions li:nth-child(3) { text-align: right; }
+
+.num {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.numLast { color: var(--cobalt); }
+
+/* ---------- Kyle's words and the one action ---------- */
+
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 40px 64px;
+  margin-top: 56px;
+}
+
+.words { flex: 1 1 420px; max-width: 640px; }
+
+.lead { color: var(--hero-ink); font-size: 22px; font-weight: 500; line-height: 1.35; }
+
+.body { margin-top: 14px; color: var(--hero-text-2); font-size: 17px; line-height: 1.65; }
+
+.action {
+  flex: 0 1 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 30px;
+  border-radius: 40px;
+  background: var(--hero-ink);
+  color: var(--mint);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.button:hover { background: #123a2d; }
+.button:focus-visible { outline: 3px solid var(--cobalt); outline-offset: 3px; }
+.button svg { flex: none; }
+
+.workLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 12px;
+  color: var(--hero-ink);
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+}
+
+.workLink:hover { color: var(--emerald); }
+.workLink:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 2px; border-radius: 4px; }
+
+.checks {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--hero-text-2);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.checks li { display: flex; align-items: center; gap: 10px; }
+.checks svg { flex: none; color: var(--emerald); }
+
+/* ---------- the clouds ---------- */
+
+.clouds { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+
+/* Each cloud rests where it starts (top, and --l percent of the screen from
+   the left). Moving, it crosses from fully off the left edge to fully off
+   the right one, and a negative delay puts it at its start point on load. */
+.cloud {
+  --k: 1;
+  position: absolute;
+  top: var(--top);
+  left: calc(var(--l) * 1vw);
+  width: calc(var(--w) * var(--k));
+  height: auto;
+  animation: drift var(--dur) linear var(--delay) infinite;
+  will-change: transform;
+}
+
+@keyframes drift {
+  from { transform: translateX(calc(var(--l) * -1vw - var(--w) * var(--k))); }
+  to { transform: translateX(calc((100 - var(--l)) * 1vw)); }
+}
+
+/* ---------- the project row under the hero ---------- */
+
+.work {
+  padding: 8px clamp(20px, 4vw, 56px) 88px;
+  background: var(--hero-page);
+  color: var(--hero-ink);
+  font-family: var(--font-hero-text);
+  scroll-margin-top: 5rem;
+}
+
+.workInner { max-width: 1328px; margin: 0 auto; padding-top: 56px; border-top: 1px solid rgba(11, 42, 32, 0.14); }
+
+.workHead { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; margin-bottom: 28px; }
+
+.workTitle {
+  color: var(--hero-text-2);
+  font-family: var(--font-hero-text);
+  font-size: 12px;
+  font-weight: 600;
+  font-variation-settings: normal;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.workAll { display: inline-flex; align-items: center; min-height: 44px; color: var(--hero-ink); font-size: 15px; font-weight: 500; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+.workAll:hover { color: var(--emerald); }
+.workAll:focus-visible, .card:focus-visible { outline: 3px solid var(--cobalt); outline-offset: 3px; }
+
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2vw, 28px); margin: 0; padding: 0; list-style: none; }
+
+.card { display: block; border-radius: 20px; color: inherit; }
+
+.shot {
+  display: block;
+  overflow: hidden;
+  border: 1px solid rgba(11, 42, 32, 0.14);
+  border-radius: 20px;
+  background: var(--mint);
+}
+
+.shot img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top center; }
+
+.meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; }
+
+.name { font-family: var(--font-hero-display); font-size: 28px; line-height: 1.1; letter-spacing: -0.01em; }
+.card:hover .name { color: var(--emerald); }
+
+.badge {
+  flex: none;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--mint);
+  color: var(--hero-text-2);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.stage { display: block; margin-top: 4px; color: var(--hero-text-2); font-size: 14px; line-height: 1.4; }
+
+/* ---------- smaller screens ---------- */
+
+/* Below the widest layout the hero's height changes with the wrapping, so
+   the two lower clouds are anchored to its foot and sized to fit inside the
+   bottom padding: they pass under the words, never behind the paragraph.
+   (The outlines leave a little empty space at the bottom of their boxes,
+   hence the small negative offsets.) The third rides up beside the end of
+   the headline instead of hiding behind the panel. */
+@media (max-width: 1160px) {
+  .cloud { --k: 0.75; }
+  .cloud[data-cloud="3"] { top: 300px; }
+  .cloud[data-cloud="4"] { --k: 0.5; top: auto; bottom: -6px; }
+  .cloud[data-cloud="5"] { top: auto; bottom: -4px; }
+}
+
+@media (max-width: 760px) {
+  .cards { grid-template-columns: 1fr; gap: 32px; }
+}
+
+@media (max-width: 640px) {
+  .cloud { --k: 0.5; }
+  .cloud[data-cloud="1"] { top: 84px; }
+  .cloud[data-cloud="2"] { top: 200px; }
+  .cloud[data-cloud="3"] { top: 330px; }
+  .cloud[data-cloud="4"] { --k: 0.4; }
+  /* The site's floor for text on a phone is 13px (scripts/launch-check.js). */
+  .eyebrow { font-size: 13px; letter-spacing: 0.12em; }
+  .action { flex-basis: 100%; }
+  .button { width: 100%; justify-content: center; padding-inline: 20px; }
+  .captions { font-size: 13px; }
+  .work { padding-bottom: 64px; }
+}
+
+/* ---------- reduced motion: nothing moves ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .line, .breath, .cloud { animation: none; }
+}

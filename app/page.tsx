@@ -3,12 +3,11 @@ import type { Metadata } from "next";
 import { BusinessJsonLd } from "./components/JsonLd";
 import { pageMeta } from "./data/meta";
 import { site } from "./data/site";
-import { showcaseWork } from "./data/work";
-import Coverflow from "./components/Coverflow";
 import AboutFaq from "./home/AboutFaq";
 import Hero from "./home/Hero";
 import Pricing from "./home/Pricing";
 import QuoteForm from "./home/QuoteForm";
+import WorkRow from "./home/WorkRow";
 import s from "./home/home.module.css";
 
 export const metadata: Metadata = pageMeta({
@@ -24,16 +23,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
       {/* 1. The first screen: what, for whom, the next step. */}
       <Hero />
 
-      {/* 2. Proof: every project, labeled for what it is. */}
-      <section className={`${s.section} ${s.workSection}`} id="work" aria-labelledby="work-title">
-        <div className="container">
-          <div className={s.head}>
-            <h2 id="work-title" className={s.h2} data-reveal>Work you can explore.</h2>
-            <p className={s.lede}>Live projects, each labeled for exactly what it is and built around one clear next step for the person visiting. Drag, swipe or tap through, then read the <a className={`u ${s.inlineLink}`} href="/work">full write-ups</a>.</p>
-          </div>
-          <Coverflow items={showcaseWork} label="Selected work" />
-        </div>
-      </section>
+      {/* 2. Proof: the three real projects, as a still row, each labeled for what it is. */}
+      <WorkRow />
 
       {/* 3. The price, what's in it, who runs it after, and the Google path. */}
       <Pricing />

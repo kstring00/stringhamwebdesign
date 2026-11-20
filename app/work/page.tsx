@@ -56,7 +56,7 @@ export default function WorkPage() {
                     <div className={home.chrome}><i /><i /><i /><span>{href ? new URL(href).host : w.name}</span></div>
                     <picture>
                       <source type="image/avif" srcSet={`/showcase/${w.key}-desktop.avif`} />
-                      <img src={`/showcase/${w.key}-desktop.webp`} alt={w.alt.desktop} width={1440} height={900} loading={i === 0 ? "eager" : "lazy"} decoding="async" />
+                      <img src={`/showcase/${w.key}-desktop.webp`} alt={w.alt} width={1440} height={900} loading={i === 0 ? "eager" : "lazy"} decoding="async" />
                     </picture>
                   </div>
                   <div className={styles.text}>

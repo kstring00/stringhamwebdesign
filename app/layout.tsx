@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter_Tight } from "next/font/google";
+import { DM_Sans, Fraunces, Instrument_Serif, Inter_Tight } from "next/font/google";
 
 import "./globals.css";
 import ClarityAnalytics from "./ClarityAnalytics";
@@ -12,9 +12,10 @@ import Tracking from "./motion/Tracking";
 import RefTracker from "./motion/RefTracker";
 import { site } from "./data/site";
 
-/* Both faces are self-hosted: next/font downloads them at build and serves
-   them from this origin, subset to latin, with no request to Google from a
-   visitor's browser. */
+/* All four faces are self-hosted: next/font downloads them at build and
+   serves them from this origin, subset to latin, with no request to Google
+   from a visitor's browser. Instrument Serif and DM Sans are the home
+   hero's; Fraunces and Inter Tight are the rest of the site's for now. */
 const fraunces = Fraunces({
   subsets: ["latin"],
   axes: ["opsz", "SOFT"],
@@ -31,6 +32,21 @@ const interTight = Inter_Tight({
   variable: "--font-inter-tight",
 });
 
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-instrument-serif",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+  variable: "--font-dm-sans",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: `Web Design for Therapists & Mental Health Practices | ${site.name}`, template: `%s | ${site.name}` },
@@ -45,7 +61,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${interTight.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${interTight.variable} ${instrumentSerif.variable} ${dmSans.variable}`}>
       <body>
         <a className="skip" href="#main">Skip to content</a>
         <Header />
