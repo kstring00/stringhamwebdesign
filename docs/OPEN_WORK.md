@@ -12,11 +12,6 @@ Updated 2026-11-19 (mental-health practice rework, Phase 1).
   businesses that weren't already talking to Kyle, and whether there's a
   payout window. Today the site says only "paid once the business has paid
   for its website in full".
-- The Support Shelf is in `app/data/work.ts`, but its captures are not in
-  the repo yet: the build sandbox couldn't reach the site. From a machine
-  that can, run `node scripts/capture-work.js support-shelf https://www.thesupportshelf.org/`,
-  look at the eight files it writes under `public/showcase/`, and commit
-  them. Don't merge before that; its images are broken until then.
 - The Free Website Checkup still speaks to "business owners" and
   "customers"; its wording is Phase 2 (its puzzle animation, Phase 4). The
   blog stays as it is.

@@ -111,8 +111,8 @@ export const work: Work[] = [
     ],
     liveUrl: "https://www.thesupportshelf.org",
     alt: {
-      desktop: "The Support Shelf home page",
-      mobile: "The Support Shelf home page on a phone",
+      desktop: "The Support Shelf home page: “Practical support for every step of the autism journey,” a Find my shelf button, and four books on a shelf labeled Get Organized, Make a Plan, Everyday Life and Support at Home",
+      mobile: "The Support Shelf home page on a phone: the same headline and Find my shelf button, with the four shelf books below",
     },
   },
 ];
