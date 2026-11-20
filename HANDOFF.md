@@ -47,10 +47,13 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
   drift across behind the content. No project wall, no carousel, no phone
   frames. Under the hero the three real projects sit as a still row of
   cards (`app/home/WorkRow.tsx`).
-- The rest of the site (pricing, About and FAQ, the quote band, the footer,
-  the phone's bottom bar, every other page) still wears the earlier navy
-  and blue with Fraunces and Inter Tight. Restyling it is a separate pass;
-  don't mix the two inside one section.
+- One palette and two faces, site-wide, all as tokens in `app/globals.css`:
+  white paper, deep green ink, emerald for small accents (checks, links,
+  focus), cobalt for the rare highlight, mint and sky grounds. Buttons are
+  ink with mint words. Instrument Serif for headings (one weight; never
+  bold it), DM Sans for everything else. The logo keeps its own blues.
+  Don't bring back the navy and blue, and don't write a color out in a
+  component when a token exists.
 - Owner-first: the practice owns its site and can run it without Kyle. The
   domain, hosting, code and accounts are in the practice's name. Kyle
   running the site afterwards (Website Care) is optional, never assumed,

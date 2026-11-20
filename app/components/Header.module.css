@@ -4,10 +4,9 @@
    contents. On phones the links and actions step out (MobileBar has them). */
 
 .header {
-  /* The accent: the logo blue. */
+  /* The accent, for the phone icon, the link underline and focus rings. */
   --accent: var(--brand);
-  --accent-deep: var(--brand-deep);
-  --accent-glow: rgba(0, 96, 220, 0.28);
+  --accent-glow: rgba(11, 42, 32, 0.28);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -24,8 +23,6 @@
 .header[data-home]:not([data-plain]) { animation: drop 260ms var(--ease-out); }
 
 .header[data-plain] {
-  --accent: var(--emerald);
-  --accent-deep: var(--hero-ink);
   position: absolute;
   padding-top: 28px;
   color: var(--hero-ink);
@@ -88,20 +85,21 @@
   backdrop-filter: blur(18px) saturate(1.8);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(10, 30, 60, 0.06),
-    0 1px 2px rgba(10, 30, 60, 0.05);
+    inset 0 -1px 0 rgba(11, 42, 32, 0.06),
+    0 1px 2px rgba(11, 42, 32, 0.05);
   view-transition-name: site-glass;
   transition: background-color 400ms var(--ease-out), box-shadow 400ms var(--ease-out);
 }
 
 /* Scrolled: a tighter, floating capsule with real depth. */
 .header[data-scrolled] .glass {
-  background: rgba(255, 255, 255, 0.66);
+  /* Opaque enough that the ink links still read over the dark band. */
+  background: rgba(255, 255, 255, 0.86);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(10, 30, 60, 0.06),
-    0 18px 40px -22px rgba(10, 30, 60, 0.38),
-    0 2px 6px -2px rgba(10, 30, 60, 0.08);
+    inset 0 -1px 0 rgba(11, 42, 32, 0.06),
+    0 18px 40px -22px rgba(11, 42, 32, 0.38),
+    0 2px 6px -2px rgba(11, 42, 32, 0.08);
 }
 
 /* A soft specular highlight that follows the pointer. */
@@ -144,7 +142,7 @@
 
 .brand:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 
-/* The logo: its own navy and blues, on both views. */
+/* The logo: its own blues, on every page. */
 .logo { display: block; width: auto; height: 2.5rem; }
 
 /* ---------- the links ---------- */
@@ -214,15 +212,16 @@
   overflow: hidden;
   min-height: 3rem;
   padding: 0.6rem 1.15rem 0.6rem 1.35rem;
-  border-color: var(--accent);
-  background: var(--accent);
+  border-color: var(--action);
+  background: var(--action);
+  color: var(--action-text);
   font-size: 0.95rem;
   box-shadow: 0 8px 20px -10px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.22);
   view-transition-name: site-cta;
   transition: background-color 300ms var(--ease-out), border-color 300ms var(--ease-out);
 }
 
-.bar .cta:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
+.bar .cta:hover { background: var(--action-hover); border-color: var(--action-hover); }
 
 .cta::after {
   content: "";
@@ -293,8 +292,8 @@
     backdrop-filter: blur(18px) saturate(1.8);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.95),
-      inset 0 0 0 1px rgba(10, 30, 60, 0.06),
-      0 24px 50px -24px rgba(10, 30, 60, 0.45);
+      inset 0 0 0 1px rgba(11, 42, 32, 0.06),
+      0 24px 50px -24px rgba(11, 42, 32, 0.45);
   }
 
   .header[data-menu] .nav { display: flex; animation: drop 260ms var(--ease-out); }
@@ -308,7 +307,7 @@
   .actions { display: none; }
   .bar { min-height: 3.5rem; padding-left: 1.1rem; }
   .logo { height: 2rem; }
-  .header[data-scrolled] .glass { background: rgba(255, 255, 255, 0.76); }
+  .header[data-scrolled] .glass { background: rgba(255, 255, 255, 0.9); }
 }
 
 /* The plain state on tablets and phones: an outlined Menu button, and a

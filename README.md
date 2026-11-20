@@ -45,16 +45,19 @@ the Listing Fix, quoted after the check, with its form; the page to text to pros
 - `app/data/site.ts` — identity, phone, email, location.
 - `content/service-terms.md` and `content/privacy.md` — rendered word for
   word at `/terms` and `/privacy`.
-- `app/globals.css` — the whole design system, in the logo's colours: navy
-  ink (`--ink`, `--navy`), the brand blue `--brand` `#0060DC` (white text
-  passes AA), `--brand-deep`, and the ribbon gradient `--brand-gradient`
-  (navy → blue → azure → cyan, for accents only, never text). The partner
-  view swaps the brand for violet. Component files only arrange it.
+- `app/globals.css` — the whole design system: white paper, deep green ink
+  (`--ink`), the emerald accent `--brand` `#0E6B4E` (white text passes AA),
+  `--cobalt` for highlights, the `--mint` and `--sky` grounds, the button
+  (`--action`: ink with mint words) and the gradient `--brand-gradient`
+  (ink → emerald → cobalt, for accents only, never text). Headings are
+  Instrument Serif, everything else DM Sans (`app/layout.tsx`). Component
+  files only arrange it.
 - `brand/stringham-web-design-logo.png` — Kyle's logo file (the source).
   `public/brand/` holds what's cut from it: the horizontal lockup used by
   `app/components/Logo.tsx` in the header and footer, the S mark, and a
   square logo for structured data. `app/icon.png` and `app/apple-icon.png`
-  are the S mark; the share image (`app/opengraph-image.png`) uses the lockup.
+  are the S mark; the share image (`app/opengraph-image.png`) uses the lockup
+  and is drawn by `scripts/share-image.js`.
 - `app/home/FreeCheckForm.tsx` + `app/api/free-check/route.ts` — the form and
   its backend (Resend; honeypot; rate limit; utm/referrer captured as hidden
   fields and written into the email).

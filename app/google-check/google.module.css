@@ -2,8 +2,7 @@
 .hero > div { display: grid; gap: 1.25rem; max-width: 46rem; }
 
 .h1 {
-  font-size: clamp(2.4rem, 5vw, 4rem);
-  font-variation-settings: "opsz" 144, "SOFT" 30;
+  font-size: clamp(2.76rem, 5.75vw, 4.6rem);
   letter-spacing: -0.025em;
   line-height: 1.02;
 }
@@ -75,9 +74,9 @@
   background: #fff;
 }
 
-.cardName { font-size: 1.35rem; }
+.cardName { font-size: 1.688rem; }
 .price { display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
-.price b { font-family: var(--font-display); font-size: 2.4rem; font-weight: 500; letter-spacing: -0.03em; line-height: 1; }
+.price b { font-family: var(--font-display); font-size: 2.8rem; font-weight: 400; letter-spacing: -0.03em; line-height: 1; }
 .price span { color: var(--muted); font-size: 0.95rem; }
 
 .notIncluded { color: var(--muted); font-size: 0.92rem; }

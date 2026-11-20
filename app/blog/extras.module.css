@@ -35,7 +35,7 @@
     color: #fff;
     font-weight: 600;
     white-space: nowrap;
-    box-shadow: 0 14px 34px -14px rgba(0, 96, 220, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    box-shadow: 0 14px 34px -14px rgba(11, 42, 32, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.22);
     transform: translate(-50%, 0);
     transition: transform 400ms var(--ease-out), opacity 300ms var(--ease-out);
   }

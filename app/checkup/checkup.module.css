@@ -12,7 +12,7 @@
   --warn-soft: #faedd5;
   --bad: #b23a3a;
   --bad-soft: #f7dede;
-  --wire: #c9d2e3;
+  --wire: #c8d6cf;
   --frame: var(--ink);
   display: grid;
   gap: clamp(1.75rem, 4vw, 2.5rem);
@@ -25,8 +25,7 @@
 .eyebrow { color: var(--brand-deep); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
 
 .h1 {
-  font-size: clamp(2.2rem, 5vw, 3.6rem);
-  font-variation-settings: "opsz" 144, "SOFT" 30;
+  font-size: clamp(2.53rem, 5.75vw, 4.14rem);
   letter-spacing: -0.025em;
   line-height: 1.05;
   text-wrap: balance;
@@ -72,7 +71,7 @@
   padding: 0.6em;
   border-radius: 2.4em;
   background: var(--frame);
-  box-shadow: 0 30px 60px -30px rgba(11, 27, 61, 0.45);
+  box-shadow: 0 30px 60px -30px rgba(11, 42, 32, 0.45);
 }
 
 .screen {
@@ -194,7 +193,7 @@
   border: 1px solid var(--line);
   border-radius: 0.8em;
   background: #fff;
-  box-shadow: 0 12px 24px -16px rgba(11, 27, 61, 0.5);
+  box-shadow: 0 12px 24px -16px rgba(11, 42, 32, 0.5);
 }
 
 .zGoogle[data-state="active"] { background: var(--brand-soft); }
@@ -221,7 +220,7 @@
 .live { display: grid; gap: 0.9rem; }
 .count { display: flex; justify-content: space-between; gap: 0.75rem; color: var(--muted); font-size: 0.88rem; font-variant-numeric: tabular-nums; }
 .count b { color: var(--ink); font-weight: 600; }
-.q { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 500; letter-spacing: -0.015em; line-height: 1.22; text-wrap: balance; }
+.q { font-size: clamp(1.8rem, 3.6vw, 2.4rem); font-weight: 500; letter-spacing: -0.015em; line-height: 1.22; text-wrap: balance; }
 .help { max-width: 52ch; color: var(--ink-soft); line-height: 1.55; }
 
 .answers { display: grid; gap: 0.6rem; }
@@ -328,12 +327,12 @@
 .lab { font-weight: 600; }
 .track { position: relative; height: 2rem; overflow: hidden; border-radius: 8px; background: var(--paper); }
 .fill { position: absolute; top: 0; bottom: 0; left: 0; border-radius: 0 6px 6px 0; transition: width 350ms var(--ease-out); }
-.fillNow { background: #a7b0c0; }
+.fillNow { background: #a9b8b1; }
 .fillLo { background: var(--brand); }
-.fillHi { background: #b3cdf3; }
+.fillHi { background: #a8dcc2; }
 .track b { position: absolute; top: 50%; left: 0.6rem; color: var(--ink); font-size: 0.84rem; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; transform: translateY(-50%); }
 /* On the blue "after" fill the label reads in white over the solid part. */
-.track .fillLo + b { color: #fff; text-shadow: 0 1px 2px rgba(11, 27, 61, 0.35); }
+.track .fillLo + b { color: #fff; text-shadow: 0 1px 2px rgba(11, 42, 32, 0.35); }
 
 .outs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
 .out { display: grid; gap: 0.1rem; padding: 0.75rem 0.85rem; border: 1px solid var(--line); border-radius: 12px; }
@@ -363,7 +362,7 @@
 .timeline b { font-weight: 600; font-variant-numeric: tabular-nums; }
 .timeline span { color: var(--ink-soft); }
 
-/* The ask: on navy, after the report. */
+/* The ask: on the ink ground, after the report. */
 .cta { display: grid; gap: 0.8rem; padding: clamp(1.25rem, 3vw, 1.75rem); border-radius: 18px; background: var(--navy); color: var(--paper-on-ink); scroll-margin-top: 6rem; }
 .ctaTitle { color: #fff; font-size: clamp(1.4rem, 2.6vw, 1.75rem); letter-spacing: -0.015em; line-height: 1.15; }
 .cta > p { color: var(--muted-on-ink); line-height: 1.55; }
@@ -395,8 +394,8 @@
 .leadRow { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
 .lead label { display: grid; gap: 0.3rem; color: var(--muted-on-ink); font-size: 0.86rem; font-weight: 600; }
 .lead input:not([type="hidden"]) { min-height: 44px; padding: 0.55rem 0.75rem; border: 1px solid var(--line-on-ink); border-radius: 10px; background: rgba(255, 255, 255, 0.07); color: #fff; font: inherit; font-size: 1rem; }
-.lead input::placeholder { color: rgba(246, 248, 251, 0.5); }
-.lead input:focus-visible { outline: 2px solid #9cc8ff; outline-offset: 1px; }
+.lead input::placeholder { color: rgba(243, 251, 247, 0.5); }
+.lead input:focus-visible { outline: 2px solid #a8e6c8; outline-offset: 1px; }
 .leadSubmit { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; color: var(--muted-on-ink); font-size: 0.86rem; }
 .leadSubmit a { color: #fff; }
 .leadError { color: #ffd1d1; font-size: 0.9rem; }
@@ -433,7 +432,7 @@
 
 @media print {
   @page { size: letter; margin: 0.45in 0.55in; }
-  .root { --line: #cfd6e2; display: block; padding: 0; color: #000; font-size: 9.5pt; }
+  .root { --line: #cfdad4; display: block; padding: 0; color: #000; font-size: 9.5pt; }
   .intro, .ticks, .answers, .row, .lede, .free, .cta, .footnote, .inputs, .how summary, .example { display: none !important; }
   .root * { box-shadow: none !important; }
   .printHead { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.16in; padding-bottom: 0.08in; border-bottom: 2px solid var(--brand); font-size: 10pt; }

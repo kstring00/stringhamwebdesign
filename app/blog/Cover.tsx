@@ -2,11 +2,11 @@ import type { CoverMotif } from "./posts";
 import s from "./cover.module.css";
 
 const WHITE = "#ffffff";
-const INK = "#0b1b3d";
-const BRAND = "#0060dc";
-const SKY = "#5fb2ff";
-const CYAN = "#01cffb";
-const MUTED = "#c9d6ea";
+const INK = "#0b2a20";
+const BRAND = "#0e6b4e";
+const SKY = "#9fd8bd";
+const CYAN = "#d6f5e6";
+const MUTED = "#c8d6cf";
 const TEXT = { fontFamily: "var(--font-text)" };
 const DISPLAY = { fontFamily: "var(--font-display)" };
 
@@ -116,7 +116,7 @@ function Motif({ motif }: { motif: CoverMotif }) {
 }
 
 /**
- * A post's cover: a drawing of what the post is about on a navy blueprint
+ * A post's cover: a drawing of what the post is about on a deep green blueprint
  * grid, with its issue number. Drawn in SVG, so it costs no image request
  * and stays sharp at any size; it's decoration (the title sits beside it),
  * so screen readers skip it.

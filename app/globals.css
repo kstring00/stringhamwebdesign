@@ -1,63 +1,63 @@
-/* Stringham Web Design — quiet and clear, in the logo's colours.
-   Off-white paper tinted faintly blue, navy ink (the wordmark's), and one
-   brand blue (the logo's "Web Design" blue, a shade deeper so white text
-   on it passes AA). The logo's azure and cyan are for decoration only:
-   gradients and highlights, never text. A restrained display serif for
-   headings, a clean grotesk for everything else. Everything below is the
-   whole system; component files only arrange it. */
+/* Stringham Web Design: calm and clear. White paper, deep green ink, an
+   emerald accent for small things (checks, links, focus), a cobalt for the
+   rare highlight, and mint and sky grounds. Buttons are ink with mint
+   words. The one dark ground is the ink itself. Instrument Serif for
+   headings, DM Sans for everything else. Everything below is the whole
+   system; component files only arrange it. */
 
 :root {
-  --paper: #f4f6fa;
-  --paper-deep: #e9eef6;
-  --ink: #0b1b3d;
-  --ink-soft: #34425a;
-  --muted: #5b6880;
-  /* The brand, from the logo. --brand is 5.7:1 on white; --brand-deep is
-     the mark's own blue; --navy is the wordmark. */
-  --brand: #0060dc;
-  --brand-deep: #0352ad;
-  --brand-soft: #e6effd;
-  --navy: #082241;
-  --azure: #0092fc;
-  --cyan: #01cffb;
-  /* The logo's ribbon, navy through blue to cyan: for accents only. */
-  --brand-gradient: linear-gradient(90deg, #073f82 0%, #0067ec 45%, #0092fc 75%, #01cffb 100%);
-  /* The home hero's palette (hero.module.css and the header's plain state):
-     deep green ink on white, emerald and cobalt accents, mint and sky
-     grounds, two cloud tints. The rest of the site still wears the navy
-     and blue above; it moves to these in the next pass. */
-  --hero-page: #ffffff;
-  --hero-ink: #0b2a20;
-  --hero-text-2: #1d4a3c;
+  --paper: #ffffff;
+  /* The alternate section ground: white with a breath of mint. */
+  --paper-deep: #f0f8f4;
+  --ink: #0b2a20;
+  --ink-soft: #1d4a3c;
+  /* 6.3:1 on white, 5.4:1 on mint. */
+  --muted: #4b665c;
+  /* The accent. --brand (emerald) is 6.5:1 on white and carries white
+     text; --brand-deep is its hover. */
+  --brand: #0e6b4e;
+  --brand-deep: #0a5540;
+  --brand-soft: #e3f6ec;
   --emerald: #0e6b4e;
   --cobalt: #2450b8;
   --mint: #d6f5e6;
   --sky: #dcedfb;
   --cloud-blue: #dfecfa;
   --cloud-mint: #ddf3e8;
-  --font-hero-display: var(--font-instrument-serif), "Iowan Old Style", Georgia, serif;
-  --font-hero-text: var(--font-dm-sans), "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --line: #dce3ee;
-  --line-strong: rgba(11, 27, 61, 0.3);
+  /* The one dark ground. */
+  --navy: var(--ink);
+  /* The hero line's colors, ink through emerald to cobalt: for accents only. */
+  --brand-gradient: linear-gradient(90deg, #0b2a20 0%, #0e6b4e 40%, #2450b8 72%, #2450b8 100%);
+  /* The button: ink, with mint words. */
+  --action: var(--ink);
+  --action-hover: #123a2d;
+  --action-text: var(--mint);
+  --line: #dbe6e0;
+  --line-strong: rgba(11, 42, 32, 0.3);
 
-  /* On the navy ground */
-  --paper-on-ink: #f6f8fb;
-  --muted-on-ink: rgba(246, 248, 251, 0.72);
-  --line-on-ink: rgba(246, 248, 251, 0.18);
+  /* On the ink ground */
+  --paper-on-ink: #f3fbf7;
+  --muted-on-ink: rgba(243, 251, 247, 0.74);
+  --line-on-ink: rgba(243, 251, 247, 0.18);
 
-  /* Aliases kept for the hub and legal pages, which predate the accent change. */
+  /* Names the hero and older pages still use. */
+  --hero-page: var(--paper);
+  --hero-ink: var(--ink);
+  --hero-text-2: var(--ink-soft);
   --ember: var(--brand);
   --ember-deep: var(--brand-deep);
-  --ember-on-ink: #9cc8ff;
+  --ember-on-ink: #a8e6c8;
 
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
   --max: 75rem;
   /* One section rhythm, everywhere. */
   --section: clamp(4.5rem, 8vw, 7rem);
 
-  --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
-  --font-display-italic: var(--font-fraunces-italic), var(--font-fraunces), "Iowan Old Style", Georgia, serif;
-  --font-text: var(--font-inter-tight), "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-instrument-serif), "Iowan Old Style", Georgia, serif;
+  --font-display-italic: var(--font-display);
+  --font-text: var(--font-dm-sans), "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-hero-display: var(--font-display);
+  --font-hero-text: var(--font-text);
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
@@ -74,6 +74,8 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* Instrument Serif has one weight: never fake a bold from it. */
+  font-synthesis-weight: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -120,8 +122,8 @@ body::after {
 }
 
 ::selection {
-  background: var(--brand);
-  color: var(--paper);
+  background: var(--mint);
+  color: var(--ink);
 }
 
 img,
@@ -151,9 +153,9 @@ h3,
 h4 {
   margin: 0;
   font-family: var(--font-display);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 0.98;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1;
   text-wrap: balance;
 }
 
@@ -243,7 +245,7 @@ p {
   color: var(--muted-on-ink);
 }
 
-/* Section backgrounds: the one dark ground is the logo's navy. */
+/* Section backgrounds: the one dark ground is the ink. */
 .ink {
   background: var(--navy);
   color: var(--paper-on-ink);
@@ -273,10 +275,10 @@ p {
   gap: 0.6rem;
   min-height: 3.25rem;
   padding: 0.85rem 1.6rem;
-  border: 1px solid var(--brand);
+  border: 1px solid var(--action);
   border-radius: 999px;
-  background: var(--brand);
-  color: var(--paper);
+  background: var(--action);
+  color: var(--action-text);
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: 0.005em;
@@ -287,9 +289,9 @@ p {
 }
 
 .btn:hover {
-  background: var(--brand-deep);
-  border-color: var(--brand-deep);
-  color: var(--paper);
+  background: var(--action-hover);
+  border-color: var(--action-hover);
+  color: var(--action-text);
 }
 
 .btn svg {
@@ -313,15 +315,15 @@ p {
 }
 
 .ink .btn {
-  background: var(--paper);
-  border-color: var(--paper);
+  background: var(--mint);
+  border-color: var(--mint);
   color: var(--ink);
 }
 
 .ink .btn:hover {
   background: #fff;
   border-color: #fff;
-  color: var(--brand-deep);
+  color: var(--ink);
 }
 
 .ink .btn-secondary {

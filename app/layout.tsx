@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, Fraunces, Instrument_Serif, Inter_Tight } from "next/font/google";
+import { DM_Sans, Instrument_Serif } from "next/font/google";
 
 import "./globals.css";
 import ClarityAnalytics from "./ClarityAnalytics";
@@ -12,26 +12,10 @@ import Tracking from "./motion/Tracking";
 import RefTracker from "./motion/RefTracker";
 import { site } from "./data/site";
 
-/* All four faces are self-hosted: next/font downloads them at build and
-   serves them from this origin, subset to latin, with no request to Google
-   from a visitor's browser. Instrument Serif and DM Sans are the home
-   hero's; Fraunces and Inter Tight are the rest of the site's for now. */
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  axes: ["opsz", "SOFT"],
-  weight: "variable",
-  style: ["normal"],
-  display: "swap",
-  variable: "--font-fraunces",
-});
-
-const interTight = Inter_Tight({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  display: "swap",
-  variable: "--font-inter-tight",
-});
-
+/* Both faces are self-hosted: next/font downloads them at build and serves
+   them from this origin, subset to latin, with no request to Google from a
+   visitor's browser. Instrument Serif (one weight, roman and italic) is
+   for headings; DM Sans (variable, roman and italic) is everything else. */
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",
@@ -42,7 +26,7 @@ const instrumentSerif = Instrument_Serif({
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
   display: "swap",
   variable: "--font-dm-sans",
 });
@@ -61,7 +45,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${interTight.variable} ${instrumentSerif.variable} ${dmSans.variable}`}>
+    <html lang="en" className={`${instrumentSerif.variable} ${dmSans.variable}`}>
       <body>
         <a className="skip" href="#main">Skip to content</a>
         <Header />
