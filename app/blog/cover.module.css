@@ -1,4 +1,4 @@
-/* A post cover: deep green, a faint blueprint grid, a glow in emerald and cobalt
+/* A post cover: dark, a faint blueprint grid, a glow in amber and orange
    (placed differently per post), the drawing, and the issue number. */
 
 .cover {
@@ -9,11 +9,11 @@
   overflow: hidden;
   border-radius: 16px;
   background:
-    radial-gradient(60% 70% at var(--glow-x) var(--glow-y), rgba(14, 107, 78, 0.7), transparent 70%),
-    radial-gradient(50% 60% at calc(100% - var(--glow-x)) 100%, rgba(36, 80, 184, 0.32), transparent 70%),
-    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px) 0 0 / 32px 32px,
-    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px) 0 0 / 32px 32px,
-    var(--navy);
+    radial-gradient(60% 70% at var(--glow-x) var(--glow-y), rgba(255, 154, 90, 0.34), transparent 70%),
+    radial-gradient(50% 60% at calc(100% - var(--glow-x)) 100%, rgba(255, 217, 168, 0.14), transparent 70%),
+    linear-gradient(rgba(243, 231, 211, 0.06) 1px, transparent 1px) 0 0 / 32px 32px,
+    linear-gradient(90deg, rgba(243, 231, 211, 0.06) 1px, transparent 1px) 0 0 / 32px 32px,
+    var(--surface-2);
   isolation: isolate;
 }
 
@@ -36,7 +36,7 @@
   top: 1rem;
   left: 1.1rem;
   z-index: 1;
-  color: rgba(255, 255, 255, 0.86);
+  color: rgba(243, 231, 211, 0.86);
   font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -44,7 +44,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-.cover[data-size="hero"] { border-radius: 22px; box-shadow: 0 40px 80px -48px rgba(11, 42, 32, 0.7); }
+.cover[data-size="hero"] { border-radius: 22px; box-shadow: 0 40px 80px -48px rgba(0, 0, 0, 0.7); }
 .cover[data-size="hero"] .no { top: 1.3rem; left: 1.4rem; }
 
 /* The drawing leans in a little when its card is hovered (cards set this). */

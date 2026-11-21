@@ -2,7 +2,7 @@
    grid, then sections with big numbered labels. */
 
 .page {
-  padding-top: clamp(8rem, 15vw, 12rem);
+  padding-top: clamp(2.5rem, 7vw, 6rem);
 }
 
 .head {
@@ -16,7 +16,7 @@
 .head h1 {
   grid-column: 1 / span 9;
   max-width: 12ch;
-  font-weight: 300;
+  font-weight: 500;
 }
 
 .head .lede {
@@ -57,7 +57,7 @@
 
 .prose {
   max-width: 40rem;
-  color: var(--ink-soft);
+  color: var(--text-soft);
   font-size: 1.08rem;
   line-height: 1.65;
 }
@@ -67,7 +67,7 @@
 }
 
 .prose a {
-  color: var(--ink);
+  color: var(--text);
   background-image: linear-gradient(currentColor, currentColor);
   background-repeat: no-repeat;
   background-size: 100% 1px;
@@ -92,7 +92,7 @@
 }
 
 .itemIndex {
-  color: var(--muted);
+  color: var(--text-2);
   font-size: 0.82rem;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -111,11 +111,11 @@
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ember-deep);
+  color: var(--accent);
 }
 
 .itemBody {
-  color: var(--ink-soft);
+  color: var(--text-soft);
   line-height: 1.6;
   max-width: 44ch;
 }
@@ -126,7 +126,7 @@
   gap: 0.5rem;
   min-height: 44px;
   margin-top: 0.5rem;
-  color: var(--ink);
+  color: var(--text);
   font-weight: 500;
 }
 
@@ -147,7 +147,7 @@
   padding: 1.4rem;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--paper-deep);
+  background: var(--surface);
   font-family: var(--font-display);
   font-size: clamp(1.4rem, 2.2vw, 1.9rem);
   letter-spacing: -0.02em;
@@ -156,8 +156,8 @@
 }
 
 .tile:hover {
-  background: var(--paper);
-  border-color: var(--ember);
+  background: var(--bg);
+  border-color: var(--accent);
   transform: translateY(-3px);
 }
 
@@ -177,7 +177,7 @@
 }
 
 :global(.ink) .point {
-  border-top-color: var(--line-on-ink);
+  border-top-color: var(--line);
 }
 
 .pointN {
@@ -186,11 +186,11 @@
   font-family: var(--font-display);
   font-size: 2.4rem;
   line-height: 1;
-  color: var(--ember);
+  color: var(--accent);
 }
 
 :global(.ink) .pointN {
-  color: var(--ember-on-ink);
+  color: var(--accent);
 }
 
 .point h3 {
@@ -199,12 +199,12 @@
 }
 
 .point p {
-  color: var(--ink-soft);
+  color: var(--text-soft);
   line-height: 1.55;
 }
 
 :global(.ink) .point p {
-  color: var(--muted-on-ink);
+  color: var(--text-2);
 }
 
 .trust {
@@ -244,7 +244,7 @@
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--text-2);
 }
 
 /* A standalone text link sitting next to buttons: full tap height. */
@@ -256,14 +256,14 @@
 
 /* Linked research citation inside running text */
 .cite {
-  color: var(--ink);
+  color: var(--text);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
 }
 
 .cite:hover {
-  color: var(--ember-deep);
+  color: var(--accent);
 }
 
 /* Q&A list (hub: questions clinics ask) */
@@ -288,7 +288,7 @@
 .qaItem dd {
   margin: 0;
   max-width: 52ch;
-  color: var(--ink-soft);
+  color: var(--text-soft);
   line-height: 1.6;
 }
 
@@ -309,6 +309,9 @@
 }
 
 @media (max-width: 40rem) {
+  /* Twelve columns and their gaps are wider than a small phone: one column there. */
+  .head { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+  .head h1, .head .lede, .headLabel { grid-column: 1; }
   .tiles { grid-template-columns: 1fr; }
   .tile { min-height: 7rem; }
   .actions > span, .actions > a { width: 100%; }

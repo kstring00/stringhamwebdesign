@@ -1,0 +1,46 @@
+/* The styles of the liquid navbar (LiquidNavbar.tsx), from the component's
+   own stylesheet. It shipped them as a <style> string; they are a plain
+   file here, like every other style on this site. Changed from the
+   original: the blue tints are warm cream and amber, the words are the
+   site's cream, the focus ring is the site's amber, the item an inch taller
+   (44px), the active item is marked with data-active (aria-current is kept
+   for the page the visitor is really on), and the plane and weather scenes
+   are gone. */
+
+.nimbus-nav{--n-tint:rgba(255,248,235,.16);--n-fg:#0A0908;--n-fg-soft:rgba(10,9,8,.62);--n-rim:rgba(255,255,255,.7);
+  position:relative;display:inline-flex;align-items:center;gap:2px;padding:6px;border-radius:999px;isolation:isolate;
+  font-family:var(--font-text),ui-sans-serif,-apple-system,"SF Pro Text","Segoe UI",system-ui,sans-serif;-webkit-font-smoothing:antialiased;user-select:none;-webkit-tap-highlight-color:transparent}
+.nimbus-nav[data-tone="dark"]{--n-tint:rgba(22,15,9,.42);--n-fg:#F3E7D3;--n-fg-soft:rgba(243,231,211,.78);--n-rim:rgba(255,236,208,.3)}
+.nimbus-glass{position:absolute;inset:0;border-radius:inherit;z-index:-2;overflow:hidden;background:var(--n-tint);
+  -webkit-backdrop-filter:blur(10px) saturate(1.2) brightness(1.08);backdrop-filter:blur(10px) saturate(1.2) brightness(1.08);
+  box-shadow:inset 0 1px 1px var(--n-rim),inset 0 0 0 1px rgba(255,236,208,.16),0 12px 32px -14px rgba(0,0,0,.7),0 2px 6px rgba(0,0,0,.25)}
+.nimbus-nav[data-refract="on"] .nimbus-glass{-webkit-backdrop-filter:url(#nimbus-refract) blur(2px) saturate(1.2) brightness(1.08);backdrop-filter:url(#nimbus-refract) blur(2px) saturate(1.2) brightness(1.08)}
+.nimbus-water{position:absolute;left:-14px;top:-14px;z-index:-1;pointer-events:none}
+.nimbus-nav[data-gl="off"] .nimbus-water{display:none}
+.nimbus-drop{display:none;position:absolute;top:6px;bottom:6px;left:0;border-radius:999px;z-index:-1;pointer-events:none;will-change:transform,width;
+  background:radial-gradient(120% 140% at 30% 0%,rgba(255,244,226,.5),rgba(255,244,226,0) 55%),rgba(255,217,168,.2);
+  box-shadow:inset 0 1px 1px rgba(255,244,226,.75),inset 0 -2px 6px rgba(255,154,90,.3),inset 0 0 0 1px rgba(255,217,168,.4),0 6px 16px -6px rgba(0,0,0,.6)}
+.nimbus-nav[data-gl="off"] .nimbus-drop{display:block}
+.nimbus-nav[data-empty="true"] .nimbus-drop{display:none}
+.nimbus-item{position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px;border:0;border-radius:999px;background:none;color:var(--n-fg-soft);
+  font-family:inherit;font-weight:500;font-size:14px;line-height:1;letter-spacing:-.01em;text-decoration:none;cursor:pointer;transition:color .25s}
+.nimbus-item:hover,.nimbus-item[data-active="true"]{color:var(--n-fg)}
+.nimbus-item:focus-visible{outline:2px solid #FFD9A8;outline-offset:2px;border-radius:999px}
+.nv-ico{position:relative;display:inline-flex;flex:none}
+.nv-ico svg{transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
+.nimbus-item[data-active="true"] .nv-ico svg{transform:translateY(-1px) scale(1.08)}
+.nv-door{fill:transparent}
+.nv-ico[data-fx="pop"] svg{animation:nvPop .5s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes nvPop{0%{transform:scale(.72)}60%{transform:scale(1.2)}100%{transform:translateY(-1px) scale(1.08)}}
+.nv-ico[data-fx="spin"] svg{animation:nvSpin 1s cubic-bezier(.2,.75,.25,1) both}
+@keyframes nvSpin{0%{transform:perspective(80px) rotateY(0)}100%{transform:perspective(80px) rotateY(360deg) translateY(-1px) scale(1.08)}}
+.nv-ico[data-fx="glow"] svg{animation:nvHop .8s cubic-bezier(.3,1.4,.5,1) both;transform-origin:50% 100%}
+@keyframes nvHop{0%{transform:none}30%{transform:translateY(-5px) scale(1.04,.96)}55%{transform:translateY(0) scale(1.12,.88)}75%{transform:translateY(-2px) scale(.98,1.04)}100%{transform:translateY(-1px) scale(1.08)}}
+.nv-ico[data-fx="glow"] .nv-door{animation:nvDoor 1.3s ease both}
+@keyframes nvDoor{0%{fill:transparent}30%{fill:#FFE9B8}100%{fill:rgba(255,217,168,.6)}}
+.nv-ico[data-fx="wave"] svg{animation:nvWave .9s ease-in-out both;transform-origin:50% 92%}
+@keyframes nvWave{0%{transform:none}20%{transform:rotate(-15deg)}40%{transform:rotate(12deg)}60%{transform:rotate(-8deg)}80%{transform:rotate(4deg)}100%{transform:translateY(-1px) scale(1.08)}}
+.nimbus-nav[data-compact="true"] .nimbus-item{padding:0 13px}
+.nimbus-nav[data-compact="true"] .nimbus-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:520px){.nimbus-nav:not([data-compact="false"]) .nimbus-item{padding:0 13px}.nimbus-nav:not([data-compact="false"]) .nimbus-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}}
+@media (prefers-reduced-motion:reduce){.nv-ico svg,.nv-ico::before,.nv-ico::after,.nv-door{animation:none!important;transition:none}}

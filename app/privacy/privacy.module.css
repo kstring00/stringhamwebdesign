@@ -1,7 +1,7 @@
 .prose {
   max-width: 42rem;
   padding-top: clamp(2.5rem, 5vw, 4rem);
-  color: var(--ink-soft);
+  color: var(--text-soft);
   font-size: 1.05rem;
   line-height: 1.7;
 }
@@ -10,7 +10,7 @@
   scroll-margin-top: 5.5rem;
   margin: 2.5rem 0 1rem;
   font-size: clamp(1.8rem, 3vw, 2.4rem);
-  color: var(--ink);
+  color: var(--text);
 }
 
 .prose h3 {
@@ -20,13 +20,13 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--text);
 }
 
 .prose p { margin: 0 0 1rem; }
 .prose ul { padding-left: 1.2rem; margin: 0 0 1rem; }
 .prose li { margin-bottom: 0.5rem; }
-.prose strong { color: var(--ink); font-weight: 600; }
+.prose strong { color: var(--text); font-weight: 600; }
 .prose hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
-.prose a { color: var(--ink); text-decoration: underline; text-underline-offset: 0.2em; }
-.prose a:hover { color: var(--ember); }
+.prose a { color: var(--text); text-decoration: underline; text-underline-offset: 0.2em; }
+.prose a:hover { color: var(--accent); }

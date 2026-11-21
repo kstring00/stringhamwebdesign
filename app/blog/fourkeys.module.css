@@ -20,27 +20,27 @@
   padding: 1rem 1.1rem;
   border: 1px solid var(--line);
   border-radius: 14px;
-  background: #fff;
-  color: var(--ink-soft);
+  background: var(--surface-2);
+  color: var(--text-soft);
   font-size: 0.95rem;
   line-height: 1.45;
 }
 
-.key b { grid-area: name; color: var(--ink); font-size: 1.02rem; }
+.key b { grid-area: name; color: var(--text); font-size: 1.02rem; }
 .note { grid-area: note; }
-.icon { grid-area: icon; margin-top: 0.1rem; color: var(--brand); }
+.icon { grid-area: icon; margin-top: 0.1rem; color: var(--accent); }
 
 .n {
   position: absolute;
   top: 0.65rem;
   right: 0.8rem;
-  color: var(--muted);
+  color: var(--text-2);
   font-family: var(--font-display);
   font-size: 0.95rem;
 }
 
-.top { border-color: var(--brand); box-shadow: inset 0 0 0 1px var(--brand), 0 20px 40px -30px rgba(11, 42, 32, 0.5); }
-.top .n { color: var(--brand); }
+.top { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent), 0 20px 40px -30px rgba(0, 0, 0, 0.5); }
+.top .n { color: var(--accent); }
 
 .tag {
   grid-area: tag;
@@ -48,13 +48,13 @@
   margin-top: 0.35rem;
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
-  background: var(--brand-soft);
-  color: var(--brand-deep);
+  background: var(--accent-soft);
+  color: var(--accent);
   font-size: 0.82rem;
   font-weight: 600;
 }
 
-.caption { margin-top: 0.75rem; color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
+.caption { margin-top: 0.75rem; color: var(--text-2); font-size: 0.92rem; line-height: 1.5; }
 
 @media (max-width: 40rem) {
   .grid { grid-template-columns: 1fr; }

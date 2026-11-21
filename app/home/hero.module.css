@@ -1,243 +1,257 @@
-/* The home hero and the project row under it: white, deep green ink,
-   Instrument Serif for the headline and DM Sans for everything else. The
-   colors are the tokens in globals.css. Three things move (the line,
-   the dot, the clouds), all here, all off under reduced motion. */
+/* The home hero and the project row under it. The hero is one panel, inset
+   from the page edge, with a still (and then a slow video) behind the
+   studio's name and the page's argument. Its colours are fixed here, not
+   tokens: they sit on a picture, and were chosen against it. */
+
+/* ---------- the hero panel ---------- */
 
 .hero {
+  padding: var(--inset);
+  background: var(--bg);
+}
+
+.panel {
   position: relative;
+  display: flex;
+  min-height: max(640px, calc(100svh - 2 * var(--inset)));
   overflow: hidden;
-  padding: 28px clamp(20px, 4vw, 56px) 72px;
-  background: var(--hero-page);
-  color: var(--hero-ink);
-  font-family: var(--font-hero-text);
+  border-radius: var(--radius-panel);
+  /* What shows for the instant before the still arrives. */
+  background: #1a120c;
+  isolation: isolate;
 }
 
-.inner {
+/* The still, and the video over it: both fill the panel the same way. */
+.media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 60% 40%;
+}
+
+/* The video is invisible until it is truly playing, then fades in over the still. */
+.video { opacity: 0; transition: opacity 900ms ease; pointer-events: none; }
+.video[data-on] { opacity: 1; }
+
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 6, 5, 0.42) 0%, rgba(8, 6, 5, 0) 24%, rgba(8, 6, 5, 0) 50%, rgba(8, 6, 5, 0.82) 100%);
+  pointer-events: none;
+}
+
+/* Pause and play, in the corner. */
+.pause {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(243, 231, 211, 0.28);
+  border-radius: 50%;
+  background: rgba(10, 9, 8, 0.5);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #f3e7d3;
+  cursor: pointer;
+  transition: background 220ms var(--ease-out), border-color 220ms var(--ease-out);
+}
+
+.pause:hover { background: rgba(10, 9, 8, 0.72); border-color: rgba(243, 231, 211, 0.6); }
+.pause:focus-visible { outline: 2px solid #ffd9a8; outline-offset: 3px; border-radius: 50%; }
+
+/* ---------- the words: the name bottom left, the argument bottom right ---------- */
+
+.content {
   position: relative;
-  z-index: 1;
-  max-width: 1328px;
-  margin: 0 auto;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem 3rem;
+  width: 100%;
+  margin-top: auto;
+  padding: clamp(1.25rem, 3.2vw, 3rem);
+  /* Room for the nav at the top of the panel. */
+  padding-top: 6.5rem;
+  color: #f3e7d3;
 }
 
-/* The site header overlays this strip (Header.module.css, the plain state). */
-.headerSpace { height: 47px; }
+/* On load: the name, "Web Design" and the right block rise and fade in, one after another. */
+.wordmark, .sub, .side { animation: rise 0.9s var(--ease-rise) both; }
+.sub { animation-delay: 0.15s; }
+.side { animation-delay: 0.35s; }
 
-/* ---------- eyebrow and headline ---------- */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: none; }
+}
 
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 60px;
-  padding: 10px 18px;
-  border-radius: 22px;
-  background: var(--mint);
-  color: var(--hero-text-2);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  line-height: 16px;
+/* The name. A brand mark, not a heading. */
+.wordmark {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  color: #f3e7d3;
+  font-family: var(--font-display);
+  /* The second limit keeps it inside the panel on the narrowest phones. */
+  font-size: min(clamp(4rem, 11.2vw, 11rem), 17.4vw);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 0.86;
+  white-space: nowrap;
+}
+
+.star {
+  position: absolute;
+  top: -0.06em;
+  left: 100%;
+  margin-left: 0.04em;
+  color: #ffd9a8;
+  font-size: 0.34em;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.sub {
+  margin: 0.95em 0 0 0.3em;
+  color: #f3e7d3;
+  font-size: clamp(13px, 1.5vw, 21px);
+  font-weight: 500;
+  letter-spacing: 0.52em;
+  line-height: 1;
   text-transform: uppercase;
 }
 
-.eyebrowDot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--cobalt); }
-
-.h1 {
-  margin-top: 28px;
-  color: var(--hero-ink);
-  font-family: var(--font-hero-display);
-  font-size: clamp(3.1rem, 8.6vw, 8rem);
-  font-weight: 400;
-  font-variation-settings: normal;
-  letter-spacing: -0.025em;
-  line-height: 0.96;
-  text-wrap: balance;
-}
-
-.h1 em { color: var(--cobalt); font-style: italic; }
-
-/* ---------- the story panel ---------- */
-
-.panel {
-  margin-top: 44px;
-  padding: clamp(20px, 3vw, 40px) clamp(20px, 3.2vw, 44px) clamp(18px, 2.2vw, 30px);
-  border-radius: 28px;
-  background: linear-gradient(100deg, var(--mint) 45%, var(--sky) 100%);
-}
-
-.story { display: block; width: 100%; height: auto; overflow: visible; }
-
-/* The line is fully drawn at rest; on load it draws in once. */
-.line {
-  stroke-dasharray: 3000;
-  stroke-dashoffset: 0;
-  animation: draw 4.5s cubic-bezier(0.45, 0, 0.2, 1) both;
-}
-
-@keyframes draw {
-  from { stroke-dashoffset: 3000; }
-  to { stroke-dashoffset: 0; }
-}
-
-/* The circle behind the end dot swells and fades, slowly. */
-.breath {
-  opacity: 0.45;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: breathe 7s ease-in-out infinite;
-}
-
-@keyframes breathe {
-  0%, 100% { transform: scale(1); opacity: 0.45; }
-  50% { transform: scale(2.3); opacity: 0.08; }
-}
-
-.captions {
+.side {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin: 12px 0 0;
-  padding: 0;
-  list-style: none;
-  color: var(--hero-text-2);
-  font-size: 14px;
+  gap: 0.85rem;
+  width: 100%;
+  max-width: 420px;
+}
+
+/* A soft dark pool behind the right block, so its words pass contrast over the brightest frame. */
+.side::before {
+  content: "";
+  position: absolute;
+  inset: -3.5rem -4rem -4rem -4.5rem;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgba(8, 6, 5, 0.78) 0%, rgba(8, 6, 5, 0.7) 45%, rgba(8, 6, 5, 0.36) 75%, rgba(8, 6, 5, 0) 100%);
+  pointer-events: none;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #ffd9a8;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.h1 { margin: 0; font-weight: 500; letter-spacing: 0; line-height: inherit; text-wrap: initial; }
+
+.h1Big {
+  display: block;
+  color: #f3e7d3;
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 2.8vw, 2.5rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.h1Small {
+  display: block;
+  margin-top: 0.45rem;
+  color: #f3e7d3;
+  font-family: var(--font-text);
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 0;
   line-height: 1.4;
 }
 
-.captions li:nth-child(2) { text-align: center; }
-.captions li:nth-child(3) { text-align: right; }
+.body { margin: 0; color: #e9dcc6; font-size: 16.5px; line-height: 1.5; }
 
-.num {
-  display: block;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  line-height: 17.4px;
-}
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.5rem; margin-top: 0.35rem; }
 
-.numLast { color: var(--cobalt); }
-
-/* ---------- Kyle's words and the one action ---------- */
-
-.bottom {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 40px 64px;
-  margin-top: 56px;
-}
-
-.words { flex: 1 1 420px; max-width: 640px; }
-
-.lead { color: var(--hero-ink); font-size: 22px; font-weight: 500; line-height: 1.45; }
-
-.body { margin-top: 14px; color: var(--hero-text-2); font-size: 17px; line-height: 1.65; }
-
-.action {
-  flex: 0 1 380px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
+/* The one action: a cream pill with a dark circle holding the arrow. */
 .button {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 20px 30px;
-  border-radius: 40px;
-  background: var(--hero-ink);
-  color: var(--mint);
-  font-size: 18px;
+  gap: 0.9rem;
+  min-height: 56px;
+  padding: 6px 6px 6px 1.5rem;
+  border-radius: 999px;
+  background: #f3e7d3;
+  color: #0a0908;
+  font-size: 1rem;
   font-weight: 600;
-  line-height: 24px;
+  line-height: 1;
+  white-space: nowrap;
+  transition: background 220ms var(--ease-out);
 }
 
-.button:hover { background: #123a2d; }
-.button:focus-visible { outline: 3px solid var(--cobalt); outline-offset: 3px; }
-.button svg { flex: none; }
+.button:hover { background: #fff6e6; }
+.button:focus-visible { outline: 2px solid #ffd9a8; outline-offset: 3px; border-radius: 999px; }
+
+.circle {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #0a0908;
+  color: #f3e7d3;
+  transition: transform 300ms var(--ease-out);
+}
+
+.button:hover .circle { transform: translateX(3px); }
 
 .workLink {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  margin-top: 16px;
-  color: var(--hero-ink);
-  font-size: 16px;
+  color: #f3e7d3;
+  font-size: 1rem;
   font-weight: 500;
   text-decoration: underline;
-  text-decoration-thickness: 1px;
+  text-decoration-thickness: 1.5px;
   text-underline-offset: 5px;
 }
 
-.workLink:hover { color: var(--emerald); }
-.workLink:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 2px; border-radius: 4px; }
-
-.checks {
-  display: grid;
-  gap: 7px;
-  margin: 17px 0 0;
-  padding: 0;
-  list-style: none;
-  color: var(--hero-text-2);
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-.checks li { display: flex; align-items: center; gap: 11px; }
-.checks svg { flex: none; color: var(--emerald); }
-
-/* ---------- the clouds ---------- */
-
-.clouds { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-
-/* Each cloud rests where it starts (top, and --l percent of the screen from
-   the left). Moving, it crosses from fully off the left edge to fully off
-   the right one, and a negative delay puts it at its start point on load. */
-.cloud {
-  --k: 1;
-  position: absolute;
-  top: var(--top);
-  left: calc(var(--l) * 1vw);
-  width: calc(var(--w) * var(--k));
-  height: auto;
-  animation: drift var(--dur) linear var(--delay) infinite;
-  will-change: transform;
-}
-
-@keyframes drift {
-  from { transform: translateX(calc(var(--l) * -1vw - var(--w) * var(--k))); }
-  to { transform: translateX(calc((100 - var(--l)) * 1vw)); }
-}
+.workLink:hover { color: #ffd9a8; }
+.workLink:focus-visible { outline: 2px solid #ffd9a8; outline-offset: 3px; border-radius: 4px; }
 
 /* ---------- the project row under the hero ---------- */
 
 .work {
-  padding: 8px clamp(20px, 4vw, 56px) 88px;
-  background: var(--hero-page);
-  color: var(--hero-ink);
-  font-family: var(--font-hero-text);
+  padding: var(--section) 0;
+  background: var(--bg);
+  color: var(--text);
   scroll-margin-top: 5rem;
 }
 
-.workInner { max-width: 1328px; margin: 0 auto; padding-top: 56px; border-top: 1px solid rgba(11, 42, 32, 0.14); }
+.workInner { width: min(100% - 2 * var(--gutter), var(--max)); margin: 0 auto; }
 
-.workHead { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; margin-bottom: 28px; }
+.workHead { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 24px; margin-bottom: clamp(1.75rem, 3vw, 2.5rem); }
 
-.workTitle {
-  color: var(--hero-text-2);
-  font-family: var(--font-hero-text);
-  font-size: 12px;
-  font-weight: 600;
-  font-variation-settings: normal;
-  letter-spacing: 0.14em;
-  line-height: 1.4;
-  text-transform: uppercase;
-}
+.workTitle { font-size: clamp(2.2rem, 4.6vw, 4rem); letter-spacing: -0.035em; line-height: 1; }
 
-.workAll { display: inline-flex; align-items: center; min-height: 44px; color: var(--hero-ink); font-size: 15px; font-weight: 500; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
-.workAll:hover { color: var(--emerald); }
-.workAll:focus-visible, .card:focus-visible { outline: 3px solid var(--cobalt); outline-offset: 3px; }
+.workAll { display: inline-flex; align-items: center; min-height: 44px; color: var(--text); font-size: 15px; font-weight: 500; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+.workAll:hover { color: var(--accent); }
+.workAll:focus-visible, .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 
 .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2vw, 28px); margin: 0; padding: 0; list-style: none; }
 
@@ -246,47 +260,51 @@
 .shot {
   display: block;
   overflow: hidden;
-  border: 1px solid rgba(11, 42, 32, 0.14);
+  border: 1px solid var(--line);
   border-radius: 20px;
-  background: var(--mint);
+  background: var(--surface);
 }
 
-.shot img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top center; }
+.shot img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top center; transition: transform 900ms var(--ease-out); }
 
-.meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .card:hover .shot img { transform: scale(1.03); }
+}
 
-.name { font-family: var(--font-hero-display); font-size: 28px; line-height: 1.1; letter-spacing: -0.01em; }
-.card:hover .name { color: var(--emerald); }
+.meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; }
+
+.name { font-family: var(--font-display); font-size: 24px; font-weight: 500; line-height: 1.1; letter-spacing: -0.025em; }
+.card:hover .name { color: var(--accent); }
 
 .badge {
   flex: none;
   padding: 4px 12px;
   border-radius: 999px;
-  background: var(--mint);
-  color: var(--hero-text-2);
-  font-size: 12px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.06em;
 }
 
-.stage { display: block; margin-top: 4px; color: var(--hero-text-2); font-size: 14px; line-height: 1.4; }
+.stage { display: block; margin-top: 4px; color: var(--text-2); font-size: 14px; line-height: 1.4; }
 
 /* ---------- smaller screens ---------- */
 
-/* Below the widest layout the hero's height changes with the wrapping, so
-   the two lower clouds are anchored to its foot and sized to fit inside the
-   bottom padding: they pass under the words, never behind the paragraph.
-   (The outlines leave a little empty space at the bottom of their boxes,
-   hence the small negative offsets.) The third rides up beside the end of
-   the headline instead of hiding behind the panel. */
-@media (max-width: 1160px) {
-  .cloud { --k: 0.75; }
-  /* The load positions are tuned for a wide screen; on a narrower one the
-     first cloud would start half off the left edge, so it starts further in. */
-  .cloud[data-cloud="1"] { animation-delay: -30s; }
-  .cloud[data-cloud="3"] { top: 300px; }
-  .cloud[data-cloud="4"] { --k: 0.5; top: auto; bottom: -6px; }
-  .cloud[data-cloud="5"] { top: auto; bottom: -4px; }
+/* The right block wraps under the name. Where the phone's bottom bar shows
+   (56rem and under), the panel stops above it, so the button is never
+   behind the bar. */
+@media (max-width: 56rem) {
+  .panel { min-height: max(640px, calc(100svh - 2 * var(--inset) - 4.75rem - env(safe-area-inset-bottom))); }
+  .content { gap: 1.75rem; }
+  .side { max-width: 30rem; }
+}
+
+/* A phone shows only a slice of the scene. At 60% across that slice is the
+   table between the two chairs, with a person cut off at each edge; from
+   the right-hand end it is one person, whole, facing the sky. */
+@media (max-width: 700px) {
+  .media { object-position: 100% 40%; }
 }
 
 @media (max-width: 760px) {
@@ -294,21 +312,18 @@
 }
 
 @media (max-width: 640px) {
-  .cloud { --k: 0.5; }
-  .cloud[data-cloud="1"] { top: 84px; animation-delay: -36s; }
-  .cloud[data-cloud="2"] { top: 200px; }
-  .cloud[data-cloud="3"] { top: 330px; }
-  .cloud[data-cloud="4"] { --k: 0.4; }
+  /* The pill fills the top of a phone, so the button sits under it. */
+  .pause { top: 84px; right: 14px; }
+  .content { padding: 1.25rem 1.15rem 1.5rem; padding-top: 9rem; }
+  .sub { margin-top: 0.85em; letter-spacing: 0.46em; }
   /* The site's floor for text on a phone is 13px (scripts/launch-check.js). */
-  .eyebrow { font-size: 13px; letter-spacing: 0.12em; line-height: 1.4; }
-  .action { flex-basis: 100%; }
-  .button { width: 100%; justify-content: center; padding-inline: 20px; }
-  .captions { font-size: 13px; }
-  .work { padding-bottom: 64px; }
+  .eyebrow { font-size: 13px; letter-spacing: 0.18em; }
+  .side::before { inset: -2.5rem -1.5rem -2rem; }
 }
 
 /* ---------- reduced motion: nothing moves ---------- */
 
 @media (prefers-reduced-motion: reduce) {
-  .line, .breath, .cloud { animation: none; }
+  .wordmark, .sub, .side { animation: none; }
+  .video { transition: none; }
 }

@@ -31,11 +31,11 @@
     min-height: 48px;
     padding: 0 1.3rem;
     border-radius: 999px;
-    background: var(--brand);
-    color: #fff;
+    background: var(--accent);
+    color: var(--on-light);
     font-weight: 600;
     white-space: nowrap;
-    box-shadow: 0 14px 34px -14px rgba(11, 42, 32, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    box-shadow: 0 14px 34px -14px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(243, 231, 211, 0.22);
     transform: translate(-50%, 0);
     transition: transform 400ms var(--ease-out), opacity 300ms var(--ease-out);
   }

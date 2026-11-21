@@ -361,7 +361,7 @@ export default function Checkup() {
               {e ? (
                 <section className={s.est} aria-labelledby="est-title" data-in>
                   <h3 id="est-title" className={s.h3}>What fixing these could mean for you</h3>
-                  <p className={s.estIntro}>A rough estimate from your score and public benchmarks. Change the three numbers to match your practice. It&rsquo;s a planning tool, not a promise.</p>
+                  <p className={s.estIntro}><span className="ast" aria-hidden="true">* </span>A rough estimate from your score and public benchmarks. Change the three numbers to match your practice. It&rsquo;s a planning tool, not a promise.</p>
                   <div className={s.inputs}>
                     <label htmlFor="vis">Website visits a month<span className={s.in}><input id="vis" type="number" inputMode="numeric" min={0} step={10} value={inputs.vis} onChange={(ev) => setInputs({ ...inputs, vis: ev.target.value })} /></span></label>
                     <label htmlFor="close">Inquiries that become clients<span className={s.in}><input id="close" type="number" inputMode="numeric" min={0} max={100} step={5} value={inputs.close} onChange={(ev) => setInputs({ ...inputs, close: ev.target.value })} /><span>%</span></span></label>
@@ -439,7 +439,7 @@ export default function Checkup() {
         </div>
       </div>
 
-      <p className={s.footnote}>{FOOTNOTE} Made by {site.person}, {site.name}.</p>
+      <p className={s.footnote}><span className="ast" aria-hidden="true">* </span>{FOOTNOTE} Made by {site.person}, {site.name}.</p>
       <p className={s.printFoot}>Prepared by {site.person} · {site.name} · {site.phone} · stringhamwebdesign.com</p>
     </div>
   );

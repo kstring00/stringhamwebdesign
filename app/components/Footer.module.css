@@ -1,7 +1,7 @@
 .footer {
   padding: var(--section) 0 1.75rem;
   border-top: 1px solid var(--line);
-  background: var(--paper-deep);
+  background: var(--surface);
 }
 
 .grid {
@@ -15,13 +15,13 @@
 .logoLink { display: inline-block; }
 .logo { display: block; width: auto; height: 2.75rem; }
 
-.where { color: var(--muted); }
+.where { color: var(--text-2); }
 
 .col li a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  color: var(--ink);
+  color: var(--text);
 }
 
 .col ul {
@@ -34,7 +34,7 @@
 
 .head {
   margin: 0 0 0.5rem;
-  color: var(--muted);
+  color: var(--text-2);
   font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -45,7 +45,7 @@
   margin-top: 2.5rem;
   padding-top: 1.25rem;
   border-top: 1px solid var(--line);
-  color: var(--muted);
+  color: var(--text-2);
   font-size: 0.9rem;
 }
 

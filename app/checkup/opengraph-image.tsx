@@ -11,7 +11,7 @@ function font(file: string) {
   try { return fs.readFileSync(path.join(process.cwd(), "app", "blog", "fonts", file)); } catch { return null; }
 }
 
-const WIRE = "#c8d6cf";
+const WIRE = "rgba(243,231,211,0.24)";
 
 /**
  * The share image: the checkup's wireframe phone (one part highlighted as
@@ -19,43 +19,43 @@ const WIRE = "#c8d6cf";
  * and what it is.
  */
 export default async function Image() {
-  const display = font("InstrumentSerif-400.woff"), text = font("DMSans-500.woff");
-  const fonts = [display && { name: "Instrument Serif", data: display, weight: 400 as const, style: "normal" as const }, text && { name: "DM Sans", data: text, weight: 500 as const, style: "normal" as const }].filter(Boolean) as { name: string; data: Buffer; weight: 400 | 500; style: "normal" }[];
-  const logo = fs.readFileSync(path.join(process.cwd(), "public", "brand", "logo-lockup@3x.png"));
+  const display = font("Outfit-500.woff"), text = font("DMSans-500.woff");
+  const fonts = [display && { name: "Outfit", data: display, weight: 500 as const, style: "normal" as const }, text && { name: "DM Sans", data: text, weight: 500 as const, style: "normal" as const }].filter(Boolean) as { name: string; data: Buffer; weight: 500; style: "normal" }[];
+  const logo = fs.readFileSync(path.join(process.cwd(), "public", "brand", "logo-lockup-light@3x.png"));
   const zone = (bg: string, outline?: string) => ({ display: "flex", flexDirection: "column" as const, gap: 6, padding: 7, borderRadius: 10, background: bg, border: outline ? `2px ${outline.includes("dash") ? "dashed" : "solid"} ${outline.replace("dash ", "")}` : "2px solid transparent" });
   const bar = (w: string, h = 8, c = WIRE) => ({ width: w, height: h, borderRadius: 8, background: c });
 
   return new ImageResponse(
     (
-      <div style={{ width: "100%", height: "100%", display: "flex", background: "#ffffff", fontFamily: text ? "DM Sans, sans-serif" : "sans-serif" }}>
-        <div style={{ width: 14, height: "100%", background: "linear-gradient(180deg, #0b2a20 0%, #0e6b4e 40%, #2450b8 72%, #2450b8 100%)" }} />
+      <div style={{ width: "100%", height: "100%", display: "flex", background: "#0a0908", fontFamily: text ? "DM Sans, sans-serif" : "sans-serif" }}>
+        <div style={{ width: 14, height: "100%", background: "linear-gradient(180deg, #ffd9a8 0%, #ffd9a8 40%, #ff9a5a 100%)" }} />
         <div style={{ display: "flex", flex: 1, padding: "56px 64px 52px 64px", gap: 56, alignItems: "center" }}>
           <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%", flex: 1 }}>
             <img src={`data:image/png;base64,${logo.toString("base64")}`} alt="" style={{ height: 52, alignSelf: "flex-start" }} />
             <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-              <div style={{ display: "flex", color: "#0e6b4e", fontSize: 22, letterSpacing: 2, textTransform: "uppercase" }}>10 questions · about 2 minutes</div>
-              <div style={{ display: "flex", fontFamily: display ? "Instrument Serif, serif" : "serif", fontSize: 92, lineHeight: 1, letterSpacing: -2, color: "#0b2a20" }}>Free Website Checkup</div>
-              <div style={{ display: "flex", fontSize: 28, lineHeight: 1.35, color: "#1d4a3c", maxWidth: 560 }}>See where your practice&rsquo;s website loses people before they reach out.</div>
+              <div style={{ display: "flex", color: "#ffd9a8", fontSize: 22, letterSpacing: 2, textTransform: "uppercase" }}>10 questions · about 2 minutes</div>
+              <div style={{ display: "flex", fontFamily: display ? "Outfit, sans-serif" : "sans-serif", fontWeight: 500, fontSize: 84, lineHeight: 1, letterSpacing: -3, color: "#f3e7d3" }}>Free Website Checkup</div>
+              <div style={{ display: "flex", fontSize: 28, lineHeight: 1.35, color: "#e9dcc6", maxWidth: 560 }}>See where your practice&rsquo;s website loses people before they reach out.</div>
             </div>
-            <div style={{ display: "flex", fontSize: 22, color: "#4b665c" }}>Free · no email needed · stringhamwebdesign.com/checkup</div>
+            <div style={{ display: "flex", fontSize: 22, color: "#cdbfa8" }}>Free · no email needed · stringhamwebdesign.com/checkup</div>
           </div>
-          <div style={{ display: "flex", position: "relative", width: 300, height: 530, padding: 12, borderRadius: 46, background: "#0b2a20", boxShadow: "0 30px 60px -30px rgba(11,42,32,0.5)" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 14, width: "100%", height: "100%", padding: "34px 18px 18px", borderRadius: 36, background: "#fff", position: "relative", overflow: "hidden" }}>
-              <div style={{ position: "absolute", top: 0, left: 0, display: "flex", width: "100%", height: 7, background: "#ede5d3" }}><div style={{ width: "62%", height: 7, background: "#1f7a4d" }} /></div>
+          <div style={{ display: "flex", position: "relative", width: 300, height: 530, padding: 12, borderRadius: 46, background: "#33291f", border: "1px solid rgba(243,231,211,0.3)" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 14, width: "100%", height: "100%", padding: "34px 18px 18px", borderRadius: 36, background: "#14100c", position: "relative", overflow: "hidden" }}>
+              <div style={{ position: "absolute", top: 0, left: 0, display: "flex", width: "100%", height: 7, background: "rgba(243,231,211,0.14)" }}><div style={{ width: "62%", height: 7, background: "#7bd8a6" }} /></div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}><div style={bar("64px", 14)} /><div style={bar("20px", 10)} /></div>
-              <div style={zone("#ddf1e6")}><div style={bar("100%", 18, "#0b2a20")} /><div style={bar("72%", 18, "#0b2a20")} /></div>
-              <div style={zone("#dcedfb", "dash #2450b8")}><div style={bar("100%")} /><div style={bar("100%")} /><div style={bar("60%")} /></div>
-              <div style={zone("#f7dede", "#b23a3a")}><div style={{ display: "flex", alignSelf: "flex-start", fontSize: 13, color: "#4b665c", border: `1px solid ${WIRE}`, borderRadius: 20, padding: "2px 10px" }}>Fees · insurance</div></div>
-              <div style={zone("#ddf1e6")}><div style={{ display: "flex", height: 40, borderRadius: 10, background: "#0e6b4e", alignItems: "center", justifyContent: "center" }}><div style={bar("45%", 8, "#ffffff")} /></div></div>
-              <div style={zone("#faedd5")}><div style={bar("100%")} /><div style={bar("100%")} /><div style={bar("100%")} /></div>
-              <div style={zone("#f7dede", "#b23a3a")}><div style={{ display: "flex", alignSelf: "flex-start", fontSize: 13, color: "#4b665c", border: `1px solid ${WIRE}`, borderRadius: 20, padding: "2px 10px" }}>License · approach</div><div style={bar("100%")} /><div style={bar("55%")} /></div>
+              <div style={zone("rgba(123,216,166,0.16)")}><div style={bar("100%", 18, "#f3e7d3")} /><div style={bar("72%", 18, "#f3e7d3")} /></div>
+              <div style={zone("rgba(255,217,168,0.12)", "dash #ffd9a8")}><div style={bar("100%")} /><div style={bar("100%")} /><div style={bar("60%")} /></div>
+              <div style={zone("rgba(255,148,136,0.16)", "#ff9488")}><div style={{ display: "flex", alignSelf: "flex-start", fontSize: 13, color: "#cdbfa8", border: `1px solid ${WIRE}`, borderRadius: 20, padding: "2px 10px" }}>Fees · insurance</div></div>
+              <div style={zone("rgba(123,216,166,0.16)")}><div style={{ display: "flex", height: 40, borderRadius: 10, background: "#ffd9a8", alignItems: "center", justifyContent: "center" }}><div style={bar("45%", 8, "#0a0908")} /></div></div>
+              <div style={zone("rgba(245,189,98,0.16)")}><div style={bar("100%")} /><div style={bar("100%")} /><div style={bar("100%")} /></div>
+              <div style={zone("rgba(255,148,136,0.16)", "#ff9488")}><div style={{ display: "flex", alignSelf: "flex-start", fontSize: 13, color: "#cdbfa8", border: `1px solid ${WIRE}`, borderRadius: 20, padding: "2px 10px" }}>License · approach</div><div style={bar("100%")} /><div style={bar("55%")} /></div>
               <div style={{ position: "absolute", left: 14, right: 14, bottom: 14, display: "flex", gap: 8 }}>
-                <div style={{ display: "flex", flex: 1, height: 34, borderRadius: 10, background: "#0b2a20", color: "#fff", fontSize: 12, alignItems: "center", justifyContent: "center", letterSpacing: 1 }}>CALL</div>
-                <div style={{ display: "flex", flex: 1, height: 34, borderRadius: 10, background: "#0b2a20", color: "#fff", fontSize: 12, alignItems: "center", justifyContent: "center", letterSpacing: 1 }}>TEXT</div>
+                <div style={{ display: "flex", flex: 1, height: 34, borderRadius: 10, background: "#f3e7d3", color: "#0a0908", fontSize: 12, alignItems: "center", justifyContent: "center", letterSpacing: 1 }}>CALL</div>
+                <div style={{ display: "flex", flex: 1, height: 34, borderRadius: 10, background: "#f3e7d3", color: "#0a0908", fontSize: 12, alignItems: "center", justifyContent: "center", letterSpacing: 1 }}>TEXT</div>
               </div>
             </div>
-            <div style={{ position: "absolute", top: 196, left: -18, display: "flex", width: 34, height: 34, borderRadius: 34, background: "#b23a3a", color: "#fff", fontSize: 18, alignItems: "center", justifyContent: "center", border: "3px solid #fff" }}>1</div>
-            <div style={{ position: "absolute", top: 368, left: -18, display: "flex", width: 34, height: 34, borderRadius: 34, background: "#b23a3a", color: "#fff", fontSize: 18, alignItems: "center", justifyContent: "center", border: "3px solid #fff" }}>2</div>
+            <div style={{ position: "absolute", top: 196, left: -18, display: "flex", width: 34, height: 34, borderRadius: 34, background: "#ff9488", color: "#0a0908", fontSize: 18, alignItems: "center", justifyContent: "center", border: "3px solid #0a0908" }}>1</div>
+            <div style={{ position: "absolute", top: 368, left: -18, display: "flex", width: 34, height: 34, borderRadius: 34, background: "#ff9488", color: "#0a0908", fontSize: 18, alignItems: "center", justifyContent: "center", border: "3px solid #0a0908" }}>2</div>
           </div>
         </div>
       </div>

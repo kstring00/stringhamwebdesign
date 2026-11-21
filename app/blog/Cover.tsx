@@ -1,12 +1,15 @@
 import type { CoverMotif } from "./posts";
 import s from "./cover.module.css";
 
-const WHITE = "#ffffff";
-const INK = "#0b2a20";
-const BRAND = "#0e6b4e";
-const SKY = "#9fd8bd";
-const CYAN = "#d6f5e6";
-const MUTED = "#c8d6cf";
+/* The site's colours, as literals (an SVG fill can't always take a token):
+   cream paper, near-black ink on it, amber for the one lit thing, a quieter
+   cream for outlines, and a grey-cream for the stand-in bars. */
+const WHITE = "#f3e7d3";
+const INK = "#0a0908";
+const BRAND = "#0a0908";
+const SKY = "#cdbfa8";
+const CYAN = "#ffd9a8";
+const MUTED = "#c9bba3";
 const TEXT = { fontFamily: "var(--font-text)" };
 const DISPLAY = { fontFamily: "var(--font-display)" };
 
@@ -117,7 +120,7 @@ function Motif({ motif }: { motif: CoverMotif }) {
 }
 
 /**
- * A post's cover: a drawing of what the post is about on a deep green blueprint
+ * A post's cover: a drawing of what the post is about on a dark blueprint
  * grid, with its issue number. Drawn in SVG, so it costs no image request
  * and stays sharp at any size; it's decoration (the title sits beside it),
  * so screen readers skip it.

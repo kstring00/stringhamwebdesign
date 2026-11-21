@@ -11,7 +11,7 @@
 // icon and social image are served; business JSON-LD on the homepage and
 // Person JSON-LD on /about;
 // every external link with target=_blank carries noopener. Finally, at
-// 375px and 414px on every page: no horizontal overflow and every control at
+// 320, 375, 390 and 414px on every page: no horizontal overflow and every control at
 // least 44px tall (inline links in running text exempt, per WCAG 2.5.8).
 const { chromium } = require('playwright');
 const { execSync } = require('child_process');
@@ -53,7 +53,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
         skip: Boolean(q('a.skip[href="#main"]')), landmarks: { main: Boolean(q('main#main')), header: Boolean(q('header')), footer: Boolean(q('footer')), nav: Boolean(q('nav[aria-label]')) },
         phone: qa('a[href^="tel:"]').length, cta: qa('a[href="/#quote"], a[href="#quote"], a[href="#free-check"]').length, privacy: Boolean(q('footer a[href="/privacy"]')),
         year: [...qa('footer')].pop()?.textContent.match(/©\s*(\d{4})/)?.[1] || '', jsonld: qa('script[type="application/ld+json"]').map((s) => s.textContent).join(' '),
-        text: document.body.innerText, headerNav: qa('header nav[aria-label="Primary"] a').map((a) => a.textContent.trim()), mobileBar: qa('nav[aria-label="Quick actions"] a').map((a) => a.getAttribute('href') || ''), headerCta: (q('header a[data-location="header"]')?.getAttribute('aria-label') || q('header a[data-location="header"]')?.textContent?.trim() || ''),
+        text: document.body.innerText, headerNav: qa('header nav[aria-label="Main"] a').map((a) => a.getAttribute('aria-label') || ''), navHrefs: qa('header nav[aria-label="Main"] a').map((a) => a.getAttribute('href') || ''), navCurrent: qa('header nav[aria-label="Main"] a[aria-current="page"]').map((a) => a.getAttribute('aria-label') || ''), themeColor: meta('theme-color'), why: q('#why')?.textContent.replace(/\s+/g, ' ') || '', mobileBar: qa('nav[aria-label="Quick actions"] a').map((a) => a.getAttribute('href') || ''), headerCta: (q('header a[data-location="header"]')?.getAttribute('aria-label') || q('header a[data-location="header"]')?.textContent?.trim() || ''),
         links: qa('a[href]').map((a) => ({ href: a.getAttribute('href'), target: a.getAttribute('target'), rel: a.getAttribute('rel') || '' })),
       };
     });
@@ -83,14 +83,19 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     if (path === '/') ok(`${path}: LocalBusiness JSON-LD`, /"@type":"ProfessionalService"/.test(d.jsonld) && /League City/.test(d.jsonld) && /Houston/.test(d.jsonld));
     if (path === '/about') ok(`${path}: Person JSON-LD`, /"@type":"Person"/.test(d.jsonld));
     ok(`${path}: no banned words in rendered text`, !BANNED.test(d.text), (d.text.match(BANNED) || [''])[0]);
-    ok(`${path}: header is the logo, the links, the phone and one button`, JSON.stringify(d.headerNav) === JSON.stringify(['Work', 'Pricing', 'Handoff', 'Free checkup', 'Blog', 'About', 'FAQ']) && d.headerCta === 'Free homepage demo', JSON.stringify({ nav: d.headerNav, cta: d.headerCta }));
+    ok(`${path}: the nav is six real links and the header has the one button`, JSON.stringify(d.headerNav) === JSON.stringify(['Home', 'Work', 'Pricing', 'Handoff', 'Checkup', 'About']) && JSON.stringify(d.navHrefs) === JSON.stringify(['/', '/work', '/#pricing', '/owner-handoff', '/checkup', '/#about']) && d.headerCta === 'Get a free demo', JSON.stringify({ nav: d.headerNav, hrefs: d.navHrefs, cta: d.headerCta }));
+    // Only a real page is the current page: Pricing and About are sections of the home page, and the blog, terms and the rest are not in the nav.
+    ok(`${path}: the nav marks the right current page`, JSON.stringify(d.navCurrent) === JSON.stringify(({ '/': ['Home'], '/work': ['Work'], '/owner-handoff': ['Handoff'], '/checkup': ['Checkup'] })[path] || []), JSON.stringify(d.navCurrent));
+    ok(`${path}: the browser chrome takes the page's colour`, d.themeColor === '#0a0908', d.themeColor);
     ok(`${path}: the mobile bar has call, text and the one action`, d.mobileBar.length === 3 && d.mobileBar[0].startsWith('tel:') && d.mobileBar[1].startsWith('sms:') && d.mobileBar[2] === '/#quote', JSON.stringify(d.mobileBar));
   }
 
   const home = seen.get('/');
-  // The hero is Kyle's own copy, word for word.
-  ok('home says what and for whom above the fold', /Custom web design for mental health professionals/i.test(home.text) && /Websites for the people who\s+help people\./.test(home.text) && /Your work changes lives\. Your website should reflect that\./.test(home.text) && /I combine a background in psychology and behavioral healthcare with modern web design, so your website helps people understand your services, feel comfortable reaching out, and take the next step toward care\./.test(home.text) && /They arrive overwhelmed\./.test(home.text) && /Your site makes it clear\./.test(home.text) && /They reach out\./.test(home.text));
-  ok('home has the one CTA, and says where the studio is', (home.text.match(/Get a free homepage demo/g) || []).length >= 2 && /based in League City, Texas/i.test(home.text));
+  // The hero: the page's one argument, word for word. The name is the brand, not a heading.
+  ok('home says what and for whom above the fold', home.h1s[0] === 'Why blend in? Custom websites for therapists and mental health practices.' && /Not a template/i.test(home.text) && /Squarespace and WordPress are the safe choice, and every practice down the street made it\. I build sites no template can copy\./.test(home.text) && /Stringham/.test(home.text) && /Web Design/i.test(home.text), JSON.stringify(home.h1s));
+  // Read from the markup: the section rises in on scroll, so it is not "visible" text until then.
+  ok('home: "Why not a template?" makes three fair points and states its own limit', /Why not a template\?/.test(home.why) && /What they do well/.test(home.why) && /Where they stop/.test(home.why) && /What a custom build adds/.test(home.why) && /a template is the right call/.test(home.why) && /Squarespace and WordPress/.test(home.why), home.why.slice(0, 120));
+  ok('home has the one CTA, and says where the studio is', /Get a free demo/.test(home.text) && /Get a free homepage demo/.test(home.text) && /based in League City, Texas/i.test(home.text));
   ok('the studio never presents itself as a care provider', /I don.t provide care/.test(home.text) && !/"@type":"(Medical|Physician|Psychologist)/.test(home.jsonld || ''));
   ok('the partner side is gone from the pages', ![...seen.values()].some((d) => /For partners|Explore a partnership|I pay you 20%/.test(d.text)));
 
@@ -130,6 +135,129 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     await cj.close();
   }
 
+
+  // ---- the hero: the still first, the video only when it is welcome ----
+  {
+    const VIDEO = () => { const v = document.querySelector('[data-hero-video]'); const b = document.querySelector('[data-hero-pause]'); return { src: v.currentSrc.replace(location.origin, ''), sources: v.querySelectorAll('source').length, paused: v.paused, muted: v.muted, loop: v.loop, inline: v.playsInline, hidden: v.getAttribute('aria-hidden'), tab: v.tabIndex, shown: v.hasAttribute('data-on'), time: v.currentTime, button: b ? { label: b.getAttribute('aria-label'), h: b.offsetHeight, w: b.offsetWidth } : null }; };
+    // Without JavaScript: the still and every word, and no video is asked for.
+    const cj = await b.newContext({ viewport: { width: 1280, height: 900 }, javaScriptEnabled: false }); const pj = await cj.newPage();
+    const asked = []; pj.on('request', (r) => { if (/\/hero\/hero-loop/.test(r.url())) asked.push(r.url()); });
+    await pj.goto(BASE + '/', { waitUntil: 'load' });
+    const plain = await pj.evaluate(() => { const img = document.querySelector('[data-hero-still]'); const pre = [...document.querySelectorAll('link[rel="preload"][as="image"]')].map((l) => l.getAttribute('href')); return { still: img.complete && img.naturalWidth > 0, src: img.currentSrc.replace(location.origin, ''), alt: img.getAttribute('alt'), priority: img.getAttribute('fetchpriority'), pre, h1: document.querySelector('h1').innerText.replace(/\s+/g, ' '), h1Shown: getComputedStyle(document.querySelector('h1').parentElement).opacity, name: [...document.querySelectorAll('[data-hero] p')].slice(0, 2).map((e) => e.tagName + ':' + e.innerText.replace(/\s+/g, ' ')), videoSources: document.querySelectorAll('[data-hero-video] source').length, videoSrc: document.querySelector('[data-hero-video]').getAttribute('src') }; });
+    ok('hero: the still is a real image, in a modern format, fetched first', plain.still && /hero-plate\.(avif|webp)$/.test(plain.src) && plain.alt === '' && plain.priority === 'high' && plain.pre.includes('/hero/hero-plate.avif') && plain.pre.includes('/hero/hero-plate-tall.avif'), JSON.stringify(plain).slice(0, 260));
+    ok('hero: without JavaScript the words are there and no video is fetched', /Why blend in\?/.test(plain.h1) && plain.videoSources === 0 && !plain.videoSrc && asked.length === 0, JSON.stringify({ h1: plain.h1, asked }));
+    ok('hero: the name is the brand mark, not a heading', /^P:Stringham/.test(plain.name[0] || '') && /^P:Web Design/i.test(plain.name[1] || ''), JSON.stringify(plain.name));
+    await cj.close();
+    // With motion welcome: it plays, muted and looping, and the button pauses it.
+    for (const [w, h, want] of [[1280, 900, /hero-loop\.(webm|mp4)$/], [390, 844, /hero-loop-720\.mp4$/]]) {
+      const c = await b.newContext({ viewport: { width: w, height: h } }); const p = await c.newPage();
+      const got = []; p.on('response', (r) => { if (/\/hero\/hero-loop/.test(r.url())) got.push(r.url().replace(BASE, '')); });
+      await p.goto(BASE + '/', { waitUntil: 'networkidle' }); await p.waitForTimeout(2500);
+      const on = await p.evaluate(VIDEO);
+      ok(`hero video at ${w}: plays muted, looping and inline, and is hidden from screen readers`, want.test(on.src) && !on.paused && on.muted && on.loop && on.inline && on.hidden === 'true' && on.tab === -1 && on.shown && on.time > 0, JSON.stringify(on).slice(0, 240));
+      ok(`hero video at ${w}: only the version for this screen is fetched`, got.length > 0 && got.every((u) => want.test(u)), JSON.stringify([...new Set(got)]));
+      ok(`hero video at ${w}: a labelled pause button, at least 44px`, Boolean(on.button) && on.button.label === 'Pause the background video' && on.button.h >= 44 && on.button.w >= 44, JSON.stringify(on.button));
+      await p.click('[data-hero-pause]'); await p.waitForTimeout(300);
+      const off = await p.evaluate(VIDEO);
+      await p.click('[data-hero-pause]'); await p.waitForTimeout(600);
+      const again = await p.evaluate(VIDEO);
+      ok(`hero video at ${w}: the button pauses it and plays it again`, off.paused && off.button.label === 'Play the background video' && !again.paused && again.button.label === 'Pause the background video', JSON.stringify({ off: off.paused, again: again.paused }));
+      // Scrolled away, it stops; back in view, it carries on.
+      await p.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' })); await p.waitForTimeout(700);
+      const away = await p.evaluate(VIDEO);
+      await p.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' })); await p.waitForTimeout(900);
+      const back = await p.evaluate(VIDEO);
+      ok(`hero video at ${w}: pauses when the hero scrolls away, resumes when it is back`, away.paused && !back.paused, JSON.stringify({ away: away.paused, back: back.paused }));
+      await c.close();
+    }
+    // Reduced motion, and data saver: the still alone. No video, no button.
+    for (const [name, opts, init] of [['reduced motion', { reducedMotion: 'reduce' }, null], ['data saver', {}, () => { Object.defineProperty(navigator, 'connection', { value: { saveData: true, effectiveType: '4g' }, configurable: true }); }]]) {
+      const c = await b.newContext({ viewport: { width: 1280, height: 900 }, ...opts }); const p = await c.newPage();
+      if (init) await p.addInitScript(init);
+      const got = []; p.on('request', (r) => { if (/\/hero\/hero-loop/.test(r.url())) got.push(r.url()); });
+      await p.goto(BASE + '/', { waitUntil: 'networkidle' }); await p.waitForTimeout(1500);
+      const v = await p.evaluate(VIDEO);
+      const moved = await p.evaluate(() => [...document.querySelectorAll('[data-hero] p, [data-hero] h1')].some((e) => getComputedStyle(e).animationName !== 'none' && getComputedStyle(e).animationDuration !== '0.001ms' && getComputedStyle(e).animationDuration !== '1e-06s'));
+      ok(`hero with ${name}: only the still, no video fetched, no button`, v.sources === 0 && got.length === 0 && v.button === null && !v.shown, JSON.stringify({ sources: v.sources, got, button: v.button }));
+      if (name === 'reduced motion') ok('hero with reduced motion: the words do not rise', !moved);
+      await c.close();
+    }
+    // A video that cannot play: back to the still, quietly.
+    {
+      const c = await b.newContext({ viewport: { width: 1280, height: 900 } }); const p = await c.newPage();
+      await p.route(/\/hero\/hero-loop/, (r) => r.abort());
+      const errs = []; p.on('pageerror', (e) => errs.push(e.message));
+      await p.goto(BASE + '/', { waitUntil: 'networkidle' }); await p.waitForTimeout(2500);
+      const v = await p.evaluate(VIDEO);
+      ok('hero when the video fails: the still stays, the button goes, nothing breaks', !v.shown && v.button === null && errs.length === 0, JSON.stringify({ shown: v.shown, button: v.button, errs }));
+      await c.close();
+    }
+  }
+
+  // ---- the nav: keyboard, client-side routing, resting water, and the fallback without WebGL ----
+  {
+    const NAV = 'header nav[aria-label="Main"]';
+    const c = await b.newContext({ viewport: { width: 1280, height: 900 } }); const p = await c.newPage();
+    await p.addInitScript(() => { window.__draws = 0; const wrap = (proto) => { if (!proto) return; const d = proto.drawArrays; proto.drawArrays = function (...a) { window.__draws++; return d.apply(this, a); }; }; wrap(window.WebGLRenderingContext && WebGLRenderingContext.prototype); });
+    await p.goto(BASE + '/', { waitUntil: 'networkidle' });
+    const gl = await p.getAttribute(NAV, 'data-gl');
+    ok('nav: the water shader compiles and draws', gl === 'on' && (await p.evaluate(() => window.__draws)) > 0, `data-gl=${gl}`);
+    // Battery: about two seconds after load it has stopped drawing; a hover starts it, and it stops again.
+    await p.mouse.move(640, 600); await p.waitForTimeout(4200);
+    const a0 = await p.evaluate(() => window.__draws); await p.waitForTimeout(1200); const a1 = await p.evaluate(() => window.__draws);
+    const pill = await p.locator(NAV).boundingBox();
+    await p.mouse.move(pill.x + pill.width / 2, pill.y + pill.height / 2); await p.waitForTimeout(700);
+    const a2 = await p.evaluate(() => window.__draws);
+    await p.mouse.move(640, 600); await p.waitForTimeout(4200);
+    const a3 = await p.evaluate(() => window.__draws); await p.waitForTimeout(1200); const a4 = await p.evaluate(() => window.__draws);
+    ok('nav: the water rests when nothing is happening, and moves on hover', a1 === a0 && a2 > a1 + 5 && a4 === a3, JSON.stringify({ idle: a1 - a0, hover: a2 - a1, idleAgain: a4 - a3 }));
+    // Arrow keys move focus and nothing else.
+    await p.evaluate(() => { window.__same = true; });
+    await p.focus(`${NAV} a[aria-label="Home"]`);
+    await p.keyboard.press('ArrowRight'); await p.keyboard.press('ArrowRight');
+    const afterArrows = await p.evaluate(() => ({ focus: document.activeElement.getAttribute('aria-label'), path: location.pathname + location.hash, ring: getComputedStyle(document.activeElement).outlineStyle }));
+    await p.keyboard.press('ArrowLeft');
+    const afterLeft = await p.evaluate(() => document.activeElement.getAttribute('aria-label'));
+    ok('nav: arrow keys move focus between items without navigating', afterArrows.focus === 'Pricing' && afterArrows.path === '/' && afterLeft === 'Work' && afterArrows.ring !== 'none', JSON.stringify({ afterArrows, afterLeft }));
+    // Enter follows the link, on the client: the page is not reloaded.
+    await p.keyboard.press('Enter'); await p.waitForURL('**/work'); await p.waitForTimeout(900);
+    const routed = await p.evaluate((q) => ({ same: window.__same === true, current: [...document.querySelectorAll(`${q} a[aria-current="page"]`)].map((a) => a.getAttribute('aria-label')), active: [...document.querySelectorAll(`${q} a[data-active="true"]`)].map((a) => a.getAttribute('aria-label')), h1: document.querySelector('h1').innerText }), NAV);
+    ok('nav: Enter navigates on the client and the current page follows', routed.same && JSON.stringify(routed.current) === '["Work"]' && JSON.stringify(routed.active) === '["Work"]', JSON.stringify(routed));
+    // A click on a home section from another page lands on it; the drop follows the scroll there.
+    await p.click(`${NAV} a[aria-label="Pricing"]`); await p.waitForURL('**/#pricing'); await p.waitForTimeout(1800);
+    const sect = await p.evaluate((q) => ({ same: window.__same === true, top: Math.round(document.querySelector('#pricing').getBoundingClientRect().top), active: [...document.querySelectorAll(`${q} a[data-active="true"]`)].map((a) => a.getAttribute('aria-label')), current: [...document.querySelectorAll(`${q} a[aria-current="page"]`)].map((a) => a.getAttribute('aria-label')) }), NAV);
+    ok('nav: Pricing lands on the home page\'s pricing section', sect.same && sect.top < 200 && sect.top > -400 && JSON.stringify(sect.active) === '["Pricing"]' && JSON.stringify(sect.current) === '["Home"]', JSON.stringify(sect));
+    // A page the nav does not list: no item is active, and none is the current page.
+    await p.goto(BASE + '/blog', { waitUntil: 'networkidle' });
+    const none = await p.evaluate((q) => ({ active: document.querySelectorAll(`${q} a[data-active="true"]`).length, current: document.querySelectorAll(`${q} a[aria-current]`).length, empty: document.querySelector(q).getAttribute('data-empty') }), NAV);
+    ok('nav: on a page it does not list, no item is marked', none.active === 0 && none.current === 0 && none.empty === 'true', JSON.stringify(none));
+    await c.close();
+    // Without WebGL: the CSS drop, under the current item.
+    const cg = await b.newContext({ viewport: { width: 1280, height: 900 } }); const pg = await cg.newPage();
+    await pg.addInitScript(() => { const g = HTMLCanvasElement.prototype.getContext; HTMLCanvasElement.prototype.getContext = function (t, ...r) { return /webgl/.test(t) ? null : g.call(this, t, ...r); }; });
+    await pg.goto(BASE + '/owner-handoff', { waitUntil: 'networkidle' }); await pg.waitForTimeout(1200);
+    const fb = await pg.evaluate((q) => { const nav = document.querySelector(q); const drop = nav.querySelector('.nimbus-drop').getBoundingClientRect(); const item = nav.querySelector('a[aria-current="page"]').getBoundingClientRect(); return { gl: nav.getAttribute('data-gl'), shown: getComputedStyle(nav.querySelector('.nimbus-drop')).display, dx: Math.round(Math.abs((drop.left + drop.width / 2) - (item.left + item.width / 2))), w: Math.round(drop.width), iw: Math.round(item.width), canvas: getComputedStyle(nav.querySelector('canvas')).display, bg: getComputedStyle(nav.querySelector('.nimbus-drop')).backgroundImage.slice(0, 40) }; }, NAV);
+    ok('nav without WebGL: the CSS drop sits under the current item', fb.gl === 'off' && fb.shown === 'block' && fb.canvas === 'none' && fb.dx <= 3 && Math.abs(fb.w - fb.iw) <= 6, JSON.stringify(fb));
+    await cg.close();
+    // Placement: over the hero the pill is alone; past it, and on other pages, the logo and the button join it.
+    const cp = await b.newContext({ viewport: { width: 1280, height: 900 } }); const pp = await cp.newPage();
+    const place = () => pp.evaluate(() => { const h = document.querySelector('[data-site-header]'); const vis = (sel) => { const e = h.querySelector(sel); return Boolean(e) && getComputedStyle(e).visibility === 'visible' && getComputedStyle(e).display !== 'none'; }; const n = h.querySelector('nav').getBoundingClientRect(); return { state: h.getAttribute('data-state'), logo: vis('a[aria-label^="Stringham"]'), cta: vis('a[data-location="header"]'), centred: Math.abs((n.left + n.width / 2) - innerWidth / 2) < 3, fixed: getComputedStyle(h).position }; });
+    await pp.goto(BASE + '/', { waitUntil: 'networkidle' }); await pp.waitForTimeout(600);
+    const top = await place();
+    await pp.evaluate(() => window.scrollTo({ top: innerHeight * 1.4, behavior: 'instant' })); await pp.waitForTimeout(900);
+    const past = await place();
+    await pp.goto(BASE + '/work', { waitUntil: 'networkidle' });
+    const other = await place();
+    ok('header: over the hero the pill is alone and centered', top.state === 'hero' && !top.logo && !top.cta && top.centred, JSON.stringify(top));
+    ok('header: past the hero, and on other pages, the logo and the one button join it', past.state === 'pinned' && past.logo && past.cta && past.centred && past.fixed === 'fixed' && other.state === 'pinned' && other.logo && other.cta, JSON.stringify({ past, other }));
+    await cp.close();
+    const cm = await b.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true }); const pm = await cm.newPage();
+    await pm.goto(BASE + '/work', { waitUntil: 'networkidle' });
+    const phone = await pm.evaluate(() => { const h = document.querySelector('[data-site-header]'); const shown = (e) => Boolean(e) && getComputedStyle(e).display !== 'none'; const labels = [...h.querySelectorAll('.nimbus-label')].map((l) => l.getBoundingClientRect().width); return { logo: shown(h.querySelector('a[aria-label^="Stringham"]')), cta: shown(h.querySelector('a[data-location="header"]')), labels: Math.max(...labels), items: h.querySelectorAll('nav a').length, bar: shown(document.querySelector('nav[aria-label="Quick actions"]')) }; });
+    ok('header on a phone: the pill alone, icons only, with the bottom bar for call and demo', !phone.logo && !phone.cta && phone.labels <= 1 && phone.items === 6 && phone.bar, JSON.stringify(phone));
+    await cm.close();
+  }
+
   for (const [href, uses] of externals) {
     ok(`external ${href}: opens safely`, uses.every((u) => u.target !== '_blank' || /noopener/.test(u.rel)), JSON.stringify(uses.filter((u) => u.target === '_blank' && !/noopener/.test(u.rel)).map((u) => u.page)));
   }
@@ -163,7 +291,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
   }
 
   // ---- phones ----
-  for (const width of [375, 414]) {
+  for (const width of [320, 375, 390, 414]) {
     const c = await b.newContext({ viewport: { width, height: 812 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
     for (const path of seen.keys()) {
       const p = await c.newPage();

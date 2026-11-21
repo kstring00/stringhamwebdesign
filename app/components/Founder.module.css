@@ -11,7 +11,7 @@
   aspect-ratio: 4 / 5;
   max-width: 20rem;
   border-radius: 12px;
-  background: var(--brand-soft);
+  background: var(--accent-soft);
   border: 1px solid var(--line);
 }
 
@@ -22,12 +22,12 @@
   display: grid;
   gap: 0.9rem;
   max-width: 40rem;
-  color: var(--ink-soft);
+  color: var(--text-soft);
   line-height: 1.6;
 }
 
 .label {
-  color: var(--muted);
+  color: var(--text-2);
   font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -36,7 +36,7 @@
 
 .name {
   margin-top: -0.4rem;
-  color: var(--ink);
+  color: var(--text);
   font-size: clamp(1.9rem, 3.6vw, 2.8rem);
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -44,7 +44,7 @@
 
 .role {
   margin-top: -0.5rem;
-  color: var(--ink);
+  color: var(--text);
   font-weight: 500;
 }
 
@@ -58,7 +58,7 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  color: var(--ink);
+  color: var(--text);
   font-weight: 500;
 }
 

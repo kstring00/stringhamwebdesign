@@ -18,23 +18,23 @@
 
 .legend div { display: grid; gap: 0.3rem; }
 .legend dt, .legend dd { margin: 0; }
-.legend dd { color: var(--muted); font-size: 0.9rem; }
+.legend dd { color: var(--text-2); font-size: 0.9rem; }
 
 .kind {
   display: inline-flex;
   padding: 0.25rem 0.65rem;
   border-radius: 999px;
-  background: var(--paper-deep);
-  color: var(--ink-soft);
+  background: var(--surface);
+  color: var(--text-soft);
   font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 0.04em;
 }
 
-.kind_live { background: #e3f3ea; color: #1f5f3a; }
-.kind_demo { background: var(--brand-soft); color: var(--brand-deep); }
-.kind_in_progress { background: #fff3dc; color: #7a4b00; }
-.kind_concept, .kind_archived { background: var(--paper-deep); color: var(--muted); }
+.kind_live { background: var(--good-soft); color: var(--good); }
+.kind_demo { background: var(--accent-soft); color: var(--accent); }
+.kind_in_progress { background: var(--warn-soft); color: var(--warn); }
+.kind_concept, .kind_archived { background: var(--surface); color: var(--text-2); }
 
 .list { display: grid; gap: clamp(2rem, 4vw, 3.5rem); margin: 0; padding: 0; list-style: none; }
 
@@ -52,25 +52,25 @@
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 30px 70px -40px rgba(11, 42, 32, 0.4);
+  background: var(--surface-2);
+  box-shadow: 0 30px 70px -40px rgba(0, 0, 0, 0.4);
 }
 
 .shot img { display: block; width: 100%; height: auto; }
 
 .text { display: grid; gap: 0.75rem; }
 
-.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; color: var(--muted); font-size: 0.9rem; }
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; color: var(--text-2); font-size: 0.9rem; }
 .draft { padding: 0.2rem 0.6rem; border: 1px dashed var(--line-strong); border-radius: 999px; font-size: 0.82rem; }
 
 .name { font-size: clamp(2.04rem, 3.12vw, 2.76rem); letter-spacing: -0.02em; line-height: 1.1; }
-.type { margin-top: -0.4rem; color: var(--muted); }
-.what { color: var(--ink-soft); line-height: 1.55; }
-.builtFor { color: var(--ink); }
+.type { margin-top: -0.4rem; color: var(--text-2); }
+.what { color: var(--text-soft); line-height: 1.55; }
+.builtFor { color: var(--text); }
 
 .built { display: grid; gap: 0.5rem; margin: 0.25rem 0 0; padding: 0; list-style: none; }
 
-.built li { position: relative; padding-left: 1.4rem; color: var(--ink-soft); line-height: 1.5; }
+.built li { position: relative; padding-left: 1.4rem; color: var(--text-soft); line-height: 1.5; }
 
 .built li::before {
   content: "";
@@ -80,7 +80,7 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  background: var(--brand);
+  background: var(--accent);
 }
 
 .cta { display: grid; gap: 1rem; max-width: 44rem; justify-items: start; }

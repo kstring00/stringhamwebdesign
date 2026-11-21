@@ -20,7 +20,7 @@
 }
 
 .heroAside { display: grid; gap: 1.25rem; padding-bottom: 0.6rem; }
-.heroLede { color: var(--ink-soft); font-size: clamp(1.05rem, 1.3vw, 1.2rem); line-height: 1.6; }
+.heroLede { color: var(--text-soft); font-size: clamp(1.05rem, 1.3vw, 1.2rem); line-height: 1.6; }
 
 .count {
   display: flex;
@@ -28,11 +28,11 @@
   gap: 0.5rem 1.5rem;
   padding-top: 1rem;
   border-top: 1px solid var(--line);
-  color: var(--muted);
+  color: var(--text-2);
   font-size: 0.92rem;
 }
 
-.count b { color: var(--ink); font-weight: 600; }
+.count b { color: var(--text); font-weight: 600; }
 
 /* ---------- the grid ---------- */
 
@@ -59,42 +59,42 @@
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 20px;
-  background: #fff;
+  background: var(--surface-2);
   color: inherit;
   transition: transform 450ms var(--ease-out), box-shadow 450ms var(--ease-out), border-color 450ms var(--ease-out);
 }
 
-.card:hover { transform: translateY(-4px); border-color: var(--line-strong); box-shadow: 0 40px 70px -44px rgba(11, 42, 32, 0.55); }
-.card:focus-visible { outline: 2px solid var(--brand); outline-offset: 4px; }
+.card:hover { transform: translateY(-4px); border-color: var(--line-strong); box-shadow: 0 40px 70px -44px rgba(0, 0, 0, 0.55); }
+.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 
 /* The cover sits flush in the card's top; the card's own corners round it. */
 .card > :first-child { border-radius: 0; }
 
 .body { display: grid; gap: 0.8rem; align-content: start; padding: clamp(1.25rem, 2.5vw, 1.9rem); }
 
-.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.6rem; color: var(--muted); font-size: 0.9rem; }
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.6rem; color: var(--text-2); font-size: 0.9rem; }
 
 .category, .latest {
   padding: 0.2rem 0.65rem;
   border-radius: 999px;
-  background: var(--brand-soft);
-  color: var(--brand-deep);
+  background: var(--accent-soft);
+  color: var(--accent);
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.04em;
 }
 
-.latest { background: var(--brand); color: #fff; }
+.latest { background: var(--accent); color: var(--on-light); }
 
 .cardTitle { font-size: clamp(1.74rem, 2.64vw, 2.28rem); letter-spacing: -0.02em; line-height: 1.12; text-wrap: balance; }
-.cardDesc { color: var(--ink-soft); line-height: 1.6; }
+.cardDesc { color: var(--text-soft); line-height: 1.6; }
 
 .readMore {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   margin-top: 0.2rem;
-  color: var(--brand-deep);
+  color: var(--accent);
   font-weight: 600;
 }
 
@@ -119,8 +119,8 @@
 .card[data-variant="compact"] .cardTitle { font-size: 1.6rem; line-height: 1.15; }
 .card[data-variant="compact"] .meta { font-size: 0.85rem; }
 
-.end { margin-top: clamp(2rem, 4vw, 3rem); color: var(--ink-soft); font-size: 1.05rem; text-align: center; }
-.end a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink); font-weight: 600; }
+.end { margin-top: clamp(2rem, 4vw, 3rem); color: var(--text-soft); font-size: 1.05rem; text-align: center; }
+.end a { display: inline-flex; align-items: center; min-height: 44px; color: var(--text); font-weight: 600; }
 
 /* ---------- smaller screens ---------- */
 
