@@ -32,8 +32,10 @@ the Listing Fix, quoted after the check, with its form; the page to text to pros
 
 ## Where things live
 
-- `app/data/offer.ts` — the offer in one place: the three prices
-  (`PRICES`: websites from $300, Listing Fix $25, Website Care $25/month)
+- `app/data/offer.ts` — the offer in one place: the prices
+  (`PRICES`: websites from $300, Listing Fix $25; `CARE_LEVELS`: Website
+  Care's three levels, $25, $50 and $85 a month, shown as a slider by
+  `app/home/CareCard.tsx`)
   and how pricing is worded (`pricing`: the final website price is set in
   the written quote, payment plans), what affects the price, the Listing
   Fix and Website Care lines, the three pricing

@@ -199,7 +199,7 @@ export const EXPECT = {
   see: [
     "Fewer \"are you taking new clients?\" and \"do you take my insurance?\" calls",
     "Calls, texts and form messages you can count",
-    "A one-page monthly report, if you add Website Care",
+    "A one-page monthly report, on Website Care's Full level",
     "A rerun of this checkup scoring in the 80s or 90s",
   ],
   cant: [
@@ -213,7 +213,7 @@ export const TIMELINE = [
   { when: "Day 1–3", what: "You get a fixed quote and a free demo of your homepage." },
   { when: "About 3 weeks", what: "Your site is built with every leak fixed, tested on phones, launched and handed over to you." },
   { when: "First 30 days", what: "Google picks up the new site. Calls and form messages start being counted." },
-  { when: "Months 2–3", what: "You see what's working. On Website Care, a monthly report and small changes based on real numbers." },
+  { when: "Months 2–3", what: "You see what's working. On Website Care, small changes based on real numbers, and on its Full level a monthly report." },
   { when: "Months 3–6", what: "Search visibility usually builds slowly over these months as Google trusts the site." },
 ];
 

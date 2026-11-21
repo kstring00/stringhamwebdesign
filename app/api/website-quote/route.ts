@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { careLevel, money } from "@/app/data/offer";
 import { clean, clientIp, deliver, isEmail, rateLimited } from "@/app/lib/inbox";
 import { isValidCode } from "@/app/lib/refCode";
 import { recordLead, type LeadInput } from "@/app/lib/referrals";
@@ -28,6 +29,10 @@ export const dynamic = "force-dynamic";
  * shown at /manage); the email says whether it was saved. `ref` is a
  * referral partner's code, remembered from a shared link: a valid, active
  * code credits the lead to that partner and names them in the email.
+ *
+ * `care` is a Website Care level chosen on the pricing card ("basic",
+ * "standard" or "full"); anything else is ignored. It is named in the
+ * email and kept on the ledger row, so Kyle can see which level they picked.
  *
  * JSON in, JSON out from the form script. A native post (no JavaScript)
  * gets a 303 back to /?sent=1#quote or /?error=…#quote (the checkup form
@@ -67,6 +72,8 @@ export async function POST(request: NextRequest) {
   const goals = clean(body.goals, 1000);
   const heard = clean(body.heard, 160) || clean(body.referred_by, 120);
   const checkup = clean(body.checkup, 600);
+  const care = careLevel(clean(body.care, 12).toLowerCase());
+  const careLine = care ? `Website Care: ${care.name} (${money(care.price)} a month)` : "";
   const refCode = clean(body.ref, 40).toLowerCase();
   const ref = isValidCode(refCode) ? refCode : "";
   const source = {
@@ -127,7 +134,7 @@ export async function POST(request: NextRequest) {
     return reply(400, { error: "Please fill in your name, your business, and a phone number or email." });
   }
 
-  const att = await attribute({ kind: "quote", business, contact_name: name, contact: email || phone, website: currentSite, checkup, heard });
+  const att = await attribute({ kind: "quote", business, contact_name: name, contact: email || phone, website: currentSite, checkup, heard, detail: care ? `Website Care: ${care.name}` : undefined });
   const text = [
     `Quote + free demo request from ${name}`,
     "",
@@ -137,6 +144,7 @@ export async function POST(request: NextRequest) {
     "",
     `What the site should help customers do: ${goals || "(not given)"}`,
     `How they heard / who referred: ${heard || "(not given)"}`,
+    ...(careLine ? [careLine] : []),
     ...(checkup ? ["", checkup] : []),
     "",
     ...att.lines,
@@ -145,7 +153,7 @@ export async function POST(request: NextRequest) {
     `Sent: ${new Date().toISOString()}`,
   ].join("\n");
 
-  const subject = `Quote + demo: ${business} (${name})${heard ? ` · via ${heard}` : ""}${att.partner ? ` · ref ${att.partner.code}` : ""}${checkup ? " · from the checkup" : ""}`;
+  const subject = `Quote + demo: ${business} (${name})${heard ? ` · via ${heard}` : ""}${att.partner ? ` · ref ${att.partner.code}` : ""}${checkup ? " · from the checkup" : ""}${care ? ` · Care: ${care.name}` : ""}`;
   const result = await deliver({ subject, text, replyTo: email || undefined, label: "quote + demo request" });
   return finish("quote + demo request", result, att);
 }

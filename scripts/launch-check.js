@@ -94,6 +94,42 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
   ok('the studio never presents itself as a care provider', /I don.t provide care/.test(home.text) && !/"@type":"(Medical|Physician|Psychologist)/.test(home.jsonld || ''));
   ok('the partner side is gone from the pages', ![...seen.values()].some((d) => /For partners|Explore a partnership|I pay you 20%/.test(d.text)));
 
+  // ---- Website Care: three levels on a slider, the level carried into the demo form ----
+  {
+    const c = await b.newContext({ viewport: { width: 1280, height: 900 } }); const p = await c.newPage();
+    await p.goto(BASE + '/', { waitUntil: 'networkidle' });
+    // The card fades in when it is scrolled to; read it once it is on screen.
+    await p.evaluate(() => document.querySelector('#care').scrollIntoView({ block: 'center' })); await p.waitForTimeout(1200);
+    const read = () => p.evaluate(() => {
+      const card = document.querySelector('#care'); const range = card.querySelector('input[type="range"]');
+      return { price: card.querySelector('b').textContent.trim(), text: card.innerText.replace(/\s+/g, ' '), value: range.value, min: range.min, max: range.max, valuetext: range.getAttribute('aria-valuetext'), label: range.getAttribute('aria-label'), height: range.offsetHeight, href: card.querySelector('a[data-care]').getAttribute('href') };
+    });
+    const start = await read();
+    ok('Website Care: a real range input with three stops, starting on Standard', start.min === '0' && start.max === '2' && start.value === '1' && start.price === '$50' && /Standard, \$50 a month/.test(start.valuetext) && Boolean(start.label) && start.height >= 44, JSON.stringify(start).slice(0, 200));
+    ok('Website Care: Standard lists what it adds over Basic', /Everything in Basic/.test(start.text) && /Edits: up to 45 minutes a month/.test(start.text) && /Google: listing kept right/.test(start.text) && !/Report: one page/.test(start.text));
+    ok('Website Care: the rules that hold at every level are on the card', /Optional and month to month/.test(start.text) && /not your domain, hosting or tool bills/.test(start.text) && /quoted separately/.test(start.text) && /carry over/.test(start.text) && /next billing month/.test(start.text) && /never reply to reviews/.test(start.text));
+    await p.focus('#care input[type="range"]'); await p.keyboard.press('ArrowLeft');
+    const basic = await read();
+    ok('Website Care: the left arrow key moves to Basic, $25, 15 minutes', basic.value === '0' && basic.price === '$25' && /Edits: up to 15 minutes a month/.test(basic.text) && !/Everything in/.test(basic.text) && /care=basic/.test(basic.href), JSON.stringify({ v: basic.value, p: basic.price, h: basic.href }));
+    await p.keyboard.press('ArrowRight'); await p.keyboard.press('ArrowRight');
+    const full = await read();
+    ok('Website Care: the right arrow key reaches Full, $85, 90 minutes and the report', full.value === '2' && full.price === '$85' && /Everything in Standard/.test(full.text) && /Edits: up to 90 minutes a month/.test(full.text) && /Report: one page each month/.test(full.text) && /care=full/.test(full.href), JSON.stringify({ v: full.value, p: full.price, h: full.href }));
+    await p.click('#care a[data-care]'); await p.waitForTimeout(500);
+    const carried = await p.evaluate(() => ({ field: document.querySelector('#quote-form input[name="care"]')?.value, note: document.querySelector('#quote-form')?.innerText.match(/Website Care, [A-Za-z]+ level \(\$\d+ a month\)/)?.[0], url: location.search + location.hash }));
+    ok('Website Care: "Add it to your quote" carries the level into the demo form', carried.field === 'full' && /Full level \(\$85 a month\)/.test(carried.note || '') && /care=full/.test(carried.url) && /#quote/.test(carried.url), JSON.stringify(carried));
+    await p.goto(BASE + '/?care=basic#quote', { waitUntil: 'networkidle' });
+    const linked = await p.evaluate(() => ({ field: document.querySelector('#quote-form input[name="care"]')?.value, slider: document.querySelector('#care input[type="range"]').value }));
+    ok('Website Care: a link with ?care=basic opens the form and the slider on Basic', linked.field === 'basic' && linked.slider === '0', JSON.stringify(linked));
+    ok('no page still describes one $25 plan', ![...seen.values()].some((d) => /30 minutes a month|Website Care \(\$25\/month\)|for \$25 a month/.test(d.text)));
+    await c.close();
+    // Without JavaScript: no dead slider, all three levels listed.
+    const cj = await b.newContext({ viewport: { width: 1280, height: 900 }, javaScriptEnabled: false }); const pj = await cj.newPage();
+    await pj.goto(BASE + '/', { waitUntil: 'load' });
+    const plain = await pj.evaluate(() => { const card = document.querySelector('#care'); const range = card.querySelector('input[type="range"]'); return { sliderShown: range ? getComputedStyle(range.closest('[data-care-js]')).display !== 'none' : false, text: card.innerText.replace(/\s+/g, ' ') }; });
+    ok('Website Care without JavaScript: the slider is hidden and all three levels are listed', !plain.sliderShown && /Basic, \$25 a month/.test(plain.text) && /Standard, \$50 a month/.test(plain.text) && /Full, \$85 a month/.test(plain.text) && /up to 15 minutes/.test(plain.text) && /up to 45 minutes/.test(plain.text) && /up to 90 minutes/.test(plain.text), JSON.stringify(plain).slice(0, 240));
+    await cj.close();
+  }
+
   for (const [href, uses] of externals) {
     ok(`external ${href}: opens safely`, uses.every((u) => u.target !== '_blank' || /noopener/.test(u.rel)), JSON.stringify(uses.filter((u) => u.target === '_blank' && !/noopener/.test(u.rel)).map((u) => u.page)));
   }

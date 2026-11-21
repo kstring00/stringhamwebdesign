@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 
+import { careLevel, money, type CareKey } from "../data/offer";
 import { site } from "../data/site";
+import { CARE_EVENT } from "./CareCard";
 import styles from "./form.module.css";
 import { track } from "../lib/track";
 import { currentRef } from "../lib/ref";
@@ -27,9 +29,11 @@ const R = <span className={styles.req} aria-hidden="true">*</span>;
  * same route without it. The confirmation replaces the form and takes
  * focus. utm tags and the referrer ride along hidden, and so does a
  * Website Checkup result when the visitor came from /checkup (shown above
- * the fields, so they know it's attached).
+ * the fields, so they know it's attached). The same goes for a Website
+ * Care level chosen on the pricing card: it arrives in the link
+ * (?care=standard) or, on this page, as an event from the card.
  */
-export default function QuoteForm({ sent = false, errorCode = "", checkup = "" }: { sent?: boolean; errorCode?: string; checkup?: string }) {
+export default function QuoteForm({ sent = false, errorCode = "", checkup = "", care }: { sent?: boolean; errorCode?: string; checkup?: string; care?: CareKey }) {
   const nativeError = NATIVE_ERRORS[errorCode] ?? (errorCode ? "That didn't go through." : "");
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">(sent ? "sent" : nativeError ? "error" : "idle");
   const [error, setError] = useState(nativeError);
@@ -42,6 +46,14 @@ export default function QuoteForm({ sent = false, errorCode = "", checkup = "" }
   // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from this browser after hydration
   useEffect(() => { setRef(currentRef()); }, []);
   useEffect(() => { if (state === "sent") done.current?.focus(); }, [state]);
+  // The Website Care level added to this quote, if any.
+  const [careKey, setCareKey] = useState<CareKey | "">(care ?? "");
+  useEffect(() => {
+    const onCare = (e: Event) => { const l = careLevel(String((e as CustomEvent).detail)); if (l) setCareKey(l.key); };
+    window.addEventListener(CARE_EVENT, onCare);
+    return () => window.removeEventListener(CARE_EVENT, onCare);
+  }, []);
+  const chosen = careKey ? careLevel(careKey) : undefined;
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -83,6 +95,12 @@ export default function QuoteForm({ sent = false, errorCode = "", checkup = "" }
   return (
     <form className={styles.form} id="quote-form" onSubmit={onSubmit} method="post" action="/api/website-quote">
       {checkup ? <p className={styles.attached}><b>Attached:</b> {checkup.replace(/^Website Checkup:\s*/, "your Website Checkup, ").replace(/\.\s*Top leaks:[\s\S]*$/, "")}</p> : null}
+      {chosen ? (
+        <p className={styles.attached} role="status">
+          <b>Added:</b> Website Care, {chosen.name} level ({money(chosen.price)} a month).{" "}
+          <button type="button" className={styles.attachedRemove} onClick={() => setCareKey("")}>Remove</button>
+        </p>
+      ) : null}
       <p className={styles.fine}>{R} Required</p>
       <div className={styles.row}>
         <div className={styles.field}>
@@ -118,6 +136,7 @@ export default function QuoteForm({ sent = false, errorCode = "", checkup = "" }
       {/* Where the visitor came from. Filled by the script; harmless when empty. */}
       {VISIT_KEYS.map((k) => <input key={k} type="hidden" name={k} defaultValue="" />)}
       {checkup ? <input type="hidden" name="checkup" value={checkup} /> : null}
+      {chosen ? <input type="hidden" name="care" value={chosen.key} /> : null}
       <input type="hidden" name="ref" value={ref} />
       {/* Honeypot: off screen, inert and skipped by password managers. The API
           drops any submission where `website` has a value. */}

@@ -184,6 +184,10 @@ textarea.input {
 
 .input::placeholder { color: var(--muted); opacity: 0.8; }
 
+/* "Remove" beside an attached Website Care level. */
+.attachedRemove { min-height: 44px; padding: 0 0.4rem; border: 0; background: none; color: var(--brand-deep); font: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.attachedRemove:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 4px; }
+
 /* Required marker: shown, and the input's own `required` tells screen readers. */
 .req { color: #9b2c1f; font-weight: 600; }
 

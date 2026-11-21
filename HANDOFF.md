@@ -81,9 +81,17 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
 - Pricing, matching `content/service-terms.md`: custom websites start at
   $300 and the final price is set in the written quote (fixed, not hourly;
   payment plans available); the Listing Fix is $25 one-time; Website Care
-  is $25 a month, month to month. The three numbers live in
-  `app/data/offer.ts` (`PRICES`) and nowhere else; change them and the
-  terms together. The only guarantees on the site are the ones in the
+  is optional and month to month, in three levels: Basic $25, Standard $50
+  and Full $85 a month, with 15, 45 and 90 minutes of edits. The card is a
+  slider (`app/home/CareCard.tsx`), and wherever one number has to stand
+  for the plan it is "from $25 a month". At every level: it pays for
+  Kyle's time and not the practice's bills, new pages and sections are
+  quoted separately, unused edit time doesn't carry over, a change of level
+  or a cancellation takes effect the next billing month, and Kyle never
+  replies to reviews for a practice. The numbers live in
+  `app/data/offer.ts` (`PRICES`, `CARE_LEVELS`) and nowhere else; change
+  them and the terms together (`node scripts/offer-check.js` fails when
+  they disagree). The only guarantees on the site are the ones in the
   terms.
 - Honesty: no invented reviews, numbers, clients, results, logos or
   guarantees. The four findings on /google-check are real and anonymized;

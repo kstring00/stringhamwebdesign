@@ -116,8 +116,12 @@ export default function OwnershipPage() {
           <h2 id="covers-title" className={home.h2}>What ownership covers, and what it can&rsquo;t</h2>
           <div className={s.covers}>
             <div className={s.cover}>
-              <h3 className={s.cardName}>Yours, once the site is paid in full</h3>
-              <ul className={home.planLines}>{ownership.yours.map((y) => <li key={y}>{y}</li>)}</ul>
+              <h3 className={s.cardName}>Yours from day one</h3>
+              <ul className={home.planLines}>{ownership.yoursFromDayOne.map((y) => <li key={y}>{y}</li>)}</ul>
+            </div>
+            <div className={s.cover}>
+              <h3 className={s.cardName}>Yours once the site is paid in full</h3>
+              <ul className={home.planLines}>{ownership.yoursOncePaid.map((y) => <li key={y}>{y}</li>)}</ul>
             </div>
             <div className={s.cover}>
               <h3 className={s.cardName}>Licensed from someone else</h3>
@@ -136,7 +140,7 @@ export default function OwnershipPage() {
       <section className={`${home.section} ${home.alt}`} aria-labelledby="care-title">
         <div className={`container ${s.care}`}>
           <h2 id="care-title" className={s.careLine}>{ownership.care}</h2>
-          <p className={s.note}>{ownership.careNote} <a className={`u ${home.inlineLink}`} href="/#pricing">What it includes</a></p>
+          <p className={s.note}>{ownership.careNote} <a className={`u ${home.inlineLink}`} href="/#care">See what each level includes</a></p>
           <div className={home.actions}>
             <a className="btn" href={cta.href} data-track="cta" data-location="ownership-foot">{cta.label}</a>
             <a className={`u ${home.textLink}`} href="/checkup" data-track="cta" data-location="ownership-checkup">Or run the free website checkup</a>

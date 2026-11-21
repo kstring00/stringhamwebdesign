@@ -8,13 +8,65 @@
  * (app/data/ownership.ts, /owner-handoff). Website Care is optional, and
  * no line here may read as if Kyle running the site is the default.
  *
- * The three prices live in PRICES and nowhere else: websites start at
- * $300 (the final price is set in the written quote), the Listing Fix is
- * $25 one-time, Website Care is $25 a month. Change them here and in the
- * terms together.
+ * The prices live here and nowhere else: websites start at $300 (the
+ * final price is set in the written quote) and the Listing Fix is $25
+ * one-time, both in PRICES; Website Care's three levels, with their prices
+ * and edit time, are in CARE_LEVELS. The card, the FAQ, the Handoff page,
+ * the checkup and the quote route all read them from here. The Service
+ * Terms are a written document, so they are changed by hand, in the same
+ * change (scripts/offer-check.js fails when the two disagree).
  */
-export const PRICES = { website: 300, listingFix: 25, care: 25 } as const;
+export const PRICES = { website: 300, listingFix: 25 } as const;
 export const money = (n: number) => `$${n.toLocaleString("en-US")}`;
+
+/**
+ * Website Care: optional, month to month, in three levels. Each level
+ * includes everything in the one below it; `editMinutes` is the content
+ * edit time included each month.
+ */
+export const CARE_LEVELS = [
+  { key: "basic", name: "Basic", price: 25, editMinutes: 15 },
+  { key: "standard", name: "Standard", price: 50, editMinutes: 45 },
+  { key: "full", name: "Full", price: 85, editMinutes: 90 },
+] as const;
+
+export type CareKey = (typeof CARE_LEVELS)[number]["key"];
+/** Where the slider starts. */
+export const CARE_DEFAULT: CareKey = "standard";
+/** "from $25 a month": the lowest level's price, wherever one number has to stand for the plan. */
+export const CARE_FROM = `from ${money(CARE_LEVELS[0].price)} a month`;
+export const careLevel = (key: string) => CARE_LEVELS.find((l) => l.key === key);
+/** "Basic ($25), Standard ($50) and Full ($85)" */
+export const CARE_NAMES = `${CARE_LEVELS[0].name} (${money(CARE_LEVELS[0].price)}), ${CARE_LEVELS[1].name} (${money(CARE_LEVELS[1].price)}) and ${CARE_LEVELS[2].name} (${money(CARE_LEVELS[2].price)})`;
+
+const edits = (minutes: number) => `Edits: up to ${minutes} minutes a month`;
+const GOOGLE_LINE = "Google: listing kept right, new reviews flagged to you";
+const REPORT_LINE = "Report: one page each month of calls and requests";
+
+/**
+ * What the Website Care card shows at each level. `below` is the "Everything
+ * in ..." line (none at the first level); `lines` is what this level itself
+ * brings, which on the second and third levels is what it adds.
+ */
+export const careCard = [
+  { ...CARE_LEVELS[0], below: "", lines: ["My time keeping your site fast, secure and online", "A heads-up before your domain renews", edits(CARE_LEVELS[0].editMinutes)] },
+  { ...CARE_LEVELS[1], below: `Everything in ${CARE_LEVELS[0].name}`, lines: [edits(CARE_LEVELS[1].editMinutes), GOOGLE_LINE] },
+  { ...CARE_LEVELS[2], below: `Everything in ${CARE_LEVELS[1].name}`, lines: [edits(CARE_LEVELS[2].editMinutes), REPORT_LINE] },
+];
+
+/** True at every level. On the card, and in section 3 of the terms. */
+export const careRules = [
+  "Optional and month to month.",
+  "It pays for my time, not your domain, hosting or tool bills.",
+  "New pages and new sections are quoted separately.",
+  "Unused edit time doesn't carry over.",
+  "Change level or cancel anytime by email, effective the next billing month.",
+  "I never reply to reviews on your practice's behalf.",
+] as const;
+
+/** The levels that bring the Google listing upkeep and the monthly report. */
+const GOOGLE_LEVEL = CARE_LEVELS[1];
+const REPORT_LEVEL = CARE_LEVELS[2];
 
 export const pricing = {
   /** The website message. */
@@ -23,7 +75,7 @@ export const pricing = {
   next: { booking: "Run the free checkup or book a call to get yours.", phone: "Run the free checkup or give me a call to get yours." },
   factors: ["Number of pages", "Whether your words and photos are ready", "Scheduling, intake or payment tools to connect", "Moving an existing site"],
   listingFix: `${money(PRICES.listingFix)} one-time, done within 7 days.`,
-  care: `${money(PRICES.care)} a month, month to month.`,
+  care: `Website Care is optional, ${CARE_FROM}, month to month.`,
 } as const;
 
 /** The verified, anonymized findings from Kyle's own free checks. */
@@ -50,7 +102,7 @@ export const listingSteps = [
   {
     n: "3",
     title: "Keep it right (optional)",
-    body: `Website Care, ${money(PRICES.care)} a month: your listing kept accurate, new reviews flagged to you, and a short report of calls and requests. Month to month.`,
+    body: `Website Care's ${GOOGLE_LEVEL.name} level, ${money(GOOGLE_LEVEL.price)} a month: your listing kept accurate and new reviews flagged to you. Month to month.`,
   },
 ] as const;
 
@@ -82,17 +134,11 @@ export const plans = [
   {
     key: "care",
     name: "Website Care",
-    price: money(PRICES.care),
+    // The card itself is app/home/CareCard.tsx: a slider over careCard, with careRules under it.
+    price: `From ${money(CARE_LEVELS[0].price)}`,
     cadence: "/month",
-    priceNote: "Optional. Month to month. It pays for my time, not your domain, hosting or tool bills.",
-    lines: [
-      "My time keeping your site fast, secure and online",
-      "A heads-up before your domain renews",
-      "Edits: 30 minutes a month",
-      "Google: listing kept right, new reviews flagged to you",
-      "Report: one page of calls and requests",
-    ],
-    foot: "Rather not run it yourself? I will. You still pay your domain, hosting and any tools directly to those companies. Cancel anytime by email; the accounts are already in your name.",
+    lines: [] as string[],
+    foot: "Rather not run it yourself? I will. The accounts are already in your name.",
     cta: { label: "Add it to your quote", href: "#quote", secondary: true },
     terms: "#website-care",
   },
@@ -145,7 +191,7 @@ export const faq = [
   },
   {
     q: "Will this bring me more clients?",
-    a: "I can't promise that, and nobody honest can: Google controls rankings, and people choose their own care. What I promise is the work: the site in your written quote, built around the one next step someone looking for help needs to take, and on Website Care a one-page monthly report of calls and requests.",
+    a: `I can't promise that, and nobody honest can: Google controls rankings, and people choose their own care. What I promise is the work: the site in your written quote, built around the one next step someone looking for help needs to take, and on Website Care's ${REPORT_LEVEL.name} level a one-page monthly report of calls and requests.`,
     link: { label: "What I can't promise (Terms)", href: "/terms#what-we-cant-promise" },
   },
   {
@@ -158,7 +204,7 @@ export const faq = [
   },
   {
     q: "Do I own the website?",
-    a: "Yes. For every site I build, the domain, hosting and code accounts are opened in your practice's name, or transferred to it at launch, with me added as a helper you can remove. Once the site is paid in full, the design, words and code are yours, and you get a manual, recorded walkthroughs and a training session so you can run it without me.",
+    a: "Yes. For every site I build, the domain, hosting and code accounts are opened in your practice's name, or transferred to it at launch, with me added as a helper you can remove. Those, and the words and photos you supply, are yours from day one. Once the site is paid in full, the design and the code I wrote are yours too, and you get a manual, recorded walkthroughs and a training session so you can run it without me.",
     link: { label: "How ownership works", href: "/owner-handoff" },
   },
   {
@@ -172,7 +218,7 @@ export const faq = [
   },
   {
     q: "Do I have to pay you every month?",
-    a: "No. Website Care is optional: your site runs without it, in accounts that are yours. It pays for my time running the site. Your domain, hosting and any tools are billed to you by those companies either way. If you add it, it's month to month with no contract, and you can cancel anytime by email. Cancellation takes effect at the end of the paid month, and nothing has to be handed back.",
+    a: `No. Website Care is optional: your site runs without it, in accounts that are yours. It comes in three levels, ${CARE_FROM}, and pays for my time running the site. Your domain, hosting and any tools are billed to you by those companies either way. If you add it, it's month to month with no contract, and you can change level or cancel anytime by email, effective the next billing month. Nothing has to be handed back.`,
     link: { label: "Website Care (Terms)", href: "/terms#website-care" },
   },
 ] as const;
@@ -186,7 +232,7 @@ export const listingQuestions = [
   },
   {
     q: "What does it cost? Any hidden fees?",
-    a: `The check is free. The Listing Fix is ${money(PRICES.listingFix)}, one time. Website Care, if you want it, is ${money(PRICES.care)} a month, month to month. No hidden fees, no contracts.`,
+    a: `The check is free. The Listing Fix is ${money(PRICES.listingFix)}, one time. Website Care, if you want it, is ${CARE_FROM}, month to month. No hidden fees, no contracts.`,
     link: { label: "Service Terms", href: "/terms#listing-fix" },
   },
   {
@@ -200,7 +246,7 @@ export const listingQuestions = [
   },
   {
     q: "Can I cancel? What if I change my mind?",
-    a: "The Listing Fix is fully refundable if you ask before work starts. Website Care is month to month; cancel anytime by email.",
+    a: "The Listing Fix is fully refundable if you ask before work starts. Website Care is month to month; change level or cancel anytime by email, effective the next billing month.",
     link: { label: "Refunds (Terms)", href: "/terms#refunds" },
   },
   {

@@ -1,4 +1,4 @@
-import { money, PRICES } from "./offer";
+import { CARE_FROM, CARE_NAMES } from "./offer";
 
 /**
  * /owner-handoff ("Handoff" in the nav): what a practice owns, how the
@@ -58,7 +58,7 @@ export const ownership = {
   handoff: [
     {
       name: "An owner’s manual",
-      body: "A short written guide to your own site, in plain language: how to change words, photos, hours and fees, how to add a page, where each account lives, how to remove me, and who to call if something breaks.",
+      body: "A short written guide to your own site, in plain language: how to change words, photos, hours and fees, what to do when you want a new page, where each account lives, how to remove me, and who to call if something breaks.",
     },
     {
       name: "Recorded walkthroughs",
@@ -143,7 +143,7 @@ export const ownership = {
       when: "Afterward",
       title: "Making a small change yourself",
       ease: "Takes some learning",
-      body: "A phone number, your hours or a photo. There’s no drag-and-drop editor. You sign in to your code account, open the one file that holds the detail, change it and save, and the site republishes itself in a few minutes. It’s plain text, and it’s new to most owners. The training session covers it, the manual has each step, and every save is kept in a history, so a mistake can be undone.",
+      body: "A phone number, your hours or a photo. There’s no drag-and-drop editor. You sign in to your code account, open the one file that holds the detail, change it and save, and the site republishes itself in a few minutes. It’s plain text, and it’s new to most owners. The training session covers it, the manual has each step, and every save is kept in a history, so a mistake can be undone. Rather not? Small changes like these are what Website Care’s included edit time is for.",
       who: "You",
       time: "About 10 minutes once you’ve done it, longer the first time",
       hold: "The change live on your site, with a history you can roll back",
@@ -152,7 +152,7 @@ export const ownership = {
       when: "Afterward",
       title: "Making a bigger change",
       ease: "Hard",
-      body: "A new page or a new section is written in code, and realistically needs a developer. Most owners ask me: I quote it before I start, and smaller edits fit inside Website Care’s 30 minutes a month.",
+      body: "A new page or a new section is written in code, and realistically needs a developer. Most owners ask me: I quote it before I start, and smaller edits fit inside the edit time in your Website Care level.",
       who: "A developer: me, or anyone you choose",
       time: "Depends on the change, quoted first",
       hold: "The new work, in your accounts like the rest",
@@ -168,11 +168,13 @@ export const ownership = {
     },
   ] satisfies readonly { when: string; title: string; ease: Ease; body: string; who: string; time: string; hold: string }[],
 
+  /** What is the practice's from the first day, whatever has or hasn't been paid. */
+  yoursFromDayOne: ["Your domain", "The three accounts: domain, hosting and code", "The words and photos you supplied"],
   /** What becomes the practice's property once the site is paid in full. */
-  yours: ["The design of your site", "The words and photos you supplied", "The code I wrote for it", "Your domain and the accounts above"],
+  yoursOncePaid: ["The design of your site", "The code I wrote for it"],
   /** What can't be handed over as property, said plainly. */
   licensed: "Some things can’t be handed over as property. Fonts, stock images, and the software and services your site runs on belong to their makers and are used under their licenses. Where one needs an account or a license, it’s in your practice’s name when the maker allows it, and your running-costs sheet says so.",
-  tools: "A scheduling or intake tool is its own account, also yours. It holds client information; the website doesn’t.",
+  tools: "A scheduling or intake tool is its own account, also yours. Client information belongs in that tool, not on the website. The contact form on a site I build asks only for a name and how to reach the person, and tells visitors not to include health details.",
 
   costs: [
     "You pay other companies’ fees directly to them: your domain’s yearly renewal, your hosting, and any scheduling, intake or email tool you choose. The running-costs sheet lists each one.",
@@ -180,6 +182,6 @@ export const ownership = {
   ],
 
   /** The one quiet line about staying on. */
-  care: `Rather not run it? I will, for ${money(PRICES.care)} a month.`,
-  careNote: "Website Care is optional and month to month. It covers my time running the site, not your domain, hosting or tool bills.",
+  care: `Rather not run it? I will, ${CARE_FROM}.`,
+  careNote: `Website Care comes in three levels: ${CARE_NAMES} a month. It’s optional and month to month, and it covers my time running the site, not your domain, hosting or tool bills.`,
 } as const;
