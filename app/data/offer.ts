@@ -4,6 +4,10 @@
  * "practice", never "business"; "clients" are the people seeking care. Promises here must match content/service-terms.md; change them
  * together.
  *
+ * Owner-first: the practice owns its site and can run it without Kyle
+ * (app/data/ownership.ts, /owner-handoff). Website Care is optional, and
+ * no line here may read as if Kyle running the site is the default.
+ *
  * The three prices live in PRICES and nowhere else: websites start at
  * $300 (the final price is set in the written quote), the Listing Fix is
  * $25 one-time, Website Care is $25 a month. Change them here and in the
@@ -69,8 +73,9 @@ export const plans = [
       "A contact or booking form that reaches you",
       "Launch on your domain, basic search setup",
       "Two rounds of changes",
+      "Handed over to you: accounts in your name, a manual, walkthroughs and a training session",
     ],
-    foot: "You approve the finished site before paying the balance.",
+    foot: "You approve the finished site before paying the balance. Then it's yours to run.",
     cta: { label: "Get a free homepage demo", href: "#quote" },
     terms: "#website",
   },
@@ -79,15 +84,15 @@ export const plans = [
     name: "Website Care",
     price: money(PRICES.care),
     cadence: "/month",
-    priceNote: "Month to month. Cancel anytime by email.",
+    priceNote: "Optional. Month to month. Cancel anytime by email.",
     lines: [
-      "Hosting: fast, secure, online",
-      "Domain: renewals handled, kept in your name",
+      "Upkeep: your site kept fast, secure and online",
+      "Domain: renewal watched, always in your name",
       "Edits: 30 minutes a month",
       "Google: listing kept right, new reviews flagged to you",
       "Report: one page of calls and requests",
     ],
-    foot: "I run it so you don't have to. Cancel anytime by email. If you leave, I hand over your domain and site files.",
+    foot: "Rather not run it yourself? I will. Cancel anytime by email; the accounts are already in your name.",
     cta: { label: "Add it to your quote", href: "#quote", secondary: true },
     terms: "#website-care",
   },
@@ -128,7 +133,7 @@ export const listingFix = {
 export const steps = [
   { n: "1", title: "Tell me about your practice", body: "Form, text or call." },
   { n: "2", title: "Get your free homepage demo + quote", body: "See your homepage before you say yes." },
-  { n: "3", title: "Live in about 3 weeks", body: "Approve it, then it goes live." },
+  { n: "3", title: "Live in about 3 weeks, then it's yours", body: "Approve it, it goes live, and I hand it over." },
 ] as const;
 
 /** The home page's questions, beside the About block. */
@@ -153,8 +158,8 @@ export const faq = [
   },
   {
     q: "Do I own the website?",
-    a: "Yes. Once it's paid in full, the site and its content are yours. Your domain and accounts stay in your name, and if you ever leave Website Care, I hand over your domain and site files.",
-    link: { label: "Ownership (Terms)", href: "/terms#website" },
+    a: "Yes. Your domain, hosting and code sit in accounts in your practice's name from the start, with me as a guest you can remove. Once the site is paid in full, the design, words and code are yours, and you get a manual, recorded walkthroughs and a training session so you can run it without me.",
+    link: { label: "How ownership works", href: "/owner-handoff" },
   },
   {
     q: "What do you need from me to get started?",
@@ -166,8 +171,8 @@ export const faq = [
     a: "I build custom sites rather than working inside those platforms. If your site is on one, I rebuild it and move your words, photos and domain over. If you'd rather stay where you are, I'm not the right fit, and I'll say so up front.",
   },
   {
-    q: "Can I cancel Website Care?",
-    a: "Yes, anytime, by email. It's month to month with no contract. Cancellation takes effect at the end of the paid month, and you keep your domain and site.",
+    q: "Do I have to pay you every month?",
+    a: "No. Website Care is optional: your site runs without it, in accounts that are yours. If you add it, it's month to month with no contract, and you can cancel anytime by email. Cancellation takes effect at the end of the paid month, and nothing has to be handed back.",
     link: { label: "Website Care (Terms)", href: "/terms#website-care" },
   },
 ] as const;

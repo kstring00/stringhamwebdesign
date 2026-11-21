@@ -26,7 +26,7 @@ export default function Pricing() {
     <section className={`${s.section} ${s.alt}`} id="pricing" aria-labelledby="pricing-title">
       <div className="container">
         <div className={s.head}>
-          <h2 id="pricing-title" className={s.h2} data-reveal>Build it once. Let me run it.</h2>
+          <h2 id="pricing-title" className={s.h2} data-reveal>Build it once. Own it outright.</h2>
           <p className={s.lede}>{pricing.website} {site.bookingUrl ? pricing.next.booking : pricing.next.phone}</p>
           <div className={s.factors}>
             <p className={s.factorsTitle}>What affects your price</p>
@@ -36,7 +36,7 @@ export default function Pricing() {
             <a className="btn" href="#quote" data-track="cta" data-location="pricing-demo">Get a free homepage demo</a>
             <a className={`u ${s.textLink}`} href="/checkup" data-track="cta" data-location="pricing-checkup">Or run the free website checkup</a>
           </div>
-          <p className={s.pricingFine}>No ad spend, no contract. Website Care is month to month. Full details in the <a className={`u ${s.inlineLink}`} href="/terms">Service Terms</a>.</p>
+          <p className={s.pricingFine}>No ad spend, no contract. Your site is yours to run; Website Care is optional and month to month. <a className={`u ${s.inlineLink}`} href="/owner-handoff">How ownership works</a>. Full details in the <a className={`u ${s.inlineLink}`} href="/terms">Service Terms</a>.</p>
         </div>
         <div className={s.plans} data-reveal-group>
           {plans.map((p) => (

@@ -57,7 +57,16 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
 - Owner-first: the practice owns its site and can run it without Kyle. The
   domain, hosting, code and accounts are in the practice's name. Kyle
   running the site afterwards (Website Care) is optional, never assumed,
-  and never the headline.
+  and never the headline. What a practice is handed at launch, and how far
+  each part goes, is on /owner-handoff ("Ownership" in the nav), written in
+  `app/data/ownership.ts` and matched by sections 2 and 3 of
+  `content/service-terms.md`. Those are commitments: change them only on
+  Kyle's say-so, all three together, and never promise open-ended support
+  or ownership of something licensed from another company.
+- The Free Website Checkup is for a practice's owner checking their own
+  site, never for a client: proof is credentials and approach (never
+  client reviews), cost is fees and insurance, and a good form asks for
+  contact details only.
 - Privacy: the site's forms ask a practice for its own contact details
   only, and say so. Never ask for, or invite, anything about a client:
   no diagnoses, no treatment history. Don't promise HIPAA compliance

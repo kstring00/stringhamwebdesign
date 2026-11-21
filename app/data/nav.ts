@@ -2,6 +2,7 @@
 export const navLinks = [
   { label: "Work", href: "/#work" },
   { label: "Pricing", href: "/#pricing" },
+  { label: "Ownership", href: "/owner-handoff" },
   { label: "Free checkup", href: "/checkup" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/#about" },
@@ -15,6 +16,7 @@ export const cta = { label: "Get a free homepage demo", nav: "Free homepage demo
 export const footerLinks = [
   { label: "Work", href: "/work" },
   { label: "Pricing", href: "/#pricing" },
+  { label: "Ownership", href: "/owner-handoff" },
   { label: "Free Google check", href: "/google-check" },
   { label: "Free Website Checkup", href: "/checkup" },
   { label: "Blog", href: "/blog" },

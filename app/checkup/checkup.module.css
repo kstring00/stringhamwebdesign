@@ -169,8 +169,8 @@
 .qrow { display: flex; align-items: center; justify-content: space-between; padding-bottom: 0.3em; border-bottom: 1px solid var(--wire); }
 .qrow .wbar { width: 70%; height: 0.4em; }
 .qrow b { color: var(--wire); font-size: 0.7em; line-height: 1; }
-.zReviews { display: grid; gap: 0.3em; }
-.stars { color: var(--warn); font-size: 0.8em; letter-spacing: 0.1em; line-height: 1; }
+.zReviews { display: grid; justify-items: start; gap: 0.3em; }
+.zReviews .wbar { justify-self: stretch; }
 .zReviews .wbar { height: 0.4em; }
 .zReviews .wbar:last-of-type { width: 55%; }
 .zForm { display: grid; gap: 0.35em; }

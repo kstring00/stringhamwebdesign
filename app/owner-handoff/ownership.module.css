@@ -1,0 +1,108 @@
+/* /owner-handoff: arranged from the site's own pieces (home.module.css for
+   sections, headings, ledes and lists). Only what is particular to this
+   page is here. */
+
+.hero { padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(2rem, 4vw, 3rem); }
+.hero > div { display: grid; gap: 1.25rem; max-width: 46rem; }
+
+.h1 {
+  font-size: clamp(2.76rem, 5.75vw, 4.6rem);
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+}
+
+/* ---------- the three accounts ---------- */
+
+.accounts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin: clamp(1.5rem, 3vw, 2.25rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.account, .cover {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  padding: clamp(1.25rem, 2.4vw, 1.75rem);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--paper);
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.account b, .cover b { color: var(--ink); font-weight: 600; }
+
+.cardName { color: var(--ink); font-size: 1.7rem; letter-spacing: -0.015em; line-height: 1.1; }
+
+.what { color: var(--muted); }
+.guest { padding-top: 0.6rem; border-top: 1px solid var(--line); }
+
+.guestLine { margin-top: 1.25rem; color: var(--ink); font-size: 1.1rem; font-weight: 500; }
+
+/* ---------- what is handed over ---------- */
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(1.5rem, 5vw, 5rem);
+  align-items: start;
+}
+
+.splitHead { display: grid; gap: 1rem; }
+
+.note { color: var(--muted); line-height: 1.55; }
+
+.handoff { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+
+.handoff li {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.handoff li:last-child { border-bottom: 1px solid var(--line); }
+
+.n {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--brand);
+  border-radius: 50%;
+  color: var(--brand);
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.itemName { margin-bottom: 0.3rem; color: var(--ink); font-size: 1.6rem; letter-spacing: -0.015em; line-height: 1.15; }
+
+/* ---------- what it covers ---------- */
+
+.covers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.terms { margin-top: 1.25rem; color: var(--muted); }
+
+/* ---------- the quiet line ---------- */
+
+.care { display: grid; gap: 1rem; justify-items: start; max-width: 46rem; }
+
+.careLine { color: var(--ink); font-size: clamp(1.9rem, 3.4vw, 2.6rem); letter-spacing: -0.015em; line-height: 1.1; }
+
+@media (max-width: 60rem) {
+  .accounts, .covers { grid-template-columns: minmax(0, 1fr); }
+  .split { grid-template-columns: minmax(0, 1fr); }
+}

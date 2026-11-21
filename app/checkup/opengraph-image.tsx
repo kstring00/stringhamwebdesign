@@ -35,7 +35,7 @@ export default async function Image() {
             <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
               <div style={{ display: "flex", color: "#0e6b4e", fontSize: 22, letterSpacing: 2, textTransform: "uppercase" }}>10 questions · about 2 minutes</div>
               <div style={{ display: "flex", fontFamily: display ? "Instrument Serif, serif" : "serif", fontSize: 92, lineHeight: 1, letterSpacing: -2, color: "#0b2a20" }}>Free Website Checkup</div>
-              <div style={{ display: "flex", fontSize: 28, lineHeight: 1.35, color: "#1d4a3c", maxWidth: 560 }}>See where your website loses customers, with a fix for each leak.</div>
+              <div style={{ display: "flex", fontSize: 28, lineHeight: 1.35, color: "#1d4a3c", maxWidth: 560 }}>See where your practice&rsquo;s website loses people before they reach out.</div>
             </div>
             <div style={{ display: "flex", fontSize: 22, color: "#4b665c" }}>Free · no email needed · stringhamwebdesign.com/checkup</div>
           </div>
@@ -45,10 +45,10 @@ export default async function Image() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}><div style={bar("64px", 14)} /><div style={bar("20px", 10)} /></div>
               <div style={zone("#ddf1e6")}><div style={bar("100%", 18, "#0b2a20")} /><div style={bar("72%", 18, "#0b2a20")} /></div>
               <div style={zone("#dcedfb", "dash #2450b8")}><div style={bar("100%")} /><div style={bar("100%")} /><div style={bar("60%")} /></div>
-              <div style={zone("#f7dede", "#b23a3a")}><div style={{ display: "flex", alignSelf: "flex-start", fontSize: 13, color: "#4b665c", border: `1px solid ${WIRE}`, borderRadius: 20, padding: "2px 10px" }}>From $___</div></div>
+              <div style={zone("#f7dede", "#b23a3a")}><div style={{ display: "flex", alignSelf: "flex-start", fontSize: 13, color: "#4b665c", border: `1px solid ${WIRE}`, borderRadius: 20, padding: "2px 10px" }}>Fees · insurance</div></div>
               <div style={zone("#ddf1e6")}><div style={{ display: "flex", height: 40, borderRadius: 10, background: "#0e6b4e", alignItems: "center", justifyContent: "center" }}><div style={bar("45%", 8, "#ffffff")} /></div></div>
               <div style={zone("#faedd5")}><div style={bar("100%")} /><div style={bar("100%")} /><div style={bar("100%")} /></div>
-              <div style={zone("#f7dede", "#b23a3a")}><div style={{ display: "flex", color: "#a8670a", fontSize: 16, letterSpacing: 2 }}>★★★★★</div><div style={bar("100%")} /><div style={bar("55%")} /></div>
+              <div style={zone("#f7dede", "#b23a3a")}><div style={{ display: "flex", alignSelf: "flex-start", fontSize: 13, color: "#4b665c", border: `1px solid ${WIRE}`, borderRadius: 20, padding: "2px 10px" }}>License · approach</div><div style={bar("100%")} /><div style={bar("55%")} /></div>
               <div style={{ position: "absolute", left: 14, right: 14, bottom: 14, display: "flex", gap: 8 }}>
                 <div style={{ display: "flex", flex: 1, height: 34, borderRadius: 10, background: "#0b2a20", color: "#fff", fontSize: 12, alignItems: "center", justifyContent: "center", letterSpacing: 1 }}>CALL</div>
                 <div style={{ display: "flex", flex: 1, height: 34, borderRadius: 10, background: "#0b2a20", color: "#fff", fontSize: 12, alignItems: "center", justifyContent: "center", letterSpacing: 1 }}>TEXT</div>
