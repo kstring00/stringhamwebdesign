@@ -20,14 +20,14 @@
 }
 
 /* The site header overlays this strip (Header.module.css, the plain state). */
-.headerSpace { height: var(--hero-header-h, 48px); }
+.headerSpace { height: 47px; }
 
 /* ---------- eyebrow and headline ---------- */
 
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   margin-top: 60px;
   padding: 10px 18px;
   border-radius: 22px;
@@ -36,7 +36,7 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.14em;
-  line-height: 1.4;
+  line-height: 16px;
   text-transform: uppercase;
 }
 
@@ -109,10 +109,10 @@
 
 .num {
   display: block;
-  margin-bottom: 4px;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.14em;
+  line-height: 17.4px;
 }
 
 .numLast { color: var(--cobalt); }
@@ -129,7 +129,7 @@
 
 .words { flex: 1 1 420px; max-width: 640px; }
 
-.lead { color: var(--hero-ink); font-size: 22px; font-weight: 500; line-height: 1.35; }
+.lead { color: var(--hero-ink); font-size: 22px; font-weight: 500; line-height: 1.45; }
 
 .body { margin-top: 14px; color: var(--hero-text-2); font-size: 17px; line-height: 1.65; }
 
@@ -150,7 +150,7 @@
   color: var(--mint);
   font-size: 18px;
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 24px;
 }
 
 .button:hover { background: #123a2d; }
@@ -161,13 +161,13 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  margin-top: 12px;
+  margin-top: 16px;
   color: var(--hero-ink);
   font-size: 16px;
   font-weight: 500;
   text-decoration: underline;
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
 }
 
 .workLink:hover { color: var(--emerald); }
@@ -175,8 +175,8 @@
 
 .checks {
   display: grid;
-  gap: 8px;
-  margin: 10px 0 0;
+  gap: 7px;
+  margin: 17px 0 0;
   padding: 0;
   list-style: none;
   color: var(--hero-text-2);
@@ -184,7 +184,7 @@
   line-height: 1.4;
 }
 
-.checks li { display: flex; align-items: center; gap: 10px; }
+.checks li { display: flex; align-items: center; gap: 11px; }
 .checks svg { flex: none; color: var(--emerald); }
 
 /* ---------- the clouds ---------- */
@@ -281,6 +281,9 @@
    the headline instead of hiding behind the panel. */
 @media (max-width: 1160px) {
   .cloud { --k: 0.75; }
+  /* The load positions are tuned for a wide screen; on a narrower one the
+     first cloud would start half off the left edge, so it starts further in. */
+  .cloud[data-cloud="1"] { animation-delay: -30s; }
   .cloud[data-cloud="3"] { top: 300px; }
   .cloud[data-cloud="4"] { --k: 0.5; top: auto; bottom: -6px; }
   .cloud[data-cloud="5"] { top: auto; bottom: -4px; }
@@ -292,12 +295,12 @@
 
 @media (max-width: 640px) {
   .cloud { --k: 0.5; }
-  .cloud[data-cloud="1"] { top: 84px; }
+  .cloud[data-cloud="1"] { top: 84px; animation-delay: -36s; }
   .cloud[data-cloud="2"] { top: 200px; }
   .cloud[data-cloud="3"] { top: 330px; }
   .cloud[data-cloud="4"] { --k: 0.4; }
   /* The site's floor for text on a phone is 13px (scripts/launch-check.js). */
-  .eyebrow { font-size: 13px; letter-spacing: 0.12em; }
+  .eyebrow { font-size: 13px; letter-spacing: 0.12em; line-height: 1.4; }
   .action { flex-basis: 100%; }
   .button { width: 100%; justify-content: center; padding-inline: 20px; }
   .captions { font-size: 13px; }

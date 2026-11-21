@@ -28,10 +28,10 @@
 .loginForm input:focus-visible, .lead input:focus-visible, .lead select:focus-visible { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
 .err { color: #9e2a20; }
 
-.setup { display: grid; gap: 0.6rem; padding: 1.1rem 1.25rem; border: 1px solid var(--line); border-radius: 14px; background: #fff; color: var(--ink-soft); line-height: 1.55; }
-.setup h2 { color: var(--ink); font-size: 1.3rem; }
+.setup { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.6rem; padding: 1.1rem 1.25rem; border: 1px solid var(--line); border-radius: 14px; background: #fff; color: var(--ink-soft); line-height: 1.55; }
+.setup h2 { color: var(--ink); font-size: 1.6rem; }
 .setup ul { margin: 0; padding-left: 1.2rem; }
-.setup code, .code { padding: 0.1rem 0.4rem; border-radius: 6px; background: var(--paper-deep); color: var(--ink); font-size: 0.9em; }
+.setup code, .code { overflow-wrap: anywhere; padding: 0.1rem 0.4rem; border-radius: 6px; background: var(--paper-deep); color: var(--ink); font-size: 0.9em; }
 
 .totals { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.6rem; margin: 0 0 1rem; }
 .totals div { padding: 0.8rem 0.95rem; border: 1px solid var(--line); border-radius: 12px; background: #fff; }

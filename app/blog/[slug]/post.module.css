@@ -351,7 +351,7 @@
   .prose td { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 0.75rem; padding: 0.3rem 0; border: 0; }
   .prose td::before { content: attr(data-label); color: var(--muted); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
   /* The first cell names the row: a card title, no label. */
-  .prose td:first-child { display: block; padding: 0 0 0.35rem; font-family: var(--font-display); font-size: 1.15rem; font-weight: 500; }
+  .prose td:first-child { display: block; padding: 0 0 0.35rem; font-family: var(--font-display); font-size: 1.4rem; font-weight: 400; }
   .prose td:first-child::before { content: none; }
 }
 
@@ -386,7 +386,7 @@
 .demo:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 .demo img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top center; border-radius: 9px; }
 .demoText { display: grid; gap: 0.3rem; padding-right: 0.5rem; }
-.demoText b { font-family: var(--font-display); font-size: 1.25rem; font-weight: 500; line-height: 1.2; }
+.demoText b { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; line-height: 1.15; }
 .demoKind { color: var(--muted-on-ink); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
 .demoLink { color: #a8e6c8; font-weight: 600; }
 

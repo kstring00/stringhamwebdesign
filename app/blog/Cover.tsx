@@ -13,7 +13,8 @@ const DISPLAY = { fontFamily: "var(--font-display)" };
 /** A tick in a circle, for the checklist. */
 const tick = (cx: number, cy: number) => `M${cx - 6} ${cy} l4.5 4.5 l8 -9`;
 
-/** The drawing for each post, on a 640 × 400 board. */
+/** The drawing for each post, on a 640 × 400 board. A card on a phone shows
+ * the board at about half size, so no words on it are set below 20. */
 function Motif({ motif }: { motif: CoverMotif }) {
   switch (motif) {
     case "keys":
@@ -23,11 +24,11 @@ function Motif({ motif }: { motif: CoverMotif }) {
             { x: 92, y: 74, t: "Domain", hot: true },
             { x: 448, y: 92, t: "Hosting" },
             { x: 110, y: 296, t: "Website" },
-            { x: 430, y: 300, t: "Google listing" },
+            { x: 392, y: 300, t: "Google listing" },
           ].map((p) => (
             <g key={p.t}>
-              <rect x={p.x} y={p.y} width={p.t.length * 10.5 + 34} height={36} rx={18} fill={p.hot ? CYAN : "none"} stroke={p.hot ? CYAN : SKY} strokeWidth={2} opacity={p.hot ? 1 : 0.8} />
-              <text x={p.x + 17} y={p.y + 24} fontSize={17} fontWeight={600} fill={p.hot ? INK : SKY} style={TEXT}>{p.t}</text>
+              <rect x={p.x} y={p.y} width={p.t.length * 13.2 + 40} height={44} rx={22} fill={p.hot ? CYAN : "none"} stroke={p.hot ? CYAN : SKY} strokeWidth={2} />
+              <text x={p.x + 20} y={p.y + 30} fontSize={22} fontWeight={600} fill={p.hot ? INK : SKY} style={TEXT}>{p.t}</text>
             </g>
           ))}
           <circle cx={232} cy={200} r={60} fill="none" stroke={WHITE} strokeWidth={16} />
@@ -71,8 +72,8 @@ function Motif({ motif }: { motif: CoverMotif }) {
           <path d="M143.5 192 v-5 a5.5 5.5 0 0 1 11 0 v5" fill="none" stroke={BRAND} strokeWidth={3} />
           <text x={174} y={204} fontSize={26} fontWeight={600} fill={INK} style={TEXT}>yourbusiness.com</text>
           <rect x={398} y={180} width={3} height={30} rx={1.5} fill={BRAND} />
-          <rect x={232} y={258} width={176} height={42} rx={21} fill="none" stroke={CYAN} strokeWidth={2} />
-          <text x={320} y={285} textAnchor="middle" fontSize={17} fontWeight={600} fill={CYAN} style={TEXT}>Owner: you</text>
+          <rect x={222} y={256} width={196} height={50} rx={25} fill="none" stroke={CYAN} strokeWidth={2} />
+          <text x={320} y={289} textAnchor="middle" fontSize={22} fontWeight={600} fill={CYAN} style={TEXT}>Owner: you</text>
         </g>
       );
     case "growth": {
@@ -86,9 +87,9 @@ function Motif({ motif }: { motif: CoverMotif }) {
           ))}
           <polyline points={pts} fill="none" stroke={WHITE} strokeWidth={3} strokeLinejoin="round" strokeLinecap="round" />
           <circle cx={188 + 4 * 66} cy={318 - 228} r={9} fill={CYAN} stroke={INK} strokeWidth={3} />
-          <rect x={92} y={66} width={170} height={48} rx={24} fill={WHITE} />
-          <path d="M120 112 l-6 18 l22 -16 z" fill={WHITE} />
-          <text x={177} y={97} textAnchor="middle" fontSize={19} fontWeight={600} fill={INK} style={TEXT}>“Call Maria!”</text>
+          <rect x={80} y={62} width={194} height={54} rx={27} fill={WHITE} />
+          <path d="M120 114 l-6 18 l22 -16 z" fill={WHITE} />
+          <text x={177} y={97} textAnchor="middle" fontSize={23} fontWeight={600} fill={INK} style={TEXT}>“Call Maria!”</text>
         </g>
       );
     }
@@ -107,7 +108,7 @@ function Motif({ motif }: { motif: CoverMotif }) {
           <circle cx={458} cy={292} r={52} fill="none" stroke={CYAN} strokeOpacity={0.25} strokeWidth={2} />
           <circle cx={458} cy={292} r={36} fill="none" stroke={CYAN} strokeOpacity={0.5} strokeWidth={2} />
           <rect x={402} y={272} width={112} height={40} rx={20} fill={BRAND} />
-          <text x={458} y={298} textAnchor="middle" fontSize={16} fontWeight={600} fill={WHITE} style={TEXT}>Call now</text>
+          <text x={458} y={299} textAnchor="middle" fontSize={20} fontWeight={600} fill={WHITE} style={TEXT}>Call now</text>
         </g>
       );
     default:
