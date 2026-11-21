@@ -174,7 +174,7 @@ export const ownership = {
   yoursOncePaid: ["The design of your site", "The code I wrote for it"],
   /** What can't be handed over as property, said plainly. */
   licensed: "Some things can’t be handed over as property. Fonts, stock images, and the software and services your site runs on belong to their makers and are used under their licenses. Where one needs an account or a license, it’s in your practice’s name when the maker allows it, and your running-costs sheet says so.",
-  tools: "A scheduling or intake tool is its own account, also yours. Client information belongs in that tool, not on the website. The contact form on a site I build asks only for a name and how to reach the person, and tells visitors not to include health details.",
+  tools: "A scheduling or intake tool is its own account, also yours. Client information belongs in that tool, not on the website. The contact form on a site I build asks only for a name and how to reach the person, and tells visitors not to include health details. Messages go to your inbox through an email service in your practice’s name. The site keeps no list of its own.",
 
   costs: [
     "You pay other companies’ fees directly to them: your domain’s yearly renewal, your hosting, and any scheduling, intake or email tool you choose. The running-costs sheet lists each one.",

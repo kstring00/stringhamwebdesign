@@ -137,6 +137,35 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
 - Accessibility failures are disqualifying: Lighthouse accessibility 95+.
 - Don't merge to `main` or deploy to production without the owner's OK.
 
+## Rules for a practice's site
+
+These are for the sites Kyle builds for practices. They are not about
+this site: Stringham Web Design's own demo form, its lead ledger
+(Supabase) and its /manage page stay as they are, because the people who
+write to this site are practice owners asking about a website, not people
+looking for care.
+
+On a site built for a practice, a visitor may be someone seeking care, so:
+
+- No lead ledger and no database of form messages. The form sends one
+  email to the practice's inbox, and the site keeps no list of its own.
+  Don't copy this repo's ledger, its `/manage` page or its Supabase setup
+  into a practice's site.
+- The email-sending account is opened in the practice's name, like the
+  domain, hosting and code accounts.
+- Form fields: name, phone or email, and a best time to reach them. No
+  open message box. A visible line asks visitors not to share health
+  details.
+- No session-recording or screen-replay tools. (This site runs Microsoft
+  Clarity; a practice's site does not.)
+- Scheduling and intake stay in the practice's own tool, linked from the
+  site, never rebuilt inside it.
+
+The Handoff page and the Free Website Checkup tell practices the same
+thing (`app/data/ownership.ts`, the "Form" question in
+`app/checkup/data.ts`). If one of these rules changes, change those words
+with it.
+
 ## Checks before any deploy
 
 ```

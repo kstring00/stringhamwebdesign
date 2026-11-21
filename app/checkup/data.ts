@@ -93,10 +93,10 @@ export const QUESTIONS: Question[] = [
   {
     z: "form", zone: "Form", w: 6,
     q: "Does your contact form ask for contact details only, in 4 fields or fewer?",
-    help: "Name, phone or email, and a short message. Nothing about symptoms, a diagnosis or history.",
+    help: "Name, phone or email, and a best time to reach them. Nothing about symptoms, a diagnosis or history.",
     leak: "The form asks for too much", ok: "Short form, contact details only",
     why: "Every extra field is one more reason to give up halfway through, and a website's contact form is not the place for health details.",
-    fix: "Cut it to name, phone or email, and one short message box, and ask people not to share health details there. Intake belongs in a tool built for it.",
+    fix: "Cut it to name, phone or email, and a best time to reach them, with a line asking visitors not to share health details. Intake belongs in a tool built for it.",
   },
   {
     z: "google", zone: "Google", w: 7,

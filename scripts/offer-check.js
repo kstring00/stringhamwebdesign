@@ -14,7 +14,7 @@ const assert = require("node:assert/strict");
 
 const root = path.join(__dirname, "..");
 const out = fs.mkdtempSync(path.join(os.tmpdir(), "offer-check-"));
-const files = ["app/data/offer.ts", "app/data/ownership.ts"].map((f) => path.join(root, f));
+const files = ["app/data/offer.ts", "app/data/ownership.ts", "app/checkup/data.ts"].map((f) => path.join(root, f));
 fs.writeFileSync(path.join(out, "tsconfig.json"), JSON.stringify({
   extends: path.join(root, "tsconfig.json"),
   compilerOptions: { outDir: out, rootDir: path.join(root, "app"), module: "nodenext", moduleResolution: "nodenext", noEmit: false, incremental: false, declaration: false, strict: false, skipLibCheck: true, plugins: [] },
@@ -24,6 +24,7 @@ fs.writeFileSync(path.join(out, "tsconfig.json"), JSON.stringify({
 execFileSync(process.execPath, [path.join(root, "node_modules", "typescript", "bin", "tsc"), "-p", path.join(out, "tsconfig.json")], { cwd: root, stdio: "inherit" });
 const offer = require(path.join(out, "data", "offer.js"));
 const { ownership } = require(path.join(out, "data", "ownership.js"));
+const checkup = require(path.join(out, "checkup", "data.js"));
 
 const terms = fs.readFileSync(path.join(root, "content", "service-terms.md"), "utf8");
 const careSection = terms.slice(terms.indexOf("## 3. Website Care"), terms.indexOf("## 4."));
@@ -102,6 +103,16 @@ test("what is the practice's from day one is not listed as waiting on payment", 
   assert.deepEqual(ownership.yoursOncePaid, ["The design of your site", "The code I wrote for it"]);
   assert.ok(ownership.yoursFromDayOne.some((y) => /domain/i.test(y)) && ownership.yoursFromDayOne.some((y) => /accounts/i.test(y)) && ownership.yoursFromDayOne.some((y) => /words and photos/i.test(y)));
   assert.match(terms, /words and photos you supply are yours from the first day\. Once the website is paid in full, you also own its design and the code/);
+});
+
+test("a practice's contact form: the same advice on the Handoff page and in the checkup", () => {
+  const form = checkup.QUESTIONS.find((q) => q.z === "form");
+  assert.ok(form.fix.includes("name, phone or email, and a best time to reach them, with a line asking visitors not to share health details"));
+  assert.ok(!/message box|short message/.test(form.fix + form.help), "no open message box is recommended");
+  assert.equal(form.w, 6, "wording only: the question's weight is unchanged");
+  assert.equal(checkup.TOTAL, 84, "and so is the total");
+  assert.ok(ownership.tools.includes("asks only for a name and how to reach the person, and tells visitors not to include health details."));
+  assert.ok(ownership.tools.includes("Messages go to your inbox through an email service in your practice’s name. The site keeps no list of its own."));
 });
 
 test("the owner's manual doesn't promise a skill step 8 calls hard", () => {
