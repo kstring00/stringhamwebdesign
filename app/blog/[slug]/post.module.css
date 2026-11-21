@@ -398,6 +398,9 @@
 .ctaBody a { color: #fff; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.5); text-underline-offset: 3px; }
 .ctaBody a:hover { text-decoration-color: #fff; }
 .ctaActions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.25rem; }
+/* The main button on the ink ground: mint, so it doesn't vanish into it. */
+.ctaActions > a[class~="btn"]:not([class~="btn-secondary"]) { border-color: var(--mint); background: var(--mint); color: var(--ink); }
+.ctaActions > a[class~="btn"]:not([class~="btn-secondary"]):hover { border-color: #fff; background: #fff; color: var(--ink); }
 .ctaSecondary { border-color: rgba(255, 255, 255, 0.35); color: #fff; }
 .ctaSecondary:hover { background: rgba(255, 255, 255, 0.1); border-color: #fff; color: #fff; }
 .signature { color: var(--muted-on-ink); font-size: 0.92rem; }

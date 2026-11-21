@@ -368,7 +368,10 @@
 .cta > p { color: var(--muted-on-ink); line-height: 1.55; }
 .cta .phoneNo { color: #fff; font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; user-select: all; }
 .ctaRow { display: flex; flex-wrap: wrap; gap: 0.6rem; }
-.onInkBtn { border-color: rgba(255, 255, 255, 0.4); color: #fff; }
+/* The main button on the ink ground: mint, so it doesn't vanish into it. */
+.cta :global(.btn):not(:global(.btn-secondary)):not(.onInkBtn) { border-color: var(--mint); background: var(--mint); color: var(--ink); }
+.cta :global(.btn):not(:global(.btn-secondary)):not(.onInkBtn):hover { border-color: #fff; background: #fff; color: var(--ink); }
+.onInkBtn { border-color: rgba(255, 255, 255, 0.4); background: transparent; color: #fff; }
 .onInkBtn:hover { background: rgba(255, 255, 255, 0.1); border-color: #fff; color: #fff; }
 
 .ghost {
