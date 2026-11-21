@@ -314,6 +314,7 @@
 /* The estimate. */
 .est { display: grid; gap: 1rem; padding: clamp(1.1rem, 3vw, 1.4rem); border: 1px solid var(--line); border-radius: 18px; background: #fff; break-inside: avoid; }
 .estIntro { color: var(--ink-soft); font-size: 0.96rem; line-height: 1.55; }
+.estHelp { color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
 
 .inputs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
 .inputs label { display: grid; gap: 0.3rem; align-content: end; color: var(--muted); font-size: 0.85rem; font-weight: 600; }
@@ -436,7 +437,7 @@
 @media print {
   @page { size: letter; margin: 0.45in 0.55in; }
   .root { --line: #cfdad4; display: block; padding: 0; color: #000; font-size: 9.5pt; }
-  .intro, .ticks, .answers, .row, .lede, .free, .cta, .footnote, .inputs, .how summary, .example { display: none !important; }
+  .intro, .ticks, .answers, .row, .lede, .free, .cta, .footnote, .inputs, .estHelp, .how summary, .example { display: none !important; }
   .root * { box-shadow: none !important; }
   .printHead { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.16in; padding-bottom: 0.08in; border-bottom: 2px solid var(--brand); font-size: 10pt; }
   .printHead b { color: var(--brand); font-family: var(--font-display); font-size: 17pt; font-weight: 600; }

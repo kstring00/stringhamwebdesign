@@ -24,7 +24,7 @@ locally (the contact form logs instead of emailing without `RESEND_API_KEY`).
 
 `/` (the hero, a still row of the three projects, pricing, about Kyle beside the questions,
 and the free homepage demo form), `/work` (the full portfolio, each project
-labeled for exactly what it is), `/owner-handoff` ("Ownership": what a practice owns and is handed at
+labeled for exactly what it is), `/owner-handoff` ("Handoff" in the nav: what a practice owns and is handed at
 launch; the words are in `app/data/ownership.ts`), `/google-check` (the free Google check and
 the Listing Fix, quoted after the check, with its form; the page to text to prospects),
 `/terms`, `/privacy`, and the unlinked

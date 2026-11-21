@@ -75,7 +75,7 @@ export const plans = [
       "Two rounds of changes",
       "Handed over to you: accounts in your name, a manual, walkthroughs and a training session",
     ],
-    foot: "You approve the finished site before paying the balance. Then it's yours to run.",
+    foot: "You approve the finished site before paying the balance. Then it's yours to run, and anything I built that's broken is fixed free for 30 days.",
     cta: { label: "Get a free homepage demo", href: "#quote" },
     terms: "#website",
   },
@@ -84,15 +84,15 @@ export const plans = [
     name: "Website Care",
     price: money(PRICES.care),
     cadence: "/month",
-    priceNote: "Optional. Month to month. Cancel anytime by email.",
+    priceNote: "Optional. Month to month. It pays for my time, not your domain, hosting or tool bills.",
     lines: [
-      "Upkeep: your site kept fast, secure and online",
-      "Domain: renewal watched, always in your name",
+      "My time keeping your site fast, secure and online",
+      "A heads-up before your domain renews",
       "Edits: 30 minutes a month",
       "Google: listing kept right, new reviews flagged to you",
       "Report: one page of calls and requests",
     ],
-    foot: "Rather not run it yourself? I will. Cancel anytime by email; the accounts are already in your name.",
+    foot: "Rather not run it yourself? I will. You still pay your domain, hosting and any tools directly to those companies. Cancel anytime by email; the accounts are already in your name.",
     cta: { label: "Add it to your quote", href: "#quote", secondary: true },
     terms: "#website-care",
   },
@@ -158,7 +158,7 @@ export const faq = [
   },
   {
     q: "Do I own the website?",
-    a: "Yes. Your domain, hosting and code sit in accounts in your practice's name from the start, with me as a guest you can remove. Once the site is paid in full, the design, words and code are yours, and you get a manual, recorded walkthroughs and a training session so you can run it without me.",
+    a: "Yes. For every site I build, the domain, hosting and code accounts are opened in your practice's name, or transferred to it at launch, with me added as a helper you can remove. Once the site is paid in full, the design, words and code are yours, and you get a manual, recorded walkthroughs and a training session so you can run it without me.",
     link: { label: "How ownership works", href: "/owner-handoff" },
   },
   {
@@ -172,7 +172,7 @@ export const faq = [
   },
   {
     q: "Do I have to pay you every month?",
-    a: "No. Website Care is optional: your site runs without it, in accounts that are yours. If you add it, it's month to month with no contract, and you can cancel anytime by email. Cancellation takes effect at the end of the paid month, and nothing has to be handed back.",
+    a: "No. Website Care is optional: your site runs without it, in accounts that are yours. It pays for my time running the site. Your domain, hosting and any tools are billed to you by those companies either way. If you add it, it's month to month with no contract, and you can cancel anytime by email. Cancellation takes effect at the end of the paid month, and nothing has to be handed back.",
     link: { label: "Website Care (Terms)", href: "/terms#website-care" },
   },
 ] as const;

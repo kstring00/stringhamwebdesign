@@ -58,11 +58,16 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
   domain, hosting, code and accounts are in the practice's name. Kyle
   running the site afterwards (Website Care) is optional, never assumed,
   and never the headline. What a practice is handed at launch, and how far
-  each part goes, is on /owner-handoff ("Ownership" in the nav), written in
+  each part goes, is on /owner-handoff ("Handoff" in the nav), written in
   `app/data/ownership.ts` and matched by sections 2 and 3 of
   `content/service-terms.md`. Those are commitments: change them only on
   Kyle's say-so, all three together, and never promise open-ended support
-  or ownership of something licensed from another company.
+  or ownership of something licensed from another company. The practice
+  pays its domain, hosting and tools directly to those companies; Website
+  Care pays for Kyle's time and never reads as covering those bills. The
+  page's "How the handoff works" steps carry honest ease labels: a small
+  change is editing a text file ("Takes some learning"), a new page is code
+  ("Hard"). Don't soften them.
 - The Free Website Checkup is for a practice's owner checking their own
   site, never for a client: proof is credentials and approach (never
   client reviews), cost is fees and insurance, and a good form asks for

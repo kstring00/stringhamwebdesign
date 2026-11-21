@@ -8,7 +8,7 @@ import { track } from "../lib/track";
 import { sourceQuery, useSourceFields, VISIT_KEYS } from "../lib/useSourceFields";
 import { gsap, prefersReducedMotion } from "../motion/gsap";
 import {
-  ESTIMATE_DEFAULTS, EXAMPLE, EXPECT, FOOTNOTE, HOW_CALCULATED, OPTIONS, QUESTIONS, TIMELINE, PAYBACK_LINE,
+  ESTIMATE_DEFAULTS, EXAMPLE, EXPECT, FOOTNOTE, HOW_CALCULATED, OPTIONS, QUESTIONS, TIMELINE, PAYBACK_LINE, VALUE_HELP,
   estimate, result, summary, type AnswerValue, type ZoneKey,
 } from "./data";
 import s from "./checkup.module.css";
@@ -367,6 +367,7 @@ export default function Checkup() {
                     <label htmlFor="close">Inquiries that become clients<span className={s.in}><input id="close" type="number" inputMode="numeric" min={0} max={100} step={5} value={inputs.close} onChange={(ev) => setInputs({ ...inputs, close: ev.target.value })} /><span>%</span></span></label>
                     <label htmlFor="val">An average new client brings in<span className={s.in}><span>$</span><input id="val" type="number" inputMode="numeric" min={0} step={25} value={inputs.val} onChange={(ev) => setInputs({ ...inputs, val: ev.target.value })} /></span></label>
                   </div>
+                  <p className={s.estHelp}>{VALUE_HELP}</p>
                   <p className={s.printOnly}>Your numbers: {n0(est.vis)} visits a month · {n0(est.close)}% of inquiries become clients · {money(est.val)} per new client.</p>
                   <div className={s.bars}>
                     <div className={s.brow}>
@@ -386,9 +387,9 @@ export default function Checkup() {
                     </div>
                   </div>
                   <div className={s.outs}>
-                    <div className={s.out}><small>Extra inquiries</small><b>{range(e.extraLo, e.extraHi, n0)}</b><span>a month</span></div>
-                    <div className={s.out}><small>Extra new clients</small><b>{range(e.custLo, e.custHi, one)}</b><span>a month</span></div>
-                    <div className={s.out}><small>Extra revenue</small><b>{range(e.revLo, e.revHi, money)}</b><span>a month · {range(e.revLo * 12, e.revHi * 12, money)} a year</span></div>
+                    <div className={s.out}><small>Estimated extra inquiries</small><b>{range(e.extraLo, e.extraHi, n0)}</b><span>a month</span></div>
+                    <div className={s.out}><small>Estimated extra new clients</small><b>{range(e.custLo, e.custHi, one)}</b><span>a month</span></div>
+                    <div className={s.out}><small>Estimated extra revenue</small><b>{range(e.revLo, e.revHi, money)}</b><span>a month · {range(e.revLo * 12, e.revHi * 12, money)} a year</span></div>
                   </div>
                   <p className={s.payback}>
                     {e.payback

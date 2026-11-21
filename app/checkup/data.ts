@@ -156,7 +156,9 @@ export function summary(score: number, bandName: string, leaks: Leak[]) {
 
 /* ---------- the estimate ---------- */
 
-export const ESTIMATE_DEFAULTS = { vis: 200, close: 30, val: 250 };
+export const ESTIMATE_DEFAULTS = { vis: 200, close: 30, val: 1000 };
+/** Under the three inputs: how to arrive at the third number. */
+export const VALUE_HELP = "A new client is worth your session fee times the sessions they usually stay for. Replace this with your own number.";
 /** The payback line, shown when the estimate finds extra revenue. No price: every site is quoted separately. */
 export const PAYBACK_LINE = "Most practices only need a few new clients for a website to pay for itself.";
 
@@ -192,6 +194,7 @@ export const EXPECT = {
     "Two rounds of changes, then your approval before launch",
     "Your domain, hosting and code in accounts in your name",
     "A manual, walkthroughs and a training session, so you can run it yourself",
+    "Anything I built that's broken, fixed free for 30 days after launch",
   ],
   see: [
     "Fewer \"are you taking new clients?\" and \"do you take my insurance?\" calls",

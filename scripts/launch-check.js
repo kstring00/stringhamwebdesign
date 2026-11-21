@@ -83,7 +83,7 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     if (path === '/') ok(`${path}: LocalBusiness JSON-LD`, /"@type":"ProfessionalService"/.test(d.jsonld) && /League City/.test(d.jsonld) && /Houston/.test(d.jsonld));
     if (path === '/about') ok(`${path}: Person JSON-LD`, /"@type":"Person"/.test(d.jsonld));
     ok(`${path}: no banned words in rendered text`, !BANNED.test(d.text), (d.text.match(BANNED) || [''])[0]);
-    ok(`${path}: header is the logo, the links, the phone and one button`, JSON.stringify(d.headerNav) === JSON.stringify(['Work', 'Pricing', 'Ownership', 'Free checkup', 'Blog', 'About', 'FAQ']) && d.headerCta === 'Free homepage demo', JSON.stringify({ nav: d.headerNav, cta: d.headerCta }));
+    ok(`${path}: header is the logo, the links, the phone and one button`, JSON.stringify(d.headerNav) === JSON.stringify(['Work', 'Pricing', 'Handoff', 'Free checkup', 'Blog', 'About', 'FAQ']) && d.headerCta === 'Free homepage demo', JSON.stringify({ nav: d.headerNav, cta: d.headerCta }));
     ok(`${path}: the mobile bar has call, text and the one action`, d.mobileBar.length === 3 && d.mobileBar[0].startsWith('tel:') && d.mobileBar[1].startsWith('sms:') && d.mobileBar[2] === '/#quote', JSON.stringify(d.mobileBar));
   }
 
