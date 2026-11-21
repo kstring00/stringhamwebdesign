@@ -1,0 +1,188 @@
+/* The tile scenes: soft interlocking pieces that sit joined at rest and
+   come together as they are scrolled to (TileJoin.tsx). Every scene keeps
+   its block's proportions, so a tile's shape scales evenly and its seams
+   meet at any width. Words are real HTML laid over the shapes. */
+
+.shape { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.fill { fill: var(--tile, var(--mint)); }
+
+/* A soft shadow under a piece while it is still loose. At rest there is none. */
+.shadow { fill: rgba(11, 42, 32, 0.55); opacity: 0; filter: blur(16px); transform: translateY(18px); }
+
+.wideOnly { display: block; }
+.narrowOnly { display: none; }
+
+.scene { position: relative; margin: 0; padding: 0; list-style: none; }
+.scene [data-tile] { position: absolute; }
+
+/* A line laid over a whole scene. It is not a piece: it is drawn once they have met. */
+.scene > .thread { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; pointer-events: none; }
+.thread svg { width: 100%; height: 100%; overflow: visible; }
+.thread path { fill: none; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; vector-effect: non-scaling-stroke; }
+.thread path.dot { stroke: var(--mint); stroke-width: 12; stroke-dasharray: none; }
+
+/* ---------- the process: three pieces in a row ---------- */
+
+.process { aspect-ratio: 1200 / 330; margin-top: clamp(2.5rem, 5vw, 4rem); }
+
+/* Between a phone and a wide screen the words need more of each piece, so the row is taller. */
+@media (min-width: 52.0625rem) and (max-width: 68rem) {
+  .process { aspect-ratio: 1200 / 410; }
+}
+
+.process > li { top: 0; left: calc(var(--i) * 33.3333%); width: 33.3334%; height: 100%; }
+
+.process > li:nth-child(1) { --tile: var(--mint); --num: var(--emerald); }
+.process > li:nth-child(2) { --tile: var(--sky); --num: var(--cobalt); }
+.process > li:nth-child(3) { --tile: var(--ink); --num: var(--mint); color: var(--paper-on-ink); }
+
+.inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 7% 10% 8.5%;
+}
+
+.num {
+  color: var(--num);
+  font-family: var(--font-display);
+  font-size: clamp(4.5rem, 9.5vw, 9rem);
+  font-style: italic;
+  letter-spacing: -0.04em;
+  line-height: 0.78;
+}
+
+.words { display: grid; gap: 0.3rem; max-width: 19rem; }
+.words b { color: var(--ink); font-size: clamp(1.05rem, 1.55vw, 1.4rem); font-weight: 600; line-height: 1.22; }
+.words span { color: var(--ink-soft); font-size: clamp(0.95rem, 1.15vw, 1.05rem); line-height: 1.45; }
+.process > li:nth-child(3) .words b { color: #fff; }
+.process > li:nth-child(3) .words span { color: var(--muted-on-ink); }
+
+/* ---------- the handoff: four pieces, one block, labeled "Yours" ---------- */
+
+/* Its words are sized from the block itself (cqw), which is narrow beside a heading and wide on its own. */
+.yours { aspect-ratio: 600 / 400; width: 100%; max-width: 34rem; margin-block: 1.25rem 0.5rem; container-type: inline-size; }
+
+.yours > [data-tile] { left: calc(var(--c) * 50%); top: calc(var(--r) * 50%); width: 50%; height: 50%; }
+.yours > [data-tile]:nth-of-type(1), .yours > [data-tile]:nth-of-type(4) { --tile: var(--mint); }
+.yours > [data-tile]:nth-of-type(2), .yours > [data-tile]:nth-of-type(3) { --tile: var(--sky); }
+
+/* Each piece carries its item's number and name, in its outer corner, so the middle is free. */
+.label {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  gap: 0.15rem;
+  max-width: 78%;
+  color: var(--ink);
+  font-size: clamp(0.8125rem, 3cqw, 0.98rem);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.label i { color: var(--emerald); font-family: var(--font-display); font-size: 1.7em; font-style: italic; line-height: 0.9; }
+.yours > [data-tile]:nth-of-type(1) .label { top: 14%; left: 12%; }
+.yours > [data-tile]:nth-of-type(2) .label { top: 14%; right: 12%; text-align: right; justify-items: end; }
+.yours > [data-tile]:nth-of-type(3) .label { bottom: 14%; left: 12%; }
+.yours > [data-tile]:nth-of-type(4) .label { bottom: 14%; right: 12%; text-align: right; justify-items: end; }
+
+/* One line around all four, once they are one block. */
+.outline { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.outline rect { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 1; stroke-dashoffset: 0; vector-effect: non-scaling-stroke; }
+
+.yoursWord {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  margin: 0;
+  padding: 0.12em 0.42em 0.2em;
+  border-radius: 999px;
+  background: var(--paper);
+  box-shadow: 0 18px 40px -22px rgba(11, 42, 32, 0.55);
+  color: var(--cobalt);
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 16cqw, 5rem);
+  font-style: italic;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  translate: -50% -50%;
+  white-space: nowrap;
+}
+
+/* ---------- the checkup: ten pieces ---------- */
+
+/* The progress strip: one piece per question. A set piece is filled; a gap is a dashed outline. */
+.strip { display: block; width: 100%; height: 26px; overflow: visible; }
+.strip path { fill: transparent; stroke: var(--line-strong); stroke-width: 1.25; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; transform-box: fill-box; transform-origin: center; }
+.strip path[data-s="now"] { stroke: var(--brand); stroke-dasharray: none; stroke-width: 2; }
+.strip path[data-s="yes"] { fill: var(--good); stroke: var(--good); stroke-dasharray: none; animation: drop 420ms var(--ease-out) both; }
+.strip path[data-s="kind"] { fill: #fbeccd; stroke: var(--warn); stroke-dasharray: none; animation: drop 420ms var(--ease-out) both; }
+.strip path[data-s="no"], .strip path[data-s="unsure"] { stroke: var(--bad); stroke-width: 1.5; }
+
+/* The strip is stretched to its width, so its pieces only drop; a turn would shear. */
+@keyframes drop {
+  from { opacity: 0; transform: translateY(-12px); }
+  70% { opacity: 1; transform: translateY(1.5px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes set {
+  from { opacity: 0; transform: translateY(-14px) rotate(-10deg) scale(0.9); }
+  70% { opacity: 1; transform: translateY(2px) rotate(1deg) scale(1.02); }
+  to { opacity: 1; transform: none; }
+}
+
+/* The report's board: the same ten, named, five across. */
+.board { aspect-ratio: 1000 / 300; }
+.board > li { left: calc(var(--c) * 20%); top: calc(var(--r) * 50%); width: 20%; height: 50%; animation: set 520ms var(--ease-out) both; animation-delay: calc(var(--i) * 55ms); }
+
+.board > li[data-s="yes"] { --tile: #ddf1e6; }
+.board > li[data-s="kind"] { --tile: #fbeccd; }
+.board > li[data-s="no"], .board > li[data-s="unsure"] { --tile: transparent; }
+.board > li[data-s="no"] .fill, .board > li[data-s="unsure"] .fill { stroke: var(--bad); stroke-width: 1.5; stroke-dasharray: 5 5; vector-effect: non-scaling-stroke; }
+
+.piece { position: relative; z-index: 1; display: grid; align-content: center; gap: 0.3rem; height: 100%; padding: 0 12% 0 14%; color: var(--ink); line-height: 1.2; }
+.piece b { font-size: clamp(0.875rem, 1.05vw, 0.95rem); font-weight: 600; }
+.piece span { display: flex; align-items: center; gap: 0.35rem; color: var(--ink-soft); font-size: 0.8125rem; }
+.board > li[data-s="no"] .piece span, .board > li[data-s="unsure"] .piece span { color: #8c2318; font-weight: 600; }
+.board > li[data-s="kind"] .piece span { color: #6b4200; font-weight: 600; }
+
+/* A gap's number, matching the list of leaks under the board. */
+.rank { flex: none; display: grid; place-items: center; width: 1.35rem; height: 1.35rem; border-radius: 50%; background: var(--bad); color: #fff; font-size: 0.8125rem; font-style: normal; font-weight: 700; line-height: 1; }
+.board > li[data-s="kind"] .rank { background: var(--warn); }
+
+/* ---------- narrower screens: the same pieces, stacked ---------- */
+
+@media (max-width: 52rem) {
+  .wideOnly { display: none; }
+  .narrowOnly { display: block; }
+
+  .process { aspect-ratio: 360 / 720; }
+  .process > li { left: 0; top: calc(var(--i) * 33.3333%); width: 100%; height: 33.3334%; }
+  .inner { padding: 7% 9% 8%; }
+  .num { font-size: clamp(4rem, 19vw, 5.5rem); }
+  .words { max-width: none; }
+  .words b { font-size: 1.15rem; }
+  .words span { font-size: 0.98rem; }
+
+  .yours { aspect-ratio: 360 / 360; }
+  .label { max-width: 80%; }
+
+  /* Two across, five down. */
+  .board { aspect-ratio: 360 / 450; }
+  .board > li { left: calc(var(--c2) * 50%); top: calc(var(--r2) * 20%); width: 50%; height: 20%; }
+  .piece b { font-size: 0.875rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strip path, .board > li { animation: none; }
+}
+
+@media print {
+  .board > li { animation: none; }
+  .fill, .rank { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

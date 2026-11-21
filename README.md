@@ -91,4 +91,11 @@ the Listing Fix, quoted after the check, with its form; the page to text to pros
   drifting clouds, all plain CSS and all off under reduced motion.
   `WorkRow.tsx` is the still row of project cards under it. The header's
   "plain" state (`app/components/Header.tsx`) is the hero's top strip.
+- `app/tiles/` — the interlocking tiles. `shape.ts` draws one piece of any
+  grid (shared edges are one S-curve, so neighbours always fit); `Tile.tsx`
+  renders it; `Process.tsx` (home, three steps), `Yours.tsx` (Handoff, four
+  items, one block) and `Pieces.tsx` (the checkup's strip and report board)
+  are the scenes; `TileJoin.tsx`, mounted once in the layout, joins any
+  `[data-tile-scene]` on scroll with GSAP ScrollTrigger and cleans up after
+  itself. Joined at rest: no JavaScript or reduced motion means no movement.
 - `scripts/` — the launch, link and Lighthouse checks (see `scripts/README.md`).

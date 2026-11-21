@@ -1,5 +1,6 @@
-import { type CareKey, plans, pricing, steps } from "../data/offer";
+import { type CareKey, plans, pricing } from "../data/offer";
 import { site } from "../data/site";
+import Process from "../tiles/Process";
 import CareCard from "./CareCard";
 import care from "./care.module.css";
 import s from "./home.module.css";
@@ -21,7 +22,7 @@ export function CallOrBook({ location }: { location: string }) {
  * checkup, or a call. Then
  * three cards, equal height: the website, Website Care (its three levels
  * on a slider: CareCard.tsx), and the Google listing path; under them, how
- * a project goes in three steps. Every objection that comes up at the
+ * a project goes, as three pieces that join (tiles/Process.tsx). Every objection that comes up at the
  * price is answered where it comes up. `careLevel` is the level a visitor
  * already chose (?care=...), so the slider opens on it.
  */
@@ -65,14 +66,7 @@ export default function Pricing({ careLevel }: { careLevel?: CareKey }) {
             </article>
           ))}
         </div>
-        <ol className={s.steps}>
-          {steps.map((st) => (
-            <li key={st.n}>
-              <span className={s.stepN} aria-hidden="true">{st.n}</span>
-              <span><b>{st.title}</b> <span className={s.stepBody}>{st.body}</span></span>
-            </li>
-          ))}
-        </ol>
+        <Process />
       </div>
     </section>
   );

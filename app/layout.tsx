@@ -10,6 +10,7 @@ import Magnetic from "./motion/Magnetic";
 import Reveal from "./motion/Reveal";
 import Tracking from "./motion/Tracking";
 import RefTracker from "./motion/RefTracker";
+import TileJoin from "./tiles/TileJoin";
 import { site } from "./data/site";
 
 /* Both faces are self-hosted: next/font downloads them at build and serves
@@ -56,6 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Magnetic />
         <Tracking />
         <RefTracker />
+        <TileJoin />
         <ClarityAnalytics />
       </body>
     </html>

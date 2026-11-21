@@ -4,6 +4,7 @@ import { pageMeta } from "../data/meta";
 import { cta } from "../data/nav";
 import { type Ease, ownership } from "../data/ownership";
 import home from "../home/home.module.css";
+import Yours from "../tiles/Yours";
 import s from "./ownership.module.css";
 
 export const metadata: Metadata = pageMeta({
@@ -66,6 +67,7 @@ export default function OwnershipPage() {
           <div className={s.splitHead}>
             <h2 id="handoff-title" className={home.h2}>What I hand you at launch</h2>
             <p className={s.note}>Included with every website.</p>
+            <Yours />
             <div className={s.after}>
               <h3 className={s.afterTitle}>After launch</h3>
               {ownership.afterLaunch.map((p) => <p key={p}>{p}</p>)}

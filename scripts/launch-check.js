@@ -130,6 +130,59 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     await cj.close();
   }
 
+  // ---- the tiles: joined at rest, moved only when motion is welcome, never in place of the words ----
+  {
+    const PROCESS = 'ol[aria-label="How a project goes"]', YOURS = '[role="img"][aria-label*="labeled Yours"]';
+    const moved = (sel) => (p) => p.evaluate((q) => [...document.querySelectorAll(`${q} [data-tile]`)].filter((e) => { const t = getComputedStyle(e).transform; return t !== 'none' && t !== 'matrix(1, 0, 0, 1, 0, 0)'; }).length, sel);
+    // Without JavaScript: three steps, in order, as a list, joined.
+    const cj = await b.newContext({ viewport: { width: 1280, height: 900 }, javaScriptEnabled: false }); const pj = await cj.newPage();
+    await pj.goto(BASE + '/', { waitUntil: 'load' });
+    const steps = await pj.evaluate((q) => [...document.querySelectorAll(`${q} > li[data-tile]`)].map((li) => li.innerText.replace(/\s+/g, ' ').trim()), PROCESS);
+    ok('tiles: the three steps are a real list, in order, with their words', steps.length === 3 && /^1 Tell me about your practice/.test(steps[0]) && /^2 Get your free homepage demo \+ quote/.test(steps[1]) && /^3 Live in about 3 weeks/.test(steps[2]), JSON.stringify(steps));
+    ok('tiles: without JavaScript the steps sit joined', (await moved(PROCESS)(pj)) === 0);
+    await pj.goto(BASE + '/owner-handoff', { waitUntil: 'load' });
+    const yours = await pj.evaluate((q) => { const e = document.querySelector(q); return e ? { label: e.getAttribute('aria-label'), text: e.innerText.replace(/\s+/g, ' ') } : null; }, YOURS);
+    ok('tiles: the handoff block is one labeled picture of the four things handed over', Boolean(yours) && /owner.s manual/.test(yours.label) && /walkthroughs/.test(yours.label) && /training session/.test(yours.label) && /running-costs sheet/.test(yours.label) && /Yours/.test(yours.text), JSON.stringify(yours));
+    ok('tiles: without JavaScript the handoff block sits joined', (await moved(YOURS)(pj)) === 0);
+    await cj.close();
+    // Reduced motion: nothing is pulled apart.
+    const cr = await b.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce' }); const pr = await cr.newPage();
+    await pr.goto(BASE + '/', { waitUntil: 'networkidle' }); await pr.waitForTimeout(400);
+    ok('tiles: with reduced motion the steps never move', (await moved(PROCESS)(pr)) === 0);
+    await cr.close();
+    // With motion: apart before they are scrolled to, joined once they are, at both layouts.
+    for (const [w, h] of [[1280, 900], [390, 844]]) {
+      const c = await b.newContext({ viewport: { width: w, height: h } }); const p = await c.newPage();
+      for (const [name, url, sel] of [['steps', '/', PROCESS], ['handoff block', '/owner-handoff', YOURS]]) {
+        await p.goto(BASE + url, { waitUntil: 'networkidle' }); await p.waitForTimeout(400);
+        const before = await moved(sel)(p);
+        await p.evaluate((q) => document.querySelector(q).scrollIntoView({ block: 'start', behavior: 'instant' }), sel);
+        await p.waitForTimeout(2200);
+        const after = await moved(sel)(p);
+        const wide = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+        ok(`tiles at ${w}: the ${name} come together on scroll`, before > 0 && after === 0 && wide <= 0, JSON.stringify({ before, after, wide }));
+      }
+      await c.close();
+    }
+    // The checkup: each answer sets a piece or leaves a gap, and the report names all ten in words.
+    const c = await b.newContext({ viewport: { width: 1280, height: 900 } }); const p = await c.newPage();
+    await p.goto(BASE + '/checkup', { waitUntil: 'networkidle' });
+    const strip = () => p.evaluate(() => [...document.querySelectorAll('#bench svg[viewBox="0 0 1000 26"] path')].map((e) => e.getAttribute('data-s') || '-').join(' '));
+    const s0 = await strip();
+    const keys = ['y', 'k', 'n', '?', 'y', 'y', 'y', 'y', 'y', 'y'];
+    for (let i = 0; i < keys.length; i++) { await p.keyboard.press(keys[i]); await p.waitForTimeout(500); if (i === 3) ok('checkup pieces: each answer sets its piece or leaves a gap', (await strip()) === 'yes kind no unsure now - - - - -', await strip()); }
+    ok('checkup pieces: ten pieces, the first one being asked about', s0 === 'now - - - - - - - - -', s0);
+    await p.waitForSelector('#pieces-title'); await p.waitForTimeout(900);
+    const board = await p.evaluate(() => {
+      const items = [...document.querySelectorAll('#pieces-title + ol > li')].map((li) => li.innerText.replace(/\s+/g, ' ').trim());
+      const leaks = [...document.querySelectorAll('#leaks-title + ol > li h4')].map((e) => e.innerText.trim());
+      return { items, leaks, hasList: Boolean(document.querySelector('#leaks-title + ol p')) };
+    });
+    ok('checkup board: all ten parts named, each with its state in words', board.items.length === 10 && /^Headline Set$/.test(board.items[0]) && /^Main button \d Partly set ?, leak \d below$/.test(board.items[1]) && /^Availability \d Missing ?, leak \d below$/.test(board.items[2]) && /^Fees and insurance \d Not sure ?, leak \d below$/.test(board.items[3]), JSON.stringify(board.items));
+    ok('checkup board: the written leaks and fixes are still there under it', board.leaks.length === 3 && board.hasList, JSON.stringify(board.leaks));
+    await c.close();
+  }
+
   for (const [href, uses] of externals) {
     ok(`external ${href}: opens safely`, uses.every((u) => u.target !== '_blank' || /noopener/.test(u.rel)), JSON.stringify(uses.filter((u) => u.target === '_blank' && !/noopener/.test(u.rel)).map((u) => u.page)));
   }

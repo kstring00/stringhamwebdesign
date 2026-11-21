@@ -11,6 +11,7 @@ import {
   ESTIMATE_DEFAULTS, EXAMPLE, EXPECT, FOOTNOTE, HOW_CALCULATED, OPTIONS, QUESTIONS, TIMELINE, PAYBACK_LINE, VALUE_HELP,
   estimate, result, summary, type AnswerValue, type ZoneKey,
 } from "./data";
+import { PieceBoard, PieceStrip } from "../tiles/Pieces";
 import s from "./checkup.module.css";
 
 const n0 = (x: number) => Math.round(x).toLocaleString("en-US");
@@ -278,7 +279,8 @@ export default function Checkup() {
   const print = () => { track("checkup_print"); window.print(); };
 
   const q = QUESTIONS[idx];
-  const tickClass = (i: number) => (!done && i === idx ? s.now : answers[i] ? s[answers[i] as string] : "");
+  // One piece per question: the one being asked, then whatever was answered.
+  const pieces = QUESTIONS.map((_q, i) => (!done && i === idx ? "now" : answers[i] ?? ""));
   const smsHref = r ? `${site.smsHref}?&body=${encodeURIComponent(copyBody)}` : site.smsHref;
 
   return (
@@ -304,7 +306,7 @@ export default function Checkup() {
         <div className={s.panel} ref={panel}>
           {!r ? (
             <>
-              <div className={s.ticks} aria-hidden="true">{QUESTIONS.map((_q, i) => <i key={i} className={tickClass(i)} />)}</div>
+              <PieceStrip states={pieces} />
               <div aria-live="polite" className={s.live}>
                 <p className={s.count}><span><b>{idx + 1}</b> of {QUESTIONS.length}</span><span>Checking: {q.zone}</span></p>
                 <h2 className={s.q} id="qtext" data-in>{q.q}</h2>
@@ -334,6 +336,11 @@ export default function Checkup() {
                 </h2>
                 <p>{r.band.message}</p>
               </div>
+
+              <section className={`${s.block} ${s.pieces}`} aria-labelledby="pieces-title" data-in>
+                <h3 className={s.sub} id="pieces-title">Your site in ten pieces</h3>
+                <PieceBoard pieces={QUESTIONS.map((x, i) => ({ key: x.z, name: x.zone, state: answers[i] ?? "unsure", rank: r.rank[i] }))} />
+              </section>
 
               {r.leaks.length ? (
                 <section className={s.block} aria-labelledby="leaks-title" data-in>

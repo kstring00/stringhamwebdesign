@@ -133,7 +133,17 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
 - Motion: content is visible at rest, the headline is real HTML that
   doesn't wait on JavaScript, and everything is off under
   `prefers-reduced-motion` (the hero's line shows fully drawn and its
-  clouds sit still). Outside the hero, small reveals only.
+  clouds sit still). Outside the hero, small reveals, and the tiles.
+- The tiles (`app/tiles/`) are the site's one motif: soft pieces whose
+  shared edges are a gentle S-curve. Never the knobbed jigsaw piece, and
+  never a game. Three uses, no more without the owner's OK: the three
+  process steps on the home page, the four handoff items closing into one
+  block labeled "Yours", and the checkup's ten pieces (a strip while
+  answering, a named board in the report). They are joined in the HTML;
+  `TileJoin.tsx` only pulls them apart and brings them together on scroll,
+  and does nothing under reduced motion or without JavaScript. A piece's
+  state is always in words too ("Set", "Partly set", "Missing", "Not
+  sure"), and the board never replaces the written leaks and fixes.
 - Accessibility failures are disqualifying: Lighthouse accessibility 95+.
 - Don't merge to `main` or deploy to production without the owner's OK.
 
