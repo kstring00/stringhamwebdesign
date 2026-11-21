@@ -24,7 +24,7 @@
 
 .header[data-plain] {
   position: absolute;
-  padding-top: 28px;
+  padding-top: 29px;
   color: var(--hero-ink);
   font-family: var(--font-hero-text);
 }
@@ -32,8 +32,22 @@
 .header[data-plain] .bar {
   width: calc(100% - 2 * clamp(20px, 4vw, 56px));
   max-width: 1328px;
-  min-height: 48px;
+  min-height: 46px;
   padding: 0;
+}
+
+/* On a wide screen the three groups (logo, links, phone and button) are
+   spread evenly, the links sit 30px apart, and the phone is its number
+   alone. */
+@media (min-width: 64.0625rem) {
+  .header[data-plain] .bar { justify-content: space-between; }
+  .header[data-plain] .brand { margin-right: 0; }
+  .header[data-plain] .nav { gap: 28px; }
+  .header[data-plain] .link { padding: 0; }
+  .header[data-plain] .link::after { left: 0; right: 0; }
+  .header[data-plain] .actions { gap: 25px; }
+  .header[data-plain] .phone { padding: 0; font-size: 15px; }
+  .header[data-plain] .phone svg { display: none; }
 }
 
 .header[data-plain] .glass { display: none; }
@@ -43,8 +57,9 @@
 
 /* The nav button, outlined: 1.5px of ink, nothing behind it. */
 .header[data-plain] .bar .cta {
-  min-height: 48px;
-  padding: 0 22px;
+  min-height: 46px;
+  padding: 0 19px;
+  font-size: 15px;
   border: 1.5px solid var(--hero-ink);
   background: transparent;
   color: var(--hero-ink);

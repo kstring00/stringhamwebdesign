@@ -8,22 +8,23 @@ const CLOUD = {
 } as const;
 
 /**
- * The five clouds: shape, color, where each sits at load (top in px, left
- * as a share of the screen), its width, and how long one crossing takes.
- * `at` is how far through its crossing a cloud is when the page loads, so
- * that it starts at `left` on a 1440px screen: (left x 1440 + width) /
- * (1440 + width). The same number sets the negative delay.
+ * The five clouds: shape, color, where each rests (top in px, left as a
+ * share of the screen), its width, and how long one crossing takes.
+ * `at` is how far through its crossing a cloud is when the page loads; it
+ * sets the negative delay. The five values are measured from the approved
+ * design, so that on a 1440px screen each cloud loads where it is drawn
+ * there (a little off its resting `left`).
  */
 const CLOUDS = [
-  { shape: "A", color: "var(--cloud-blue)", top: 64, left: 6, width: 300, seconds: 110, at: 0.2221 },
-  { shape: "B", color: "var(--cloud-mint)", top: 190, left: 58, width: 420, seconds: 140, at: 0.6748 },
-  { shape: "A", color: "var(--cloud-blue)", top: 400, left: 30, width: 240, seconds: 95, at: 0.4 },
-  { shape: "B", color: "var(--cloud-blue)", top: 880, left: 72, width: 360, seconds: 125, at: 0.776 },
-  { shape: "A", color: "var(--cloud-mint)", top: 960, left: 18, width: 220, seconds: 85, at: 0.2887 },
+  { shape: "A", color: "var(--cloud-blue)", top: 64, left: 6, width: 300, seconds: 110, at: 0.1836 },
+  { shape: "B", color: "var(--cloud-mint)", top: 190, left: 58, width: 420, seconds: 140, at: 0.6613 },
+  { shape: "A", color: "var(--cloud-blue)", top: 400, left: 30, width: 240, seconds: 95, at: 0.3845 },
+  { shape: "B", color: "var(--cloud-blue)", top: 880, left: 72, width: 360, seconds: 125, at: 0.7842 },
+  { shape: "A", color: "var(--cloud-mint)", top: 960, left: 18, width: 220, seconds: 85, at: 0.2702 },
 ] as const;
 
 function Check() {
-  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 5" /></svg>;
+  return <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 5" /></svg>;
 }
 
 /**
@@ -50,7 +51,7 @@ export default function Hero() {
             data-cloud={i + 1}
             viewBox={CLOUD[c.shape].viewBox}
             fill={c.color}
-            style={{ "--top": `${c.top}px`, "--l": c.left, "--w": `${c.width}px`, "--dur": `${c.seconds}s`, "--delay": `${(-c.seconds * c.at).toFixed(1)}s` } as React.CSSProperties}
+            style={{ "--top": `${c.top}px`, "--l": c.left, "--w": `${c.width}px`, "--dur": `${c.seconds}s`, "--delay": `${(-c.seconds * c.at).toFixed(2)}s` } as React.CSSProperties}
           >
             {CLOUD[c.shape].shapes}
           </svg>

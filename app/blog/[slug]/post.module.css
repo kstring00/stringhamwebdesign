@@ -351,7 +351,7 @@
   .prose td { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 0.75rem; padding: 0.3rem 0; border: 0; }
   .prose td::before { content: attr(data-label); color: var(--muted); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
   /* The first cell names the row: a card title, no label. */
-  .prose td:first-child { display: block; padding: 0 0 0.35rem; font-family: var(--font-display); font-size: 1.15rem; font-weight: 500; }
+  .prose td:first-child { display: block; padding: 0 0 0.35rem; font-family: var(--font-display); font-size: 1.4rem; font-weight: 400; }
   .prose td:first-child::before { content: none; }
 }
 
@@ -386,7 +386,7 @@
 .demo:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 .demo img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top center; border-radius: 9px; }
 .demoText { display: grid; gap: 0.3rem; padding-right: 0.5rem; }
-.demoText b { font-family: var(--font-display); font-size: 1.25rem; font-weight: 500; line-height: 1.2; }
+.demoText b { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; line-height: 1.15; }
 .demoKind { color: var(--muted-on-ink); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
 .demoLink { color: #a8e6c8; font-weight: 600; }
 
@@ -398,6 +398,9 @@
 .ctaBody a { color: #fff; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.5); text-underline-offset: 3px; }
 .ctaBody a:hover { text-decoration-color: #fff; }
 .ctaActions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.25rem; }
+/* The main button on the ink ground: mint, so it doesn't vanish into it. */
+.ctaActions > a[class~="btn"]:not([class~="btn-secondary"]) { border-color: var(--mint); background: var(--mint); color: var(--ink); }
+.ctaActions > a[class~="btn"]:not([class~="btn-secondary"]):hover { border-color: #fff; background: #fff; color: var(--ink); }
 .ctaSecondary { border-color: rgba(255, 255, 255, 0.35); color: #fff; }
 .ctaSecondary:hover { background: rgba(255, 255, 255, 0.1); border-color: #fff; color: #fff; }
 .signature { color: var(--muted-on-ink); font-size: 0.92rem; }
