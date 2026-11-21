@@ -28,6 +28,12 @@ with Playwright and Lighthouse installed locally, not saved:
   order, the dedupe key, and that the aggregate sent to the AI contains no
   name, contact, note, code or host. Needs no server and no packages:
   `node scripts/leads-check.js`.
+- `offer-check.js` — unit tests for the offer: Website Care's three levels
+  in `app/data/offer.ts` (prices, edit minutes, what each adds, the rules
+  that hold at every level), and that `content/service-terms.md` and the
+  Handoff page say the same. This is what fails when the terms and the
+  prices drift. Needs no server and no packages:
+  `node scripts/offer-check.js`.
 - `migration-check.js` — runs `supabase/migrations/20261024000000_leads.sql`
   against a real Postgres (PGlite, in-process) four ways: a clean database,
   an existing one with referred leads from the older migrations (rows,

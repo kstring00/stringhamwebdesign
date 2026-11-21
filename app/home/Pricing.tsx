@@ -1,5 +1,7 @@
-import { plans, pricing, steps } from "../data/offer";
+import { type CareKey, plans, pricing, steps } from "../data/offer";
 import { site } from "../data/site";
+import CareCard from "./CareCard";
+import care from "./care.module.css";
 import s from "./home.module.css";
 
 /**
@@ -17,16 +19,18 @@ export function CallOrBook({ location }: { location: string }) {
  * written quote before anything starts, payment plans, what changes the
  * price; no dollar amounts), with the two ways to a quote: the free
  * checkup, or a call. Then
- * three cards, equal height: the website, Website Care, and the Google
- * listing path; under them, how a project goes in three steps. Every
- * objection that comes up at the price is answered where it comes up.
+ * three cards, equal height: the website, Website Care (its three levels
+ * on a slider: CareCard.tsx), and the Google listing path; under them, how
+ * a project goes in three steps. Every objection that comes up at the
+ * price is answered where it comes up. `careLevel` is the level a visitor
+ * already chose (?care=...), so the slider opens on it.
  */
-export default function Pricing() {
+export default function Pricing({ careLevel }: { careLevel?: CareKey }) {
   return (
     <section className={`${s.section} ${s.alt}`} id="pricing" aria-labelledby="pricing-title">
       <div className="container">
         <div className={s.head}>
-          <h2 id="pricing-title" className={s.h2} data-reveal>Build it once. Let me run it.</h2>
+          <h2 id="pricing-title" className={s.h2} data-reveal>Build it once. Own it outright.</h2>
           <p className={s.lede}>{pricing.website} {site.bookingUrl ? pricing.next.booking : pricing.next.phone}</p>
           <div className={s.factors}>
             <p className={s.factorsTitle}>What affects your price</p>
@@ -36,10 +40,15 @@ export default function Pricing() {
             <a className="btn" href="#quote" data-track="cta" data-location="pricing-demo">Get a free homepage demo</a>
             <a className={`u ${s.textLink}`} href="/checkup" data-track="cta" data-location="pricing-checkup">Or run the free website checkup</a>
           </div>
-          <p className={s.pricingFine}>No ad spend, no contract. Website Care is month to month. Full details in the <a className={`u ${s.inlineLink}`} href="/terms">Service Terms</a>.</p>
+          <p className={s.pricingFine}>No ad spend, no contract. Your site is yours to run; Website Care is optional and month to month. <a className={`u ${s.inlineLink}`} href="/owner-handoff">How ownership works</a>. Full details in the <a className={`u ${s.inlineLink}`} href="/terms">Service Terms</a>.</p>
         </div>
         <div className={s.plans} data-reveal-group>
-          {plans.map((p) => (
+          {plans.map((p) => p.key === "care" ? (
+            <article className={`${s.plan} ${care.card}`} key={p.key} id="care" aria-labelledby={`plan-${p.key}`} data-reveal>
+              <h3 id={`plan-${p.key}`} className={s.planName}>{p.name}</h3>
+              <CareCard foot={p.foot} cta={p.cta.label} terms={p.terms} initial={careLevel} />
+            </article>
+          ) : (
             <article className={`${s.plan} ${p.key === "site" ? s.planStart : ""}`} key={p.key} aria-labelledby={`plan-${p.key}`} data-reveal>
               {"badge" in p && p.badge ? <p className={s.badge}>{p.badge}</p> : null}
               <h3 id={`plan-${p.key}`} className={s.planName}>{p.name}</h3>

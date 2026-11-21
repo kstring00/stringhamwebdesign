@@ -57,7 +57,21 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
 - Owner-first: the practice owns its site and can run it without Kyle. The
   domain, hosting, code and accounts are in the practice's name. Kyle
   running the site afterwards (Website Care) is optional, never assumed,
-  and never the headline.
+  and never the headline. What a practice is handed at launch, and how far
+  each part goes, is on /owner-handoff ("Handoff" in the nav), written in
+  `app/data/ownership.ts` and matched by sections 2 and 3 of
+  `content/service-terms.md`. Those are commitments: change them only on
+  Kyle's say-so, all three together, and never promise open-ended support
+  or ownership of something licensed from another company. The practice
+  pays its domain, hosting and tools directly to those companies; Website
+  Care pays for Kyle's time and never reads as covering those bills. The
+  page's "How the handoff works" steps carry honest ease labels: a small
+  change is editing a text file ("Takes some learning"), a new page is code
+  ("Hard"). Don't soften them.
+- The Free Website Checkup is for a practice's owner checking their own
+  site, never for a client: proof is credentials and approach (never
+  client reviews), cost is fees and insurance, and a good form asks for
+  contact details only.
 - Privacy: the site's forms ask a practice for its own contact details
   only, and say so. Never ask for, or invite, anything about a client:
   no diagnoses, no treatment history. Don't promise HIPAA compliance
@@ -67,9 +81,17 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
 - Pricing, matching `content/service-terms.md`: custom websites start at
   $300 and the final price is set in the written quote (fixed, not hourly;
   payment plans available); the Listing Fix is $25 one-time; Website Care
-  is $25 a month, month to month. The three numbers live in
-  `app/data/offer.ts` (`PRICES`) and nowhere else; change them and the
-  terms together. The only guarantees on the site are the ones in the
+  is optional and month to month, in three levels: Basic $25, Standard $50
+  and Full $85 a month, with 15, 45 and 90 minutes of edits. The card is a
+  slider (`app/home/CareCard.tsx`), and wherever one number has to stand
+  for the plan it is "from $25 a month". At every level: it pays for
+  Kyle's time and not the practice's bills, new pages and sections are
+  quoted separately, unused edit time doesn't carry over, a change of level
+  or a cancellation takes effect the next billing month, and Kyle never
+  replies to reviews for a practice. The numbers live in
+  `app/data/offer.ts` (`PRICES`, `CARE_LEVELS`) and nowhere else; change
+  them and the terms together (`node scripts/offer-check.js` fails when
+  they disagree). The only guarantees on the site are the ones in the
   terms.
 - Honesty: no invented reviews, numbers, clients, results, logos or
   guarantees. The four findings on /google-check are real and anonymized;
@@ -114,6 +136,35 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
   clouds sit still). Outside the hero, small reveals only.
 - Accessibility failures are disqualifying: Lighthouse accessibility 95+.
 - Don't merge to `main` or deploy to production without the owner's OK.
+
+## Rules for a practice's site
+
+These are for the sites Kyle builds for practices. They are not about
+this site: Stringham Web Design's own demo form, its lead ledger
+(Supabase) and its /manage page stay as they are, because the people who
+write to this site are practice owners asking about a website, not people
+looking for care.
+
+On a site built for a practice, a visitor may be someone seeking care, so:
+
+- No lead ledger and no database of form messages. The form sends one
+  email to the practice's inbox, and the site keeps no list of its own.
+  Don't copy this repo's ledger, its `/manage` page or its Supabase setup
+  into a practice's site.
+- The email-sending account is opened in the practice's name, like the
+  domain, hosting and code accounts.
+- Form fields: name, phone or email, and a best time to reach them. No
+  open message box. A visible line asks visitors not to share health
+  details.
+- No session-recording or screen-replay tools. (This site runs Microsoft
+  Clarity; a practice's site does not.)
+- Scheduling and intake stay in the practice's own tool, linked from the
+  site, never rebuilt inside it.
+
+The Handoff page and the Free Website Checkup tell practices the same
+thing (`app/data/ownership.ts`, the "Form" question in
+`app/checkup/data.ts`). If one of these rules changes, change those words
+with it.
 
 ## Checks before any deploy
 

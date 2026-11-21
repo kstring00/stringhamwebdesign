@@ -112,7 +112,7 @@ Launch isn't the finish line. It's where the real information starts coming in.
 
 - I track **calls, form submissions and bookings**, the numbers that actually matter.
 - I watch **anonymous recordings** of how visitors move through the site (no personal info) to see where people get stuck or give up.
-- On my Website Care plan, you get a **one-page report each month** and I make improvements based on what the numbers show, one change at a time.
+- On Website Care's Full level, you get a **one-page report each month** and I make improvements based on what the numbers show, one change at a time.
 
 ---
 

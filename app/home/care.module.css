@@ -1,0 +1,113 @@
+/* The Website Care card's own parts: the slider over three levels, the
+   "added" marks, and the rules that hold at every level. The card frame,
+   price and list are home.module.css's. Nothing here animates. */
+
+/* The card is a column, with the list taking the slack so the three
+   cards' buttons line up. */
+.card { display: flex; flex-direction: column; gap: 0.9rem; }
+.card > a[class~="btn"] { margin-top: 0; }
+
+.live { display: grid; gap: 0.7rem; }
+
+.levelName { margin-top: -0.45rem; color: var(--ink); font-weight: 600; }
+
+/* ---------- the slider ---------- */
+
+.slider { display: grid; gap: 0; }
+
+/* A real range input, restyled. 44px tall so a thumb can find it; the
+   visible track is drawn inside that. --at is 0, 0.5 or 1. */
+.range {
+  --at: 0.5;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 44px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.range::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--brand) calc(var(--at) * 100%), var(--line) calc(var(--at) * 100%));
+}
+
+.range::-moz-range-track { height: 8px; border-radius: 999px; background: var(--line); }
+.range::-moz-range-progress { height: 8px; border-radius: 999px; background: var(--brand); }
+
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  margin-top: -10px;
+  border: 3px solid var(--paper);
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 1.5px var(--ink), 0 4px 10px -4px rgba(11, 42, 32, 0.5);
+}
+
+.range::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border: 3px solid var(--paper);
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 1.5px var(--ink), 0 4px 10px -4px rgba(11, 42, 32, 0.5);
+}
+
+.range:focus-visible { outline: 3px solid var(--cobalt); outline-offset: 2px; border-radius: 12px; }
+
+/* The three stops' names, under the ends and the middle of the track. */
+.stops { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: -0.25rem; }
+
+.stops span {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.stops span:nth-child(2) { justify-content: center; }
+.stops span:nth-child(3) { justify-content: flex-end; }
+.stops .stopOn { color: var(--ink); font-weight: 600; }
+
+/* ---------- the list, and what a level adds ---------- */
+
+.lines { min-height: 7.6rem; }
+
+.added { color: var(--ink) !important; }
+
+.addedTag {
+  display: inline-block;
+  margin-right: 0.45rem;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  background: var(--mint);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  vertical-align: 0.08em;
+}
+
+/* ---------- true at every level ---------- */
+
+.rules { flex: 1; padding-top: 0.8rem; border-top: 1px solid var(--line); }
+
+.rulesTitle { margin-bottom: 0.45rem; color: var(--muted); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.rules ul { display: grid; gap: 0.3rem; margin: 0; padding-left: 1.1rem; color: var(--ink-soft); font-size: 0.92rem; line-height: 1.45; }
+
+/* ---------- without JavaScript: all three levels, in full ---------- */
+
+.plain { display: grid; gap: 1.1rem; margin: 0; padding: 0; list-style: none; }
+.plain > li { display: grid; gap: 0.5rem; }
+.plain b { color: var(--ink); font-size: 1.05rem; }
+.plain a { justify-self: start; display: inline-flex; align-items: center; min-height: 44px; }

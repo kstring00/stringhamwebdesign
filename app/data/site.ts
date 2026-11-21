@@ -25,7 +25,7 @@ export const site = {
 } as const;
 
 /** Where the studio is, in one sentence. On the home page's About block. */
-export const locationLine = "I’m based in League City, Texas, and I work with practices across the Houston area and beyond.";
+export const locationLine = "I’m based in League City, Texas, and I work with practices across the country.";
 
 /** What the studio does, in one line: the footer, the schema and the social image's alt text. */
 export const studioWhat = "Custom web design for therapists, counselors and mental-health practices.";

@@ -8,7 +8,7 @@ import { track } from "../lib/track";
 import { sourceQuery, useSourceFields, VISIT_KEYS } from "../lib/useSourceFields";
 import { gsap, prefersReducedMotion } from "../motion/gsap";
 import {
-  ESTIMATE_DEFAULTS, EXAMPLE, EXPECT, FOOTNOTE, HOW_CALCULATED, OPTIONS, QUESTIONS, TIMELINE, PAYBACK_LINE,
+  ESTIMATE_DEFAULTS, EXAMPLE, EXPECT, FOOTNOTE, HOW_CALCULATED, OPTIONS, QUESTIONS, TIMELINE, PAYBACK_LINE, VALUE_HELP,
   estimate, result, summary, type AnswerValue, type ZoneKey,
 } from "./data";
 import s from "./checkup.module.css";
@@ -49,12 +49,12 @@ function Phone({ answers, idx, done, rank }: { answers: (AnswerValue | undefined
           <div className={s.navrow}><div className={s.logo} /><div className={s.burger}><i /><i /><i /></div></div>
           <Zone z="clarity" className={s.zClarity} {...at("clarity")}><div className={s.h1bar} /><div className={`${s.h1bar} ${s.h1short}`} /></Zone>
           <Zone z="words" className={s.zWords} {...at("words")}><div className={s.wbar} /><div className={s.wbar} /><div className={s.wbar} /></Zone>
-          <Zone z="price" className={s.zPrice} {...at("price")}><span className={s.chip}>From $___</span></Zone>
+          <Zone z="price" className={s.zPrice} {...at("price")}><span className={s.chip}>Fees · insurance</span></Zone>
           <Zone z="action" className={s.zAction} {...at("action")}><div className={s.btnW}><span /></div></Zone>
           <Zone z="questions" className={s.zQuestions} {...at("questions")}>
             {[0, 1, 2].map((k) => <div key={k} className={s.qrow}><div className={s.wbar} /><b>+</b></div>)}
           </Zone>
-          <Zone z="reviews" className={s.zReviews} {...at("reviews")}><div className={s.stars}>★★★★★</div><div className={s.wbar} /><div className={s.wbar} /></Zone>
+          <Zone z="reviews" className={s.zReviews} {...at("reviews")}><span className={s.chip}>License · approach</span><div className={s.wbar} /><div className={s.wbar} /></Zone>
           <Zone z="form" className={s.zForm} {...at("form")}><div className={s.field} /><div className={s.field} /><div className={s.send} /></Zone>
           <Zone z="call" className={s.zCall} {...at("call")}><span>CALL</span><span>TEXT</span></Zone>
         </div>
@@ -105,7 +105,7 @@ function LeadForm({ summaryText, refCode }: { summaryText: string; refCode: stri
     <form className={s.lead} id="checkup-lead" onSubmit={onSubmit} method="post" action="/api/website-quote" noValidate>
       <p className={s.leadTitle}>Or send it here and I&rsquo;ll reply with your top three fixes</p>
       <div className={s.leadRow}>
-        <label htmlFor="cl-site">Your website<input id="cl-site" name="current_site" inputMode="url" autoComplete="url" maxLength={200} placeholder="yourbusiness.com" required /></label>
+        <label htmlFor="cl-site">Your website<input id="cl-site" name="current_site" inputMode="url" autoComplete="url" maxLength={200} placeholder="yourpractice.com" required /></label>
         <label htmlFor="cl-contact">Phone or email<input id="cl-contact" name="contact" autoComplete="on" inputMode="email" maxLength={180} required /></label>
       </div>
       <input type="hidden" name="source" value="checkup" />
@@ -288,9 +288,9 @@ export default function Checkup() {
       <header className={s.intro}>
         <p className={s.eyebrow}>Free website checkup · 10 questions · about 2 minutes</p>
         {sharer ? <p className={s.sharer}>Shared with you by {sharer}.</p> : null}
-        <h1 className={s.h1}>Is your website turning visitors into customers?</h1>
+        <h1 className={s.h1}>Is your practice&rsquo;s website turning visitors into new clients?</h1>
         <p className={s.lede}>
-          Pull up your site on your phone and answer honestly. Watch each part of the page get checked, then get your score, your biggest leaks, and a fix for each one.
+          Pull up your practice&rsquo;s site on your phone and answer honestly. Watch each part of the page get checked, then get your score, your biggest leaks, and a fix for each one.
         </p>
         <p className={s.free}>
           <span>Free. No email needed. Your report shows right here.</span>
@@ -361,13 +361,14 @@ export default function Checkup() {
               {e ? (
                 <section className={s.est} aria-labelledby="est-title" data-in>
                   <h3 id="est-title" className={s.h3}>What fixing these could mean for you</h3>
-                  <p className={s.estIntro}>A rough estimate from your score and public benchmarks. Change the three numbers to match your business. It&rsquo;s a planning tool, not a promise.</p>
+                  <p className={s.estIntro}>A rough estimate from your score and public benchmarks. Change the three numbers to match your practice. It&rsquo;s a planning tool, not a promise.</p>
                   <div className={s.inputs}>
                     <label htmlFor="vis">Website visits a month<span className={s.in}><input id="vis" type="number" inputMode="numeric" min={0} step={10} value={inputs.vis} onChange={(ev) => setInputs({ ...inputs, vis: ev.target.value })} /></span></label>
-                    <label htmlFor="close">Inquiries that become customers<span className={s.in}><input id="close" type="number" inputMode="numeric" min={0} max={100} step={5} value={inputs.close} onChange={(ev) => setInputs({ ...inputs, close: ev.target.value })} /><span>%</span></span></label>
-                    <label htmlFor="val">Average customer is worth<span className={s.in}><span>$</span><input id="val" type="number" inputMode="numeric" min={0} step={25} value={inputs.val} onChange={(ev) => setInputs({ ...inputs, val: ev.target.value })} /></span></label>
+                    <label htmlFor="close">Inquiries that become clients<span className={s.in}><input id="close" type="number" inputMode="numeric" min={0} max={100} step={5} value={inputs.close} onChange={(ev) => setInputs({ ...inputs, close: ev.target.value })} /><span>%</span></span></label>
+                    <label htmlFor="val">An average new client brings in<span className={s.in}><span>$</span><input id="val" type="number" inputMode="numeric" min={0} step={25} value={inputs.val} onChange={(ev) => setInputs({ ...inputs, val: ev.target.value })} /></span></label>
                   </div>
-                  <p className={s.printOnly}>Your numbers: {n0(est.vis)} visits a month · {n0(est.close)}% of inquiries become customers · {money(est.val)} per customer.</p>
+                  <p className={s.estHelp}>{VALUE_HELP}</p>
+                  <p className={s.printOnly}>Your numbers: {n0(est.vis)} visits a month · {n0(est.close)}% of inquiries become clients · {money(est.val)} per new client.</p>
                   <div className={s.bars}>
                     <div className={s.brow}>
                       <span className={s.lab}>Now</span>
@@ -386,9 +387,9 @@ export default function Checkup() {
                     </div>
                   </div>
                   <div className={s.outs}>
-                    <div className={s.out}><small>Extra inquiries</small><b>{range(e.extraLo, e.extraHi, n0)}</b><span>a month</span></div>
-                    <div className={s.out}><small>Extra customers</small><b>{range(e.custLo, e.custHi, one)}</b><span>a month</span></div>
-                    <div className={s.out}><small>Extra revenue</small><b>{range(e.revLo, e.revHi, money)}</b><span>a month · {range(e.revLo * 12, e.revHi * 12, money)} a year</span></div>
+                    <div className={s.out}><small>Estimated extra inquiries</small><b>{range(e.extraLo, e.extraHi, n0)}</b><span>a month</span></div>
+                    <div className={s.out}><small>Estimated extra new clients</small><b>{range(e.custLo, e.custHi, one)}</b><span>a month</span></div>
+                    <div className={s.out}><small>Estimated extra revenue</small><b>{range(e.revLo, e.revHi, money)}</b><span>a month · {range(e.revLo * 12, e.revHi * 12, money)} a year</span></div>
                   </div>
                   <p className={s.payback}>
                     {e.payback

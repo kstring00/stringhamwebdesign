@@ -20,7 +20,7 @@ export default function AboutFaq() {
           <h2 id="about-title" className={s.h2} data-reveal>You work with me, start to finish.</h2>
           <p>I&rsquo;m Kyle Stringham, a web designer. My degree is in psychology, and I&rsquo;ve worked in behavioral health as a Registered Behavior Technician with autistic children and their families. I&rsquo;m not a licensed clinician and I don&rsquo;t provide care; I build websites for the people who do.</p>
           <p>That background shapes every page: what someone looking for help needs to understand, what makes reaching out feel safe, and what comes next.</p>
-          <p>{locationLine} No agency layers, no hand-offs. I use AI-assisted tools so you get custom work faster, and I review, test and stand behind every line that ships.</p>
+          <p>{locationLine} No agency layers, and nobody passing your project along. I use AI-assisted tools so you get custom work faster, and I review, test and stand behind every line that ships.</p>
           <p className={s.aboutLinks}>
             <a className="u" href={`mailto:${site.email}`} data-track="email">{site.email}</a>
             <a className="u" href={site.phoneHref}>Call or text {site.phone}</a>

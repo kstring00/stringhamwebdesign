@@ -6,7 +6,7 @@ import Checkup from "./Checkup";
 import { QUESTIONS } from "./data";
 import s from "./page.module.css";
 
-const DESCRIPTION = "Answer 10 quick questions and see where your website loses customers, with a score, a fix for each leak, and an estimate of what fixing it could mean. Free, no email needed.";
+const DESCRIPTION = "For therapists and practice owners: answer 10 quick questions and see where your website loses people before they reach out, with a score, a fix for each leak, and an estimate of what fixing it could mean. Free, no email needed.";
 
 export const metadata: Metadata = pageMeta({
   absolute: "Free Website Checkup | Stringham Web Design",

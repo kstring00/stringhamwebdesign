@@ -24,15 +24,18 @@ locally (the contact form logs instead of emailing without `RESEND_API_KEY`).
 
 `/` (the hero, a still row of the three projects, pricing, about Kyle beside the questions,
 and the free homepage demo form), `/work` (the full portfolio, each project
-labeled for exactly what it is), `/google-check` (the free Google check and
+labeled for exactly what it is), `/owner-handoff` ("Handoff" in the nav: what a practice owns and is handed at
+launch; the words are in `app/data/ownership.ts`), `/google-check` (the free Google check and
 the Listing Fix, quoted after the check, with its form; the page to text to prospects),
 `/terms`, `/privacy`, and the unlinked
 `/family-resource-hub`. `/websites` redirects to `/work`.
 
 ## Where things live
 
-- `app/data/offer.ts` — the offer in one place: the three prices
-  (`PRICES`: websites from $300, Listing Fix $25, Website Care $25/month)
+- `app/data/offer.ts` — the offer in one place: the prices
+  (`PRICES`: websites from $300, Listing Fix $25; `CARE_LEVELS`: Website
+  Care's three levels, $25, $50 and $85 a month, shown as a slider by
+  `app/home/CareCard.tsx`)
   and how pricing is worded (`pricing`: the final website price is set in
   the written quote, payment plans), what affects the price, the Listing
   Fix and Website Care lines, the three pricing
