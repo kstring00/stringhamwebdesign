@@ -6,8 +6,7 @@ import ClarityAnalytics from "./ClarityAnalytics";
 import Footer from "./components/Footer";
 import MobileBar from "./components/MobileBar";
 import SiteHeader from "./components/SiteHeader";
-import Magnetic from "./motion/Magnetic";
-import Reveal from "./motion/Reveal";
+import Motion from "./motion/Motion";
 import Tracking from "./motion/Tracking";
 import RefTracker from "./motion/RefTracker";
 import { site } from "./data/site";
@@ -15,7 +14,9 @@ import { site } from "./data/site";
 /* Both faces are self-hosted: next/font downloads them at build and serves
    them from this origin, subset to latin, with no request to Google from a
    visitor's browser. Outfit (variable) is for display: the hero's name and
-   every heading. DM Sans (variable, roman and italic) is everything else. */
+   every heading. DM Sans (variable, roman) is everything else; the few
+   italic words on the site are slanted by the browser, which saves every
+   visitor a second font file before the first paint. */
 const outfit = Outfit({
   subsets: ["latin"],
   display: "swap",
@@ -24,7 +25,7 @@ const outfit = Outfit({
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
-  style: ["normal", "italic"],
+  style: ["normal"],
   display: "swap",
   variable: "--font-dm-sans",
 });
@@ -53,8 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main id="main" tabIndex={-1}>{children}</main>
         <Footer />
         <MobileBar />
-        <Reveal />
-        <Magnetic />
+        <Motion />
         <Tracking />
         <RefTracker />
         <ClarityAnalytics />

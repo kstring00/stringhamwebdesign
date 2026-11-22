@@ -22,7 +22,7 @@ locally (the contact form logs instead of emailing without `RESEND_API_KEY`).
 
 ## Pages
 
-`/` (the hero, a still row of the three projects, pricing, about Kyle beside the questions,
+`/` (the hero, "Why not a template?", a still row of the three projects, pricing, about Kyle beside the questions,
 and the free homepage demo form), `/work` (the full portfolio, each project
 labeled for exactly what it is), `/owner-handoff` ("Handoff" in the nav: what a practice owns and is handed at
 launch; the words are in `app/data/ownership.ts`), `/google-check` (the free Google check and
@@ -48,19 +48,19 @@ the Listing Fix, quoted after the check, with its form; the page to text to pros
 - `app/data/site.ts` — identity, phone, email, location.
 - `content/service-terms.md` and `content/privacy.md` — rendered word for
   word at `/terms` and `/privacy`.
-- `app/globals.css` — the whole design system: white paper, deep green ink
-  (`--ink`), the emerald accent `--brand` `#0E6B4E` (white text passes AA),
-  `--cobalt` for highlights, the `--mint` and `--sky` grounds, the button
-  (`--action`: ink with mint words) and the gradient `--brand-gradient`
-  (ink → emerald → cobalt, for accents only, never text). Headings are
-  Instrument Serif, everything else DM Sans (`app/layout.tsx`). Component
-  files only arrange it.
+- `app/globals.css` — the whole design system, as tokens: the near-black
+  page (`--bg`), two surfaces, cream words (`--text`, `--text-soft`,
+  `--text-2`), the amber accent `--accent` and the rarer `--accent-2`, the
+  cream button (`--btn`), the status colours, and the panel's inset and
+  corner. Headings are Outfit, everything else DM Sans (`app/layout.tsx`).
+  Component files only arrange it.
 - `brand/stringham-web-design-logo.png` — Kyle's logo file (the source).
-  `public/brand/` holds what's cut from it: the horizontal lockup used by
-  `app/components/Logo.tsx` in the header and footer, the S mark, and a
-  square logo for structured data. `app/icon.png` and `app/apple-icon.png`
-  are the S mark; the share image (`app/opengraph-image.png`) uses the lockup
-  and is drawn by `scripts/share-image.js`.
+  `public/brand/` holds what's cut from it: the horizontal lockup, its light
+  version for the dark site (`logo-lockup-light*`, made by
+  `scripts/logo-light.js` and used by `app/components/Logo.tsx` in the header
+  and footer), the S mark, and a square logo for structured data. `app/icon.png` and `app/apple-icon.png`
+  are the S mark; the share image (`app/opengraph-image.png`) is the hero in
+  small and is drawn by `scripts/share-image.js`.
 - `app/home/FreeCheckForm.tsx` + `app/api/free-check/route.ts` — the form and
   its backend (Resend; honeypot; rate limit; utm/referrer captured as hidden
   fields and written into the email).
@@ -85,10 +85,15 @@ the Listing Fix, quoted after the check, with its form; the page to text to pros
   `scripts/capture-work.js`.
 - `docs/user-test-landscaping.md` and `docs/user-test-webster-remodeler.md`
   — the 5-minute tests to run with a local owner.
-- `app/home/Hero.tsx` + `hero.module.css` — the home hero: white, deep
-  green, Instrument Serif and DM Sans; a generated line (`heroPath.ts`,
-  from `scripts/hero-path.py`) that draws in once, a breathing dot and five
-  drifting clouds, all plain CSS and all off under reduced motion.
-  `WorkRow.tsx` is the still row of project cards under it. The header's
-  "plain" state (`app/components/Header.tsx`) is the hero's top strip.
+- `app/home/Hero.tsx` + `HeroVideo.tsx` + `hero.module.css` — the home hero:
+  one inset panel with the still (`public/hero/hero-plate*`) and, over it,
+  the looping video (`hero-loop*`), the name, and the page's argument.
+  `scripts/hero-media.js` makes the web versions of both from the sources.
+  `Template.tsx` is "Why not a template?" (words in `app/data/template.ts`,
+  a draft until the owner approves them) and `WorkRow.tsx` the still row of
+  project cards.
+- `app/components/SiteHeader.tsx` — the header: the liquid nav
+  (`LiquidNavbar.tsx` + `liquid-navbar.css`, from 21st.dev, credited in the
+  file), alone over the hero, with the logo and the one button beside it
+  everywhere else. The items are in `app/data/nav.ts`.
 - `scripts/` — the launch, link and Lighthouse checks (see `scripts/README.md`).

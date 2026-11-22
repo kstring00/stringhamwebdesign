@@ -291,13 +291,30 @@
 
 /* ---------- smaller screens ---------- */
 
-/* The right block wraps under the name. Where the phone's bottom bar shows
-   (56rem and under), the panel stops above it, so the button is never
-   behind the bar. */
+/* Under about 1240px the name and the right block no longer fit side by
+   side, so the block goes under the name. The words then stand taller than
+   the panel's own shade was drawn for, and reach up into the bright part of
+   the picture; so the words carry a shade of their own, which begins in the
+   empty space above the name and is full strength by the time the name
+   starts. (It replaces the soft pool behind the right block.) */
+@media (max-width: 1240px) {
+  .content { flex-direction: column; align-items: flex-start; gap: 1.75rem; }
+  .content::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(8, 6, 5, 0) 0, rgba(8, 6, 5, 0.74) 6.5rem, rgba(8, 6, 5, 0.9) 100%);
+    pointer-events: none;
+  }
+  .side { max-width: 30rem; }
+  .side::before { display: none; }
+}
+
+/* Where the phone's bottom bar shows (56rem and under), the panel stops
+   above it, so the button is never behind the bar. */
 @media (max-width: 56rem) {
   .panel { min-height: max(640px, calc(100svh - 2 * var(--inset) - 4.75rem - env(safe-area-inset-bottom))); }
-  .content { gap: 1.75rem; }
-  .side { max-width: 30rem; }
 }
 
 /* A phone shows only a slice of the scene. At 60% across that slice is the
@@ -315,10 +332,10 @@
   /* The pill fills the top of a phone, so the button sits under it. */
   .pause { top: 84px; right: 14px; }
   .content { padding: 1.25rem 1.15rem 1.5rem; padding-top: 9rem; }
+  .content::before { background: linear-gradient(180deg, rgba(8, 6, 5, 0) 0, rgba(8, 6, 5, 0.74) 9rem, rgba(8, 6, 5, 0.9) 100%); }
   .sub { margin-top: 0.85em; letter-spacing: 0.46em; }
   /* The site's floor for text on a phone is 13px (scripts/launch-check.js). */
   .eyebrow { font-size: 13px; letter-spacing: 0.18em; }
-  .side::before { inset: -2.5rem -1.5rem -2rem; }
 }
 
 /* ---------- reduced motion: nothing moves ---------- */

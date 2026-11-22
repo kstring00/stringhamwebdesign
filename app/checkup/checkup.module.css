@@ -322,12 +322,12 @@
 .lab { font-weight: 600; }
 .track { position: relative; height: 2rem; overflow: hidden; border-radius: 8px; background: var(--bg); }
 .fill { position: absolute; top: 0; bottom: 0; left: 0; border-radius: 0 6px 6px 0; transition: width 350ms var(--ease-out); }
-.fillNow { background: rgba(243, 231, 211, 0.3); }
-.fillLo { background: var(--accent); }
-.fillHi { background: rgba(255, 217, 168, 0.4); }
+/* Each fill is dark enough for the cream label, which may run past the end of a short bar onto the track. */
+.fillNow { background: rgba(243, 231, 211, 0.22); }
+.fillLo { background: #8a5a22; }
+.fillHi { background: rgba(255, 217, 168, 0.3); }
 .track b { position: absolute; top: 50%; left: 0.6rem; color: var(--text); font-size: 0.84rem; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; transform: translateY(-50%); }
 /* On the blue "after" fill the label reads in white over the solid part. */
-.track .fillLo + b { color: var(--on-light); }
 
 .outs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
 .out { display: grid; gap: 0.1rem; padding: 0.75rem 0.85rem; border: 1px solid var(--line); border-radius: 12px; }
@@ -363,7 +363,6 @@
 .cta > p { color: var(--text-2); line-height: 1.55; }
 .cta .phoneNo { color: var(--text); font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; user-select: all; }
 .ctaRow { display: flex; flex-wrap: wrap; gap: 0.6rem; }
-/* The main button on the ink ground: mint, so it doesn't vanish into it. */
 .onInkBtn { border-color: rgba(243, 231, 211, 0.4); background: transparent; color: var(--text); }
 .onInkBtn:hover { background: rgba(243, 231, 211, 0.1); border-color: var(--text); color: var(--text); }
 
@@ -436,6 +435,9 @@
     --wire: #c8d6cf; --frame: #222;
     display: block; padding: 0; color: #000; font-size: 9.5pt;
   }
+  .fillNow { background: #c5cfca; }
+  .fillLo { background: #e6c48a; }
+  .fillHi { background: #f3e3c3; }
   .intro, .ticks, .answers, .row, .lede, .free, .cta, .footnote, .inputs, .estHelp, .how summary, .example { display: none !important; }
   .root * { box-shadow: none !important; }
   .printHead { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.16in; padding-bottom: 0.08in; border-bottom: 2px solid var(--accent); font-size: 10pt; }

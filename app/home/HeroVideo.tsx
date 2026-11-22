@@ -14,8 +14,8 @@ const LARGE = [{ src: "/hero/hero-loop.webm", type: "video/webm" }, { src: "/her
  * The hero's moving background, laid over the still.
  *
  * Nothing is fetched until the page has loaded what it needs: the element
- * has no source in the HTML. It is given one, and started, when the hero is
- * on screen, and only if the visitor has not asked for less: with reduced
+ * has no source in the HTML. It is given one, and started, once the page has
+ * loaded and the browser is idle, when the hero is on screen, and only if the visitor has not asked for less: with reduced
  * motion or data saver on there is no video at all, just the still. It
  * pauses when the hero scrolls away or the tab is hidden, and it gives up
  * quietly (back to the still) if it cannot play.
@@ -69,8 +69,20 @@ export default function HeroVideo() {
     v.addEventListener("error", fail);
     document.addEventListener("visibilitychange", onVisibility);
     reduce.addEventListener("change", onReduce);
-    io.observe(v);
+    // Nothing about the video begins until the page itself has loaded and the browser is idle.
+    let idle = 0, timer = 0;
+    const watch = () => io.observe(v);
+    const ric = (window as Window & { requestIdleCallback?: Window["requestIdleCallback"] }).requestIdleCallback;
+    const whenIdle = () => {
+      if (ric) idle = ric(watch, { timeout: 2000 });
+      else timer = window.setTimeout(watch, 400);
+    };
+    if (document.readyState === "complete") whenIdle();
+    else window.addEventListener("load", whenIdle, { once: true });
     return () => {
+      window.removeEventListener("load", whenIdle);
+      if (idle) window.cancelIdleCallback?.(idle);
+      window.clearTimeout(timer);
       io.disconnect();
       v.removeEventListener("playing", onPlaying);
       v.removeEventListener("error", fail);

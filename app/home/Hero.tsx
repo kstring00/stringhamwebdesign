@@ -34,7 +34,7 @@ export default function Hero() {
           <source media="(max-width: 700px)" srcSet="/hero/hero-plate-tall.jpg" />
           <source type="image/avif" srcSet="/hero/hero-plate.avif" />
           <source type="image/webp" srcSet="/hero/hero-plate.webp" />
-          <img className={s.media} src="/hero/hero-plate.jpg" alt="" width={1620} height={819} fetchPriority="high" loading="eager" decoding="async" data-hero-still />
+          <img className={s.media} src="/hero/hero-plate.jpg" alt="" width={1620} height={819} fetchPriority="high" loading="eager" decoding="sync" data-hero-still />
         </picture>
         <HeroVideo />
         <div className={s.shade} aria-hidden="true" />

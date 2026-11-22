@@ -20,6 +20,10 @@
  * - The water no longer moves without end. It runs while the pointer is on it,
  *   after a tap, and for about two seconds after `wake` changes (a page
  *   change); then the animation loop stops.
+ * - The water is not started until the page has loaded and gone quiet (the CSS
+ *   drop stands in until then), and the Chromium-only refraction of whatever
+ *   is behind the pill is removed: over a playing video it re-filtered every
+ *   frame.
  * - The blue tints are warm cream and amber (three colours in the shader, the
  *   rest in liquid-navbar.css, where the styles now live).
  * - The plane and weather scenes and their icons are gone; grid, tag, key and
@@ -185,12 +189,6 @@ function initGL(canvas: HTMLCanvasElement) {
   return { gl, u }
 }
 
-function supportsRefraction() {
-  if (typeof window === "undefined" || typeof CSS === "undefined") return false
-  const ua = navigator.userAgent
-  return /Chrome\/|Chromium\/|Edg\//.test(ua) && !/Firefox\//.test(ua) && !!(CSS as any).supports?.("backdrop-filter", "url(#a)")
-}
-
 export function LiquidNavbar({
   items,
   active,
@@ -215,8 +213,8 @@ export function LiquidNavbar({
   const audio = React.useRef<AudioContext | null>(null)
   const plips = React.useRef(0)
   const st = React.useRef(makeState())
-  const [gl, setGl] = React.useState<"on" | "off">("on")
-  const [refract, setRefract] = React.useState(false)
+  // The CSS drop shows first; the water takes over once the page has loaded and the browser is idle.
+  const [gl, setGl] = React.useState<"on" | "off">("off")
   const [fx, setFx] = React.useState({ i: -1, n: 0 })
   const dark = tone === "dark" ? 1 : 0
   const darkRef = React.useRef(dark)
@@ -404,12 +402,25 @@ export function LiquidNavbar({
   }, [current, loop, sizeCanvas])
 
   React.useEffect(() => {
-    setRefract(supportsRefraction())
     const s = st.current
     s.reduce = !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
     const cv = canvasRef.current
-    s.glc = cv ? initGL(cv) : null
-    if (!s.glc) setGl("off")
+    // The shader is compiled and first drawn only after the page has loaded and gone
+    // quiet, so the water never competes with the page's own first paint.
+    let idle = 0, timer = 0
+    const start = () => {
+      s.glc = cv ? initGL(cv) : null
+      if (!s.glc) return
+      setGl("on")
+      loop()
+    }
+    const ric = (window as Window & { requestIdleCallback?: Window["requestIdleCallback"] }).requestIdleCallback
+    const whenIdle = () => {
+      if (ric) idle = ric(start, { timeout: 1500 })
+      else timer = window.setTimeout(start, 300)
+    }
+    if (document.readyState === "complete") whenIdle()
+    else window.addEventListener("load", whenIdle, { once: true })
     const lost = (e: Event) => { e.preventDefault(); s.glc = null; setGl("off") }
     cv?.addEventListener("webglcontextlost", lost)
     const io = new IntersectionObserver(([e]) => { s.visible = e.isIntersecting; if (s.visible) loop() })
@@ -417,6 +428,9 @@ export function LiquidNavbar({
     const vis = () => { s.visible = document.visibilityState === "visible"; if (s.visible) loop() }
     document.addEventListener("visibilitychange", vis)
     return () => {
+      window.removeEventListener("load", whenIdle)
+      if (idle) window.cancelIdleCallback?.(idle)
+      window.clearTimeout(timer)
       cv?.removeEventListener("webglcontextlost", lost)
       io.disconnect()
       document.removeEventListener("visibilitychange", vis)
@@ -438,8 +452,11 @@ export function LiquidNavbar({
     return () => ro.disconnect()
   }, [])
   React.useEffect(() => { loop() }, [tone, loop])
-  // A page change (and the first load): the water runs for about two seconds, then rests.
+  // A page change: the water runs for about two seconds, then rests. Not on the
+  // first load, when the page has better things to spend the time on.
+  const woke = React.useRef(false)
   React.useEffect(() => {
+    if (!woke.current) { woke.current = true; return }
     st.current.awakeUntil = performance.now() + 2000
     loop()
   }, [wake, loop])
@@ -509,7 +526,6 @@ export function LiquidNavbar({
       data-tone={tone}
       data-gl={gl}
       data-compact={compact === undefined ? undefined : String(compact)}
-      data-refract={refract ? "on" : "off"}
       data-empty={current < 0 ? "true" : undefined}
       aria-label="Main"
       onKeyDown={onKeyDown}
@@ -518,13 +534,6 @@ export function LiquidNavbar({
       onPointerDown={(e) => { const p = local(e.clientX, e.clientY); ripple(p.x, p.y, 0.8) }}
       style={style}
     >
-      <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true">
-        <filter id="nimbus-refract" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
-          <feTurbulence type="fractalNoise" baseFrequency="0.006 0.02" numOctaves="2" seed="7" result="noise" />
-          <feGaussianBlur in="noise" stdDeviation="2" result="soft" />
-          <feDisplacementMap in="SourceGraphic" in2="soft" scale="60" xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-      </svg>
       <span className="nimbus-glass" aria-hidden="true" />
       <canvas className="nimbus-water" ref={canvasRef} aria-hidden="true" />
       <span className="nimbus-drop" ref={dropRef} aria-hidden="true" />

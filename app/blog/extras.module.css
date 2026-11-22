@@ -11,7 +11,7 @@
 
 .progress > div {
   height: 100%;
-  background: var(--brand-gradient);
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
   transform: scaleX(0);
   transform-origin: left center;
 }

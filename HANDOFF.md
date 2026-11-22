@@ -26,34 +26,77 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
   not a licensed mental-health professional and the studio provides no
   treatment; nothing on the site may say or imply otherwise (the schema
   type stays a professional service, never a medical one).
-- The home hero (`app/home/Hero.tsx`, `hero.module.css`) is on white, in
-  its own palette and faces: deep green ink, emerald and cobalt accents,
-  mint and sky grounds (the `--hero-*`, `--emerald`, `--cobalt`, `--mint`,
-  `--sky` and cloud tokens in `globals.css`), Instrument Serif for the
-  headline and DM Sans for everything else. Top to bottom: the site header
-  with no bar of its own (logo, links, phone, an outlined "Free homepage
-  demo" button); a mint eyebrow; the headline "Websites for the people who
-  help people." with "help people." in cobalt italic; the story panel, a
-  tangled line that unravels into one calm, straight line over three
-  captions ("They arrive overwhelmed." / "Your site makes it clear." /
-  "They reach out."); then "Your work changes lives. Your website should
-  reflect that." and Kyle's paragraph beside the button "Get a free
-  homepage demo", the link "Or explore my work" and the three checks.
-  The words are Kyle's own. Don't paraphrase or "improve" them; change
-  them only when he supplies new ones. The line's path is generated
-  (`scripts/hero-path.py` → `app/home/heroPath.ts`), never hand-drawn.
-- Three things move in the hero and nothing else, in plain CSS: the line
-  draws in once on load, the dot at its end breathes, and five clouds
-  drift across behind the content. No project wall, no carousel, no phone
-  frames. Under the hero the three real projects sit as a still row of
-  cards (`app/home/WorkRow.tsx`).
+- What the site argues: a practice shouldn't look like every other
+  practice. Squarespace and WordPress are the safe choice, and this site is
+  the proof of what a custom build can do. Every page should feel built, not
+  assembled. Stay fair to those platforms: say what they do well, say
+  nothing false about them, and make no speed or search-ranking claims.
+  "Why not a template?" under the hero (`app/home/Template.tsx`, words in
+  `app/data/template.ts`) is where that case is made.
+- The home hero (`app/home/Hero.tsx`, `HeroVideo.tsx`, `hero.module.css`)
+  is one panel on the near-black page, inset 12px from the page edge with
+  28px corners, about one screen tall. Behind it: the owner's own scene
+  (`public/hero/`), first as a still and then as a slow, silent, looping
+  video that fades in over it. Over that: the shade (dark at the top,
+  clear through the middle, dark at the bottom); the liquid nav at the top;
+  bottom left the name "Stringham" with an amber asterisk and "WEB DESIGN"
+  under it (the brand mark, not a heading); bottom right "* NOT A TEMPLATE",
+  the page's one h1 in two lines ("Why blend in?" / "Custom websites for
+  therapists and mental health practices."), one paragraph, the cream button
+  "Get a free demo" and the link "See the work". The words are the owner's.
+  Don't paraphrase or "improve" them; change them only when he supplies new
+  ones. Where the name and the right block don't fit side by side (under
+  about 1240px) the block goes under the name and the words carry their own
+  shade. Every word must pass AA over the brightest frame of the video.
+- The still is the largest thing on first paint: a real `<img>`, preloaded,
+  in AVIF and WebP, with a tighter crop for phones. The words never wait on
+  the video or on JavaScript. The video is given a source only after the
+  page has loaded, only when the hero is on screen, and never with reduced
+  motion or data saver on; it pauses out of view and in a hidden tab, falls
+  back to the still if it cannot play, is hidden from screen readers, and
+  has a pause and play button (it moves for more than five seconds, so it
+  must). `scripts/hero-media.js` makes every file in `public/hero/` from the
+  two sources. This scene is the one picture of people on the site, and the
+  owner supplied it; add no other image or video without asking him.
+- What moves: on load the name, "WEB DESIGN" and the right block rise 28px
+  and fade in, one after another; the video; the nav's water. Under the
+  hero, panels and headings rise in the same way as they are scrolled to
+  (`app/motion/Reveal.tsx`). Nothing else. Under the hero the three real
+  projects sit as a still row of cards (`app/home/WorkRow.tsx`).
+- The nav (`app/components/SiteHeader.tsx`, `LiquidNavbar.tsx`,
+  `liquid-navbar.css`) is the liquid navbar from 21st.dev, by
+  guglielmogiannattasio.it; keep the credit comment at the top of the file,
+  which also lists what was changed for this site. Six real links: Home,
+  Work, Pricing, Handoff, Checkup, About (`app/data/nav.ts`). Pricing and
+  About are sections of the home page. Blog and FAQ are in the footer. Over
+  the home hero it is the pill alone, centered; past the hero and on every
+  other page the light logo sits to its left and "Get a free demo" to its
+  right, from 900px up. On a phone it is the pill alone, icons only, and the
+  bottom bar carries call, text and the demo button. The water must not run
+  without end: it moves on hover, on a tap and for about two seconds after
+  a page change, then the animation loop stops. Without WebGL the CSS drop
+  must look right.
 - One palette and two faces, site-wide, all as tokens in `app/globals.css`:
-  white paper, deep green ink, emerald for small accents (checks, links,
-  focus), cobalt for the rare highlight, mint and sky grounds. Buttons are
-  ink with mint words. Instrument Serif for headings (one weight; never
-  bold it), DM Sans for everything else. The logo keeps its own blues.
-  Don't bring back the navy and blue, and don't write a color out in a
-  component when a token exists.
+  the page `--bg` #0A0908; surfaces `--surface` #14100C and `--surface-2`
+  #1B1612; lines `--line` (cream at 12%); words `--text` #F3E7D3, a softer
+  `--text-soft` #E9DCC6 and secondary `--text-2` #CDBFA8; the accent
+  `--accent` #FFD9A8 (amber: marks, links, focus, never a large fill); a
+  second accent `--accent-2` #FF9A5A, sparingly; buttons `--btn` cream with
+  `--btn-text` dark words; and the three status colours `--good`, `--warn`,
+  `--bad` (each always beside a word or a number). Outfit for display (the
+  name and every heading, weight 500), DM Sans for everything else.
+  Instrument Serif and the white-and-mint palette are retired; don't bring
+  them back, and don't write a colour out in a component when a token
+  exists (the hero is the exception: its colours sit on a picture).
+- Three signature touches, used with restraint, and nothing beyond them:
+  large Outfit section headings; the amber asterisk (`.ast`) as a footnote
+  mark wherever the copy states an honest limit; and 28px panels
+  (`--radius-panel`, inset `--inset` from the page edge) whose content
+  rises in on scroll the way the hero's words do, off under reduced motion.
+- The logo on the site is the light version (`public/brand/logo-lockup-light*`,
+  made by `scripts/logo-light.js`): the owner's lockup with the navy word
+  "Stringham" turned to cream so it can be read on the dark page. The blue
+  mark and "WEB DESIGN" are untouched, and the original files stay.
 - Owner-first: the practice owns its site and can run it without Kyle. The
   domain, hosting, code and accounts are in the practice's name. Kyle
   running the site afterwards (Website Care) is optional, never assumed,
@@ -99,8 +142,10 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
   for word, with written permission (and remember that therapists
   generally can't ask their own clients for them, which is also why the
   Listing Fix sets up no review link and Website Care flags new reviews
-  to the practice instead of replying). No stock or AI photos;
-  the only photo of Kyle is his own (`public/kyle-founder.*`).
+  to the practice instead of replying). No stock or AI photos, with one
+  exception the owner made himself: the hero scene he supplied
+  (`public/hero/`). The only photo of Kyle is his own
+  (`public/kyle-founder.*`).
 - Selected work is one list, `app/data/work.ts`, shown the same everywhere.
   Every project is labeled for exactly what it is. None of the current
   projects is a commissioned site for a therapy or counseling practice, and
@@ -132,8 +177,10 @@ the `revamp-2026` rebuild. Tag `archive-portal-2026-09` and branch
   anywhere. `/family-resource-hub` stays live and unlinked.
 - Motion: content is visible at rest, the headline is real HTML that
   doesn't wait on JavaScript, and everything is off under
-  `prefers-reduced-motion` (the hero's line shows fully drawn and its
-  clouds sit still). Outside the hero, small reveals only.
+  `prefers-reduced-motion` (the hero shows its still and its words don't
+  rise; the nav's drop moves without the water). Outside the hero, the
+  rise on scroll only. The optional motion and its library load after the
+  page has (`app/motion/Motion.tsx`), so they never hold up the first paint.
 - Accessibility failures are disqualifying: Lighthouse accessibility 95+.
 - Don't merge to `main` or deploy to production without the owner's OK.
 

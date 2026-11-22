@@ -88,8 +88,8 @@
   margin-right: 0.45rem;
   padding: 0.05rem 0.5rem;
   border-radius: 999px;
-  background: var(--mint);
-  color: var(--text);
+  background: var(--accent-soft);
+  color: var(--accent);
   font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.04em;

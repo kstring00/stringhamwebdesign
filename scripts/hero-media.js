@@ -64,7 +64,8 @@ const FADE = 12; // frames: half a second
   await sharp(still).avif({ quality: 52, effort: 7 }).toFile(path.join(OUT, 'hero-plate.avif'));
   await sharp(still).webp({ quality: 78 }).toFile(path.join(OUT, 'hero-plate.webp'));
   const crop = { left: Math.round(meta.width * TALL.from), top: 0, width: Math.round(meta.width * (TALL.to - TALL.from)), height: meta.height };
-  await sharp(still).extract(crop).avif({ quality: 52, effort: 7 }).toFile(path.join(OUT, 'hero-plate-tall.avif'));
+  // The phone's first picture, and the largest thing a phone paints: as small as it can be and still look right under the shade.
+  await sharp(still).extract(crop).avif({ quality: 44, effort: 7 }).toFile(path.join(OUT, 'hero-plate-tall.avif'));
   await sharp(still).extract(crop).webp({ quality: 78 }).toFile(path.join(OUT, 'hero-plate-tall.webp'));
   await sharp(still).extract(crop).jpeg({ quality: 80, mozjpeg: true }).toFile(path.join(OUT, 'hero-plate-tall.jpg'));
 

@@ -200,6 +200,9 @@ const BANNED = /Texas ABA|ABA Centers|texasabacenterscg|lorem|placeholder|exampl
     const c = await b.newContext({ viewport: { width: 1280, height: 900 } }); const p = await c.newPage();
     await p.addInitScript(() => { window.__draws = 0; const wrap = (proto) => { if (!proto) return; const d = proto.drawArrays; proto.drawArrays = function (...a) { window.__draws++; return d.apply(this, a); }; }; wrap(window.WebGLRenderingContext && WebGLRenderingContext.prototype); });
     await p.goto(BASE + '/', { waitUntil: 'networkidle' });
+    // The water starts once the page has loaded and gone quiet; the CSS drop stands in until then.
+    await p.waitForFunction((q) => document.querySelector(q).getAttribute('data-gl') === 'on', NAV, { timeout: 6000 }).catch(() => {});
+    await p.waitForTimeout(400);
     const gl = await p.getAttribute(NAV, 'data-gl');
     ok('nav: the water shader compiles and draws', gl === 'on' && (await p.evaluate(() => window.__draws)) > 0, `data-gl=${gl}`);
     // Battery: about two seconds after load it has stopped drawing; a hover starts it, and it stops again.

@@ -60,7 +60,7 @@ export default function SiteHeader() {
     <>
     <header className={s.bar} data-state={pinned ? "pinned" : "hero"} data-site-header>
       <Link className={s.logo} href="/" aria-label="Stringham Web Design, home" tabIndex={pinned ? undefined : -1}>
-        <Logo className={s.logoImg} eager />
+        <Logo className={s.logoImg} />
       </Link>
       <LiquidNavbar className={s.nav} items={ITEMS} active={active} page={page} wake={pathname} tone="dark" sound={false} />
       <Link className={s.cta} href={cta.href} data-track="cta" data-location="header" tabIndex={pinned ? undefined : -1}>
