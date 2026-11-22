@@ -363,6 +363,8 @@ p {
    (the page sets body[data-checkup] while it's open; the rest is in
    checkup.module.css). */
 @media print {
+  /* Nothing waiting to rise in is left out of a printed page. */
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
   html, body[data-checkup], body[data-checkup] main { background: #fff; }
   body[data-checkup] > :not(main),
   body[data-checkup] [data-print-hide] { display: none !important; }
