@@ -1,10 +1,12 @@
 .form {
   display: grid;
+  /* The column never grows past the card, whatever is in it (a long button label on a small phone). */
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.1rem;
   padding: clamp(1.25rem, 3vw, 2rem);
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: #fff;
+  background: var(--surface-2);
 }
 
 .row {
@@ -21,14 +23,14 @@
 .field label {
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--ink);
+  color: var(--text);
 }
 
 .field label small {
   margin-left: 0.35rem;
   font-size: 0.85rem;
   font-weight: 400;
-  color: var(--muted);
+  color: var(--text-2);
 }
 
 .input {
@@ -37,17 +39,17 @@
   padding: 0.75rem 0.9rem;
   border: 1px solid var(--line-strong);
   border-radius: 8px;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--bg);
+  color: var(--text);
   font: inherit;
   transition: border-color 200ms var(--ease-out), background 200ms var(--ease-out);
 }
 
 .input:focus {
   outline: none;
-  border-color: var(--brand);
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(11, 42, 32, 0.18);
+  border-color: var(--accent);
+  background: var(--surface-2);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 textarea.input {
@@ -67,7 +69,7 @@ textarea.input {
 }
 
 .error {
-  color: #9b2c1f;
+  color: var(--bad);
   font-size: 0.95rem;
 }
 
@@ -84,7 +86,7 @@ textarea.input {
 }
 
 .fine {
-  color: var(--muted);
+  color: var(--text-2);
   font-size: 0.88rem;
 }
 
@@ -92,20 +94,20 @@ textarea.input {
   display: grid;
   gap: 0.75rem;
   padding: clamp(1.5rem, 3vw, 2.25rem);
-  border: 1px solid var(--brand);
+  border: 1px solid var(--accent);
   border-radius: 12px;
-  background: #fff;
+  background: var(--surface-2);
 }
 
 /* The card is white even inside the dark quote section, so its heading
    sets its own color instead of inheriting the section's white. */
 .sent h3 {
-  color: var(--ink);
+  color: var(--text);
   font-size: 1.8rem;
 }
 
 .sent p {
-  color: var(--ink-soft);
+  color: var(--text-soft);
   font-size: 1.1rem;
   line-height: 1.5;
 }
@@ -133,7 +135,7 @@ textarea.input {
   margin-bottom: 0.4rem;
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--ink);
+  color: var(--text);
 }
 
 .choices {
@@ -164,37 +166,42 @@ textarea.input {
   padding: 0.55rem 1.05rem;
   border: 1px solid var(--line-strong);
   border-radius: 999px;
-  background: var(--paper);
+  background: var(--bg);
   font-weight: 500;
   transition: background 200ms var(--ease-out), border-color 200ms var(--ease-out), color 200ms var(--ease-out);
 }
 
-.choice:hover span { border-color: var(--brand); }
+.choice:hover span { border-color: var(--accent); }
 
 .choice input:checked + span {
-  background: var(--brand);
-  border-color: var(--brand);
-  color: var(--paper);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
 }
 
 .choice input:focus-visible + span {
-  outline: 2px solid var(--brand);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
-.input::placeholder { color: var(--muted); opacity: 0.8; }
+.input::placeholder { color: var(--text-2); opacity: 0.8; }
 
 /* "Remove" beside an attached Website Care level. */
-.attachedRemove { min-height: 44px; padding: 0 0.4rem; border: 0; background: none; color: var(--brand-deep); font: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
-.attachedRemove:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 4px; }
+.attachedRemove { min-height: 44px; padding: 0 0.4rem; border: 0; background: none; color: var(--accent); font: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.attachedRemove:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 
 /* Required marker: shown, and the input's own `required` tells screen readers. */
-.req { color: #9b2c1f; font-weight: 600; }
+.req { color: var(--bad); font-weight: 600; }
 
 /* Phone or email, either one: a group with one legend and one rule. */
 .either { display: grid; gap: 0.6rem; margin: 0; padding: 0; border: 0; min-width: 0; }
 .either legend { padding: 0; margin-bottom: 0.35rem; font-weight: 600; font-size: 0.95rem; }
 
 /* A Website Checkup result riding along from /checkup. */
-.attached { padding: 0.6rem 0.85rem; border-radius: 10px; background: var(--brand-soft); color: var(--brand-deep); font-size: 0.92rem; line-height: 1.45; }
+.attached { padding: 0.6rem 0.85rem; border-radius: 10px; background: var(--accent-soft); color: var(--accent); font-size: 0.92rem; line-height: 1.45; }
 .attached b { font-weight: 600; }
+
+/* On the narrowest phones the submit label may take two lines rather than push the card wider. */
+@media (max-width: 22.5rem) {
+  .form button[type="submit"] { white-space: normal; line-height: 1.25; text-align: center; }
+}

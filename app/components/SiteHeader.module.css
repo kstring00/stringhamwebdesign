@@ -1,0 +1,104 @@
+/* The site header: one fixed strip holding the liquid nav. Over the home
+   hero it is the pill alone; anywhere else the logo and the one action sit
+   either side of it (from 900px up). The strip itself takes no clicks, so
+   the page under its empty parts stays usable. */
+
+.bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0;
+  padding: 12px clamp(12px, 2.4vw, 32px);
+  pointer-events: none;
+  transition: transform 500ms var(--ease-rise);
+}
+
+.bar > * { pointer-events: auto; }
+
+/* Behind the pinned header: the page blurs and darkens, fading out at the
+   bottom edge, so words scrolling under it never run into the logo or the pill. */
+.bar::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 -18px;
+  z-index: -1;
+  background: rgba(10, 9, 8, 0.78);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 62%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 62%, transparent 100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 400ms var(--ease-out);
+}
+
+.bar[data-state="pinned"]::before { opacity: 1; }
+
+/* Over the hero: a little lower, inside the panel's top edge. */
+.bar[data-state="hero"] { transform: translateY(18px); }
+
+.nav { grid-column: 2; justify-self: center; }
+
+.logo, .cta { display: none; }
+
+@media (min-width: 900px) {
+  .bar { gap: 1rem; }
+
+  .logo {
+    grid-column: 1;
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    transition: opacity 350ms var(--ease-out), visibility 0s;
+  }
+
+  .logoImg { display: block; width: auto; height: 34px; }
+
+  .cta {
+    grid-column: 3;
+    justify-self: end;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 46px;
+    padding: 0 1.2rem;
+    border-radius: 999px;
+    background: var(--btn);
+    color: var(--btn-text);
+    font-size: 0.94rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: opacity 350ms var(--ease-out), background 220ms var(--ease-out), visibility 0s;
+  }
+
+  .cta:hover { background: var(--btn-hover); }
+  .cta svg { transition: transform 260ms var(--ease-out); }
+  .cta:hover svg { transform: translateX(3px); }
+
+  /* Over the hero the pill is alone. */
+  .bar[data-state="hero"] .logo,
+  .bar[data-state="hero"] .cta { opacity: 0; visibility: hidden; transition: opacity 250ms var(--ease-out), visibility 0s 250ms; }
+}
+
+/* Where the pill would crowd the logo and the button, and on small screens, it is icons only
+   (each still named for a screen reader, as the component does on a phone). */
+@media (min-width: 900px) and (max-width: 1139px), (max-width: 719px) {
+  .nav :global(.nimbus-item) { padding: 0 13px; }
+  .nav :global(.nimbus-label) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+
+.spacer { height: 4.5rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bar, .bar::before, .logo, .cta { transition: none; }
+}
+
+@media print {
+  .bar, .spacer { display: none; }
+}

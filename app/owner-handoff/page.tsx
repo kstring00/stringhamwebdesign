@@ -124,7 +124,7 @@ export default function OwnershipPage() {
               <ul className={home.planLines}>{ownership.yoursOncePaid.map((y) => <li key={y}>{y}</li>)}</ul>
             </div>
             <div className={s.cover}>
-              <h3 className={s.cardName}>Licensed from someone else</h3>
+              <h3 className={s.cardName}>Licensed from someone else<span className="ast" aria-hidden="true">*</span></h3>
               <p>{ownership.licensed}</p>
               <p>{ownership.tools}</p>
             </div>

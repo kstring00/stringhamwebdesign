@@ -1,0 +1,44 @@
+/* "Why not a template?": one panel under the hero, the same inset and
+   corner as the hero itself, with three points across it. */
+
+.section { padding: 0 var(--inset) var(--inset); background: var(--bg); scroll-margin-top: 5rem; }
+
+.panel {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  padding: clamp(2rem, 5.5vw, 5rem) clamp(1.25rem, 4.6vw, 4.5rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+}
+
+.head { display: grid; gap: 0.9rem; max-width: 46rem; }
+
+.title { font-size: clamp(2.5rem, 6.4vw, 5.5rem); letter-spacing: -0.04em; line-height: 0.96; }
+
+.lede { color: var(--text-2); font-size: clamp(1.05rem, 1.4vw, 1.3rem); line-height: 1.5; }
+
+.points {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 3rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.point { display: grid; align-content: start; gap: 0.75rem; padding-top: 1.25rem; border-top: 1px solid var(--line-strong); }
+
+.label { display: flex; align-items: baseline; gap: 0.75rem; color: var(--text-2); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.12em; line-height: 1.4; text-transform: uppercase; }
+.n { color: var(--accent); font-family: var(--font-display); font-size: 0.95rem; letter-spacing: 0.02em; }
+
+.pointTitle { font-size: clamp(1.45rem, 2.1vw, 1.9rem); letter-spacing: -0.025em; line-height: 1.12; }
+.pointTitle :global(.ast) { margin-left: 0.08em; font-size: 0.8em; vertical-align: 0.3em; }
+
+.body { color: var(--text-soft); line-height: 1.6; }
+
+.footnote { max-width: 44rem; padding-top: 1.25rem; border-top: 1px solid var(--line); color: var(--text-2); font-size: 0.98rem; line-height: 1.55; }
+
+@media (max-width: 56rem) {
+  .points { grid-template-columns: 1fr; gap: 1.75rem; }
+}

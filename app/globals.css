@@ -1,68 +1,57 @@
-/* Stringham Web Design: calm and clear. White paper, deep green ink, an
-   emerald accent for small things (checks, links, focus), a cobalt for the
-   rare highlight, and mint and sky grounds. Buttons are ink with mint
-   words. The one dark ground is the ink itself. Instrument Serif for
-   headings, DM Sans for everything else. Everything below is the whole
+/* Stringham Web Design: built, not assembled. A near-black page, warm
+   cream words, one amber accent for small things (marks, links, focus) and
+   a deeper orange used rarely. Buttons are cream with dark words. Outfit
+   for display, DM Sans for everything else. Everything below is the whole
    system; component files only arrange it. */
 
 :root {
-  --paper: #ffffff;
-  /* The alternate section ground: white with a breath of mint. */
-  --paper-deep: #f0f8f4;
-  --ink: #0b2a20;
-  --ink-soft: #1d4a3c;
-  /* 6.3:1 on white, 5.4:1 on mint. */
-  --muted: #4b665c;
-  /* The accent. --brand (emerald) is 6.5:1 on white and carries white
-     text; --brand-deep is its hover. */
-  --brand: #0e6b4e;
-  --brand-deep: #0a5540;
-  --brand-soft: #e3f6ec;
-  --emerald: #0e6b4e;
-  --cobalt: #2450b8;
-  --mint: #d6f5e6;
-  --sky: #dcedfb;
-  --cloud-blue: #dfecfa;
-  --cloud-mint: #ddf3e8;
-  /* The one dark ground. */
-  --navy: var(--ink);
-  /* The hero line's colors, ink through emerald to cobalt: for accents only. */
-  --brand-gradient: linear-gradient(90deg, #0b2a20 0%, #0e6b4e 40%, #2450b8 72%, #2450b8 100%);
-  /* The button: ink, with mint words. */
-  --action: var(--ink);
-  --action-hover: #123a2d;
-  --action-text: var(--mint);
-  --line: #dbe6e0;
-  --line-strong: rgba(11, 42, 32, 0.3);
-
-  /* On the ink ground */
-  --paper-on-ink: #f3fbf7;
-  --muted-on-ink: rgba(243, 251, 247, 0.74);
-  --line-on-ink: rgba(243, 251, 247, 0.18);
-
-  /* Names the hero and older pages still use. */
-  --hero-page: var(--paper);
-  --hero-ink: var(--ink);
-  --hero-text-2: var(--ink-soft);
-  --ember: var(--brand);
-  --ember-deep: var(--brand-deep);
-  --ember-on-ink: #a8e6c8;
+  /* Grounds: the page, a raised surface, and a second one for things on it. */
+  --bg: #0a0908;
+  --surface: #14100c;
+  --surface-2: #1b1612;
+  --line: rgba(243, 231, 211, 0.12);
+  --line-strong: rgba(243, 231, 211, 0.3);
+  /* Words. On the page: 16:1, 14.6:1 and 10.9:1. On --surface-2: 14.3:1, 13:1, 9.7:1. */
+  --text: #f3e7d3;
+  --text-soft: #e9dcc6;
+  --text-2: #cdbfa8;
+  /* The accent, amber: 14.5:1 on the page. For marks, links and focus, never large fills. */
+  --accent: #ffd9a8;
+  --accent-soft: rgba(255, 217, 168, 0.12);
+  /* The second accent: sparingly. 9.3:1 on the page. */
+  --accent-2: #ff9a5a;
+  /* The button: cream, with dark words. */
+  --btn: #f3e7d3;
+  --btn-hover: #fff6e6;
+  --btn-text: #0a0908;
+  /* Dark words, wherever something light is the ground. */
+  --on-light: #0a0908;
+  /* Status, always beside a word or a number, never alone: good, caution,
+     problem. Each is 8:1 or better on the page and on both surfaces. */
+  --good: #7bd8a6;
+  --good-soft: rgba(123, 216, 166, 0.14);
+  --warn: #f5bd62;
+  --warn-soft: rgba(245, 189, 98, 0.15);
+  --bad: #ff9488;
+  --bad-soft: rgba(255, 148, 136, 0.15);
 
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
   --max: 75rem;
   /* One section rhythm, everywhere. */
   --section: clamp(4.5rem, 8vw, 7rem);
+  /* The panel: the hero's inset from the page edge, and its corner. */
+  --inset: 12px;
+  --radius-panel: 28px;
 
-  --font-display: var(--font-instrument-serif), "Iowan Old Style", Georgia, serif;
-  --font-display-italic: var(--font-display);
+  --font-display: var(--font-outfit), "Avenir Next", "Segoe UI", system-ui, sans-serif;
   --font-text: var(--font-dm-sans), "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-hero-display: var(--font-display);
-  --font-hero-text: var(--font-text);
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  /* The rise the hero text makes, and every panel after it. */
+  --ease-rise: cubic-bezier(0.16, 1, 0.3, 1);
 
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 *,
@@ -74,8 +63,7 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  /* Instrument Serif has one weight: never fake a bold from it. */
-  font-synthesis-weight: none;
+  background: var(--bg);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -88,19 +76,18 @@ body {
   margin: 0;
   /* Room for the phone's bottom action bar. */
   padding-bottom: 0;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--bg);
+  color: var(--text);
   font-family: var(--font-text);
   font-size: 1.0625rem;
   line-height: 1.6;
-  font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
 }
 
 ::selection {
-  background: var(--mint);
-  color: var(--ink);
+  background: var(--accent);
+  color: var(--on-light);
 }
 
 img,
@@ -130,9 +117,9 @@ h3,
 h4 {
   margin: 0;
   font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: -0.015em;
-  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.04;
   text-wrap: balance;
 }
 
@@ -141,12 +128,12 @@ p {
 }
 
 :focus-visible {
-  outline: 2px solid var(--brand);
+  outline: 2px solid var(--accent);
   outline-offset: 4px;
   border-radius: 2px;
 }
 
-/* ---------- editorial primitives ---------- */
+/* ---------- primitives ---------- */
 
 .container {
   width: min(100% - 2 * var(--gutter), var(--max));
@@ -171,7 +158,7 @@ p {
   align-items: baseline;
   gap: 0.75rem;
   margin: 0;
-  color: var(--muted);
+  color: var(--text-2);
   font-size: 0.82rem;
   font-weight: 500;
   letter-spacing: 0.12em;
@@ -181,51 +168,45 @@ p {
 .label b {
   font-family: var(--font-display);
   font-size: 1.6rem;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1;
-  color: var(--ink);
+  color: var(--text);
 }
 
-.ink .label,
-.ink .label b {
-  color: var(--paper-on-ink);
-}
-
-.ink .label {
-  color: var(--muted-on-ink);
-}
-
-/* Display sizes. Fluid, up to about 10vw for the hero. */
+/* Display sizes. */
 .display-xl {
-  font-size: clamp(3rem, 10vw, 11rem);
-  line-height: 0.92;
+  font-size: clamp(2.8rem, 8.6vw, 9.5rem);
+  line-height: 0.94;
 }
 
 .display-l {
-  font-size: clamp(2.6rem, 6.5vw, 6.5rem);
-  line-height: 0.95;
+  font-size: clamp(2.4rem, 5.6vw, 5.6rem);
+  line-height: 0.98;
 }
 
 .display-m {
-  font-size: clamp(2rem, 4.2vw, 4.2rem);
+  font-size: clamp(1.9rem, 3.7vw, 3.7rem);
 }
 
 .lede {
   max-width: 36rem;
-  color: var(--ink-soft);
+  color: var(--text-soft);
   font-size: clamp(1.1rem, 1.4vw, 1.35rem);
   line-height: 1.55;
 }
 
-.ink .lede {
-  color: var(--muted-on-ink);
+/* A raised section: a panel, inset from the page edge like the hero. */
+.ink {
+  background: var(--surface);
+  color: var(--text);
 }
 
-/* Section backgrounds: the one dark ground is the ink. */
-.ink {
-  background: var(--navy);
-  color: var(--paper-on-ink);
+/* The amber asterisk: the footnote mark, wherever the copy states an honest limit. */
+.ast {
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-weight: 600;
 }
 
 /* Link underlines that draw in on hover. */
@@ -252,10 +233,10 @@ p {
   gap: 0.6rem;
   min-height: 3.25rem;
   padding: 0.85rem 1.6rem;
-  border: 1px solid var(--action);
+  border: 1px solid var(--btn);
   border-radius: 999px;
-  background: var(--action);
-  color: var(--action-text);
+  background: var(--btn);
+  color: var(--btn-text);
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: 0.005em;
@@ -266,9 +247,9 @@ p {
 }
 
 .btn:hover {
-  background: var(--action-hover);
-  border-color: var(--action-hover);
-  color: var(--action-text);
+  background: var(--btn-hover);
+  border-color: var(--btn-hover);
+  color: var(--btn-text);
 }
 
 .btn svg {
@@ -282,36 +263,13 @@ p {
 .btn-secondary {
   background: transparent;
   border-color: var(--line-strong);
-  color: var(--ink);
+  color: var(--text);
 }
 
 .btn-secondary:hover {
-  background: var(--paper-deep);
-  border-color: var(--ink);
-  color: var(--ink);
-}
-
-.ink .btn {
-  background: var(--mint);
-  border-color: var(--mint);
-  color: var(--ink);
-}
-
-.ink .btn:hover {
-  background: #fff;
-  border-color: #fff;
-  color: var(--ink);
-}
-
-.ink .btn-secondary {
-  background: transparent;
-  border-color: var(--paper);
-  color: var(--paper);
-}
-
-.ink .btn-secondary:hover {
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--surface-2);
+  border-color: var(--text);
+  color: var(--text);
 }
 
 /* Image frame with hover zoom */
@@ -319,7 +277,7 @@ p {
   position: relative;
   overflow: hidden;
   border-radius: 6px;
-  background: var(--paper-deep);
+  background: var(--surface);
 }
 
 .frame img {
@@ -358,9 +316,9 @@ p {
   z-index: 10000;
   padding: 0.75rem 1rem;
   border-radius: 999px;
-  background: var(--ink);
-  color: var(--paper);
-  font-weight: 500;
+  background: var(--btn);
+  color: var(--btn-text);
+  font-weight: 600;
   transform: translateY(-200%);
   transition: transform 200ms var(--ease-out);
 }
@@ -386,9 +344,9 @@ p {
   }
 }
 
-/* Page to page: a quick crossfade, and the header's glass, button and view
-   indicator morph between pages instead of jumping (browsers with
-   cross-document view transitions; others just navigate). */
+/* Page to page by an ordinary link: a quick crossfade (browsers with
+   cross-document view transitions; others just navigate). The nav itself
+   routes on the client, so its drop travels instead. */
 @media (prefers-reduced-motion: no-preference) {
   @view-transition { navigation: auto; }
 }
@@ -396,26 +354,18 @@ p {
 ::view-transition-old(root),
 ::view-transition-new(root) { animation-duration: 240ms; }
 
-::view-transition-group(site-view) {
-  animation-duration: 650ms;
-  animation-timing-function: cubic-bezier(0.34, 1.3, 0.64, 1);
-}
-
-::view-transition-group(site-glass),
-::view-transition-group(site-cta) {
-  animation-duration: 450ms;
-  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
 /* Phones and tablets: room under the page for the bottom action bar. */
 @media (max-width: 56rem) {
   body { padding-bottom: calc(4.75rem + env(safe-area-inset-bottom)); }
 }
 
-/* The Free Website Checkup's PDF: only the report prints (the page sets
-   body[data-checkup] while it's open; the rest is in checkup.module.css). */
+/* The Free Website Checkup's PDF: only the report prints, dark on white
+   (the page sets body[data-checkup] while it's open; the rest is in
+   checkup.module.css). */
 @media print {
-  body[data-checkup], body[data-checkup] main { background: #fff; }
+  /* Nothing waiting to rise in is left out of a printed page. */
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+  html, body[data-checkup], body[data-checkup] main { background: #fff; }
   body[data-checkup] > :not(main),
   body[data-checkup] [data-print-hide] { display: none !important; }
   body[data-checkup] main .container { width: 100%; max-width: none; padding: 0; }

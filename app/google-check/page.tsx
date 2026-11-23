@@ -62,7 +62,7 @@ export default async function GoogleCheckPage({ searchParams }: { searchParams: 
                 <ul className={styles.notes}>{listingFix.notes.map((n) => <li key={n}>{n}</li>)}</ul>
                 <p><a className={`u ${home.inlineLink}`} href={`/terms${listingFix.terms}`}>Terms for the Listing Fix</a></p>
               </article>
-              <p className={styles.fineNote}>{noGuarantee}</p>
+              <p className={styles.fineNote}><span className="ast" aria-hidden="true">* </span>{noGuarantee}</p>
             </div>
             <FreeCheckForm sent={sent === "1"} errorCode={typeof error === "string" ? error : ""} />
           </div>

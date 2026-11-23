@@ -14,7 +14,7 @@ const assert = require("node:assert/strict");
 
 const root = path.join(__dirname, "..");
 const out = fs.mkdtempSync(path.join(os.tmpdir(), "offer-check-"));
-const files = ["app/data/offer.ts", "app/data/ownership.ts", "app/checkup/data.ts"].map((f) => path.join(root, f));
+const files = ["app/data/offer.ts", "app/data/ownership.ts", "app/checkup/data.ts", "app/data/nav.ts", "app/data/template.ts"].map((f) => path.join(root, f));
 fs.writeFileSync(path.join(out, "tsconfig.json"), JSON.stringify({
   extends: path.join(root, "tsconfig.json"),
   compilerOptions: { outDir: out, rootDir: path.join(root, "app"), module: "nodenext", moduleResolution: "nodenext", noEmit: false, incremental: false, declaration: false, strict: false, skipLibCheck: true, plugins: [] },
@@ -25,6 +25,8 @@ execFileSync(process.execPath, [path.join(root, "node_modules", "typescript", "b
 const offer = require(path.join(out, "data", "offer.js"));
 const { ownership } = require(path.join(out, "data", "ownership.js"));
 const checkup = require(path.join(out, "checkup", "data.js"));
+const nav = require(path.join(out, "data", "nav.js"));
+const { template } = require(path.join(out, "data", "template.js"));
 
 const terms = fs.readFileSync(path.join(root, "content", "service-terms.md"), "utf8");
 const careSection = terms.slice(terms.indexOf("## 3. Website Care"), terms.indexOf("## 4."));
@@ -122,4 +124,40 @@ test("the owner's manual doesn't promise a skill step 8 calls hard", () => {
   const bigger = ownership.steps.find((s) => s.title === "Making a bigger change");
   assert.equal(bigger.ease, "Hard");
   assert.ok(bigger.body.includes("the edit time in your Website Care level"));
+});
+
+test("the nav: six items in order, each a route that exists, with Blog and FAQ in the footer", () => {
+  assert.deepEqual(nav.navLinks.map((l) => l.label), ["Home", "Work", "Pricing", "Handoff", "Checkup", "About"]);
+  assert.deepEqual(nav.navLinks.map((l) => l.href), ["/", "/work", "/#pricing", "/owner-handoff", "/checkup", "/#about"]);
+  for (const l of nav.navLinks) {
+    const route = l.href.split("#")[0];
+    const file = route === "/" ? "app/page.tsx" : `app${route}/page.tsx`;
+    assert.ok(fs.existsSync(path.join(root, file)), `${l.label} points at ${route}, which has no page`);
+  }
+  // Pricing and About are sections of the home page, not pages of their own.
+  assert.deepEqual(nav.navLinks.filter((l) => l.section).map((l) => l.section), ["pricing", "about"]);
+  const footer = nav.footerLinks.map((l) => l.label);
+  assert.ok(footer.includes("Blog") && footer.includes("FAQ"), "Blog and FAQ moved to the footer");
+  assert.ok(!nav.navLinks.some((l) => /blog|faq/i.test(l.label)));
+  assert.equal(nav.cta.nav, "Get a free demo");
+  assert.equal(nav.cta.href, "/#quote");
+});
+
+test("\"Why not a template?\": three points, fair to the platforms, no numbers it can't stand behind", () => {
+  assert.equal(template.title, "Why not a template?");
+  assert.deepEqual(template.points.map((p) => p.label), ["What they do well", "Where they stop", "What a custom build adds"]);
+  const all = flat(template);
+  // What they do well comes first, and names both.
+  assert.match(template.points[0].body, /Squarespace and WordPress/);
+  assert.match(template.points[0].title + template.points[0].body, /cheap/i);
+  assert.match(template.points[0].title + template.points[0].body, /fast to start|in a weekend/i);
+  // No speed or search-ranking claims, no percentages, no reviews.
+  assert.doesNotMatch(all, /\d+\s*%|faster|slower|speed|seconds|rank|SEO|Google|PageSpeed|conversion/i);
+  assert.doesNotMatch(all, /testimonial|clients say|rated|stars/i);
+  // Nothing absolute said about either platform.
+  assert.doesNotMatch(all, /can(?:'|’)?t|cannot|never|always|impossible|bad|worse|ugly|generic/i);
+  // The custom route's own limit is stated, and it matches the offer.
+  assert.match(template.footnote, /costs more/);
+  assert.match(template.footnote, /about three weeks/);
+  assert.ok(offer.steps.some((st) => /about 3 weeks/.test(st.title)), "the three-week figure is the offer's own");
 });

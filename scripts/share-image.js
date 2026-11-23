@@ -1,8 +1,9 @@
-// The site's share image, app/opengraph-image.png (1200 x 630): the logo,
-// the hero's eyebrow and headline, and the unraveling line.
+// The site's share image, app/opengraph-image.png (1200 x 630): the home
+// hero in small. The hero's still, its shade, the name with its asterisk,
+// and the page's two-line heading.
 //   node scripts/share-image.js
-// Run it again when the hero's words change. The words here are the hero's
-// own (app/home/Hero.tsx); the line is the same generated path.
+// Run it again when the hero's words or its picture change. The words here
+// are the hero's own (app/home/Hero.tsx).
 //
 // Needs Playwright (not a project dependency):
 //   npm install --no-save playwright
@@ -12,7 +13,6 @@ const path = require('path');
 
 const root = process.cwd();
 const b64 = (...p) => fs.readFileSync(path.join(root, ...p)).toString('base64');
-const heroPath = fs.readFileSync(path.join(root, 'app', 'home', 'heroPath.ts'), 'utf8').match(/"(M[^"]+)"/)[1];
 
 function findChrome() {
   if (process.env.CHROME_PATH) return process.env.CHROME_PATH;
@@ -28,34 +28,29 @@ function findChrome() {
 }
 
 const html = `<!doctype html><html><head><meta charset="utf-8"><style>
-@font-face { font-family: "Instrument Serif"; font-style: normal; src: url(data:font/woff;base64,${b64('app', 'blog', 'fonts', 'InstrumentSerif-400.woff')}) format("woff"); }
-@font-face { font-family: "Instrument Serif"; font-style: italic; src: url(data:font/woff;base64,${b64('app', 'blog', 'fonts', 'InstrumentSerif-400-italic.woff')}) format("woff"); }
+@font-face { font-family: "Outfit"; font-weight: 500; src: url(data:font/woff;base64,${b64('app', 'blog', 'fonts', 'Outfit-500.woff')}) format("woff"); }
 @font-face { font-family: "DM Sans"; font-weight: 500; src: url(data:font/woff;base64,${b64('app', 'blog', 'fonts', 'DMSans-500.woff')}) format("woff"); }
 * { box-sizing: border-box; margin: 0; }
-body { width: 1200px; height: 630px; display: flex; background: #fff; color: #0b2a20; font-family: "DM Sans", sans-serif; font-weight: 500; }
-.ribbon { width: 14px; background: linear-gradient(180deg, #0b2a20 0%, #0e6b4e 40%, #2450b8 72%, #2450b8 100%); }
-.in { flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 52px 64px 48px; }
-img { height: 54px; align-self: flex-start; }
-.eyebrow { display: inline-flex; align-items: center; gap: 12px; padding: 10px 20px; border-radius: 24px; background: #d6f5e6; color: #1d4a3c; font-size: 17px; letter-spacing: 0.14em; text-transform: uppercase; }
-.eyebrow i { width: 9px; height: 9px; border-radius: 50%; background: #2450b8; }
-h1 { margin-top: 20px; font-family: "Instrument Serif", serif; font-weight: 400; font-size: 104px; line-height: 0.96; letter-spacing: -0.025em; text-wrap: balance; }
-h1 em { color: #2450b8; white-space: nowrap; }
-.panel { padding: 14px 30px; border-radius: 24px; background: linear-gradient(100deg, #d6f5e6 45%, #dcedfb 100%); }
-svg { display: block; width: 100%; height: auto; overflow: visible; }
+body { position: relative; width: 1200px; height: 630px; overflow: hidden; background: #0a0908; color: #f3e7d3; font-family: "DM Sans", sans-serif; font-weight: 500; }
+.plate { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 60% 30%; }
+.shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,6,5,.3) 0%, rgba(8,6,5,0) 26%, rgba(8,6,5,.1) 48%, rgba(8,6,5,.9) 100%); }
+.in { position: absolute; left: 56px; right: 56px; bottom: 48px; display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
+.name { position: relative; display: inline-block; font-family: "Outfit", sans-serif; font-size: 148px; letter-spacing: -0.045em; line-height: 0.86; }
+.name i { position: absolute; top: -8px; left: 100%; margin-left: 6px; color: #ffd9a8; font-size: 50px; font-style: normal; letter-spacing: 0; line-height: 1; }
+.sub { margin: 22px 0 0 6px; font-size: 20px; letter-spacing: 0.52em; text-transform: uppercase; }
+.side { width: 400px; padding-bottom: 4px; }
+.eyebrow { color: #ffd9a8; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; }
+h1 { margin-top: 12px; font-family: "Outfit", sans-serif; font-weight: 500; font-size: 52px; letter-spacing: -0.03em; line-height: 1.02; }
+p { margin-top: 12px; color: #f3e7d3; font-size: 23px; line-height: 1.35; }
 </style></head><body>
-<div class="ribbon"></div>
+<img class="plate" src="data:image/jpeg;base64,${b64('public', 'hero', 'hero-plate.jpg')}" alt="">
+<div class="shade"></div>
 <div class="in">
-  <img src="data:image/png;base64,${b64('public', 'brand', 'logo-lockup@3x.png')}" alt="">
-  <div>
-    <div class="eyebrow"><i></i>Custom web design for mental health professionals</div>
-    <h1>Websites for the people who <em>help people.</em></h1>
-  </div>
-  <div class="panel">
-    <svg viewBox="0 20 1200 100">
-      <defs><linearGradient id="g" gradientUnits="userSpaceOnUse" x1="60" y1="0" x2="1160" y2="0"><stop offset="0" stop-color="#0B2A20"/><stop offset="0.4" stop-color="#0E6B4E"/><stop offset="0.72" stop-color="#2450B8"/><stop offset="1" stop-color="#2450B8"/></linearGradient></defs>
-      <path d="${heroPath}" fill="none" stroke="url(#g)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="1166" cy="70" r="8" fill="#2450B8"/>
-    </svg>
+  <div><div class="name">Stringham<i>*</i></div><div class="sub">Web Design</div></div>
+  <div class="side">
+    <div class="eyebrow">* Not a template</div>
+    <h1>Why blend in?</h1>
+    <p>Custom websites for therapists and mental health practices.</p>
   </div>
 </div>
 </body></html>`;

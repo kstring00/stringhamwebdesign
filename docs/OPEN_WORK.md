@@ -33,3 +33,13 @@ Updated 2026-11-19 (mental-health practice rework, Phase 1).
 - Turbopack's font downloader does not use the sandbox's proxy, so local
   verification builds ran with `next build --webpack`. Vercel builds with
   Turbopack normally.
+
+## Waiting on the owner
+
+- "Why not a template?" (`app/data/template.ts`) is draft copy. It needs his
+  read before it is treated as final.
+- The hero's largest paint on a phone is now a picture where it used to be
+  words. Loaded on a throttled connection it is as fast as before; by
+  Lighthouse's simulated estimate (the one PageSpeed shows) it is slower,
+  because that estimate counts all the page's script before a picture. See
+  the pull request that introduced the hero for the numbers and the options.

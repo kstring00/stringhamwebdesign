@@ -8,6 +8,7 @@ import AboutFaq from "./home/AboutFaq";
 import Hero from "./home/Hero";
 import Pricing from "./home/Pricing";
 import QuoteForm from "./home/QuoteForm";
+import Template from "./home/Template";
 import WorkRow from "./home/WorkRow";
 import s from "./home/home.module.css";
 
@@ -26,17 +27,20 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
       {/* 1. The first screen: what, for whom, the next step. */}
       <Hero />
 
-      {/* 2. Proof: the three real projects, as a still row, each labeled for what it is. */}
+      {/* 2. The argument: why not a template, made fairly. */}
+      <Template />
+
+      {/* 3. Proof: the three real projects, as a still row, each labeled for what it is. */}
       <WorkRow />
 
-      {/* 3. The price, what's in it, who runs it after, and the Google path. */}
+      {/* 4. The price, what's in it, who runs it after, and the Google path. */}
       <Pricing careLevel={chosenCare} />
 
 
-      {/* 4. Who you'd work with, and the questions that come up. */}
+      {/* 5. Who you'd work with, and the questions that come up. */}
       <AboutFaq />
 
-      {/* 5. The close: a free homepage demo, with a fixed written quote. */}
+      {/* 6. The close: a free homepage demo, with a fixed written quote. */}
       <section className={s.quote} id="quote" aria-labelledby="quote-title">
         <div className={`container ${s.quoteGrid}`}>
           <div className={s.quoteSide}>
